@@ -1,0 +1,780 @@
+# Default device.
+pcm.!default {
+    @func refer
+    name { @func concat 
+        strings [ "pcm."
+            { @func getenv
+                vars [ ALSA_DEFAULT_PCM ]
+                default "combo"
+            }
+        ]
+    }
+}
+
+# Default control device.
+ctl.!default {
+    @func refer
+    name { @func concat 
+        strings [ "ctl."
+            { @func getenv
+                vars [ ALSA_DEFAULT_CTL ]
+                default "hda_hw"
+            }
+        ]
+    }
+}
+
+##########################################################
+#################### HARDWARE DEVICES ####################
+##########################################################
+
+# Juli@ analog in/out.
+pcm.julia_analog_hw {
+    type hw
+    card Juli
+    device 0
+    subdevice 0
+}
+
+# Control device for program compatibility.
+ctl.julia_analog_hw {
+    type hw
+    card Juli
+}
+
+# Juli@ digital in.
+pcm.julia_digital_hw {
+    type hw
+    card Juli
+    device 1
+    subdevice 0
+}
+
+# Control device for program compatibility.
+ctl.julia_digital_hw {
+    type hw
+    card Juli
+}
+
+# Integrated digital out and analog in/out.
+pcm.hda_hw {
+    type hw
+    card PCH
+    device 0
+    subdevice 0
+}
+
+# Control device for program compatibility.
+ctl.hda_hw {
+    type hw
+    card PCH
+}
+
+# Integrated digital out.
+pcm.hda_digital_hw {
+    type hw
+    card PCH
+    device 1
+    subdevice 0
+}
+
+# Control device for program compatibility.
+ctl.hda_digital_hw {
+    type hw
+    card PCH
+}
+
+# HDMI.
+pcm.hdmi_hw {
+    type hw
+    card HDMI
+    device 3
+    subdevice 0
+}
+
+# Control device for program compatibility.
+ctl.hdmi_hw {
+    type hw
+    card HDMI
+}
+
+##########################################
+############## HDMI DEVICE ###############
+##########################################
+
+# HDMI out.
+pcm.hdmi_out {
+    type plug
+    slave {
+        format S16_LE
+        pcm "hdmi_hw"
+    }
+    hint {
+        show on
+        description "HDMI out"
+    }
+}
+
+###############################################################
+############## INTEGRATED AUDIO VIRTUAL DEVICES ###############
+###############################################################
+
+# Asymmetric device.
+pcm.hda {
+    type asym
+    playback.pcm "hda_out_mix_44100"
+    capture.pcm "hda_in_mix_44100"
+    hint {
+        show on
+        description "HDA asymmetric"
+    }
+}
+
+# WAV recording device.
+pcm.file_out {
+    type file
+    slave.pcm "hda"
+    file /dev/shm/alsaout.wav
+    format "wav"
+    hint {
+        show on
+        description "WAV recording"
+    }
+}
+
+# Virtual equalizer device.
+pcm.hda_eq {
+    type plug
+    slave.pcm {
+        type equal
+        slave.pcm "hda"
+    }
+    hint {
+        show on
+        description "HDA with equalizer"
+    }
+}
+
+# Mixing with integrated.
+pcm.hda_out_mix_44100 {
+    type plug
+    slave.pcm {
+        type dmix
+        ipc_key 10
+        slave {
+            pcm "hda_hw"
+            format S16_LE
+            periods 16
+            period_time -1
+            period_size 1024
+            rate 44100
+        }
+    }
+    hint {
+        show on
+        description "HDA dmix out"
+    }
+}
+
+# Mixing dsnoop device for input.
+pcm.hda_in_mix_44100 {
+    type dsnoop
+    ipc_key 20
+    slave {
+        pcm "hda_hw"
+        format S16_LE
+        rate 44100
+    }
+    hint {
+        show on
+        description "HDA dsnoop in"
+    }
+}
+
+###############################################################
+#################### JULIA VIRTUAL DEVICES ####################
+###############################################################
+
+# Analog out.
+pcm.julia_aout {
+    type plug
+    slave {
+        format S32_LE
+        pcm "julia_analog_hw"
+    }
+    hint {
+        show on
+        description "Juli@ analog out"
+    }
+}
+
+# Analog in.
+pcm.julia_ain {
+    type plug
+    slave {
+        format S32_LE
+        pcm "julia_analog_hw"
+    }
+    hint {
+        show on
+        description "Juli@ analog in"
+    }
+}
+
+# Digital out.
+pcm.julia_dout {
+    type plug
+    slave {
+        format S32_LE
+        pcm "julia_digital_hw"
+    }
+    hint {
+        show on
+        description "Juli@ digital out"
+    }
+}
+
+# Both analog and digital out, channels separate (quad).
+pcm.julia_qout {
+    type plug
+    slave {
+        format S32_LE
+        pcm {
+            type multi
+            slaves.dout.pcm "julia_dout"
+            slaves.dout.channels 2
+            slaves.aout.pcm "julia_aout"
+            slaves.aout.channels 2
+            bindings.0.slave dout
+            bindings.0.channel 0
+            bindings.1.slave dout
+            bindings.1.channel 1
+            bindings.2.slave aout
+            bindings.2.channel 0
+            bindings.3.slave aout
+            bindings.3.channel 1
+        }
+    }
+    route_policy duplicate
+    ttable {
+        0.0 1
+        1.1 1
+        2.2 1
+        3.3 1
+    }
+    hint {
+        show on
+        description "Juli@ analog/digital out"
+    }
+}
+
+# Both analog and digital out, channels duplicated.
+pcm.julia_bout {
+    type plug
+    slave {
+        format S32_LE
+        pcm {
+            type multi
+            slaves.dout.pcm "julia_dout"
+            slaves.dout.channels 2
+            slaves.aout.pcm "julia_aout"
+            slaves.aout.channels 2
+            bindings.0.slave dout
+            bindings.0.channel 0
+            bindings.1.slave dout
+            bindings.1.channel 1
+            bindings.2.slave aout
+            bindings.2.channel 0
+            bindings.3.slave aout
+            bindings.3.channel 1
+        }
+    }
+    route_policy duplicate
+    ttable {
+        0.0 1
+        1.1 1
+        0.2 1
+        1.3 1
+    }
+    hint {
+        show on
+        description "Juli@ analog/digital out"
+    }
+}
+
+# 5.1 to 2.0 downmix.
+pcm.julia_51to20 {
+    type plug
+    slave {
+        format S32_LE
+        pcm "julia_digital_hw"
+    }
+    route_policy duplicate
+    ttable {
+        0.0 0.29289
+        1.1 0.29289
+        2.0 0.29289
+        3.1 0.29289
+        4.0 0.20711
+        4.1 0.20711
+        5.0 0.20711
+        5.1 0.20711
+    }
+    hint {
+        show on
+        description "Juli@ 5.1 to 2.0 downmix"
+    }
+}
+
+# Asymmetric device @ 44.1 kHz.
+pcm.julia {
+    type asym
+    playback.pcm "julia_dout_mix_44100"
+    capture.pcm "julia_ain_mix_44100"
+    hint {
+        show on
+        description "Juli@ asymmetric 44.1 kHz"
+    }
+}
+
+# Asymmetric device @ 96kHz.
+pcm.julia_96 {
+    type asym
+    playback.pcm "julia_dout_mix_96000"
+    capture.pcm "julia_ain_mix_96000"
+    hint {
+        show on
+        description "Juli@ asymmetric 96 kHz"
+    }
+}
+
+# Mixing with Juli@, digital out, dmix.
+pcm.julia_dout_mix_44100 {
+    type plug
+    slave.pcm {
+        type dmix
+        ipc_key 11
+        slave {
+            pcm "julia_digital_hw"
+            format S32_LE
+            periods 16
+            period_time -1
+            period_size 1024
+            rate 44100
+        }
+    }
+    hint {
+        show on
+        description "Juli@ dmix digital out 44.1 kHz"
+    }
+}
+#
+# Mixing with Juli@, analog out, dmix.
+pcm.julia_aout_mix_44100 {
+    type plug
+    slave.pcm {
+        type dmix
+        ipc_key 11
+        slave {
+            pcm "julia_analog_hw"
+            format S32_LE
+            periods 16
+            period_time -1
+            period_size 1024
+            rate 44100
+        }
+    }
+    hint {
+        show on
+        description "Juli@ dmix analog out 44.1 kHz"
+    }
+}
+
+
+# Mixing dsnoop device for input.
+pcm.julia_ain_mix_44100 {
+    type plug
+    slave.pcm {
+        type dsnoop
+        ipc_key 22
+        slave {
+            pcm "julia_analog_hw"
+            rate 44100
+        }
+    }
+    hint {
+        show on
+        description "Juli@ dsnoop analog in 44.1 kHz"
+    }
+}
+
+# Mixing with Juli@, digital out, dmix.
+pcm.julia_dout_mix_96000 {
+    type plug
+    slave.pcm {
+        type dmix
+        ipc_key 12
+        slave {
+            pcm "julia_digital_hw"
+            format S32_LE
+            periods 16
+            period_time -1
+            period_size 1024
+            rate 96000
+        }
+    }
+    hint {
+        show on
+        description "Juli@ dmix digital out 96 kHz"
+    }
+}
+
+# Mixing dsnoop device for input.
+pcm.julia_ain_mix_96000 {
+    type plug
+    slave.pcm {
+        type dsnoop
+        ipc_key 21
+        slave {
+            pcm "julia_analog_hw"
+            rate 96000
+        }
+    }
+    hint {
+        show on
+        description "Juli@ dsnoop analog in 96 kHz"
+    }
+}
+
+#############################
+########## SPECIAL ##########
+#############################
+
+# Control device for equalizer plugin.
+ctl.eq {
+    type equal
+}
+
+# Null output.
+pcm.null {
+    type null
+}
+
+# Soft volume control.
+pcm.hda_out_mix_44100_vol {
+    type softvol
+    slave {
+        pcm "hda_out_mix_44100"
+    }
+    control {
+        name "Soft Master"
+        card PCH
+    }
+    hint {
+        show on
+        description "HDA out with soft volume control"
+    }
+}
+
+# Digital out volume control.
+pcm.julia_vol {
+    type softvol
+    slave {
+        pcm "julia_dout"
+    }
+    control {
+        name "DigitalMaster"
+        card Juli
+    }
+    hint {
+        show on
+        description "Juli@ digital out with volume control"
+    }
+}
+
+# General movie setup.
+pcm.julia_movie {
+    type plug
+    slave {
+        format float
+        pcm {
+            type multi
+            slaves.speakers {
+                pcm "julia_aout"
+                channels 2
+            }
+            bindings.0.slave speakers
+            bindings.0.channel 0
+            bindings.1.slave speakers
+            bindings.1.channel 1
+        }
+    }
+    route_policy duplicate
+    ttable {
+        0.0 0.185
+        1.1 0.185
+        2.0 0.185
+        3.1 0.185
+        4.0 0.13
+        4.1 0.13
+        5.0 0.5
+        5.1 0.5
+    }
+    hint {
+        show on
+        description "Juli@ movie setup"
+    }
+}
+
+# Another general movie setup with balanced sound matrix.
+pcm.julia_movie_balanced_matrix {
+    type plug
+    slave {
+        format float
+        pcm {
+            type multi
+            slaves.speakers {
+                pcm "julia_dout"
+                channels 2
+            }
+            bindings.0.slave speakers
+            bindings.0.channel 0
+            bindings.1.slave speakers
+            bindings.1.channel 1
+        }
+    }
+    route_policy duplicate
+    ttable {
+        0.0 0.29289
+        1.1 0.29289
+        2.0 0.29289
+        3.1 0.29289
+        4.0 0.20711
+        4.1 0.20711
+        5.0 0.20711
+        5.1 0.20711
+    }
+    hint {
+        show on
+        description "Juli@ movie setup, balanced matrix"
+    }
+}
+
+# Yet another general movie setup, for night watching.
+pcm.julia_movie_night {
+    type plug
+    slave {
+        format float
+        pcm {
+            type multi
+            slaves.speakers {
+                pcm "julia_aout"
+                channels 2
+            }
+            bindings.0.slave speakers
+            bindings.0.channel 0
+            bindings.1.slave speakers
+            bindings.1.channel 1
+        }
+    }
+    route_policy duplicate
+    ttable {
+        0.0 0.2125
+        1.1 0.2125
+        2.0 0.2125
+        3.1 0.2125
+        4.0 0.5
+        4.1 0.5
+        5.0 0.075
+        5.1 0.075
+    }
+    hint {
+        show on
+        description "Juli@ movie setup, night watching"
+    }
+}
+
+# Plug device for bs2b.
+pcm.julia_binaural {
+    type plug
+    slave {
+        rate 44100
+        pcm {
+            type ladspa
+            slave.pcm "julia_digital"
+            path "/usr/lib/ladspa"
+            plugins [ {
+                label bs2b # Bauer stereophonic-to-binaural DSP
+                input {
+                    controls [ 2 0 ] # crossfeed level (1-3), high boost (0, 1)
+                }
+            } ]
+        }
+    }
+    hint {
+        show on
+        description "Juli@ binaural"
+    }
+}
+
+# Plug device for basscut.
+pcm.julia_basscut {
+    type plug
+    slave.pcm "ladspa_basscut"
+}
+
+# Plug device for bassboost.
+pcm.julia_bassboost {
+    type plug
+    slave.pcm "ladspa_bassboost"
+}
+
+# LADSPA device for bass cut.
+pcm.ladspa_basscut {
+    type ladspa
+    channels 2
+    slave.pcm "julia_dout"
+    path "/usr/lib/ladspa"
+    plugins [
+        {
+            label mbeq # Multiband EQ (mbeq_1197.so)
+            policy duplicate
+            input.bindings.0 "Input"
+            output.bindings.0 "Output"
+            input.controls [-70 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+        }
+    ]
+}
+
+# LADSPA device for bass boost.
+pcm.ladspa_bassboost {
+    type ladspa
+    channels 2
+    slave.pcm "julia_dout"
+    path "/usr/lib/ladspa"
+    plugins [
+        {
+            label tap_equalizer # TAP Equalizer (tap_eq.so)
+            policy duplicate
+            input.bindings.0 "Input"
+            output.bindings.0 "Output"
+            input.controls [0 -10 -10 -10 -10 -10 -10 -10 40 100 200 400 1000 4000 10000 16000]
+        }
+    ]
+}
+
+# Asymmetric device for audio with input.
+pcm.combo {
+    type asym
+    playback.pcm "hda_out_mix_44100_vol"
+    capture.pcm "julia_ain_mix_44100"
+    hint {
+        show on
+        description "Combo asymmetric"
+    }
+}
+
+#############################
+########### LOOP ############
+#############################
+
+# Loop device substreams in device 0 correspond to substreams in device 1. In reality there are no ins and outs, just ends (they work both ways).
+
+pcm.loop {
+    type asym
+    playback.pcm "loop_out_alsa"
+    capture.pcm "loop_in_alsa"
+    hint {
+        show on
+        description "ALSA loopback"
+    }
+}
+
+pcm.loop2 {
+    type asym
+    playback.pcm "loop2_out_alsa"
+    capture.pcm "loop2_in_alsa"
+    hint {
+        show on
+        description "ALSA loopback 2"
+    }
+}
+
+# These are for use with JACK.
+pcm.loop_out_alsa {
+    type plug
+    slave.pcm "hw:Loopback,0,0"
+    hint {
+        show on
+        description "ALSA loopback out"
+    }
+}
+
+pcm.loop_out_jack {
+    type plug
+    slave.pcm "hw:Loopback,1,0"
+}
+
+pcm.loop_in_alsa {
+    type plug
+    slave.pcm "hw:Loopback,0,1"
+    hint {
+        show on
+        description "ALSA loopback in"
+    }
+}
+
+pcm.loop_in_jack {
+    type plug
+    slave.pcm "hw:Loopback,1,1"
+}
+
+pcm.loop2_out_alsa {
+    type plug
+    slave.pcm "hw:Loopback,0,2"
+    hint {
+        show on
+        description "ALSA loopback out 2"
+    }
+}
+
+pcm.loop2_out_jack {
+    type plug
+    slave.pcm "hw:Loopback,1,2"
+}
+
+pcm.loop2_in_alsa {
+    type plug
+    slave.pcm "hw:Loopback,0,3"
+    hint {
+        show on
+        description "ALSA loopback in 2"
+    }
+}
+
+pcm.loop2_in_jack {
+    type plug
+    slave.pcm "hw:Loopback,1,3"
+}
+
+# These are for use with virtual machines.
+pcm.loop_vm_dac_in {
+    type plug
+    slave.pcm "hw:Loopback,0,4"
+}
+
+pcm.loop_vm_dac_out {
+    type plug
+    slave.pcm "hw:Loopback,1,4"
+}
+
+pcm.loop_vm_adc_in {
+    type plug
+    slave.pcm "hw:Loopback,0,5"
+}
+
+pcm.loop_vm_adc_out {
+    type plug
+    slave.pcm "hw:Loopback,1,5"
+}
+

@@ -1,0 +1,3 @@
+# Saitek Cyborg Rumble Pad udev rule to fire up scripts.
+ACTION=="add", ENV{ID_VENDOR}=="Saitek", ENV{ID_MODEL}=="Cyborg_Rumble_Pad_-_PC_Xbox_360", RUN+="/bin/bash /opt/udev/scripts/udev_saitek_add.sh %E{BUSNUM} %E{DEVNUM}"
+ACTION=="remove", ENV{ID_VENDOR}=="Saitek", ENV{ID_MODEL}=="Cyborg_Rumble_Pad_-_PC_Xbox_360", RUN+="/bin/bash /opt/udev/scripts/udev_saitek_remove.sh"

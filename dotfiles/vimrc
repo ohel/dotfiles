@@ -1,0 +1,348 @@
+if hostname() == "minigun"
+    "set window size when starting in GUI mode
+    au GUIEnter * set lines=27 columns=107
+    "put default window size in memory
+    let g:dlines=31
+    let g:dcols=107
+
+    "if using omnicppcomplete, set extra commands
+    if filereadable(expand("~/.vim/ctagsdb"))
+        set tags +=~/ramdisk/vimctags
+        nnoremap <c-f5> :!ctags -R -f ~/ramdisk/vimctags --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
+        autocmd FileType cpp set tags +=~/.vim/ctagsdb
+        nnoremap <f4> :TlistToggle<cr>
+        inoremap <f4> <c-o>:TlistToggle<cr>
+    endif
+
+    let g:pydiction_location = '~/.vim/pydiction/complete-dict'
+    let g:pydiction_menu_height = 15
+    let g:zoom_functions = 1
+
+    set guifont=ProggyCleanTTSZ\ 12
+    let g:dfont="ProggyCleanTTSZ"
+    let g:daltfont="Monospace"
+
+elseif hostname() == "predator"
+    au GUIEnter * set lines=27 columns=107
+    let g:dlines=27
+    let g:dcols=107
+    let g:pydiction_location = '~/.vim/pydiction/complete-dict'
+    let g:pydiction_menu_height = 10
+    let g:zoom_functions = 1
+
+    set guifont=ProggyCleanTTSZ\ 12
+    let g:dfont="ProggyCleanTTSZ"
+    let g:daltfont="Monospace"
+else
+    au GUIEnter * set lines=31 columns=107
+    let g:dlines=31
+    let g:dcols=107
+    let g:zoom_functions = 0
+endif
+
+if has("win32")
+    set guifont=ProggyCleanTTSZ:h12:cANSI
+    let g:dfont="ProggyCleanTTSZ"
+    let g:daltfont="Bitstream_Vera_Sans_Mono"
+    let g:zoom_functions = 1
+endif
+
+"set syntax highlight for unknown extensions
+au BufNewFile,BufRead *.xaml set filetype=xml
+au BufNewFile,BufRead *.md set filetype=markdown
+
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+
+colorscheme custom
+set encoding=utf-8
+
+"set swap directory
+if isdirectory("~/.vim")
+    set directory=~/.vim
+endif
+
+"highlight search
+set hlsearch
+"automatically update file if changed from the outside
+set autoread
+"make backspace clear other than new text also
+set backspace=indent,eol,start
+"set cursor size
+set guicursor=n-v-c:hor25-Cursor
+"nocompatible: enables features which are not Vi compatible
+set nocp
+"set ignore case on searches, remedy with set noic or use \C in search term
+set ic
+"enable file type detection
+syntax on
+filetype on
+"sets system clipboard as buffer +
+set clipboard=unnamed
+"line numbering
+set nu!
+"hide toolbar
+set go-=T
+"hide menu
+set go-=m
+"disable tear-off menus
+set go-=t
+"disable right scroll bar
+set go-=r
+"tab selector always visible
+set showtabline=2
+"tab width
+set tabstop=4
+"set intend (using keys << or >>) width
+set shiftwidth=4
+"expand tab to spaces, use c-q<tab> for real tab
+set expandtab
+"set indent in insert mode using tab
+set softtabstop=4
+"define text width if autowrapping: 0 disables autowrap, wraps to 80 on manual wrap (gq)
+set textwidth=0
+"don't autowrap lines while typing
+let g:leave_my_textwidth_alone=1
+
+"uppercase commands
+command W w
+command Q q
+command WQ wq
+command Wq wq
+
+"prevent accidental save-and-exit
+nnoremap ZZ :q<cr>
+
+"select all
+inoremap <c-a> <esc>gg<s-v>G
+
+"convert Alt Gr + space to normal space
+inoremap Â  <space>
+
+"insert real tab on shift-tab
+inoremap <s-tab> <c-q><tab>
+
+"toggle menubar
+nnoremap <f1> :if &go=~#'m'<bar>set go-=m<bar>else<bar>set go+=m<bar>endif<cr>
+inoremap <f1> <esc>:if &go=~#'m'<bar>set go-=m<bar>else<bar>set go+=m<bar>endif<cr>
+
+"open file in new tab
+nnoremap <c-e> :tabe ./
+
+"open file under cursor in new tab
+"nnoremap <c-o> <c-w>gf
+
+"move screen lines
+inoremap <home> <c-o>g0
+inoremap <end> <c-o>g$
+"enabling these disables functionality with autocomplete, thus c-up and c-down
+inoremap <up> <c-o>gk
+inoremap <down> <c-o>gj
+inoremap <c-up> <up>
+inoremap <c-down> <down>
+
+"wrap to next/previous line on arrow key presses
+inoremap <silent> <left> <c-r>=col('.') == 1 ? "\<lt>c-o>gkg$" : "\<lt>left>"<cr>
+inoremap <silent> <right> <c-r>=col('.') == col('$') ? "\<lt>c-o>gjg0" : "\<lt>right>"<cr>
+
+"emulate traditional shift + keys functionality
+inoremap <silent> <s-up> <c-o>v<up>
+inoremap <silent> <s-down> <c-o>v<down>
+inoremap <silent> <s-left> <c-r>=col('.') == 1 ? "\<lt>c-o>gkg$v" : "\<lt>c-o>hv"<cr>
+inoremap <silent> <s-right> <c-r>=col('.') == col('$') ? "\<lt>c-o>gjg0v" : "\<lt>c-o>v"<cr>
+inoremap <silent> <s-home> <left><c-o>v<home>
+inoremap <silent> <s-end> <c-o>v<end><left>
+
+"scroll down/up
+nnoremap <c-j> <c-e>
+nnoremap <c-k> <c-y>
+vnoremap <c-j> <c-e>
+vnoremap <c-k> <c-y>
+
+"speed up browsing
+nnoremap <s-up> 5k 
+nnoremap <s-down> 5j
+vnoremap <s-up> 5k
+vnoremap <s-down> 5j
+
+"insert mode
+inoremap <c-space> <esc>`^
+nnoremap <c-space> i<c-r>=col('.') == col('$')-1 ? "\<lt>right>" : ""<cr>
+nnoremap <enter> i<c-r>=col('.') == col('$')-1 ? "\<lt>right>" : ""<cr>
+
+"copy
+nnoremap <c-insert> V"+ygv<esc>:echo "Line copied."<cr>
+vnoremap <c-insert> "+ygv<esc>:echo "Copied."<cr>
+vnoremap <c-c> "+ygv<esc>:echo "Copied."<cr>
+inoremap <c-insert> <esc>ve
+
+"cut - for some reason must use ygvx and not d for paste to work in insert mode
+vnoremap <c-x> "+ygvx<esc>:echo "Cut."<cr>
+
+"insert
+nnoremap <s-insert> "+P
+"for some reason this does not paste from + buffer
+inoremap <s-insert> <esc>"+pa
+inoremap <c-v> <c-r>=col('.') == col('$') ? "\<lt>esc>`^\"+pa" : "\<lt>esc>`^\"+Pa"<cr>
+"replace contents
+vnoremap <s-insert> "_x"+P
+
+"search and replace
+nnoremap n nzz
+nnoremap N Nzz
+inoremap <c-f> <esc>/
+nnoremap <c-f> /
+nnoremap <c-h> :%s//g\|:silent noh<left><left><left><left><left><left><left><left><left><left><left><left><left><left>
+vnoremap <c-h> :s//g\|:silent noh<left><left><left><left><left><left><left><left><left><left><left><left><left><left>
+vnoremap <c-r> :s#<c-r>=substitute(substitute(@+, "\n", "\\\\n", "g"),"#", "\\\\#", "g")<cr>##g\|:silent noh<left><left><left><left><left><left><left><left><left><left><left><left><left><left>
+
+"uppercase word under cursor
+nnoremap <silent> <f8> gUiw
+
+"clear search highlight
+nnoremap <silent> <c-n> :silent noh<cr>
+
+"prefix (eg. for commenting) visual lines
+vnoremap <c-m> :s/^//\|:silent noh<left><left><left><left><left><left><left><left><left><left><left><left><left>
+
+"generic tab complete
+function! TabOrComplete()
+    if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
+        return "\<c-n>"
+    else
+        return "\<Tab>"
+    endif
+endfunction
+inoremap <tab> <c-r>=TabOrComplete()<cr>
+"always tab omnicomplete with control-tab
+inoremap <c-tab> <c-x><c-o>
+
+"relative line numbering came in vi 7.3
+if version >= 703
+    function! ToggleRelativeNumbering()
+        if &nu
+            set rnu
+            echo "Relative numbering set."
+        else
+            set nu
+            echo "Absolute numbering set."
+        endif
+        return ''
+    endfunction
+    inoremap <silent> <f3> <c-r>=ToggleRelativeNumbering()<cr>
+    nnoremap <silent> <f3> :call ToggleRelativeNumbering()<cr>
+endif
+
+function! ToggleWrap()
+    if &wrap
+        set nowrap
+        echo "No wrap set."
+    else
+        set wrap
+        echo "Wrap set."
+    endif
+    return ''
+endfunction
+inoremap <silent> <f2> <c-r>=ToggleWrap()<cr>
+nnoremap <silent> <f2> :call ToggleWrap()<cr>
+
+"print file info
+function! PrintFileInfo()
+    redir => filename
+    silent !echo %:p
+    redir END
+    let filename = substitute(filename, '.*\n\(.*\n\)', '\1', '')
+    let n = confirm(filename . "\n" . &fileencoding . "\n" . &ff, "", 1, "Info")
+endfunction
+nnoremap <f5> :call PrintFileInfo()<cr>
+
+"set file encoding dialog
+function! SetFileEncoding()
+    let n = confirm("Select file encoding:\n(current: " . &fileencoding . ")", "&UTF-8\n&ISO-8859-1\n&Cancel", 3, "Question")
+    if n == 1
+        set fileencoding=utf-8
+    elseif n == 2
+        set fileencoding=iso-8859-1
+    endif
+endfunction
+nnoremap <f6> :call SetFileEncoding()<cr>
+
+"set file format dialog
+function! SetFileFormat()
+    let n = confirm("Select format for writing the file:\n(current: " . &ff . ")", "&Unix\n&Dos\n&Mac\n&Cancel", 4, "Question")
+    if n == 1
+        set ff=unix
+    elseif n == 2
+        set ff=dos
+    elseif n == 3
+        set ff=mac
+    endif
+endfunction
+nnoremap <f7> :call SetFileFormat()<cr>
+
+if zoom_functions == "1"
+
+    let g:zoom_level=0
+
+    function! GrowFont()
+        let fontsize = substitute(&guifont, '[^0-9]', '', 'g')
+        let fontname = substitute(&guifont, '[0-9 ]', '', 'g')
+        let fontname = substitute(fontname, ':h:cANSI', '', 'g')
+        if g:zoom_level == 15
+            return ''
+        endif
+        let fontsize = fontsize + 2
+        if g:zoom_level == 0
+            let fontname = g:daltfont
+            let fontsize = 10
+        endif
+        let g:zoom_level = g:zoom_level + 1
+        if has("win32")
+            let &guifont = fontname . ":h" . fontsize . ":cANSI"
+        else
+            let &guifont = fontname . " " . fontsize
+        endif
+        let &lines=g:dlines
+        let &columns=g:dcols
+        echo "Font set to: " &guifont
+        return ''
+    endfunction
+
+    function! ShrinkFont()
+        let fontsize = substitute(&guifont, '[^0-9]', '', 'g')
+        let fontname = substitute(&guifont, '[0-9 ]', '', 'g')
+        let fontname = substitute(fontname, ':h:cANSI', '', 'g')
+        if g:zoom_level == 0
+            return ''
+        endif
+        let fontsize = fontsize - 2
+        if g:zoom_level == 1
+            let fontname = g:dfont
+            let fontsize = 12
+        endif
+        let g:zoom_level = g:zoom_level - 1
+        if has("win32")
+            let &guifont = fontname . ":h" . fontsize . ":cANSI"
+        else
+            let &guifont = fontname . " " . fontsize
+        endif
+        let &lines=g:dlines
+        let &columns=g:dcols
+        echo "Font set to: " &guifont
+        return ''
+    endfunction
+
+    "shrink/grow font
+    inoremap <silent> <c-kplus> <c-r>=GrowFont()<cr>
+    nnoremap <silent> <c-kplus> :call GrowFont()<cr>
+    inoremap <silent> <c-kminus> <c-r>=ShrinkFont()<cr>
+    nnoremap <silent> <c-kminus> :call ShrinkFont()<cr>
+    inoremap <silent> <c-mousedown> <c-r>=GrowFont()<cr>
+    nnoremap <silent> <c-mousedown> :call GrowFont()<cr>
+    inoremap <silent> <c-mouseup> <c-r>=ShrinkFont()<cr>
+    nnoremap <silent> <c-mouseup> :call ShrinkFont()<cr>
+endif
