@@ -3,3 +3,4 @@
 * copymusic_encode.sh: Encodes and tags a source audio file to destination file.
 * dosbox.sh: Set's CPU affinity and runs DosBox on single core with performance governor.
 * kvm: Kernel-based Virtual Machine scripts.
+* network_all: An OpenRC script to set up a network interface and a bridge for virtual machines.

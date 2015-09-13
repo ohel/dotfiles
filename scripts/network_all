@@ -1,0 +1,71 @@
+#!/sbin/runscript
+
+# This is a custom script.
+
+depend()
+{
+	need localmount
+	after bootmisc
+	provide net
+}
+
+start()
+{
+	ebegin "Setting up network..."
+
+    #networkaddr="192.168.0"
+    networkaddr="10.0.0"
+
+    # network config
+    ip link set enp4s0 up
+    ip addr add $networkaddr.2/24 dev enp4s0 scope global
+    ip route add 0.0.0.0 via $networkaddr.1 dev enp4s0
+    ip route add default via $networkaddr.1 dev enp4s0 2> /dev/null
+    ip addr add fe80::2/64 dev enp4s0 scope site
+    sysctl -q -e -w net.ipv4.conf.enp4s0.forwarding=1
+    sysctl -q -e -w net.ipv6.conf.enp4s0.forwarding=1
+    #iptables -t nat -A PREROUTING -p tcp --dport 10000 -i ppp0 -j DNAT --to-destination 10.0.1.2:22 # for a virtual server
+    iptables -t nat -A POSTROUTING -s 10.0.1.0/24 -o enp4s0 -j SNAT --to-source $networkaddr.2 # for virtual machines
+    einfo "enp4s0 up"
+
+    # add network bridge
+    brctl addbr vmbridge
+    ip link set vmbridge up
+    ip addr add 10.0.1.1/24 dev vmbridge scope host
+    ip addr add fe80::1:1/64 dev vmbridge scope site
+    sysctl -q -e -w net.ipv4.conf.vmbridge.forwarding=1
+    sysctl -q -e -w net.ipv6.conf.vmbridge.forwarding=1
+    iptables -t nat -A POSTROUTING -s 10.0.1.1/32 -o vmbridge -j SNAT --to-source $networkaddr.2
+    einfo "vmbridge up"
+
+	eend $? "Failed to start network"
+}
+
+stop()
+{
+	ebegin "Stopping network..."
+
+    #networkaddr="192.168.0"
+    networkaddr="10.0.0"
+
+    #iptables -t nat -D PREROUTING $(iptables -t nat -L --line-numbers | grep 10.0.1.2:22 | head -n 1 | cut -f 1 -d ' ')
+    iptables -t nat -D POSTROUTING -s 10.0.1.0/24 -o enp4s0 -j SNAT --to-source $networkaddr.2 # for virtual machines
+    sysctl -q -e -w net.ipv4.conf.enp4s0.forwarding=0
+    sysctl -q -e -w net.ipv6.conf.enp4s0.forwarding=0
+    ip route del 0.0.0.0 via $networkaddr.1 dev enp4s0
+    ip route del default via $networkaddr.1 dev enp4s0 2> /dev/null
+    ip addr del $networkaddr.2/24 dev enp4s0
+    ip addr del fe80::2/64 dev enp4s0
+    ip link set enp4s0 down
+
+    iptables -t nat -D POSTROUTING -s 10.0.1.1/32 -o vmbridge -j SNAT --to-source $networkaddr.2
+    sysctl -q -e -w net.ipv4.conf.vmbridge.forwarding=0
+    sysctl -q -e -w net.ipv6.conf.vmbridge.forwarding=0
+    ip addr del 10.0.1.1/24 dev vmbridge scope host
+    ip addr del fe80::1:1/64 dev vmbridge scope site
+    ip link set vmbridge down
+    brctl delbr vmbridge
+
+	eend $? "Failed to stop network"
+}
+
