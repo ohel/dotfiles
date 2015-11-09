@@ -1,0 +1,47 @@
+HISTFILESIZE=4096  
+HISTSIZE=4096
+PROMPT_COMMAND='history -a; history -c; history -r; echo -ne "\e]0;Terminal: ${PWD}\007"'
+if [ -e ~/.scripts/gitprompt.sh ]
+then
+  source ~/.scripts/gitprompt.sh
+  PS1='\[\e[0;37m\]\w \[\e[1;36m\]$(__git_ps1 "(%s) ")\[\e[1;30m\]\$\[\e[0m\] '
+else
+  PS1='\[\e[0;37m\]\w \[\e[1;30m\]\$\[\e[0m\] '
+fi
+
+set -o vi
+shopt -s globstar # recursive glob like **/*.log or cd **/scripts
+shopt -s autocd # "$ directory" equals "$ cd directory"
+shopt -s cdspell # cd directry -> cd directory
+
+case "$TERM" in
+xterm*|rxvt*)
+    bind '"\t":menu-complete'
+    bind '"\e[A":history-search-backward'
+    bind '"\e[B":history-search-forward'
+    ;;
+esac
+
+alias ls='/bin/ls --color=auto -hG --group-directories-first'
+alias cp='cp -a'
+alias mountiso='sudo mount -o loop -t iso9660'
+alias gitvis='git log --graph --oneline --decorate --all'
+alias x='exit'
+
+export NVM_DIR="/home/panther/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+alias gvim='gvim -p'
+alias mountfat='~/.scripts/mountfat.sh'
+alias agv='~/.scripts/agvim.sh'
+alias mplay='~/.scripts/launchers/media_player.sh'
+alias playdvd='~/.scripts/launchers/media_player_dvd.sh'
+alias hwinfo='~/.scripts/hwinfo.sh'
+alias alsadevice='source ~/.scripts/alsadevice.sh'
+alias agv='~/.scripts/agvim.sh'
+alias jshit='~/.scripts/javascript_installs.sh'
+
+alias irc='ssh -t lakka.kapsi.fi "screen -r"'
+alias kapsi='ssh lakka.kapsi.fi'
+alias kapsirdp='ssh -N -L 3389:localhost:33389 lakka.kapsi.fi'
+
