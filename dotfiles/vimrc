@@ -197,8 +197,8 @@ vnoremap <c-h> :s//g\|:silent noh<left><left><left><left><left><left><left><left
 
 
 " up/down
-noremap <c-k> <up>
-noremap <c-j> <down>
+inoremap <c-k> <up>
+inoremap <c-j> <down>
 
 " move screen lines
 inoremap <home> <c-o>g0
