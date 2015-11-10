@@ -69,7 +69,6 @@ call plug#begin('~/.vim/plugged')
 Plug 'leafgarland/typescript-vim'
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/unite-outline'
-Plug 'Shougo/unite-session'
 Plug 'Shougo/vimproc.vim', { 'do': 'cd ~/.vim/plugged/vimproc.vim && make -f make_unix.mak' }
 Plug 'kien/ctrlp.vim'
 "Plug 'https://github.com/prendradjaja/vim-vertigo.git'
