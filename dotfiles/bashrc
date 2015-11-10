@@ -33,7 +33,6 @@ export NVM_DIR="/home/panther/.nvm"
 
 alias gvim='gvim -p'
 alias mountfat='~/.scripts/mountfat.sh'
-alias agv='~/.scripts/agvim.sh'
 alias mplay='~/.scripts/launchers/media_player.sh'
 alias playdvd='~/.scripts/launchers/media_player_dvd.sh'
 alias hwinfo='~/.scripts/hwinfo.sh'
