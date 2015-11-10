@@ -75,12 +75,11 @@ Plug 'kien/ctrlp.vim'
 "Plug 'https://github.com/prendradjaja/vim-vertigo.git'
 call plug#end()
 
-if filereadable(expand("~/.vim/ctagsdb")) "if using omnicppcomplete, set extra commands
-    set tags +=~/ramdisk/vimctags
-    nnoremap <c-f5> :!ctags -R -f ~/ramdisk/vimctags --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
-    autocmd FileType cpp set tags +=~/.vim/ctagsdb
+if filereadable(expand("~/.vim/plugin/taglist.vim"))
+    nnoremap <c-f5> :!ctags -R -f ~/.vim/ctagsdb --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
     nnoremap <f4> :TlistToggle<cr>
     inoremap <f4> <c-o>:TlistToggle<cr>
+    autocmd FileType cpp set tags +=~/.vim/ctagsdb
 endif
 
 if executable('ag')
@@ -90,12 +89,12 @@ if executable('ag')
     let g:unite_source_grep_default_opts = '--vimgrep -i --silent'
 endif
 let g:unite_enable_ignore_case = 1
-let g:unite_enable_start_insert = 1
+"let g:unite_enable_start_insert = 1
 let g:unite_prompt = '» '
 let g:unite_source_history_yank_enable = 1
 let g:unite_split_rule = 'bot'
 let g:unite_winheight = 15
-nnoremap <silent><space>a :Unite grep:.::\\.(filter\|provider\|controller\|directive\|factory\|service)\\(\\'.+\\'<cr>
+nnoremap <silent><space>a :Unite -start-insert grep:.::\\.(filter\|provider\|controller\|directive\|factory\|service)\\(\\'.+\\'<cr>
 nnoremap <silent><space>u :Unite grep:.:<cr>
 
 nnoremap <c-b> :CtrlPBuffer<cr>
