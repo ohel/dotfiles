@@ -66,11 +66,12 @@ silent !mkdir -p "$HOME/.vim/undodir"
 
 
 call plug#begin('~/.vim/plugged')
-Plug 'https://github.com/leafgarland/typescript-vim.git'
+Plug 'leafgarland/typescript-vim'
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/unite-outline'
 Plug 'Shougo/unite-session'
 Plug 'Shougo/vimproc.vim', { 'do': 'cd ~/.vim/plugged/vimproc.vim && make -f make_unix.mak' }
+Plug 'kien/ctrlp.vim'
 "Plug 'https://github.com/prendradjaja/vim-vertigo.git'
 call plug#end()
 
@@ -96,6 +97,8 @@ let g:unite_split_rule = 'bot'
 let g:unite_winheight = 15
 nnoremap <silent><space>a :Unite grep:.::\\.(filter\|provider\|controller\|directive\|factory\|service)\\(\\'.+\\'<cr>
 nnoremap <silent><space>u :Unite grep:.:<cr>
+
+nnoremap <c-b> :CtrlPBuffer<cr>
 
 " Vertigo options
 "let mapleader = ' '
