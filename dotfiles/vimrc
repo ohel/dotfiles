@@ -46,10 +46,25 @@ endif
 
 
 
-set showtabline=2 "tab selector always visible
-set expandtab "expand tab to spaces, use c-q<tab> for real tab
-let &shiftwidth=&tabstop "set intend (using keys << or >>) width
-let &softtabstop=&softtabstop "set indent width in insert mode using tab
+set showtabline=2 " tab selector always visible
+set expandtab " expand tab to spaces, use c-q<tab> for real tab
+let &shiftwidth=&tabstop " set intend (using keys << or >>) width
+let &softtabstop=&softtabstop " set indent width in insert mode using tab
+function! TabOrComplete() " generic tab complete
+    if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
+        return "\<c-n>"
+    else
+        return "\<Tab>"
+    endif
+endfunction
+inoremap <tab> <c-r>=TabOrComplete()<cr>
+" insert real tab on shift-tab
+inoremap <s-tab> <c-q><tab>
+" tab omnicomplete with control-tab (needs omnifunc)
+inoremap <c-tab> <c-x><c-o>
+" tab navigation
+nnoremap <c-tab> :tabnext<cr>
+nnoremap <c-s-tab> :tabprevious<cr>
 
 
 
@@ -161,12 +176,6 @@ inoremap Â  <space>
 
 
 
-" tab navigation
-nnoremap <c-tab> :tabnext<cr>
-nnoremap <c-s-tab> :tabprevious<cr>
-inoremap <c-tab> :tabnext<cr>
-inoremap <c-s-tab> :tabprevious<cr>
-
 " select all
 inoremap <c-a> <esc>gg<s-v>G
 
@@ -220,9 +229,6 @@ inoremap <down> <c-o>gj
 
 
 
-" insert real tab on shift-tab
-inoremap <s-tab> <c-q><tab>
-
 " uppercase word under cursor
 nnoremap <silent> <f8> gUiw
 
@@ -246,18 +252,6 @@ nnoremap <silent> <c-n> :silent noh<cr>
 vnoremap <c-m> :s/^//\|:silent noh<left><left><left><left><left><left><left><left><left><left><left><left><left>
 
 
-
-" generic tab complete
-function! TabOrComplete()
-    if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
-        return "\<c-n>"
-    else
-        return "\<Tab>"
-    endif
-endfunction
-inoremap <tab> <c-r>=TabOrComplete()<cr>
-" always tab omnicomplete with control-tab
-inoremap <c-tab> <c-x><c-o>
 
 " relative line numbering came in vi 7.3
 if version >= 703
