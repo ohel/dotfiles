@@ -94,13 +94,16 @@ let g:unite_prompt = '» '
 let g:unite_source_history_yank_enable = 1
 let g:unite_split_rule = 'bot'
 let g:unite_winheight = 15
-nnoremap <silent><space>f :Unite -start-insert file_rec/async<cr>
-nnoremap <silent><space>g :Unite -start-insert file_rec/git<cr>
-nnoremap <silent><space>a :Unite -start-insert grep:.::\\.(filter\|provider\|controller\|directive\|factory\|service)\\(\\'.+\\'<cr>
-nnoremap <silent><space>u :Unite grep:.:<cr>
+let mapleader = ' '
+nnoremap <silent><leader>f :Unite -start-insert file_rec/async<cr>
+vnoremap <silent><leader>f :Unite -start-insert file_rec/async<cr><c-r>*
+nnoremap <silent><leader>g :Unite -start-insert file_rec/git<cr>
+vnoremap <silent><leader>g :Unite -start-insert file_rec/git<cr><c-r>*
+nnoremap <silent><leader>a :Unite -start-insert grep:.::\\.(filter\|provider\|controller\|directive\|factory\|service)\\(\\'.+\\'<cr>
+nnoremap <silent><leader>u :Unite grep:.:<cr>
+vnoremap <silent><leader>u :Unite grep:.::<c-r>*<cr>
 
 " Vertigo options
-"let mapleader = ' '
 "nnoremap <silent><space>p :Unite -silent file_rec/async<cr>
 "nnoremap <silent><leader>j :<C-U>VertigoDown n<cr>
 "onoremap <silent><leader>j :<C-U>VertigoDown o<cr>
