@@ -50,9 +50,14 @@ set showtabline=2 " tab selector always visible
 set expandtab " expand tab to spaces, use c-q<tab> for real tab
 let &shiftwidth=&tabstop " set intend (using keys << or >>) width
 let &softtabstop=&softtabstop " set indent width in insert mode using tab
+
 function! TabOrComplete() " generic tab complete
     if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
-        return "\<c-n>"
+        if empty(&omnifunc)
+            return "\<c-n>"
+        else
+            return "\<c-x>\<c-o>"
+        endif
     else
         return "\<Tab>"
     endif
@@ -60,11 +65,6 @@ endfunction
 inoremap <tab> <c-r>=TabOrComplete()<cr>
 " insert real tab on shift-tab
 inoremap <s-tab> <c-q><tab>
-" tab omnicomplete with control-tab (needs omnifunc)
-inoremap <c-tab> <c-x><c-o>
-" tab navigation
-nnoremap <c-tab> :tabnext<cr>
-nnoremap <c-s-tab> :tabprevious<cr>
 
 
 
@@ -85,6 +85,8 @@ Plug 'leafgarland/typescript-vim'
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/unite-outline'
 Plug 'Shougo/vimproc.vim', { 'do': 'cd ~/.vim/plugged/vimproc.vim && make -f make_unix.mak' } " allows async operations
+Plug 'tomtom/tcomment_vim'
+Plug 'jreybert/vimagit'
 call plug#end()
 
 if filereadable(expand("~/.vim/plugin/taglist.vim"))
@@ -118,11 +120,18 @@ nnoremap <silent><leader>u :Unite grep:.:<cr>
 " search selected text
 vnoremap <silent><leader>u :Unite grep:.::<c-r>*<cr>
 " search current filename
-nnoremap <silent><leader>c :Unite grep:.::<c-r>=expand('%:t')<cr><cr>
+nnoremap <silent><leader><s-f> :Unite grep:.::<c-r>=expand('%:t')<cr><cr>
 " search Angular.js keywords
 nnoremap <silent><leader>a :Unite -start-insert grep:.::\\.(filter\|provider\|controller\|directive\|factory\|service)\\(\\'.+\\'<cr>
 
+" vimagit
+nnoremap <silent><leader>m :Magit<cr>
 
+" tcomment
+let g:tcommentMapLeaderOp1 = 'å'
+" toggle comment for the current/selected line(s)
+nmap <silent><a-c> åcc<a-c>
+vmap <silent><a-c> åc<a-c>
 
 " syntax and file type detection
 syntax on
@@ -137,7 +146,7 @@ autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif " returns cursor to previous position when opening files
 
 
 
@@ -156,6 +165,7 @@ set go-=T " hide toolbar
 set go-=m " hide menu
 set go-=t " disable tear-off menus
 set go-=r " disable right scroll bar
+set incsearch " incremental search
 
 
 
@@ -166,9 +176,13 @@ command WQ wq
 command Wq wq
 
 " convert Alt Gr + space to normal space
-inoremap Â  <space>
+inoremap   <space>
 
 
+
+" tab navigation
+nnoremap <c-tab> :tabnext<cr>
+nnoremap <c-s-tab> :tabprevious<cr>
 
 " select all
 inoremap <c-a> <esc>gg<s-v>G
@@ -211,8 +225,9 @@ vnoremap <c-h> :s//g\|:silent noh<left><left><left><left><left><left><left><left
 
 
 " up/down
-inoremap <c-k> <up>
-inoremap <c-j> <down>
+inoremap <a-k> <up>
+inoremap <a-j> <down>
+inoremap <a-h> <cr>
 
 " move screen lines
 inoremap <home> <c-o>g0
@@ -241,9 +256,6 @@ nnoremap N Nzz
 
 " clear search highlight
 nnoremap <silent> <c-n> :silent noh<cr>
-
-" prefix (eg. for commenting) visual lines
-vnoremap <c-m> :s/^//\|:silent noh<left><left><left><left><left><left><left><left><left><left><left><left><left>
 
 
 
