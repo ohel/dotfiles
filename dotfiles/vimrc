@@ -85,7 +85,6 @@ Plug 'leafgarland/typescript-vim'
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/unite-outline'
 Plug 'Shougo/vimproc.vim', { 'do': 'cd ~/.vim/plugged/vimproc.vim && make -f make_unix.mak' } " allows async operations
-"Plug 'https://github.com/prendradjaja/vim-vertigo.git'
 call plug#end()
 
 if filereadable(expand("~/.vim/plugin/taglist.vim"))
@@ -103,30 +102,25 @@ if executable('ag')
     let g:unite_source_grep_recursive_opt = ''
     let g:unite_source_rec_async_command = ['ag', '--nocolor', '--nogroup', '-g', '']
 endif
-"let g:unite_enable_start_insert = 1
 let g:unite_enable_ignore_case = 1
 let g:unite_prompt = '» '
 let g:unite_source_history_yank_enable = 1
 let g:unite_split_rule = 'bot'
 let g:unite_winheight = 15
 let mapleader = ' '
-nnoremap <silent><leader>f :Unite -start-insert file_rec/async<cr>
-vnoremap <silent><leader>f :Unite -start-insert file_rec/async<cr><c-r>*
-nnoremap <silent><leader>g :Unite -start-insert file_rec/git<cr>
-vnoremap <silent><leader>g :Unite -start-insert file_rec/git<cr><c-r>*
-nnoremap <silent><leader>a :Unite -start-insert grep:.::\\.(filter\|provider\|controller\|directive\|factory\|service)\\(\\'.+\\'<cr>
+nnoremap <silent><leader>b :Unite buffer<cr>
+nnoremap <silent><leader>b :Unite buffer<cr>
+nnoremap <silent><leader>f :Unite -start-insert file_rec/async file_rec/git buffer<cr>
+vnoremap <silent><leader>f :Unite -start-insert file_rec/async file_rec/git buffer<cr><c-r>*
+nnoremap <silent><leader>g :Unite -start-insert file_rec/git buffer<cr>
+vnoremap <silent><leader>g :Unite -start-insert file_rec/git buffer<cr><c-r>*
 nnoremap <silent><leader>u :Unite grep:.:<cr>
+" search selected text
 vnoremap <silent><leader>u :Unite grep:.::<c-r>*<cr>
-
-" Vertigo options
-"nnoremap <silent><space>p :Unite -silent file_rec/async<cr>
-"nnoremap <silent><leader>j :<C-U>VertigoDown n<cr>
-"onoremap <silent><leader>j :<C-U>VertigoDown o<cr>
-"vnoremap <silent><leader>j :<C-U>VertigoDown v<cr>
-"nnoremap <silent><leader>k :<C-U>VertigoUp n<cr>
-"onoremap <silent><leader>k :<C-U>VertigoUp o<cr>
-"vnoremap <silent><leader>k :<C-U>VertigoUp v<cr>
-"let g:Vertigo_homerow = 'asdfghjkl '
+" search current filename
+nnoremap <silent><leader>c :Unite grep:.::<c-r>=expand('%:t')<cr><cr>
+" search Angular.js keywords
+nnoremap <silent><leader>a :Unite -start-insert grep:.::\\.(filter\|provider\|controller\|directive\|factory\|service)\\(\\'.+\\'<cr>
 
 
 
