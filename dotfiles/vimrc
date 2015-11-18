@@ -49,7 +49,7 @@ endif
 set showtabline=2 " tab selector always visible
 set expandtab " expand tab to spaces, use c-q<tab> for real tab
 let &shiftwidth=&tabstop " set intend (using keys << or >>) width
-let &softtabstop=&softtabstop " set indent width in insert mode using tab
+let &softtabstop=&tabstop " set indent width in insert mode using tab
 
 function! TabOrComplete() " generic tab complete
     if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
