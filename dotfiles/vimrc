@@ -180,6 +180,10 @@ inoremap   <space>
 
 
 
+" save
+inoremap <c-s> <c-r>=col('.') == col('$') ? "\<lt>esc>`^:w\<lt>cr>a" : "\<lt>esc>`^:w\<lt>cr>i"<cr>
+nnoremap <c-s> :w<cr>
+
 " tab navigation
 nnoremap <c-tab> :tabnext<cr>
 nnoremap <c-s-tab> :tabprevious<cr>
