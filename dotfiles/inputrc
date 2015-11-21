@@ -1,0 +1,5 @@
+set match-hidden-files off
+set completion-ignore-case on
+set mark-symlinked-directories on
+"\e[5~": history-search-backward
+"\e[6~": history-search-forward

@@ -1,0 +1,136 @@
+# Mod1 = Alt key
+# Mod4 = Windows key
+
+# Common applications
+"xfce4-terminal --geometry=80x26"
+Mod4 + t
+"thunar"
+Mod4 + e
+"xfce4-terminal --geometry=120x30 -e ranger"
+Mod4 + r
+"xfce4-terminal --working-directory=~ --title IPython -e ipython"
+XF86Calculator
+"chromium-browser"
+Mod1 + Mod4 + w
+"~/.scripts/launchers/chromium.sh"
+Mod4 + w
+"~/.scripts/launchers/chromium.sh"
+XF86HomePage
+"thunar"
+XF86Search
+
+# Special commands
+"xfce4-popup-whiskermenu"
+Control + Escape
+"xfce4-popup-whiskermenu"
+Mod4 + u
+"xkill"
+Control + Mod1 + Escape
+"~/.scripts/switch_wm.sh"
+Mod1 + Mod4 + Pause
+"~/.scripts/switch_background.sh"
+Mod4 + Pause
+"wmctrl -a xfce4-panel"
+Mod4 + s
+#"wmctrl -r :ACTIVE: -e 0,0,0,-1,-1"
+#Mod4 + BackSpace
+"~/.scripts/screenshot.sh"
+Print
+"~/.scripts/screenshot.sh 2"
+Shift + Print
+"import ~/partialscreenshot.png"
+Mod4 + Print
+"claws-mail --select INBOX"
+XF86Mail
+"gvim -c start"
+XF86Launch5
+"filezilla"
+XF86Launch6
+"gvim -n +1 -c start ~/ramdisk/memo"
+XF86Launch7
+"xfce4-terminal -x htop"
+XF86Launch8
+"xfce4-terminal --geometry 80x50 -x screen -c ~/.config/hwinfoscreenrc"
+XF86Launch9
+
+# Multimedia
+"~/.scripts/quodlibet/start_play_pause.sh"
+XF86AudioPlay
+"/opt/programs/quodlibet/quodlibet.py --random=album"
+Mod4 + XF86AudioPlay
+#"xfce4-terminal --hide-borders --geometry 50x10 -x ~/.scripts/toggle_digital_source.sh autoclose &"
+#XF86AudioMute
+#"xfce4-terminal --hide-borders --geometry 50x10 -x ~/.scripts/toggle_digital_source_no_monitor.sh autoclose &"
+#Shift + XF86AudioMute
+#"~/.scripts/quodlibet/vol_down.sh"
+#XF86AudioLowerVolume
+#"~/.scripts/quodlibet/vol_up.sh"
+#XF86AudioRaiseVolume
+#"~/.scripts/softvol.sh -"
+#Shift + XF86AudioLowerVolume
+#"~/.scripts/softvol.sh +"
+#Shift + XF86AudioRaiseVolume
+"~/.scripts/quodlibet/prev_song.sh"
+Mod4 + XF86AudioLowerVolume
+"~/.scripts/quodlibet/next_song.sh"
+Mod4 + XF86AudioRaiseVolume
+"~/.scripts/quodlibet/toggle_visible.sh"
+XF86Favorites
+"~/.scripts/screensaver.sh"
+Mod4 + XF86Favorites
+"~/.scripts/screensaver.sh standby"
+Mod1 + Mod4 + XF86Favorites
+
+# Terminal buffer scrolling with Win+J/K
+"xdotool keyup j && xdotool key --clearmodifiers Shift+Page_Down"
+Shift + Mod4 + j
+"xdotool keyup k && xdotool key --clearmodifiers Shift+Page_Up"
+Shift + Mod4 + k
+
+# Mouse wheel left
+# "xdotool key Left"
+# m:0x0 + b:11
+# "xdotool key Left"
+# Mod1 + m:0x0 + b:11
+# "xdotool key Left"
+# Mod4 + m:0x0 + b:11
+# "xdotool key Left"
+# Control + m:0x0 + b:11
+# "xdotool key Left"
+# Shift + m:0x0 + b:11
+
+# Mouse wheel right
+# "xdotool key Right"
+# m:0x0 + b:12
+# "xdotool key Right"
+# Mod1 + m:0x0 + b:12
+# "xdotool key Right"
+# Mod4 + m:0x0 + b:12
+# "xdotool key Right"
+# Control + m:0x0 + b:12
+# "xdotool key Right"
+# Shift + m:0x0 + b:12
+
+# Mouse back thumb
+# "xdotool key Return"
+# m:0x0 + b:9
+# "xdotool key Return"
+# Mod1 + m:0x0 + b:9
+# "xdotool key Return"
+# Mod4 + m:0x0 + b:9
+# "xdotool key Return"
+# Control + m:0x0 + b:9
+# "xdotool key Return"
+# Shift + m:0x0 + b:9
+
+# Mouse forward thumb
+# Have to put with and without Control modifier, otherwise won't work as intended.
+# For some reason mouse click events are not registered while this is on so it's useless.
+#"xdotool keydown Control"
+#m:0x0 + b:10
+#"xdotool keydown Control"
+#m:0x4 + b:10
+#"xdotool keyup Control"
+#Release + m:0x0 + b:10
+#"xdotool keyup Control"
+#Release + m:0x4 + b:10

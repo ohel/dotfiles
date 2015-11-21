@@ -1,0 +1,4 @@
+ACTION=="add", ENV{ID_VENDOR}=="DragonRise_Inc.", ENV{ID_MODEL}=="Generic_USB_Joystick", ENV{DEVNAME}=="*event*", SYMLINK="input/dragonrise-evdev", MODE="0664", RUN+="/bin/bash /opt/udev/scripts/dragonrise.sh"
+ACTION=="add", ENV{ID_VENDOR}=="DragonRise_Inc.", ENV{ID_MODEL}=="Generic_USB_Joystick", ENV{DEVNAME}=="*js*", RUN+="/bin/bash /opt/udev/scripts/dragonrise_remove.sh $name"
+ACTION=="remove", ENV{ID_VENDOR}=="DragonRise_Inc.", ENV{ID_MODEL}=="Generic_USB_Joystick", ENV{DEVNAME}=="*js*", RUN+="/bin/bash /opt/udev/scripts/dragonrise_remove.sh"
+

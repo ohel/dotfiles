@@ -1,0 +1,2 @@
+# Initialize the display with correct serial port speed.
+ACTION=="add", ENV{ID_VENDOR}=="Matrix_Orbital", ENV{ID_MODEL}=="MX2_MX3", SYMLINK="serial/matrix_orbital", GROUP="wheel", MODE="0660", RUN+="/bin/sh -c '/bin/stty -F /dev/serial/matrix_orbital speed 19200 -onlcr && echo -n -e \\xFEX > /dev/serial/matrix_orbital'"

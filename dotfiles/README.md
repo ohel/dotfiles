@@ -1,3 +1,7 @@
-* bashrc: ~/.bashrc.
-* vimrc: ~/.vimrc.
 * asoundrc: ALSA's ~/.asoundrc config file. This includes lots of virtual devices, multi-channel devices, LADSPA devices and more.
+* bashrc: ~/.bashrc.
+* conkyrc: ~/.conkyrc. A minimal config showing a few RSS feeds and if something eats resources.
+* inputrc: ~/.inputrc.
+* vimrc: ~/.vimrc.
+* xbindkeysrc: ~/.xbindkeys. Has quite a few mappings for MS Natural Ergonomic 4000 multimedia keys.
+* xinitrc: ~/.xinitrc. On my main rig I start X using good old xinitrc script. I'm the single user anyway.

@@ -4,3 +4,6 @@
 * dosbox.sh: Set's CPU affinity and runs DosBox on single core with performance governor.
 * kvm: Kernel-based Virtual Machine scripts.
 * network_all: An OpenRC script to set up a network interface and a bridge for virtual machines.
+* updatesystem.sh: My Gentoo system update script.
+
+Also contains various other scripts.

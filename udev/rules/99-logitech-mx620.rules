@@ -1,0 +1,3 @@
+# Add evdev for Gizmo Daemon.
+ACTION=="add", ENV{ID_VENDOR}=="Logitech", ENV{SUBSYSTEM}=="input", ENV{ID_INPUT_MOUSE}=="1", ENV{ID_USB_INTERFACE_NUM}=="00", ENV{DEVNAME}=="*event*", SYMLINK="input/evdev-mouse", GROUP="wheel", MODE="0660"
+

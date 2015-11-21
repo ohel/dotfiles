@@ -1,0 +1,11 @@
+# Sony Xperia Z1 Compact
+ACTION=="add", ENV{ID_VENDOR}=="SONY", ENV{ID_MODEL}=="Mass_Storage", ENV{DEVTYPE}=="partition", RUN+="/bin/su panther -c '/bin/bash ~/.scripts/udev/phonesdcard.sh %k'"
+
+# Samsung Galaxy Y
+# ACTION=="add", ENV{ID_VENDOR}=="SAMSUNG", ENV{ID_MODEL}=="S5360_Card", ENV{DEVTYPE}=="disk", SYMLINK="phone", RUN+="/bin/su panther -c '/bin/bash ~/.scripts/udev/android.sh device %k'"
+# ACTION=="add", ENV{ID_VENDOR}=="SAMSUNG", ENV{ID_MODEL}=="S5360_Card", ENV{DEVTYPE}=="partition", RUN+="/bin/su panther -c '/bin/bash ~/.scripts/udev/android.sh partition %k'"
+
+# Sony Ericsson Xperia X10 Mini
+#ACTION=="add", ENV{ID_VENDOR}=="SEMC", ENV{ID_MODEL}=="Mass_Storage", ENV{DEVTYPE}=="disk", SYMLINK="xperia", RUN+="/bin/su panther -c '/bin/bash /home/.scripts/udev/xperia.sh device %k'"
+#ACTION=="add", ENV{ID_VENDOR}=="SEMC", ENV{ID_MODEL}=="Mass_Storage", ENV{DEVTYPE}=="partition", RUN+="/bin/su panther -c '/bin/bash /home/.scripts/udev/xperia.sh partition %k'"
+

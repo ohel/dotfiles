@@ -1,0 +1,91 @@
+if [ "X$XTYPE" == "Xalt" ]
+then
+    # *****************************************************************************
+    # run alternative X server
+    exec compiz --only-current-screen ccp &
+    exec emerald &
+elif [ "X$XTYPE" == "Xdefault" ] || [ "X$XTYPE" == "X" ]
+then
+
+# *****************************************************************************
+# run normal startup
+
+export LANG='en_US.utf8'
+export LC_ALL='en_US.utf8'
+
+export ALSA_DEFAULT_PCM="julia"
+export ALSA_DEFAULT_CTL="julia_analog_hw"
+export SDL_AUDIODRIVER="alsa"
+
+export PATH="$PATH:/opt/bin:/opt/bin/java_bin:~/.scripts:."
+export NODE_PATH="/opt/iojs/bin/node_modules"
+
+export MAGICK_THREAD_LIMIT=4
+export GDK_USE_XFT=1
+export QT_XFT=true
+export IGNOREEOF=1
+
+# Compiz < 0.9 is a non-reparenting window manager
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+# E.g. for Japanese input
+#export XMODIFIERS=@im=scim
+#export GTK_IM_MODULE=scim
+
+#xset dpms 900 0 0
+xset -dpms; xset s off
+
+export RAMDISKDIR=~/ramdisk
+if test "$(uname -r | grep rt)" == "$(uname -r)"
+then
+	ln -s ~/.scripts/lcd/systeminfo_radeon.sh $RAMDISKDIR/lcdsysteminfo
+	export LIBGL_ALWAYS_INDIRECT=1
+else
+	ln -s ~/.scripts/lcd/systeminfo_catalyst.sh $RAMDISKDIR/lcdsysteminfo
+fi
+
+ln -sf ~/.themes/crepuscular_rays_crop_browner.png $RAMDISKDIR/background
+ln -sf ~/docs/misc/memo.txt $RAMDISKDIR/memo
+mkdir -p $RAMDISKDIR/thumbnails
+mkdir -p $RAMDISKDIR/cache/browser
+mkdir -p $RAMDISKDIR/cache/flash
+if ! [ -e $RAMDISKDIR/mpvfifo ]
+	then mkfifo $RAMDISKDIR/mpvfifo
+fi
+if ! [ -e $RAMDISKDIR/miscfifo ]
+	then mkfifo $RAMDISKDIR/miscfifo
+fi
+mkdir -p /tmp/mhwaveedit
+
+#if test "$(uname -r | grep rt)" == "$(uname -r)"
+#then
+#    exec xfwm4 &
+#else
+#    exec compiz --only-current-screen ccp &
+#    exec emerald &
+#fi
+exec ~/.scripts/launchers/compiz.sh &
+
+exec xfce4-session &
+exec devilspie ~/.config/devilspie/*.ds &
+exec ~/.scripts/initkeyboard.sh &
+exec ~/.scripts/launchers/conky.sh &
+exec ~/.scripts/launchers/gizmod.sh &
+exec ~/.scripts/launchers/clawsmail.sh &
+exec /mnt/exports/share/samba/mount_visual_studio.sh &
+
+if [ -e /dev/serial/matrix_orbital ]
+then
+	echo -n -e "\xFEX\xFE\x48\xFE\x46" > /dev/serial/matrix_orbital
+fi
+
+# Play a dummy wav so that software volume control device is visible for volumeicon.
+#aplay -q -D hda_out_mix_44100_vol ~/.local/share/misc/dummy.wav
+exec volumeicon &
+
+# If remote connections etc. are used.
+#exec ~/.scripts/updateip.sh &
+
+fi # *****************************************************************************
+
+exec /opt/programs/lastofxinitrc/lastofxinitrc

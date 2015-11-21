@@ -1,0 +1,1 @@
+ACTION=="add", ATTRS{product}=="LaCie Hard Drive USB", SYMLINK="usbhdd", RUN+="/bin/su panther -c '/usr/bin/sudo /bin/mount /dev/usbhdd /mnt/vortex'"

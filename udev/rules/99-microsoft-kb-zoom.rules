@@ -1,0 +1,2 @@
+# Microsoft Natural Ergonomic Keyboard 4000 symlink device to control zoom button functionality with Gizmo Daemon.
+ACTION=="add", ENV{ID_VENDOR}=="Microsoft", ENV{SUBSYSTEM}=="input", ENV{ID_INPUT_KEYBOARD}=="1", ENV{ID_USB_INTERFACE_NUM}=="01", SYMLINK="input/mskb-zoom", GROUP="wheel", MODE="0660"
