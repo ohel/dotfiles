@@ -22,25 +22,25 @@ xterm*|rxvt*)
     ;;
 esac
 
-alias ls='/bin/ls --color=auto -hG --group-directories-first'
-alias cp='cp -a'
-alias mountiso='sudo mount -o loop -t iso9660'
-alias gitvis='git log --graph --oneline --decorate --all'
-alias x='exit'
-
 export NVM_DIR="/home/panther/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
-alias gvim='gvim -p'
+alias cp='cp -a'
+alias f='find ./ | grep -i '
+alias gitvis='git log --graph --oneline --decorate --all'
+alias ls='ls --color=auto -hG --group-directories-first'
+alias mountiso='sudo mount -o loop -t iso9660'
+alias x='exit'
+
+alias agv='~/.scripts/agvim.sh'
+alias alsadevice='source ~/.scripts/alsadevice.sh'
+alias hwinfo='~/.scripts/hwinfo.sh'
+alias jshit='~/.scripts/javascript_installs.sh'
 alias mountfat='~/.scripts/mountfat.sh'
 alias mplay='~/.scripts/launchers/media_player.sh'
 alias playdvd='~/.scripts/launchers/media_player_dvd.sh'
-alias hwinfo='~/.scripts/hwinfo.sh'
-alias alsadevice='source ~/.scripts/alsadevice.sh'
-alias agv='~/.scripts/agvim.sh'
-alias jshit='~/.scripts/javascript_installs.sh'
 
-alias irc='ssh -t lakka.kapsi.fi "screen -r"'
+alias gvim='gvim -p'
+alias irc='ssh -t lakka.kapsi.fi "screen -DR"'
 alias kapsi='ssh lakka.kapsi.fi'
 alias kapsirdp='ssh -N -L 3389:localhost:33389 lakka.kapsi.fi'
-
