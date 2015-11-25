@@ -1,5 +1,9 @@
-set match-hidden-files off
 set completion-ignore-case on
+set editing-mode vi
+set history-preserve-point on
 set mark-symlinked-directories on
+set match-hidden-files off
+set show-all-if-ambiguous on
+set show-mode-in-prompt on
 "\e[5~": history-search-backward
 "\e[6~": history-search-forward
