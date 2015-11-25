@@ -6,6 +6,8 @@
 Mod4 + t
 "thunar"
 Mod4 + e
+"thunar"
+XF86Search
 "xfce4-terminal --geometry=120x30 -e ranger"
 Mod4 + r
 "xfce4-terminal --working-directory=~ --title IPython -e ipython"
@@ -16,8 +18,6 @@ Mod1 + Mod4 + w
 Mod4 + w
 "~/.scripts/launchers/chromium.sh"
 XF86HomePage
-"thunar"
-XF86Search
 
 # Special commands
 "xfce4-popup-whiskermenu"
@@ -30,8 +30,12 @@ Control + Mod1 + Escape
 Mod1 + Mod4 + Pause
 "~/.scripts/switch_background.sh"
 Mod4 + Pause
+# Focus tray area
 "wmctrl -a xfce4-panel"
 Mod4 + s
+"~/.scripts/switch_display.sh"
+Mod4 + d
+# Reset active window to upper left corner.
 #"wmctrl -r :ACTIVE: -e 0,0,0,-1,-1"
 #Mod4 + BackSpace
 "~/.scripts/screenshot.sh"
@@ -40,14 +44,18 @@ Print
 Shift + Print
 "import ~/partialscreenshot.png"
 Mod4 + Print
+"i3lock -e -i ~/.themes/lockscreen.png"
+Control + Mod1 + Delete
 "claws-mail --select INBOX"
 XF86Mail
 "gvim -c start"
 XF86Launch5
 "filezilla"
 XF86Launch6
-"gvim -n +1 -c start ~/ramdisk/memo"
+"gvim +1 -c start ~/.memo"
 XF86Launch7
+"gvim +1 -c start ~/.memo"
+Mod4 + v
 "xfce4-terminal -x htop"
 XF86Launch8
 "xfce4-terminal --geometry 80x50 -x screen -c ~/.config/hwinfoscreenrc"
@@ -81,11 +89,11 @@ Mod4 + XF86Favorites
 "~/.scripts/screensaver.sh standby"
 Mod1 + Mod4 + XF86Favorites
 
-# Terminal buffer scrolling with Win+J/K
+# Terminal buffer scrolling with Alt+J/K
 "xdotool keyup j && xdotool key --clearmodifiers Shift+Page_Down"
-Shift + Mod4 + j
+Shift + Mod1 + j
 "xdotool keyup k && xdotool key --clearmodifiers Shift+Page_Up"
-Shift + Mod4 + k
+Shift + Mod1 + k
 
 # Mouse wheel left
 # "xdotool key Left"

@@ -45,7 +45,7 @@ else
 fi
 
 ln -sf ~/.themes/crepuscular_rays_crop_browner.png $RAMDISKDIR/background
-ln -sf ~/docs/misc/memo.txt $RAMDISKDIR/memo
+ln -sf ~/docs/misc/memo.txt ~/.memo
 mkdir -p $RAMDISKDIR/thumbnails
 mkdir -p $RAMDISKDIR/cache/browser
 mkdir -p $RAMDISKDIR/cache/flash
