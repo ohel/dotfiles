@@ -109,7 +109,8 @@ let g:unite_prompt = '» '
 let g:unite_source_history_yank_enable = 1
 let g:unite_split_rule = 'bot'
 let g:unite_winheight = 15
-let mapleader = ' '
+"let mapleader = ' '
+map <space> <leader>
 nnoremap <silent><leader>b :Unite buffer<cr>
 nnoremap <silent><leader>b :Unite buffer<cr>
 nnoremap <silent><leader>f :Unite -start-insert file_rec/async file_rec/git buffer<cr>
@@ -126,6 +127,9 @@ nnoremap <silent><leader>a :Unite -start-insert grep:.::\\.(filter\|provider\|co
 
 " vimagit
 nnoremap <silent><leader>m :Magit<cr>
+
+" Netrw Directory Listing on new tab
+nnoremap <silent><leader>e :tabe .<cr>
 
 " tcomment
 let g:tcommentMapLeaderOp1 = 'å'
@@ -161,6 +165,7 @@ set clipboard=unnamedplus " alias unnamed register to +
 set number  " line numbering
 set textwidth=0 " define text width if autowrapping: 0 disables autowrap, wraps to 80 on manual wrap (gq)
 let g:leave_my_textwidth_alone=1 " don't autowrap lines while typing
+let g:netrw_list_hide='\(^\|\s\s\)\zs\.\S\+' " hide dotfiles by default in Netrw Directory Listing
 set go-=T " hide toolbar
 set go-=m " hide menu
 set go-=t " disable tear-off menus
