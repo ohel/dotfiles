@@ -112,7 +112,6 @@ let g:unite_winheight = 15
 "let mapleader = ' '
 map <space> <leader>
 nnoremap <silent><leader>b :Unite buffer<cr>
-nnoremap <silent><leader>b :Unite buffer<cr>
 nnoremap <silent><leader>f :Unite -start-insert file_rec/async file_rec/git buffer<cr>
 vnoremap <silent><leader>f :Unite -start-insert file_rec/async file_rec/git buffer<cr><c-r>*
 nnoremap <silent><leader>g :Unite -start-insert file_rec/git buffer<cr>
