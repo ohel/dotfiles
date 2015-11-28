@@ -222,6 +222,7 @@ inoremap <s-insert> <esc>"+pa
 inoremap <c-v> <c-r>=col('.') == col('$') ? "\<lt>esc>`^\"+pa" : "\<lt>esc>`^\"+Pa"<cr>
 " replace contents
 vnoremap <s-insert> "_x"+P
+vnoremap <c-v> "_x"+P
 
 " common search hotkey
 inoremap <c-f> <esc>/
