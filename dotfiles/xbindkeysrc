@@ -48,13 +48,13 @@ Mod4 + Print
 Control + Mod1 + Delete
 "claws-mail --select INBOX"
 XF86Mail
-"gvim -c start"
+"gvim -c 'e .'"
 XF86Launch5
 "filezilla"
 XF86Launch6
-"gvim +1 -c start ~/.memo"
+"gvim +1 ~/.memo"
 XF86Launch7
-"gvim +1 -c start ~/.memo"
+"gvim +1 ~/.memo"
 Mod4 + v
 "xfce4-terminal -x htop"
 XF86Launch8
