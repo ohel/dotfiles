@@ -44,13 +44,6 @@ if has("win32")
     let g:daltfont="Bitstream_Vera_Sans_Mono"
 endif
 
-
-
-set showtabline=2 " tab selector always visible
-set expandtab " expand tab to spaces, use c-q<tab> for real tab
-let &shiftwidth=&tabstop " set intend (using keys << or >>) width
-let &softtabstop=&tabstop " set indent width in insert mode using tab
-
 function! TabOrComplete() " generic tab complete
     if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
         if empty(&omnifunc)
@@ -66,17 +59,56 @@ inoremap <tab> <c-r>=TabOrComplete()<cr>
 " insert real tab on shift-tab
 inoremap <s-tab> <c-q><tab>
 
-
-
 colorscheme custom
+
 set encoding=utf-8
+set showtabline=2 " tab selector always visible
+set expandtab " expand tab to spaces, use c-q<tab> for real tab
+let &shiftwidth=&tabstop " set intend (using keys << or >>) width
+let &softtabstop=&tabstop " set indent width in insert mode using tab
+set hidden " do not close file buffers when opening a new one, use :ls to list buffers
+set hlsearch " highlight search
+set autoread " automatically update file if changed from the outside
+set backspace=indent,eol,start " make backspace clear other than new text also
+set guicursor=n-v-c:hor25-Cursor " set cursor size
+set nocp " nocompatible: enables features which are not Vi compatible
+set ic " set ignore case on searches, remedy with set noic or use \C in search term
+set clipboard=unnamedplus " alias unnamed register to +
+set number  " line numbering
+set textwidth=0 " define text width if autowrapping: 0 disables autowrap, wraps to 80 on manual wrap (gq)
+let g:leave_my_textwidth_alone=1 " don't autowrap lines while typing
+let g:netrw_list_hide='\(^\|\s\s\)\zs\.\S\+' " hide dotfiles by default in Netrw Directory Listing
+set go-=T " hide toolbar
+set go-=m " hide menu
+set go-=t " disable tear-off menus
+set go-=r " disable right scroll bar
+set incsearch " incremental search
+set virtualedit=block " allow selecting non-characters in visual block mode
 " set swap directory
 "if isdirectory("~/.vim")
 "   set directory=~/.vim
 "endif
 set noswapfile
-set undofile undolevels=1000 undoreload=10000 undodir=~/.vim/undodir nobackup
 silent !mkdir -p "$HOME/.vim/undodir"
+set undodir=~/.vim/undodir
+set undofile
+
+
+
+" syntax and file type detection
+syntax on
+filetype on
+
+au BufNewFile,BufRead *.xaml set filetype=xml
+au BufNewFile,BufRead *.md set filetype=markdown
+
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif " returns cursor to previous position when opening files
 
 
 
@@ -136,41 +168,6 @@ let g:tcommentMapLeaderOp1 = 'å'
 nmap <silent><a-c> åc
 vmap <silent><a-c> å
 imap <silent><a-c> <esc>åc^
-
-" syntax and file type detection
-syntax on
-filetype on
-
-au BufNewFile,BufRead *.xaml set filetype=xml
-au BufNewFile,BufRead *.md set filetype=markdown
-
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif " returns cursor to previous position when opening files
-
-
-
-set hidden " do not close file buffers when opening a new one, use :ls to list buffers
-set hlsearch " highlight search
-set autoread " automatically update file if changed from the outside
-set backspace=indent,eol,start " make backspace clear other than new text also
-set guicursor=n-v-c:hor25-Cursor " set cursor size
-set nocp " nocompatible: enables features which are not Vi compatible
-set ic " set ignore case on searches, remedy with set noic or use \C in search term
-set clipboard=unnamedplus " alias unnamed register to +
-set number  " line numbering
-set textwidth=0 " define text width if autowrapping: 0 disables autowrap, wraps to 80 on manual wrap (gq)
-let g:leave_my_textwidth_alone=1 " don't autowrap lines while typing
-let g:netrw_list_hide='\(^\|\s\s\)\zs\.\S\+' " hide dotfiles by default in Netrw Directory Listing
-set go-=T " hide toolbar
-set go-=m " hide menu
-set go-=t " disable tear-off menus
-set go-=r " disable right scroll bar
-set incsearch " incremental search
 
 
 
