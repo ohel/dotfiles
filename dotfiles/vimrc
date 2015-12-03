@@ -189,6 +189,10 @@ nnoremap <c-s> :w<cr>
 " tab navigation
 nnoremap <c-tab> :tabnext<cr>
 nnoremap <c-s-tab> :tabprevious<cr>
+inoremap <c-tab> <c-o>:tabnext<cr>
+inoremap <c-s-tab> <c-o>:tabprevious<cr>
+vnoremap <c-tab> <esc>:tabnext<cr>
+vnoremap <c-s-tab> <esc>:tabprevious<cr>
 
 " select all
 inoremap <c-a> <esc>gg<s-v>G
@@ -222,7 +226,7 @@ vnoremap <s-insert> "_x"+P
 vnoremap <c-v> "_x"+P
 
 " common search hotkey
-inoremap <c-f> <esc>/
+inoremap <c-f> <esc>`^/
 nnoremap <c-f> /
 
 " common search and replace hotkey
@@ -231,7 +235,7 @@ vnoremap <c-h> :s//g\|:silent noh<left><left><left><left><left><left><left><left
 
 
 
-" up/down
+" up/down + select for dropdown lists (c-j also works)
 inoremap <a-k> <up>
 inoremap <a-j> <down>
 inoremap <a-h> <cr>
