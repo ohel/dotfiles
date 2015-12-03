@@ -249,6 +249,10 @@ inoremap <down> <c-o>gj
 
 
 
+" switch to alternate file (usually previously edited buffer)
+inoremap <a-s> <c-o>:b#<cr>
+nnoremap <a-s> :b#<cr>
+
 " uppercase word under cursor
 nnoremap <silent> <f8> gUiw
 
