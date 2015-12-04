@@ -5,9 +5,6 @@ let g:zoom_functions = 1
 set tabstop=4 "tab width
 
 if hostname() == "minigun"
-    let g:pydiction_location = '~/.vim/pydiction/complete-dict'
-    let g:pydiction_menu_height = 15
-
     set guifont=ProggyCleanTTSZ\ 12
     let g:dfont="ProggyCleanTTSZ"
     let g:daltfont="Monospace"
@@ -126,6 +123,10 @@ call plug#end()
 if filereadable(expand("~/.vim/plugin/taglist.vim"))
     nnoremap <f1> :TlistToggle<cr>
     inoremap <f1> <c-o>:TlistToggle<cr>
+endif
+if filereadable(expand("~/.vim/after/ftplugin/python_pydiction.vim"))
+    let g:pydiction_location = '~/.vim/pydiction/complete-dict'
+    let g:pydiction_menu_height = 15
 endif
 
 if executable('ag')
