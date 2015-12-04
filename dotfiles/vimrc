@@ -276,7 +276,7 @@ nnoremap N Nzz
 nnoremap <silent> <c-n> :silent noh<cr>
 
 " incremental search next without highlight and select match
-cnoremap <c-cr> <cr>:noh<cr>
+cnoremap <c-cr> <cr>:noh<cr>zz
 cnoremap <c-n> <cr>:noh<cr>/<up>
 cnoremap <a-n> <cr>NN:noh<cr>/<up>
 
