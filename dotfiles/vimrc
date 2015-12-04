@@ -92,26 +92,29 @@ set noswapfile
 silent !mkdir -p "$HOME/.vim/undodir"
 set undodir=~/.vim/undodir
 set undofile
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif " returns cursor to previous position when opening files
+:set pastetoggle=<f4> " toggle paste mode (no auto indent)
 
 
 
-" syntax and file type detection
+" syntax and file type detection etc.
 syntax on
 filetype on
-
 au BufNewFile,BufRead *.xaml set filetype=xml
 au BufNewFile,BufRead *.md set filetype=markdown
-
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif " returns cursor to previous position when opening files
+autocmd FileType cpp set tags +=~/.vim/ctagsdb
+"ctags -R -f ctagsdb --c++-kinds=+p --fields=+iaS --extra=+q /usr/lib64/gcc/x86_64-pc-linux-gnu/$(ls -t1 /usr/lib64/gcc/x86_64-pc-linux-gnu/)/include/
+nnoremap <c-f1> :!ctags -R -f ~/.vim/ctagsdb --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
 
 
 
+" plugins
 call plug#begin('~/.vim/plugged')
 Plug 'leafgarland/typescript-vim'
 Plug 'Shougo/unite.vim'
@@ -120,12 +123,9 @@ Plug 'Shougo/vimproc.vim', { 'do': 'cd ~/.vim/plugged/vimproc.vim && make -f mak
 Plug 'tomtom/tcomment_vim'
 Plug 'jreybert/vimagit'
 call plug#end()
-
 if filereadable(expand("~/.vim/plugin/taglist.vim"))
-    nnoremap <c-f5> :!ctags -R -f ~/.vim/ctagsdb --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
-    nnoremap <f4> :TlistToggle<cr>
-    inoremap <f4> <c-o>:TlistToggle<cr>
-    autocmd FileType cpp set tags +=~/.vim/ctagsdb
+    nnoremap <f1> :TlistToggle<cr>
+    inoremap <f1> <c-o>:TlistToggle<cr>
 endif
 
 if executable('ag')
@@ -239,6 +239,8 @@ vnoremap <c-h> :s//g\|:silent noh<left><left><left><left><left><left><left><left
 inoremap <a-k> <up>
 inoremap <a-j> <down>
 inoremap <a-h> <cr>
+" mainly for taglist plugin etc. to select ergonomically
+nmap <c-j> <cr>
 
 " move screen lines
 inoremap <home> <c-o>g0
@@ -254,11 +256,11 @@ inoremap <a-s> <c-o>:b#<cr>
 nnoremap <a-s> :b#<cr>
 
 " uppercase word under cursor
-nnoremap <silent> <f8> gUiw
+nnoremap <a-u> gUiw
 
 " toggle menubar
-nnoremap <f1> :if &go=~#'m'<bar>set go-=m<bar>else<bar>set go+=m<bar>endif<cr>
-inoremap <f1> <esc>:if &go=~#'m'<bar>set go-=m<bar>else<bar>set go+=m<bar>endif<cr>
+nnoremap <f5> :if &go=~#'m'<bar>set go-=m<bar>else<bar>set go+=m<bar>endif<cr>
+inoremap <f5> <esc>:if &go=~#'m'<bar>set go-=m<bar>else<bar>set go+=m<bar>endif<cr>
 
 " insert mode toggles, grave moves to ^ (editing mark)
 inoremap <c-space> <esc>`^
@@ -271,6 +273,11 @@ nnoremap N Nzz
 
 " clear search highlight
 nnoremap <silent> <c-n> :silent noh<cr>
+
+" incremental search next without highlight and select match
+cnoremap <c-cr> <cr>:noh<cr>
+cnoremap <c-n> <cr>:noh<cr>/<up>
+cnoremap <a-n> <cr>NN:noh<cr>/<up>
 
 " close window
 nnoremap <a-w> <c-w>c
@@ -319,7 +326,7 @@ function! PrintFileInfo()
     let filename = substitute(filename, '.*\n\(.*\n\)', '\1', '')
     let n = confirm(filename . "\n" . &fileencoding . "\n" . &ff, "", 1, "Info")
 endfunction
-nnoremap <f5> :call PrintFileInfo()<cr>
+nnoremap <f6> :call PrintFileInfo()<cr>
 
 " set file encoding dialog
 function! SetFileEncoding()
@@ -330,7 +337,7 @@ function! SetFileEncoding()
         set fileencoding=iso-8859-1
     endif
 endfunction
-nnoremap <f6> :call SetFileEncoding()<cr>
+nnoremap <f7> :call SetFileEncoding()<cr>
 
 " set file format dialog
 function! SetFileFormat()
@@ -343,7 +350,7 @@ function! SetFileFormat()
         set ff=mac
     endif
 endfunction
-nnoremap <f7> :call SetFileFormat()<cr>
+nnoremap <f8> :call SetFileFormat()<cr>
 
 " font zooming
 if zoom_functions == "1"
