@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<colorTheme id="117" name="Minigun (based on EasyOnTheEyes)" modified="2011-02-02 19:09:57" author="Panther/Cyrus Coffman">
+    <searchResultIndication color="#616161" bold="false" italic="false" />
+    <filteredSearchResultIndication color="#616161" bold="false" italic="false" />
+    <occurrenceIndication color="#616161" bold="false" italic="false" />
+    <writeOccurrenceIndication color="#616161" bold="false" italic="false" />
+    <findScope color="#E0E2E4" bold="false" italic="false" />
+    <deletionIndication color="#E0E2E4" bold="false" italic="false" />
+    <sourceHoverBackground color="#FFFFFF" bold="false" italic="false" />
+    <singleLineComment color="#7D8C93" bold="false" italic="false" />
+    <multiLineComment color="#7D8C93" bold="false" italic="false" />
+    <commentTaskTag color="#66DD88" bold="false" italic="false" />
+    <javadoc color="#7D8C93" bold="false" italic="true" />
+    <javadocLink color="#678CB1" bold="false" italic="false" />
+    <javadocTag color="#E0E2E4" bold="false" italic="false" />
+    <javadocKeyword color="#6677BB" bold="false" italic="false" />
+    <class color="#3399BB" bold="false" italic="false" />
+    <interface color="#3399BB" bold="false" italic="false" />
+    <method color="#3399BB" bold="false" italic="false" />
+    <methodDeclaration color="#E8E2B7" bold="false" italic="false" />
+    <bracket color="#E8E2B7" bold="false" italic="false" />
+    <number color="#3399BB" bold="false" italic="false" />
+    <string color="#66DD88" bold="false" italic="false" />
+    <operator color="#E8E2B7" bold="false" italic="false" />
+    <keyword color="#678CB1" bold="false" italic="false" />
+    <annotation color="#66DD88" bold="false" italic="false" />
+    <staticMethod color="#E0E2E4" bold="false" italic="false" />
+    <localVariable color="#E0E2E4" bold="false" italic="false" />
+    <localVariableDeclaration color="#E0E2E4" bold="false" italic="false" />
+    <field color="#678CB1" bold="false" italic="false" />
+    <staticField color="#678CB1" bold="false" italic="false" />
+    <staticFinalField color="#E0E2E4" bold="false" italic="false" />
+    <deprecatedMember color="#E0E2E4" bold="false" italic="false" />
+    <enum color="#E0E2E4" bold="false" italic="false" />
+    <inheritedMethod color="#E0E2E4" bold="false" italic="false" />
+    <abstractMethod color="#E0E2E4" bold="false" italic="false" />
+    <parameterVariable color="#E0E2E4" bold="false" italic="false" />
+    <typeArgument color="#E0E2E4" bold="false" italic="false" />
+    <typeParameter color="#E0E2E4" bold="false" italic="false" />
+    <constant color="#6677BB" bold="false" italic="false" />
+    <background color="#313131" bold="false" italic="false" />
+    <currentLine color="#2F393C" bold="false" italic="false" />
+    <foreground color="#E0E0E0" bold="false" italic="false" />
+    <lineNumber color="#969696" bold="false" italic="false" />
+    <selectionBackground color="#804000" bold="false" italic="false" />
+    <selectionForeground color="#E0E2E4" bold="false" italic="false" />
+</colorTheme>
