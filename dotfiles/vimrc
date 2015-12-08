@@ -269,8 +269,8 @@ nnoremap <f5> :if &go=~#'m'<bar>set go-=m<bar>else<bar>set go+=m<bar>endif<cr>
 inoremap <f5> <esc>:if &go=~#'m'<bar>set go-=m<bar>else<bar>set go+=m<bar>endif<cr>
 
 " insert mode toggles, grave moves to ^ (editing mark)
-call arpeggio#map('i', '', 0, 'jk', '<esc>`^')
-call arpeggio#map('n', '', 0, 'jk', 'i')
+call arpeggio#map('i', '', 0, 'fj', '<esc>`^')
+call arpeggio#map('n', '', 0, 'fj', 'i')
 inoremap <c-space> <esc>`^
 nnoremap <c-space> i
 nnoremap <enter> i<c-r>=col('.') == col('$')-1 ? "\<lt>right>" : ""<cr>
