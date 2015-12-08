@@ -113,12 +113,14 @@ nnoremap <c-f1> :!ctags -R -f ~/.vim/ctagsdb --c++-kinds=+p --fields=+iaS --extr
 
 " plugins
 call plug#begin('~/.vim/plugged')
-Plug 'leafgarland/typescript-vim'
-Plug 'Shougo/unite.vim'
-Plug 'Shougo/unite-outline'
-Plug 'Shougo/vimproc.vim', { 'do': 'cd ~/.vim/plugged/vimproc.vim && make -f make_unix.mak' } " allows async operations
-Plug 'tomtom/tcomment_vim'
-Plug 'jreybert/vimagit'
+  Plug 'jreybert/vimagit'
+  Plug 'kana/vim-arpeggio'
+  Plug 'leafgarland/typescript-vim'
+  Plug 'Shougo/unite-outline' " Unite source providing outline view of current buffer
+  Plug 'Shougo/unite.vim'
+  Plug 'Shougo/vimproc.vim', { 'do': 'cd ~/.vim/plugged/vimproc.vim && make -f make_unix.mak' } " allows async operations
+  Plug 'tomtom/tcomment_vim' " code commenting
+  Plug 'Valloric/YouCompleteMe', { 'do': 'cd ~/.vim/plugged/YouCompleteMe && ./install.py' }
 call plug#end()
 if filereadable(expand("~/.vim/plugin/taglist.vim"))
     nnoremap <f1> :TlistToggle<cr>
@@ -267,6 +269,8 @@ nnoremap <f5> :if &go=~#'m'<bar>set go-=m<bar>else<bar>set go+=m<bar>endif<cr>
 inoremap <f5> <esc>:if &go=~#'m'<bar>set go-=m<bar>else<bar>set go+=m<bar>endif<cr>
 
 " insert mode toggles, grave moves to ^ (editing mark)
+call arpeggio#map('i', '', 0, 'jk', '<esc>`^')
+call arpeggio#map('n', '', 0, 'jk', 'i')
 inoremap <c-space> <esc>`^
 nnoremap <c-space> i
 nnoremap <enter> i<c-r>=col('.') == col('$')-1 ? "\<lt>right>" : ""<cr>
