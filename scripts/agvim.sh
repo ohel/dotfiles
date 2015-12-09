@@ -1,7 +1,7 @@
 #!/bin/bash
 # Search stuff using the silver searcher (ag), then open filenames containing keywords from the search results.
 ag $1
-echo -n "grep/gvim: "
+echo -n "grep+gvim: "
 read -a words
 greps=""
 for word in "${words[@]}"
