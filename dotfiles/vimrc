@@ -56,7 +56,7 @@ inoremap <tab> <c-r>=TabOrComplete()<cr>
 " insert real tab on shift-tab
 inoremap <s-tab> <c-q><tab>
 
-colorscheme custom
+colorscheme minigun
 
 set encoding=utf-8
 set showtabline=2 " tab selector always visible
