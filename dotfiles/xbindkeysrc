@@ -12,11 +12,11 @@ XF86Search
 Mod4 + r
 "xfce4-terminal --working-directory=~ --title IPython -e ipython"
 XF86Calculator
-"chromium-browser"
+"~/.scripts/launchers/browser.sh newwindow"
 Mod1 + Mod4 + w
-"~/.scripts/launchers/chromium.sh"
+"~/.scripts/launchers/browser.sh"
 Mod4 + w
-"~/.scripts/launchers/chromium.sh"
+"~/.scripts/launchers/browser.sh"
 XF86HomePage
 
 # Special commands
