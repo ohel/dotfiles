@@ -1,5 +1,6 @@
-# Mod1 = Alt key
-# Mod4 = Windows key
+# Mod1 = Alt
+# Mod4 = Windows
+# Mod5 = Alt gr
 
 # Common applications
 "xfce4-terminal --geometry=80x26"
@@ -34,7 +35,7 @@ Mod4 + Pause
 "wmctrl -a xfce4-panel"
 Mod4 + s
 "~/.scripts/switch_display.sh"
-Mod4 + d
+Mod4 + p
 # Reset active window to upper left corner.
 #"wmctrl -r :ACTIVE: -e 0,0,0,-1,-1"
 #Mod4 + BackSpace
@@ -94,51 +95,3 @@ Mod1 + Mod4 + XF86Favorites
 Shift + Mod1 + j
 "xdotool keyup k && xdotool key --clearmodifiers Shift+Page_Up"
 Shift + Mod1 + k
-
-# Mouse wheel left
-# "xdotool key Left"
-# m:0x0 + b:11
-# "xdotool key Left"
-# Mod1 + m:0x0 + b:11
-# "xdotool key Left"
-# Mod4 + m:0x0 + b:11
-# "xdotool key Left"
-# Control + m:0x0 + b:11
-# "xdotool key Left"
-# Shift + m:0x0 + b:11
-
-# Mouse wheel right
-# "xdotool key Right"
-# m:0x0 + b:12
-# "xdotool key Right"
-# Mod1 + m:0x0 + b:12
-# "xdotool key Right"
-# Mod4 + m:0x0 + b:12
-# "xdotool key Right"
-# Control + m:0x0 + b:12
-# "xdotool key Right"
-# Shift + m:0x0 + b:12
-
-# Mouse back thumb
-# "xdotool key Return"
-# m:0x0 + b:9
-# "xdotool key Return"
-# Mod1 + m:0x0 + b:9
-# "xdotool key Return"
-# Mod4 + m:0x0 + b:9
-# "xdotool key Return"
-# Control + m:0x0 + b:9
-# "xdotool key Return"
-# Shift + m:0x0 + b:9
-
-# Mouse forward thumb
-# Have to put with and without Control modifier, otherwise won't work as intended.
-# For some reason mouse click events are not registered while this is on so it's useless.
-#"xdotool keydown Control"
-#m:0x0 + b:10
-#"xdotool keydown Control"
-#m:0x4 + b:10
-#"xdotool keyup Control"
-#Release + m:0x0 + b:10
-#"xdotool keyup Control"
-#Release + m:0x4 + b:10
