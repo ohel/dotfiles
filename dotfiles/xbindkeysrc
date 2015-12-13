@@ -98,12 +98,12 @@ Shift + Mod1 + k
 
 # Backlight
 "/opt/backlight.sh -50"
-Mod4 + F11
+Mod4 + Home
 "/opt/backlight.sh 50"
-Mod4 + F12
+Mod4 + End
 
 # Color temperature
 "/opt/redshift.sh -500"
-Mod4 + F5
+Mod4 + Next # Page down
 "/opt/redshift.sh 500"
-Mod4 + F6
+Mod4 + Prior # Page up
