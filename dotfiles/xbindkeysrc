@@ -95,3 +95,15 @@ Mod1 + Mod4 + XF86Favorites
 Shift + Mod1 + j
 "xdotool keyup k && xdotool key --clearmodifiers Shift+Page_Up"
 Shift + Mod1 + k
+
+# Backlight
+"/opt/backlight.sh -50"
+Mod4 + F11
+"/opt/backlight.sh 50"
+Mod4 + F12
+
+# Color temperature
+"/opt/redshift.sh -500"
+Mod4 + F5
+"/opt/redshift.sh 500"
+Mod4 + F6

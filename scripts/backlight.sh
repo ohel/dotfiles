@@ -1,5 +1,8 @@
 #!/bin/bash
+# Change laptop screen backlight brightness via script.
+
 backlight=/sys/class/backlight/intel_backlight
+
 max=$(cat $backlight/max_brightness);
 current=$(cat $backlight/brightness);
 if [ "$#" -eq 0 ]
