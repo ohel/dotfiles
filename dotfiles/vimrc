@@ -3,11 +3,15 @@ let g:dlines=31 "put default window size in memory
 let g:dcols=107
 let g:zoom_functions = 1
 set tabstop=4 "tab width
+set guifont=Monospace\ 12
+let g:dfont="ProggyCleanTTSZ"
+let g:daltfont="Monospace"
 
 if hostname() == "minigun"
     set guifont=ProggyCleanTTSZ\ 12
-    let g:dfont="ProggyCleanTTSZ"
-    let g:daltfont="Monospace"
+
+elseif hostname() == "gainasus"
+    let g:zoom_level=2
 
 elseif hostname() == "predator"
     au GUIEnter * set lines=27 columns=107
@@ -15,23 +19,13 @@ elseif hostname() == "predator"
     let g:dcols=107
 
     set guifont=ProggyCleanTTSZ\ 12
-    let g:dfont="ProggyCleanTTSZ"
-    let g:daltfont="Monospace"
 
 elseif hostname() == "oheldell"
     au GUIEnter * set lines=35 columns=130
     let g:dlines=35
     let g:dcols=130
     let g:zoom_level=2
-
-    set guifont=Monospace\ 12
-    let g:dfont="ProggyCleanTTSZ"
-    let g:daltfont="Monospace"
-    
     set tabstop=2
-
-else
-    let g:zoom_functions = 0
 
 endif
 
@@ -363,7 +357,9 @@ nnoremap <f8> :call SetFileFormat()<cr>
 " font zooming
 if zoom_functions == "1"
 
-    let g:zoom_level=0
+    if !exists("g:zoom_level")
+        let g:zoom_level=0
+    endif
 
     function! GrowFont()
         let fontsize = substitute(&guifont, '[^0-9]', '', 'g')
@@ -413,14 +409,16 @@ if zoom_functions == "1"
         return ''
     endfunction
 
-    inoremap <silent> <c-kplus> <c-r>=GrowFont()<cr>
-    nnoremap <silent> <c-kplus> :call GrowFont()<cr>
-    inoremap <silent> <c-kminus> <c-r>=ShrinkFont()<cr>
-    nnoremap <silent> <c-kminus> :call ShrinkFont()<cr>
-    inoremap <silent> <c-mousedown> <c-r>=GrowFont()<cr>
-    nnoremap <silent> <c-mousedown> :call GrowFont()<cr>
-    inoremap <silent> <c-mouseup> <c-r>=ShrinkFont()<cr>
-    nnoremap <silent> <c-mouseup> :call ShrinkFont()<cr>
+    nnoremap + :call GrowFont()<cr>
+    nnoremap - :call ShrinkFont()<cr>
+    inoremap <c-kplus> <c-r>=GrowFont()<cr>
+    nnoremap <c-kplus> :call GrowFont()<cr>
+    inoremap <c-kminus> <c-r>=ShrinkFont()<cr>
+    nnoremap <c-kminus> :call ShrinkFont()<cr>
+    inoremap <c-mousedown> <c-r>=GrowFont()<cr>
+    nnoremap <c-mousedown> :call GrowFont()<cr>
+    inoremap <c-mouseup> <c-r>=ShrinkFont()<cr>
+    nnoremap <c-mouseup> :call ShrinkFont()<cr>
 endif
 
 " Unite sources
