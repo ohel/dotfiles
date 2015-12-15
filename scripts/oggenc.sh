@@ -1,9 +1,12 @@
 #!/bin/bash
 # Encode all flac files in subdirectories to ogg vorbis in batches of $batchsize. This is far from perfect parallelization, but good enough.
 
+oggdir=ogg
 overwrite=0
 batchsize=4
-oggdir=ogg
+if [ "$#" -gt 0 ]; then oggdir=$1; fi
+if [ "$#" -gt 1 ]; then overwrite=$2; fi
+if [ "$#" -gt 2 ]; then batchsize=$3; fi
 
 mkdir -p $oggdir
 
