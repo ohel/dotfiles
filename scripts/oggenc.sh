@@ -20,7 +20,7 @@ do
     then
         echo Encoding $flacfile...
 
-        batchindex=$((($batchindex + 1) % 4))
+        batchindex=$((($batchindex + 1) % $batchsize))
         oggenc -Q -q 7 -o $oggdir/$filebase.ogg $filebase.flac &
 
         if [ $batchindex -eq 0 ]; then wait; fi
