@@ -1,8 +1,8 @@
-au GUIEnter * set lines=31 columns=107 "set window size when starting in GUI mode
-let g:dlines=31 "put default window size in memory
+au GUIEnter * set lines=31 columns=107 " set window size when starting in GUI mode
+let g:dlines=31 " put default window size in memory
 let g:dcols=107
 let g:zoom_functions = 1
-set tabstop=4 "tab width
+set tabstop=4 " tab width
 set guifont=Monospace\ 12
 let g:dfont="ProggyCleanTTSZ"
 let g:daltfont="Monospace"
@@ -107,20 +107,31 @@ nnoremap <c-f1> :!ctags -R -f ~/.vim/ctagsdb --c++-kinds=+p --fields=+iaS --extr
 
 " plugins
 call plug#begin('~/.vim/plugged')
-  Plug 'jreybert/vimagit'
-  Plug 'kana/vim-arpeggio'
-  Plug 'leafgarland/typescript-vim'
-  Plug 'Shougo/unite-outline' " Unite source providing outline view of current buffer
-  Plug 'Shougo/unite.vim'
-  Plug 'Shougo/vimproc.vim', { 'do': 'cd ~/.vim/plugged/vimproc.vim && make -f make_unix.mak' } " allows async operations
-  Plug 'tomtom/tcomment_vim' " code commenting
-  Plug 'Valloric/YouCompleteMe', { 'do': 'cd ~/.vim/plugged/YouCompleteMe && ./install.py' }
+    Plug 'jreybert/vimagit'
+    Plug 'justinmk/vim-gtfo'
+    Plug 'kana/vim-arpeggio'
+    Plug 'leafgarland/typescript-vim'
+    Plug 'Shougo/unite-outline' " Unite source providing outline view of current buffer
+    Plug 'Shougo/unite.vim'
+    Plug 'Shougo/vimproc.vim', { 'do': 'cd ~/.vim/plugged/vimproc.vim && make -f make_unix.mak' } " allows async operations
+    Plug 'tomtom/tcomment_vim' " code commenting
+    Plug 'Valloric/YouCompleteMe', { 'do': 'cd ~/.vim/plugged/YouCompleteMe && ./install.py' }
 call plug#end()
+if filereadable(expand("~/.vim/autoload/pathogen.vim"))
+    " https://github.com/tpope/vim-pathogen
+    execute pathogen#infect()
+endif
+if isdirectory(expand("~/.vim/bundle/tsuquyomi"))
+    " https://github.com/Quramy/tsuquyomi
+    autocmd FileType typescript setlocal completeopt+=menu,preview
+endif
 if filereadable(expand("~/.vim/plugin/taglist.vim"))
+    " http://vim-taglist.sourceforge.net/
     nnoremap <f1> :TlistToggle<cr>
     inoremap <f1> <c-o>:TlistToggle<cr>
 endif
 if filereadable(expand("~/.vim/after/ftplugin/python_pydiction.vim"))
+    " https://github.com/rkulla/pydiction
     let g:pydiction_location = '~/.vim/pydiction/complete-dict'
     let g:pydiction_menu_height = 15
 endif
@@ -168,6 +179,8 @@ let g:tcommentMapLeaderOp1 = 'å'
 nmap <silent><a-c> åc
 vmap <silent><a-c> å
 imap <silent><a-c> <esc>åc^
+
+let g:gtfo#terminals = { 'unix' : 'xfce4-terminal' }
 
 
 
