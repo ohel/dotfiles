@@ -333,6 +333,19 @@ endfunction
 inoremap <silent> <f2> <c-r>=ToggleWrap()<cr>
 nnoremap <silent> <f2> :call ToggleWrap()<cr>
 
+" set tab width to current line whitespace width
+function! WhitespaceToTabWidth()
+    normal! ^
+    let tabwidth = col('.') - 1
+    if tabwidth > 0
+        let &tabstop=tabwidth
+        let &shiftwidth=tabwidth
+        let &softtabstop=tabwidth
+        echo "Tab width set to" tabwidth
+    endif
+endfunction
+nnoremap <leader><tab> :call WhitespaceToTabWidth()<cr>
+
 " print file info
 function! PrintFileInfo()
     redir => filename
