@@ -241,6 +241,7 @@ vnoremap <c-v> "_x"+P
 " common search hotkey
 inoremap <c-f> <esc>`^/
 nnoremap <c-f> /
+vnoremap <c-f> <esc>/<c-r>*<cr>
 
 " common search and replace hotkey
 nnoremap <c-h> :%s//g\|:silent noh<left><left><left><left><left><left><left><left><left><left><left><left><left><left>
