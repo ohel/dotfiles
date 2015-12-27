@@ -4,9 +4,9 @@
 # xbindkeys -f xbindkeysmouseemu
 
 # Mouse emulation
-"xdotool click --clearmodifiers 1"
+"sleep 0.1 && xdotool click --clearmodifiers 1"
 Mod5 + h                        
-"xdotool keyup l && xdotool click --clearmodifiers 3"
+"sleep 0.1 && xdotool click --clearmodifiers 3"
 Mod5 + l                        
 "xdotool click --clearmodifiers 4"
 Mod5 + k                        
