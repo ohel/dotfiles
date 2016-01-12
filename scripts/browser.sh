@@ -9,7 +9,5 @@ then
 elif test "$(ps -ef | grep chromium-browser | grep -v grep)X" == "X"
 then
     chromium-browser
-else
-    chromium-browser about:blank
 fi
 wmctrl -i -a $(wmctrl -l | grep -e "Chromium" | tail -n 1 | cut -f 1 -d ' ')

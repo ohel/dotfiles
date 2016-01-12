@@ -107,3 +107,13 @@ Mod4 + End
 Mod4 + Next # Page down
 "/opt/redshift.sh 500"
 Mod4 + Prior # Page up
+
+# Touchpad toggles
+"/opt/toggle_touchpad.sh"
+XF86TouchpadToggle
+"/opt/toggle_touchpad.sh"
+Mod5 + m
+
+# Bluetooth
+"/opt/toggle_bluetooth.sh"
+Mod4 + b
