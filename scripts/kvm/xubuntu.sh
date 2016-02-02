@@ -47,7 +47,7 @@ fi
 -display none \
 -net nic,model=virtio,macaddr="00:00:00:00:00:01",name=eth0 \
 -net tap,script="kvm_net_up.sh" \
--drive file="xubuntu.img",if=virtio \
+-drive file="xubuntu.img",if=virtio,format=raw \
 -no-kvm-irqchip \
 -vnc :1
 # -no-kvm-irqchip is required if VM hangs during POST until VNC connection is established
