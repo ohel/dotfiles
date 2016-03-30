@@ -50,6 +50,10 @@ inoremap <tab> <c-r>=TabOrComplete()<cr>
 " insert real tab on shift-tab
 inoremap <s-tab> <c-q><tab>
 
+if !filereadable(expand("~/.vim/colors/minigun.vim"))
+    echo("Downloading color scheme...")
+    silent !curl -fLo ~/.vim/colors/minigun.vim --create-dirs https://raw.githubusercontent.com/ohel/dotfiles/master/themes/minigun.vim
+endif
 colorscheme minigun
 
 set encoding=utf-8
@@ -106,6 +110,21 @@ nnoremap <c-f1> :!ctags -R -f ~/.vim/ctagsdb --c++-kinds=+p --fields=+iaS --extr
 
 
 " plugins
+if !isdirectory(expand("~/.vim/autoload"))
+    silent call mkdir($HOME . '/.vim/autoload')
+endif
+if !filereadable(expand("~/.vim/autoload/plug.vim"))
+    echo("Downloading vim-plug...")
+    silent !curl -fLo ~/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+endif
+if !isdirectory(expand("~/.vim/bundle"))
+    silent call mkdir($HOME . '/.vim/bundle')
+endif
+if !filereadable(expand("~/.vim/autoload/pathogen.vim"))
+    echo("Downloading pathogen...")
+    silent !curl -fLo ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+endif
+
 call plug#begin('~/.vim/plugged')
     Plug 'jreybert/vimagit'
     Plug 'justinmk/vim-gtfo'
