@@ -49,6 +49,12 @@ endfunction
 inoremap <tab> <c-r>=TabOrComplete()<cr>
 " insert real tab on shift-tab
 inoremap <s-tab> <c-q><tab>
+" TODO: for some reason (YCM?) mapping tab in vimrc does not work
+function! LoadTabOrComplete() 
+    inoremap <tab> <c-r>=TabOrComplete()<cr>
+    inoremap <s-tab> <c-q><tab>
+endfunction
+nnoremap <a-t> :call LoadTabOrComplete()<cr>
 
 if !filereadable(expand("~/.vim/colors/minigun.vim"))
     echo("Downloading color scheme...")
