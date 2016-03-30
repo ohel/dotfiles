@@ -170,9 +170,6 @@ nnoremap <leader>u :UniteResume<cr>
 " vimagit
 nnoremap <silent><leader>m :Magit<cr>
 
-" Netrw Directory Listing on new tab
-nnoremap <silent><leader>n :tabe .<cr>
-
 " tcomment
 let g:tcommentMapLeaderOp1 = 'å'
 " toggle comment for the current/selected line(s)
@@ -181,6 +178,13 @@ vmap <silent><a-c> å
 imap <silent><a-c> <esc>åc^
 
 let g:gtfo#terminals = { 'unix' : 'xfce4-terminal' }
+
+" Netrw Directory Listing on new tab
+nnoremap <silent><leader>n :tabe .<cr>
+
+" sort
+vnoremap <leader>s :!sort<cr>
+
 
 
 
