@@ -1,5 +1,11 @@
 #!/bin/bash
-adapter=wlp1s0
+adapter=$1
+if test "X$adapter" == "X"
+then
+    adapter=eth0
+fi
+
+modprobe tun
 
 ip=$(ifconfig | grep -A 1 $adapter | tail -n 1 | cut -f 2 -d ":" | cut -f 1 -d " " | grep "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}$")
 
