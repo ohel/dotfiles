@@ -26,7 +26,8 @@ export NVM_DIR="/home/panther/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
 alias cp='cp -a'
-alias f='find ./ | grep -i '
+alias f='find ./ | grep -i --colour'
+alias g='grep -iR --colour'
 alias gitvis='git log --graph --oneline --decorate --all'
 alias ls='ls --color=auto -hG --group-directories-first'
 alias mountiso='sudo mount -o loop -t iso9660'
