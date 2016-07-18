@@ -1,13 +1,15 @@
 #!/bin/bash
 # Source the network_down script to undo everything.
 echo -e "" > network_down
+echo -e "" > network_reset
 
 adapter=$1
 if test "X$adapter" == "X"
 then
-    echo "Remember to give adapter parameter when on Wi-Fi!"
-    adapter=eth0
+    adapter=$(cat default_adapter)
+    adapter=${adapter:-eth0}
 fi
+echo "Using adapter: $adapter"
 
 modprobe tun
 
@@ -23,6 +25,8 @@ sysctl -q -e -w net.ipv4.conf.$adapter.forwarding=1
 iptables -t nat -A POSTROUTING -s 10.0.1.0/24 -o $adapter -j $jump
 echo "sudo sysctl -q -e -w net.ipv4.conf.$adapter.forwarding=0" >> network_down
 echo "sudo iptables -t nat -D POSTROUTING -s 10.0.1.0/24 -o $adapter -j $jump" >> network_down
+echo "sudo sysctl -q -e -w net.ipv4.conf.$adapter.forwarding=0" >> network_reset
+echo "sudo iptables -t nat -D POSTROUTING -s 10.0.1.0/24 -o $adapter -j $jump" >> network_reset
 
 # Virtual machine bridge.
 brctl addbr vmbridge
