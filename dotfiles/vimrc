@@ -7,6 +7,12 @@ set guifont=Monospace\ 12
 let g:dfont="ProggyCleanTTSZ"
 let g:daltfont="Monospace"
 
+if has('win32') || has ('win64')
+    let $VIMHOME = $VIM."/vimfiles"
+else
+    let $VIMHOME = $HOME."/.vim"
+endif
+
 if hostname() == "minigun"
     set guifont=ProggyCleanTTSZ\ 12
 
@@ -29,7 +35,7 @@ elseif hostname() == "oheldell"
 
 endif
 
-if has("win32")
+if has('win32') || has ('win64')
     set guifont=ProggyCleanTTSZ:h12:cANSI
     let g:dfont="ProggyCleanTTSZ"
     let g:daltfont="Bitstream_Vera_Sans_Mono"

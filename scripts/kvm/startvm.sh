@@ -6,6 +6,13 @@ vm_name="Xubuntu"
 img_name="xubuntu.img"
 net_id=10 # used as the static IP address in the guest, MAC address and VNC display
 vncviewer="gvncviewer localhost:$net_id"
+vm_bridge=vmbridge
+
+if test "X$(brctl show $vm_bridge 2>&1 | grep No)" != "X"
+then
+    echo "The bridge $vm_bridge does not exist. Aborting..."
+    exit
+fi
 
 modprobe kvm
 modprobe kvm-intel
@@ -40,6 +47,7 @@ then
     bootstring="d -cdrom $cdrom_image"
 fi
 
+echo "Starting the virtual machine..."
 /bin/env QEMU_ALSA_DAC_DEV=$dac QEMU_ALSA_ADC_DEV=$adc qemu-system-x86_64 $soundhw -daemonize \
 -name "$vm_name" \
 -boot $bootstring \
