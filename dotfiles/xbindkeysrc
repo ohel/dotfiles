@@ -36,9 +36,11 @@ Mod4 + Pause
 Mod4 + s
 "~/.scripts/switch_display.sh"
 Mod4 + p
+"~/.scripts/mirror_display.sh"
+Mod1 + Mod4 + p
 # Reset active window to upper left corner.
-#"wmctrl -r :ACTIVE: -e 0,0,0,-1,-1"
-#Mod4 + BackSpace
+"wmctrl -r :ACTIVE: -e 0,0,0,-1,-1"
+Mod4 + BackSpace
 "~/.scripts/screenshot.sh"
 Print
 "~/.scripts/screenshot.sh 2"
