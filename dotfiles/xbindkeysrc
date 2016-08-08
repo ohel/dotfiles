@@ -34,10 +34,12 @@ Mod4 + Pause
 # Focus tray area
 "wmctrl -a xfce4-panel"
 Mod4 + s
-"~/.scripts/switch_display.sh"
+"~/.scripts/switch_display.sh switch"
 Mod4 + p
-"~/.scripts/mirror_display.sh"
+"~/.scripts/switch_display.sh mirror"
 Mod1 + Mod4 + p
+"~/.scripts/switch_display.sh extend"
+Control + Mod1 + Mod4 + p
 # Reset active window to upper left corner.
 "wmctrl -r :ACTIVE: -e 0,0,0,-1,-1"
 Mod4 + BackSpace
