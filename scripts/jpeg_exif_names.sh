@@ -1,2 +1,2 @@
-#!/bin/sh
-exiftool -ext .jpg "-filename<CreateDate" -d %Y-%m-%d_%H.%M.%S.jpg .
+#!/bin/bash
+exiftool "-FileName<CreateDate" -ext .jpg -overwrite_original_in_place -P -d %Y-%m-%d_%H.%M.%S_.jpg .
