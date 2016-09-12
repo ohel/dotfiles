@@ -1,6 +1,7 @@
 #!/bin/bash
+echo "Change exif dates of .jpg files in current directory."
 echo "Usage: jpeg_exif_timestamps.sh +|- h m s"
-echo "Press return to accept, CTRL-C to cancel."
+echo "Press return to continue, CTRL-C to cancel."
 read
-exiftool -ext .jpg -overwrite_original -AllDates$1=$2:$3:$4 .
+exiftool -ext .jpg -m -overwrite_original -AllDates$1=$2:$3:$4 .
 
