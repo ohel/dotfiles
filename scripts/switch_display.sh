@@ -18,21 +18,25 @@ secondary_mode=$(xrandr | grep -A 1 $secondary_display | tail -n 1 | tr -s ' ' |
 
 if [ -f $testfile ]
 then
+    echo "Switching off external display."
     xrandr --output $primary_display --mode "$primary_mode" --primary
     xrandr --output $secondary_display --off
     rm $testfile
 elif test "X$secondary_mode" != "X"
 then
-    if test "$script_mode" == "switch"
+    if test "$script_mode" = "switch"
     then
+        echo "Switching to external display."
         xrandr --output $secondary_display --mode "$secondary_mode" --primary
         xrandr --output $primary_display --off
-    elif test "$script_mode" == "extend"
+    elif test "$script_mode" = "extend"
     then
+        echo "Extending to external display."
         xrandr --output $primary_display --mode "$primary_mode" --primary
         xrandr --output $secondary_display --mode "$secondary_mode" --right-of $primary_display
-    elif test "$script_mode" == "mirror"
+    elif test "$script_mode" = "mirror"
     then
+        echo "Mirroring to external display."
         xrandr --output $primary_display --mode "$primary_mode" --noprimary
         xrandr --output $secondary_display --mode "$primary_mode"
     fi
