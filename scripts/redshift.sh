@@ -3,17 +3,14 @@
 # Change screen color temperature using the redshift application.
 
 tempfile=/dev/shm/redshift_temp
+default=6000
 max=6500
 min=3500
 if [ ! -e $tempfile ]
 then
-    echo 5500 > $tempfile
+    echo $default > $tempfile
 fi
 current=$(cat $tempfile);
-if test "X$current" == "X"
-then
-    current=5500
-fi
 
 if [ "$#" -gt 0 ]
 then
