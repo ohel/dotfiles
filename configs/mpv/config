@@ -84,26 +84,6 @@ profile=common-movie
 
 
 ###############################################################################
-[surroundmoviebalancedmatrix]
-profile-desc="another surround sound profile for movies"
-
-ao=alsa:device=julia_movie_balanced_matrix
-audio-channels=6
-profile=common-movie
-
-
-
-###############################################################################
-[surroundmovienight]
-profile-desc="another surround sound profile for movies with compression"
-
-ao=alsa:device=julia_movie_night
-audio-channels=6
-profile=common-movie
-
-
-
-###############################################################################
 [hdamovie]
 profile-desc="movie profile with hda audio"
 
