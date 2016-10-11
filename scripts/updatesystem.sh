@@ -17,6 +17,7 @@ echo "* Update complete! *"
 echo "********************"
 echo
 echo "Run perl-cleaner and python-updater if necessary."
-echo "To remove obsolete packages: sudo emerge --depclean -av --exclude gentoo-sources"
+echo "To remove obsolete packages:"
+echo "sudo emerge --depclean -av"
 read
 

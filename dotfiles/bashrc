@@ -1,3 +1,13 @@
+export LANG='en_US.utf8'
+export LC_ALL='en_US.utf8'
+export LC_NUMERIC='fi_FI.utf8'
+export LC_TIME='en_US.utf8'
+export LC_MONETARY='fi_FI.utf8'
+export LC_PAPER='fi_FI.utf8'
+export LC_TELEPHONE='fi_FI.utf8'
+export LC_MEASUREMENT='fi_FI.utf8'
+export EDITOR="/usr/bin/vim"
+
 HISTFILESIZE=4096  
 HISTSIZE=4096
 PROMPT_COMMAND='history -a; history -c; history -r; echo -ne "\e]0;Terminal: ${PWD}\007"'
@@ -8,8 +18,6 @@ then
 else
   PS1='\[\e[0;37m\]\w \[\e[1;30m\]\$\[\e[0m\] '
 fi
-
-export EDITOR="/usr/bin/vim"
 
 set -o vi
 shopt -s globstar # recursive glob like **/*.log or cd **/scripts

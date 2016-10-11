@@ -3,121 +3,132 @@
 # Mod5 = Alt gr
 
 # Common applications
+######################
+
 "xfce4-terminal --geometry=80x26"
 Mod4 + t
+
 "thunar"
 Mod4 + e
 "thunar"
 XF86Search
+
 "xfce4-terminal --geometry=120x30 -e ranger"
 Mod4 + r
+
 "xfce4-terminal --working-directory=~ --title IPython -e ipython"
 XF86Calculator
-"~/.scripts/launchers/browser.sh newwindow"
+
+"~/.scripts/browser.sh newwindow"
 Mod1 + Mod4 + w
-"~/.scripts/launchers/browser.sh"
+"~/.scripts/browser.sh"
 Mod4 + w
-"~/.scripts/launchers/browser.sh"
+"~/.scripts/browser.sh"
 XF86HomePage
 
+
 # Special commands
+###################
+
 "xfce4-popup-whiskermenu"
 Control + Escape
 "xfce4-popup-whiskermenu"
 Mod4 + u
+
 "xkill"
 Control + Mod1 + Escape
+
 "~/.scripts/switch_wm.sh"
 Mod1 + Mod4 + Pause
+
 "~/.scripts/switch_background.sh"
 Mod4 + Pause
-# Focus tray area
-"wmctrl -a xfce4-panel"
-Mod4 + s
-"~/.scripts/switch_display.sh switch"
+
+"~/.scripts/switch_display.sh"
 Mod4 + p
-"~/.scripts/switch_display.sh mirror"
-Mod1 + Mod4 + p
-"~/.scripts/switch_display.sh extend"
-Control + Mod1 + Mod4 + p
+
 # Reset active window to upper left corner.
 "wmctrl -r :ACTIVE: -e 0,0,0,-1,-1"
 Mod4 + BackSpace
+
 "~/.scripts/screenshot.sh"
 Print
 "~/.scripts/screenshot.sh 2"
-Shift + Print
-"import ~/partialscreenshot.png"
 Mod4 + Print
+
 "i3lock -e -i ~/.themes/lockscreen.png"
 Control + Mod1 + Delete
+
 "claws-mail --select INBOX"
 XF86Mail
+
+"gvim +1 ~/.memo"
+Mod4 + v
+
+# The quick launch buttons are mapped in a strange way.
+# These correspond to quicklaunch 1-5 on a Natural Ergonomic 4000.
 "gvim -c 'e .'"
 XF86Launch5
 "filezilla"
 XF86Launch6
 "gvim +1 ~/.memo"
 XF86Launch7
-"gvim +1 ~/.memo"
-Mod4 + v
 "xfce4-terminal -x htop"
 XF86Launch8
-"xfce4-terminal --geometry 80x50 -x screen -c ~/.config/hwinfoscreenrc"
+"xfce4-terminal --geometry=120x26"
 XF86Launch9
 
 # Multimedia
+#############
+
 "~/.scripts/quodlibet/start_play_pause.sh"
 XF86AudioPlay
+
 "/opt/programs/quodlibet/quodlibet.py --random=album"
 Mod4 + XF86AudioPlay
+
+# For toggling between two soundcards.
 #"xfce4-terminal --hide-borders --geometry 50x10 -x ~/.scripts/toggle_digital_source.sh autoclose &"
 #XF86AudioMute
-#"xfce4-terminal --hide-borders --geometry 50x10 -x ~/.scripts/toggle_digital_source_no_monitor.sh autoclose &"
-#Shift + XF86AudioMute
+
 #"~/.scripts/quodlibet/vol_down.sh"
 #XF86AudioLowerVolume
 #"~/.scripts/quodlibet/vol_up.sh"
 #XF86AudioRaiseVolume
+
+# If using full software volume control.
 #"~/.scripts/softvol.sh -"
-#Shift + XF86AudioLowerVolume
+#XF86AudioLowerVolume
 #"~/.scripts/softvol.sh +"
-#Shift + XF86AudioRaiseVolume
+#XF86AudioRaiseVolume
+
 "~/.scripts/quodlibet/prev_song.sh"
 Mod4 + XF86AudioLowerVolume
 "~/.scripts/quodlibet/next_song.sh"
 Mod4 + XF86AudioRaiseVolume
+
 "~/.scripts/quodlibet/toggle_visible.sh"
 XF86Favorites
+
 "~/.scripts/screensaver.sh"
 Mod4 + XF86Favorites
 "~/.scripts/screensaver.sh standby"
 Mod1 + Mod4 + XF86Favorites
 
-# Terminal buffer scrolling with Alt+J/K
+# Terminal buffer scrolling with Alt+J/K (caps), makes it ergonomic.
 "xdotool keyup j && xdotool key --clearmodifiers Shift+Page_Down"
 Shift + Mod1 + j
 "xdotool keyup k && xdotool key --clearmodifiers Shift+Page_Up"
 Shift + Mod1 + k
 
-# Backlight
+# Backlight adjustment.
 "/opt/backlight.sh -50"
 Mod4 + Home
 "/opt/backlight.sh 50"
 Mod4 + End
 
-# Color temperature
+# Color temperature using Page Up/Down.
 "/opt/redshift.sh -500"
 Mod4 + Next # Page down
 "/opt/redshift.sh 500"
 Mod4 + Prior # Page up
-
-# Touchpad toggles
-"/opt/toggle_touchpad.sh"
-XF86TouchpadToggle
-"/opt/toggle_touchpad.sh"
-Mod5 + m
-
-# Bluetooth
-"/opt/toggle_bluetooth.sh"
-Mod4 + b
