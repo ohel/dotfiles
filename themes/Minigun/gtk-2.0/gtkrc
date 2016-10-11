@@ -1,4 +1,4 @@
-#Minigun by Panther, based on Crude
+#DarkPanther by Panther, based on Crude
 
 # Set GtkSettings color scheme property.
 # This can be overriden (via an xsetting) with eg. the gnome-appearance-properties.
@@ -9,7 +9,6 @@ include "panel.rc"
 gtk-icon-sizes = "panel-menu=16,16"
 gtk-menu-popup-delay = 10
 gtk-button-images = 0
-gtk-auto-mnemonics = 0
 
 style "default"
 {

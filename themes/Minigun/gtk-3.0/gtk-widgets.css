@@ -22,18 +22,10 @@
     -GtkTextView-error-underline-color: @error_color;
 
     -GtkScrolledWindow-scrollbar-spacing: 0;
-    -GtkScrolledWindow-scrollbars-within-bevel: 1;
-    -GtkPaned-handle-size: 8px;
 
-    -GtkWidget-link-color: @link_color;
-    -GtkWidget-visited-link-color: @link_color;
     -GtkIMHtml-hyperlink-color: @link_color;
     -GtkHTML-link-color: @link_color;
 
-    -GtkWidget-focus-line-width: 2;
-    -GtkWidget-focus-padding: 0;
-    
-    -GtkWindow-decoration-button-layout: 'close:maximize'
     -GtkWindow-resize-grip-width: 0;
     -GtkWindow-resize-grip-height: 0;
 
@@ -53,7 +45,7 @@
 
 *:selected,
 *:selected:focus {
-    /* Make focused things stand out better, especially in Quod Libet for example. */
+    /* Make focus things stand out better, especially in Quod Libet for example. */
     border-style: dotted;
     border-width: 1px;
     border-color: white;
@@ -63,13 +55,13 @@
     color: @selected_fg_color;
 }
 
-*:insensitive {
-    color: @insensitive_color;
-    -gtk-image-effect: dim;
+*:disabled {
+    color: @disabled_color;
+    -gtk-icon-effect: dim;
 }
 
 *:hover {
-    -gtk-image-effect: none;
+    -gtk-icon-effect: none;
 }
 
 .gtkstyle-fallback {
@@ -78,13 +70,13 @@
 }
 
 GtkImage,
-GtkImage:insensitive,
+GtkImage:disabled,
 GtkLabel,
-GtkLabel:insensitive,
+GtkLabel:disabled,
 GtkBox,
-GtkBox:insensitive,
+GtkBox:disabled,
 GtkGrid,
-GtkGrid:insensitive {
+GtkGrid:disabled {
     background-color: transparent;
 }
 
@@ -162,7 +154,7 @@ GtkGrid:insensitive {
 }
 
 .pane-separator,
-.pane-separator:prelight,
+.pane-separator:hover,
 .pane-separator:selected {
     border: 1px solid shade (@base_color, 0.55);
     border-width: 0 1px;
@@ -177,7 +169,7 @@ GtkGrid:insensitive {
 }
 
 .pane-separator.vertical,
-.pane-separator.vertical:prelight,
+.pane-separator.vertical:hover,
 .pane-separator.vertical:selected {
     border-width: 1px 0;
 
@@ -215,7 +207,7 @@ GtkGrid:insensitive {
                 
     color: @text_color;
 
-    icon-shadow: 0 1px alpha (#fff, 0.4);
+    -gtk-icon-shadow: 0 1px alpha (#fff, 0.4);
     text-shadow: 0 1px alpha (#fff, 0.4);
 
     padding: 4px;
@@ -270,9 +262,9 @@ GtkGrid:insensitive {
                 inset 0 0 0 1px alpha (@inset_dark_color, 0.3),
                 0 1px 0 0 alpha (#fff, 0.30);
                 
-    color: @insensitive_fg_color;
+    color: @disabled_fg_color;
 
-    icon-shadow: 0 1px alpha (#fff, 0.4);
+    -gtk-icon-shadow: 0 1px alpha (#fff, 0.4);
     text-shadow: 0 1px alpha (#fff, 0.4);
 }
 
@@ -284,24 +276,24 @@ GtkGrid:insensitive {
     transition: all 200ms ease-in;
 }
 
-.entry:insensitive {
+.entry:disabled {
     background-image: linear-gradient(to bottom,
                                   alpha (#000, 0.05),
                                   transparent 5px
                                   );
 
-    color: @insensitive_color;
+    color: @disabled_color;
 }
 
-.titlebar .entry:insensitive,
-.toolbar .entry:insensitive {
+.titlebar .entry:disabled,
+.toolbar .entry:disabled {
     border-color: alpha (#000, 0.25);
     box-shadow: inset 0 0 0 1px @inset_dark_color,
                 0 1px 0 0 alpha (#fff, 0.30);
 }
 
-.titlebar .entry:insensitive:backdrop,
-.toolbar .entry:insensitive:backdrop {
+.titlebar .entry:disabled:backdrop,
+.toolbar .entry:disabled:backdrop {
     background-image: linear-gradient(to bottom,
                                   alpha (#000, 0.05),
                                   transparent 5px
@@ -319,7 +311,7 @@ GtkGrid:insensitive {
 }
 
 .image:hover {
-    color: @internal_element_prelight;
+    color: @internal_element_hover;
 }
 
 .image:selected,
@@ -346,7 +338,7 @@ GtkGrid:insensitive {
 .progressbar row:hover {
     color: @selected_fg_color;
     text-shadow: 0 1px alpha (#000, 0.3);
-    icon-shadow: 0 1px alpha (#000, 0.3);
+    -gtk-icon-shadow: 0 1px alpha (#000, 0.3);
 
     background-image: linear-gradient(to bottom,
                                   shade (@selected_bg_color, 1.30),
@@ -388,7 +380,7 @@ GtkGrid:insensitive {
 }
 
 .progressbar row:selected,
-.progressbar row:selected:focused {
+.progressbar row:selected:focus {
     border-image: linear-gradient(to bottom,
                                   shade (@selected_bg_color, 0.87),
                                   shade (@selected_bg_color, 0.80)
@@ -423,7 +415,7 @@ GtkGrid:insensitive {
 }
 
 .trough row:selected,
-.trough row:selected:focused  {
+.trough row:selected:focus  {
     color: @text_color;
 
     border-image: linear-gradient(to bottom,
@@ -432,7 +424,7 @@ GtkGrid:insensitive {
                                   ) 1 1 1 1;
 
     text-shadow: 0 1px alpha (#fff, 0.4);
-    icon-shadow: 0 1px alpha (#fff, 0.4);
+    -gtk-icon-shadow: 0 1px alpha (#fff, 0.4);
 }
 
 .progressbar.vertical {
@@ -472,8 +464,6 @@ GtkGrid:insensitive {
 
 .scale {
     -GtkScale-slider-length: 16;
-    -GtkRange-slider-width: 16;
-    -GtkRange-trough-border: 0;
 }
 
 .scale.slider {
@@ -515,7 +505,7 @@ GtkGrid:insensitive {
 }
 
 .titlebar .scale.slider,
-.scale.slider:insensitive {
+.scale.slider:disabled {
     background-image: none;
     border: none;
     box-shadow: none;
@@ -541,7 +531,7 @@ GtkGrid:insensitive {
     border-width: 1px 1px 1px 0;
 }
 
-.scale.trough:insensitive {
+.scale.trough:disabled {
     background-image: none;
     background-color: shade (@theme_bg_color, 1.25);
     border-color: shade (@inactive_frame_color, 0.9);
@@ -558,7 +548,7 @@ GtkGrid:insensitive {
                                   );
 }
 
-.scale.trough.vertical:insensitive {
+.scale.trough.vertical:disabled {
     background-image: none;
     background-color: shade (@theme_bg_color, 1.25);
     border-radius: 12px 12px 0 0;
@@ -582,7 +572,7 @@ GtkGrid:insensitive {
                 0 1px 0 0 alpha (#fff, 0.30);
 }
 
-.scale.highlight.left:insensitive {
+.scale.highlight.left:disabled {
     border: 1px solid alpha (#000, 0.40);
     
     background-image: linear-gradient(to bottom,
@@ -604,7 +594,7 @@ GtkGrid:insensitive {
                 0 1px 0 0 alpha (#fff, 0.30);
 }
 
-.scale.highlight.bottom:insensitive {
+.scale.highlight.bottom:disabled {
     border: 1px solid alpha (#000, 0.40);
     border-radius: 0 0 12px 12px;
 
@@ -649,7 +639,7 @@ GtkComboBox.combobox-entry .button {
 
 .button {
     text-shadow: 0 1px alpha (#fff, 0.4);
-    icon-shadow: 0 1px alpha (#fff, 0.4);
+    -gtk-icon-shadow: 0 1px alpha (#fff, 0.4);
 
     background-image: linear-gradient(to bottom,
                                   transparent,
@@ -683,13 +673,13 @@ GtkComboBox.combobox-entry .button {
     color:@text_color;
 }
 
-.button:insensitive {
+.button:disabled {
     background-image: none;
     background-color: transparent;
     border-color: alpha (#000, 0.20);
 }
 
-.toolbar .button:insensitive {
+.toolbar .button:disabled {
     background-image: linear-gradient(to bottom,
                                   alpha (#fff, 0.05),
                                   alpha (#000, 0.05)
@@ -720,7 +710,7 @@ GtkComboBox.combobox-entry .button {
                 0 1px 0 0 alpha (#fff, 0.30);
 }
 
-.button:active:insensitive {
+.button:active:disabled {
     background-image: linear-gradient(to bottom,
                                   shade (@bg_color, 0.85),
                                   shade (@bg_color, 0.94) 20%,
@@ -825,11 +815,11 @@ GtkOverlay > .button:focus:active {
     background-image: none;
 }
 
-.spinbutton .button:insensitive,
-.spinbutton .button:focus:insensitive {
+.spinbutton .button:disabled,
+.spinbutton .button:focus:disabled {
     background-color: alpha (#000, 0.02);
     background-image: none;
-    color: @insensitive_color;
+    color: @disabled_color;
 }
 
 .spinbutton .button:first-child {
@@ -885,7 +875,7 @@ GtkOverlay > .button:focus:active {
 .linked .button:focus,
 .linked .button:hover,
 .linked .button:active:hover,
-.linked .button:insensitive {
+.linked .button:disabled {
     border-right-width: 0;
     border-radius: 0;
     padding: 3px;
@@ -896,7 +886,7 @@ GtkOverlay > .button:focus:active {
 .linked .button:first-child,
 .linked .button:active:first-child,
 .linked .button:active:hover:first-child,
-.linked .button:insensitive:first-child {
+.linked .button:disabled:first-child {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
     border-bottom-left-radius: 2.5px;
@@ -908,7 +898,7 @@ GtkOverlay > .button:focus:active {
 .linked .button:last-child,
 .linked .button:active:last-child,
 .linked .button:active:hover:last-child,
-.linked .button:insensitive:last-child {
+.linked .button:disabled:last-child {
     border-right-width: 1px;
     border-bottom-right-radius: 2.5px;
     border-top-right-radius: 2.5px;
@@ -919,7 +909,7 @@ GtkOverlay > .button:focus:active {
 GtkOverlay .linked .button:last-child,
 GtkOverlay .linked .button:active:last-child,
 GtkOverlay .linked .button:active:hover:last-child,
-GtkOverlay .linked .button:insensitive:last-child {
+GtkOverlay .linked .button:disabled:last-child {
     border-right-width: 2px;
 }
 
@@ -928,7 +918,7 @@ GtkOverlay .linked .button:insensitive:last-child {
 .linked .button:only-child,
 .linked .button:active:only-child,
 .linked .button:active:hover:only-child,
-.linked .button:insensitive:only-child {
+.linked .button:disabled:only-child {
     border-right-width: 1px;
     border-left-width: 1px;
     border-radius: 2.5px;
@@ -939,7 +929,7 @@ GtkOverlay .linked .button:insensitive:last-child {
 .linked.vertical .button,
 .linked.vertical .button:active,
 .linked.vertical .button:active:hover,
-.linked.vertical .button:insensitive {
+.linked.vertical .button:disabled {
     border-bottom-width: 0;
     border-radius: 0;
 }
@@ -949,7 +939,7 @@ GtkOverlay .linked .button:insensitive:last-child {
 .linked.vertical .button:first-child,
 .linked.vertical .button:active:first-child,
 .linked.vertical .button:active:hover:first-child,
-.linked.vertical .button:insensitive:first-child {
+.linked.vertical .button:disabled:first-child {
     border-radius: 2.5px 2.5px 0 0;
 }
 
@@ -958,7 +948,7 @@ GtkOverlay .linked .button:insensitive:last-child {
 .linked.vertical .button:last-child,
 .linked.vertical .button:active:last-child,
 .linked.vertical .button:active:hover:last-child,
-.linked.vertical .button:insensitive:last-child {
+.linked.vertical .button:disabled:last-child {
     border-bottom-width: 1px;
     border-radius: 0 0 2.5px 2.5px;
 }
@@ -968,7 +958,7 @@ GtkOverlay .linked .button:insensitive:last-child {
 .linked.vertical .button:only-child,
 .linked.vertical .button:active:only-child,
 .linked.vertical .button:active:hover:only-child,
-.linked.vertical .button:insensitive:only-child {
+.linked.vertical .button:disabled:only-child {
     border-top-width: 1px;
     border-bottom-width: 1px;
     border-radius: 2.5px;
@@ -1004,7 +994,6 @@ GtkOverlay .linked .button:insensitive:last-child {
 }
 
 .dynamic-notebook .notebook {
-    -GtkNotebook-tab-overlap: 1px;
     border-width: 0;
 }
 
@@ -1016,8 +1005,8 @@ GtkOverlay .linked .button:insensitive:last-child {
     color: shade (@title_color, 0.75);
 }
 
-.dynamic-notebook GtkImage:insensitive {
-    color: @insensitive_color;
+.dynamic-notebook GtkImage:disabled {
+    color: @disabled_color;
 }
 
 .dynamic-notebook .notebook .button:hover {
@@ -1070,7 +1059,7 @@ GtkOverlay .linked .button:insensitive:last-child {
     border-width: 0 1px 1px;
 
     text-shadow: 0 1px alpha (#fff, 0.4);
-    icon-shadow: 0 1px alpha (#fff, 0.4);
+    -gtk-icon-shadow: 0 1px alpha (#fff, 0.4);
 
     box-shadow: inset 0 0 0 1px alpha (#fff, 0.20),
                 0 0 0 1px shade (@titlebar_color, 0.56);
@@ -1102,7 +1091,7 @@ GtkOverlay .linked .button:insensitive:last-child {
     background-color: shade (@titlebar_color, 1.06);
 
     text-shadow: 0 1px alpha (#fff, 0.4);
-    icon-shadow: 0 1px alpha (#fff, 0.4);
+    -gtk-icon-shadow: 0 1px alpha (#fff, 0.4);
     
     border: 1px solid shade (@titlebar_color, 0.60);
 }
@@ -1166,14 +1155,7 @@ GtkOverlay .linked .button:insensitive:last-child {
 * ComboBoxes *
 *************/
 
-GtkComboBox {
-    -GtkComboBox-arrow-scaling: 0.5;
-    -GtkComboBox-shadow-type: none;
-}
-
 GtkComboBox .separator {
-    /* always disable separators */
-    -GtkWidget-wide-separators: true;
     -GtkWidget-horizontal-separator: 0;
     -GtkWidget-vertical-separator: 0;
 }
@@ -1224,25 +1206,14 @@ GtkComboBox.combobox-entry .button:last-child {
 .scrollbar {
     background-image: none;
     border-style: solid;
-    -GtkRange-trough-border: 2;
     -GtkScrollbar-has-backward-stepper: false;
     -GtkScrollbar-has-forward-stepper: false;
-    -GtkRange-slider-width: 10;
-    -GtkScrollbar-min-slider-length: 30;
-
-    -GtkRange-stepper-spacing: 0;
-    -GtkRange-trough-under-steppers: 1;
-}
-
-.scrollbar:backdrop {
-    -GtkRange-trough-border: 0;
-    -GtkRange-slider-width: 0;
 }
 
 .scrollbar.button,
 .scrollbar.button:active,
 .scrollbar.button:active:hover,
-.scrollbar.button:insensitive,
+.scrollbar.button:disabled,
 .scrollbar.button:hover:backdrop,
 .scrollbar.button:active:hover:backdrop {
     border-style: none;
@@ -1253,15 +1224,11 @@ GtkComboBox.combobox-entry .button:last-child {
 }
 
 .scrollbar.slider,
-.scrollbar.slider:prelight,
+.scrollbar.slider:hover,
 .scrollbar.button {
     border-width: 0;
     border-radius: 2px;
     background-color: alpha (#000, 0.4);
-}
-
-.scrollbar.slider:insensitive {
-    -GtkRange-slider-width: 0;
 }
 
 .scrollbars-junction,
@@ -1273,10 +1240,6 @@ GtkComboBox.combobox-entry .button:last-child {
     border-radius: 0;
     border-image: none;
     box-shadow: none;
-}
-
-.scrollbar.trough:insensitive {
-    -GtkRange-trough-border: 0;
 }
 
 /********
@@ -1320,7 +1283,7 @@ GtkTreeMenu .menuitem {
 .menu .menuitem {
     padding: 4px 0;
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
 }
 
 .menu .menuitem GtkLabel,
@@ -1347,13 +1310,13 @@ GtkTreeMenu .menuitem {
                 inset 0 -1px 0 0 alpha (#fff, 0.15);
 
     text-shadow: 0 1px 1px alpha (#000, 0.25);
-    icon-shadow: 0 1px 1px alpha (#000, 0.25);
+    -gtk-icon-shadow: 0 1px 1px alpha (#000, 0.25);
 
     color: @selected_fg_color;
 }
 
-.menu .menuitem *:insensitive {
-    color: @insensitive_color;
+.menu .menuitem *:disabled {
+    color: @disabled_color;
 }
 
 .menuitem .accelerator {
@@ -1371,7 +1334,6 @@ GtkModelMenuItem GtkBox GtkImage {
 
 .menuitem.separator {
     color: @menu_separator;
-    -GtkMenuItem-horizontal-padding: 0;
 }
 
 .menuitem.check,
@@ -1380,8 +1342,8 @@ GtkModelMenuItem GtkBox GtkImage {
 .menuitem.radio:active,
 .menuitem.check:hover,
 .menuitem.radio:hover,
-.menuitem.check:insensitive,
-.menuitem.radio:insensitive {
+.menuitem.check:disabled,
+.menuitem.radio:disabled {
     background-image: none;
     background-color: transparent;
     box-shadow: none;
@@ -1393,8 +1355,8 @@ GtkModelMenuItem GtkBox GtkImage {
 
 .check,
 .radio,
-.check:insensitive,
-.radio:insensitive {
+.check:disabled,
+.radio:disabled {
     background-color: transparent;
     border-style: none;
 }
@@ -1457,11 +1419,10 @@ GtkCheckButton:selected:focus {
                                   );
 
     text-shadow: 0 1px alpha (#fff, 0.4);
-    icon-shadow: 0 1px alpha (#fff, 0.4);
+    -gtk-icon-shadow: 0 1px alpha (#fff, 0.4);
 }
 
 .toolbar .separator {
-    -GtkWidget-wide-separators: true;
     -GtkWidget-horizontal-separator: 0;
     -GtkWidget-vertical-separator: 0;
 } 
@@ -1484,7 +1445,7 @@ GtkCheckButton:selected:focus {
     border-color: shade (@titlebar_color, 0.50);
 
     text-shadow: 0 1px alpha (#fff, 0.4);
-    icon-shadow: 0 1px alpha (#fff, 0.4);
+    -gtk-icon-shadow: 0 1px alpha (#fff, 0.4);
 }
 
 .secondary-toolbar.toolbar:backdrop {
@@ -1494,16 +1455,16 @@ GtkCheckButton:selected:focus {
                                   );
     border-color: shade (@titlebar_color, 0.70);
     
-    color: @insensitive_color;
+    color: @disabled_color;
     
-    -gtk-image-effect: dim;
+    -gtk-icon-effect: dim;
 }
 
 .secondary-toolbar.toolbar .button {
     border-color: alpha (#000, 0.3);
 
     text-shadow: 0 1px alpha (#fff, 0.4);
-    icon-shadow: 0 1px alpha (#fff, 0.4);
+    -gtk-icon-shadow: 0 1px alpha (#fff, 0.4);
 }
 
 
@@ -1552,17 +1513,17 @@ GtkCheckButton:selected:focus {
 
 .header-bar .button.image-button GtkImage {
     color: @title_color;
-    icon-shadow: 0 1px @title_shadow_color;
+    -gtk-icon-shadow: 0 1px @title_shadow_color;
 }
 
-.header-bar .button.image-button GtkImage:insensitive {
-    color: @insensitive_color;
-    -gtk-image-effect: dim;
+.header-bar .button.image-button GtkImage:disabled {
+    color: @disabled_color;
+    -gtk-icon-effect: dim;
 }
 
 .header-bar .button.image-button GtkImage:backdrop {
     color: shade (@titlebar_color, 0.80);
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
 }
 
 /***************
@@ -1573,7 +1534,7 @@ GtkCheckButton:selected:focus {
     padding: 1px 6px;
 
     text-shadow: 0 1px alpha (#fff, 0.4);
-    icon-shadow: 0 1px alpha (#fff, 0.4);
+    -gtk-icon-shadow: 0 1px alpha (#fff, 0.4);
 
     background-image: linear-gradient(to bottom,
                                   @titlebar_color,
@@ -1661,7 +1622,7 @@ GtkPaned .inline-toolbar.toolbar {
     box-shadow: none;
 
     text-shadow: 0 1px alpha (#fff, 0.4);
-    icon-shadow: 0 1px alpha (#fff, 0.4);
+    -gtk-icon-shadow: 0 1px alpha (#fff, 0.4);
 }
 
 .inline-toolbar.toolbar .button:active,
@@ -1683,11 +1644,11 @@ GtkPaned .inline-toolbar.toolbar {
     border-radius: 0 2px 2px 0;
 }
 
-.inline-toolbar.toolbar .button *:insensitive,
-.inline-toolbar.toolbar .button:insensitive {
+.inline-toolbar.toolbar .button *:disabled,
+.inline-toolbar.toolbar .button:disabled {
     background-image: none;
     background-color: alpha (#000, 0.02);
-    color: @insensitive_color;
+    color: @disabled_color;
 }
 
 /***************
@@ -1711,7 +1672,7 @@ GtkPaned .inline-toolbar.toolbar {
     border-color: shade (@titlebar_color, 0.50);
 
     text-shadow: 0 1px alpha (#fff, 0.4);
-    icon-shadow: 0 1px alpha (#fff, 0.4);
+    -gtk-icon-shadow: 0 1px alpha (#fff, 0.4);
 }
 
 GtkDialog .search-bar {
@@ -1745,22 +1706,22 @@ GtkOverlay .suggested-action.button {
 }
 
 .suggested-action.button GtkLabel,
-.suggested-action.button GtkLabel:prelight {
+.suggested-action.button GtkLabel:hover {
     color: @selected_fg_color;
     text-shadow: 0 1px alpha (#000, 0.3);
-    icon-shadow: 0 1px alpha (#000, 0.3);
+    -gtk-icon-shadow: 0 1px alpha (#000, 0.3);
 }
 
-.suggested-action.button:insensitive {
+.suggested-action.button:disabled {
     border-color: alpha (#000, 0.20);
     background-image: none;
     background-color: transparent;
 }
 
-.suggested-action.button GtkLabel:insensitive {
+.suggested-action.button GtkLabel:disabled {
     text-shadow: 0 1px alpha (#fff, 0.3);
-    icon-shadow: 0 1px alpha (#fff, 0.3);
-    color: @insensitive_color;
+    -gtk-icon-shadow: 0 1px alpha (#fff, 0.3);
+    color: @disabled_color;
 }
 
 .suggested-action.button:active,
@@ -1788,10 +1749,10 @@ GtkOverlay .suggested-action.button {
 }
 
 .destructive-action.button GtkLabel,
-.destructive-action.button Gtklabel:prelight {
+.destructive-action.button Gtklabel:hover {
     color: @selected_fg_color;
     text-shadow: 0 1px alpha (#000, 0.2);
-    icon-shadow: 0 1px alpha (#000, 0.2);
+    -gtk-icon-shadow: 0 1px alpha (#000, 0.2);
 }
 
 /***************
@@ -1836,11 +1797,11 @@ GtkSwitch.trough:active {
     background-image: url("assets/switch-on.svg");
 }
 
-GtkSwitch.trough:insensitive {
+GtkSwitch.trough:disabled {
     background-image: url("assets/switch-off-disabled.svg");
 }
 
-GtkSwitch.trough:active:insensitive {
+GtkSwitch.trough:active:disabled {
     background-image: url("assets/switch-on-disabled.svg");
 }
 
@@ -1854,7 +1815,7 @@ GtkSwitch.slider:focus {
     background-image: url("assets/switch-slider-focus.svg");
 }
 
-GtkSwitch.slider:insensitive {
+GtkSwitch.slider:disabled {
     background-image: none;
     background-color: transparent;
 }
@@ -2079,13 +2040,13 @@ GtkDialog .sidebar GtkScrolledWindow {
 .sidebar,
 .sidebar .view,
 .sidebar .view:selected:backdrop,
-.sidebar .view:prelight:selected:backdrop,
+.sidebar .view:hover:selected:backdrop,
 .source-list,
 .source-list.view,
 .source-list.view:selected:backdrop,
-.source-list.view:prelight:selected:backdrop {
+.source-list.view:hover:selected:backdrop {
     text-shadow: 0 1px alpha (#fff, 0.4);
-    icon-shadow: 0 1px alpha (#fff, 0.4);
+    -gtk-icon-shadow: 0 1px alpha (#fff, 0.4);
 }
 
 .sidebar,
@@ -2098,17 +2059,17 @@ GtkDialog .sidebar GtkScrolledWindow {
     color: transparent;
 }
 
-.sidebar .view:prelight,
-.source-list.view:prelight {
+.sidebar .view:hover,
+.source-list.view:hover {
     background-color: shade (@titlebar_color, 1.10);
 }
 
 .sidebar .view:selected,
-.sidebar .view:prelight:selected,
+.sidebar .view:hover:selected,
 .sidebar.view:selected,
-.sidebar.view:prelight:selected,
+.sidebar.view:hover:selected,
 .source-list.view:selected,
-.source-list.view:prelight:selected,
+.source-list.view:hover:selected,
 .source-list.view:selected:focus,
 .source-list.category-expander:hover {
 
@@ -2132,7 +2093,7 @@ GtkDialog .sidebar GtkScrolledWindow {
 }
 
 GtkDialog .sidebar .view:selected,
-GtkDialog .sidebar .view:prelight:selected {
+GtkDialog .sidebar .view:hover:selected {
     background-image: none;
     background-color: alpha (#000, 0.05);
 
@@ -2146,9 +2107,9 @@ GtkDialog .sidebar .view:prelight:selected {
 }
 
 .sidebar .view:selected:backdrop,
-.sidebar .view:prelight:selected:backdrop,
+.sidebar .view:hover:selected:backdrop,
 .source-list.view:selected:backdrop,
-.source-list.view:prelight:selected:backdrop {
+.source-list.view:hover:selected:backdrop {
     background-image: linear-gradient(to bottom,
                                   alpha (#000, 0.08),
                                   alpha (#000, 0.04)
@@ -2161,7 +2122,7 @@ GtkDialog .sidebar .view:prelight:selected {
 }
 
 GtkDialog .sidebar .view:selected:backdrop,
-GtkDialog .sidebar .view:prelight:selected:backdrop {
+GtkDialog .sidebar .view:hover:selected:backdrop {
     background-color: alpha (#000, 0.05);
     background-image: none;
 
@@ -2172,11 +2133,10 @@ GtkDialog .sidebar .view:prelight:selected:backdrop {
 }
 
 .sidebar-pane-separator,
-.sidebar-pane-separator:prelight,
+.sidebar-pane-separator:hover,
 .sidebar-pane-separator:selected {
 
     border-width: 0;
-    -GtkPaned-handle-size: 1;
     background-image: none;
     background-color: shade (@titlebar_color, 0.75);
 }
@@ -2189,10 +2149,10 @@ GtkDialog .sidebar .view:prelight:selected:backdrop {
 }
 
 .source-list.badge,
-.source-list.badge:prelight,
+.source-list.badge:hover,
 .source-list.badge:selected,
 .source-list.badge:selected:focus,
-.source-list.badge:prelight:selected {
+.source-list.badge:hover:selected {
     background-image: none;
     background-color: alpha (#000, 0.4);
     color: @titlebar_color;
@@ -2200,22 +2160,22 @@ GtkDialog .sidebar .view:prelight:selected:backdrop {
     padding: 0 6px;
     margin: 0 3px;
     text-shadow: 0 1px alpha (#000, 0.1);
-    icon-shadow: 0 1px alpha (#000, 0.1);
+    -gtk-icon-shadow: 0 1px alpha (#000, 0.1);
     border-width: 0;
 }
 
 .source-list.badge:selected,
-.source-list.badge:prelight:selected {
+.source-list.badge:hover:selected {
     color: @titlebar_color;
 }
 
 .source-list.badge:selected:backdrop,
-.source-list.badge:selected:prelight:backdrop {
+.source-list.badge:selected:hover:backdrop {
     background-image: none;
     background-color: alpha (#000, 0.2);
     color: shade (@titlebar_color, 0.95);
     text-shadow: 0 1px alpha (#000, 0.1);
-    icon-shadow: 0 1px alpha (#000, 0.1);
+    -gtk-icon-shadow: 0 1px alpha (#000, 0.1);
 }
 
 /**************
@@ -2227,7 +2187,7 @@ GtkCalendar {
 }
 
 GtkCalendar.button,
-GtkCalendar.button:insensitive,
+GtkCalendar.button:disabled,
 GtkCalendar.header,
 GtkCalendar.view {
     background-color: transparent;
@@ -2306,7 +2266,7 @@ GtkCalendar.highlight {
 }
 
 GtkInfoBar GtkLabel {
-    icon-shadow: 0 1px alpha (#fff, 0.3);
+    -gtk-icon-shadow: 0 1px alpha (#fff, 0.3);
     text-shadow: 0 1px alpha (#fff, 0.3);
 }
 
@@ -2316,8 +2276,8 @@ GtkInfoBar .menu {
 }
 
 
-GtkInfoBar GtkLabel:insensitive {
-    color: @insensitive_color;
+GtkInfoBar GtkLabel:disabled {
+    color: @disabled_color;
 
 }
 
@@ -2326,7 +2286,7 @@ GtkInfoBar .button:focus,
 .dynamic-notebook GtkInfoBar .button {
 
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     
     background-image: none; 
     background-color: transparent;  
@@ -2346,8 +2306,8 @@ GtkInfoBar .button:hover:active {
     border-color: alpha (#000, 0.35);
 }
 
-GtkInfoBar .button:insensitive,
-GtkInfoBar .button:hover:insensitive {
+GtkInfoBar .button:disabled,
+GtkInfoBar .button:hover:disabled {
     background-image: none;
     background-color: transparent;    
 
@@ -2376,8 +2336,8 @@ GtkModelButton.button {
 }
 
 GtkModelButton.button:active,
-GtkModelButton.button:insensitive,
-GtkModelButton.button:active:insensitive,
+GtkModelButton.button:disabled,
+GtkModelButton.button:active:disabled,
 GtkModelButton.button {
     background-color: transparent;
     background-image: none;
@@ -2393,7 +2353,7 @@ GtkPopover .separator {
     color: alpha(@text_color, 0.4);
     text-shadow: none;
     background-color: transparent;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     border: 0;
 }
 
@@ -2416,7 +2376,7 @@ GtkModelButton.button:selected {
                 inset 0 -1px 0 0 alpha (#fff, 0.15);
 
     text-shadow: 0 1px 1px alpha (#000, 0.25);
-    icon-shadow: 0 1px 1px alpha (#000, 0.25);
+    -gtk-icon-shadow: 0 1px 1px alpha (#000, 0.25);
 }
 
 
@@ -2435,7 +2395,7 @@ GtkModelButton.button:selected {
     border-width: 0 0 1px;
 
     text-shadow: 0 1px alpha (#fff, 0.4);
-    icon-shadow: 0 1px alpha (#fff, 0.4);
+    -gtk-icon-shadow: 0 1px alpha (#fff, 0.4);
 
     box-shadow: inset 0 0 0 1px alpha (#fff, 0.20),
                 inset 0 1px 0 0 alpha (#fff, 0.60);
@@ -2453,7 +2413,7 @@ GtkModelButton.button:selected {
 
     box-shadow: inset 0 0 0 1px alpha (#fff, 0.40);
     
-    -gtk-image-effect: dim;
+    -gtk-icon-effect: dim;
 }
 
 .header-bar {
@@ -2474,18 +2434,18 @@ GtkModelButton.button:selected {
     color: @title_color;
     font: Bold 9;
     text-shadow: 0 1px @title_shadow_color;
-    icon-shadow: 0 1px @title_shadow_color;
+    -gtk-icon-shadow: 0 1px @title_shadow_color;
 }
 
 .titlebar .subtitle {
     color: shade (@titlebar_color, 0.50);
     font-size: 80%;
     text-shadow: 0 1px @title_shadow_color;
-    icon-shadow: 0 1px @title_shadow_color;
+    -gtk-icon-shadow: 0 1px @title_shadow_color;
 }
 
 .titlebar .titlebutton {
-    icon-shadow: 0 1px @title_shadow_color;
+    -gtk-icon-shadow: 0 1px @title_shadow_color;
     color: alpha (#000, 0.50);
     background: none;
     padding: 3px;
@@ -2504,7 +2464,7 @@ GtkModelButton.button:selected {
 .titlebar .button.image-button GtkImage:backdrop {
     color: shade (@title_color, 1.20);
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
 }
 
 .window-frame {

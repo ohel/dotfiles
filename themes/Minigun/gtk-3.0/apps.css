@@ -88,7 +88,6 @@ MarlinViewChromeLocationBar .button:active {
 ********/
 
 ConversationListView {
-    -GtkWidget-focus-line-width: 1px;
     -GtkTreeView-grid-line-width: 0;
 }
  
@@ -132,7 +131,7 @@ ConversationListView.view.cell:selected {
     color: #fff;
     font-weight: bold;
     text-shadow: 0 1px 2px alpha (#000, 0.6);
-    icon-shadow: 0 1px 2px alpha (#000, 0.6);
+    -gtk-icon-shadow: 0 1px 2px alpha (#000, 0.6);
 }
 
 .panel .menu .menuitem {
@@ -144,10 +143,6 @@ ConversationListView.view.cell:selected {
     background-color: transparent;
 }
 
-.panel-app-button {
-    -GtkMenuItem-horizontal-padding: 6px;
-}
-
 .composited-indicator {
     background-color: transparent;
     color: #fff;
@@ -155,7 +150,7 @@ ConversationListView.view.cell:selected {
 }
 
 .composited-indicator.menuitem:active,
-.composited-indicator.menuitem:prelight {
+.composited-indicator.menuitem:hover {
     border-style: none;
     background-image: none;
     box-shadow: none;
@@ -189,7 +184,7 @@ ConversationListView.view.cell:selected {
     background-color: @selected_bg_color;
     color: @selected_fg_color;
     text-shadow: 0 1px 1px alpha (#000, 0.25);
-    icon-shadow: 0 1px 1px alpha (#000, 0.25);
+    -gtk-icon-shadow: 0 1px 1px alpha (#000, 0.25);
 }
  
 .search-entry-large,
