@@ -14,26 +14,12 @@ mkdir -p /dev/shm/cache
 mkdir -p /tmp/mhwaveedit
 mkfifo /dev/shm/mpvfifo 2>/dev/null
 
-#xset dpms 900 0 0
+# Set standby, suspend, off for DPMS.
+xset dpms 900 0 0
+# Disable DPMS, disable screensaver. Using a television, it doesn't support DPMS anyway.
 xset -dpms; xset s off
 
 exec xfce4-session &
-exec devilspie ~/.config/devilspie/*.ds &
-exec ~/.scripts/initkeyboard.sh &
-exec ~/.scripts/launchers/compiz.sh &
-exec ~/.scripts/launchers/conky.sh &
-exec ~/.scripts/launchers/gizmod.sh &
-exec ~/.scripts/launchers/clawsmail.sh &
-
-# Clear and turn off LCD.
-if [ -e /dev/serial/matrix_orbital ]
-then
-	echo -n -e "\xFEX\xFE\x48\xFE\x46" > /dev/serial/matrix_orbital
-fi
-
-# Play a dummy wav so that software volume control device is visible for volumeicon.
-#aplay -q -D hda_out_mix_44100_vol ~/.local/share/misc/dummy.wav
-exec volumeicon &
 
 # This application does absolutely nothing, it just waits to be killed, keeping X alive.
 exec /opt/programs/lastofxinitrc/lastofxinitrc
