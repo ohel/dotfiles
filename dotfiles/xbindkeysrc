@@ -44,8 +44,12 @@ Mod1 + Mod4 + Pause
 "~/.scripts/switch_background.sh"
 Mod4 + Pause
 
-"~/.scripts/switch_display.sh"
+"~/.scripts/switch_display.sh switch"
 Mod4 + p
+"~/.scripts/switch_display.sh mirror"
+Mod1 + Mod4 + p
+"~/.scripts/switch_display.sh extend"
+Control + Mod1 + Mod4 + p
 
 # Reset active window to upper left corner.
 "wmctrl -r :ACTIVE: -e 0,0,0,-1,-1"
