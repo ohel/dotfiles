@@ -1,3 +1,5 @@
+umask 0007
+
 export LANG='en_US.utf8'
 export LC_ALL='en_US.utf8'
 export LC_NUMERIC='fi_FI.utf8'
@@ -8,8 +10,9 @@ export LC_TELEPHONE='fi_FI.utf8'
 export LC_MEASUREMENT='fi_FI.utf8'
 export EDITOR="/usr/bin/vim"
 
-HISTFILESIZE=4096  
+HISTFILESIZE=4096
 HISTSIZE=4096
+# common history for all bash shells
 PROMPT_COMMAND='history -a; history -c; history -r; echo -ne "\e]0;Terminal: ${PWD}\007"'
 if [ -e ~/.scripts/gitprompt.sh ]
 then
@@ -41,6 +44,11 @@ alias ls='ls --color=auto -hG --group-directories-first'
 alias mountiso='sudo mount -o loop -t iso9660'
 alias rcp='rsync -ah --progress'
 alias x='exit'
+
+if [ -d "$HOME/.scripts" ]; then
+    PATH="$HOME/.scripts:$PATH"
+fi
+PATH="$PATH:."
 
 if [ -e ~/.bashrc_extra ]
 then
