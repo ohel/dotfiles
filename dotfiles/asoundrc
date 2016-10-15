@@ -130,18 +130,6 @@ pcm.hda {
     }
 }
 
-# WAV recording device.
-pcm.file_out {
-    type file
-    slave.pcm "hda"
-    file /dev/shm/alsaout.wav
-    format "wav"
-    hint {
-        show on
-        description "WAV recording"
-    }
-}
-
 # Virtual equalizer device.
 pcm.hda_eq {
     type plug
@@ -245,13 +233,13 @@ pcm.julia_qout {
             slaves.dout.channels 2
             slaves.aout.pcm "julia_aout"
             slaves.aout.channels 2
-            bindings.0.slave dout
+            bindings.0.slave aout
             bindings.0.channel 0
-            bindings.1.slave dout
+            bindings.1.slave aout
             bindings.1.channel 1
-            bindings.2.slave aout
+            bindings.2.slave dout
             bindings.2.channel 0
-            bindings.3.slave aout
+            bindings.3.slave dout
             bindings.3.channel 1
         }
     }
@@ -264,7 +252,7 @@ pcm.julia_qout {
     }
     hint {
         show on
-        description "Juli@ analog/digital out"
+        description "Juli@ analog/digital out, quad"
     }
 }
 
@@ -279,13 +267,13 @@ pcm.julia_bout {
             slaves.dout.channels 2
             slaves.aout.pcm "julia_aout"
             slaves.aout.channels 2
-            bindings.0.slave dout
+            bindings.0.slave aout
             bindings.0.channel 0
-            bindings.1.slave dout
+            bindings.1.slave aout
             bindings.1.channel 1
-            bindings.2.slave aout
+            bindings.2.slave dout
             bindings.2.channel 0
-            bindings.3.slave aout
+            bindings.3.slave dout
             bindings.3.channel 1
         }
     }
@@ -298,83 +286,27 @@ pcm.julia_bout {
     }
     hint {
         show on
-        description "Juli@ analog/digital out"
+        description "Juli@ analog/digital out, stereo"
     }
 }
 
-# 5.1 to 2.0 downmix.
-pcm.julia_51to20 {
-    type plug
-    slave {
-        format S32_LE
-        pcm "julia_digital_hw"
-    }
-    route_policy duplicate
-    ttable {
-        0.0 0.29289
-        1.1 0.29289
-        2.0 0.29289
-        3.1 0.29289
-        4.0 0.20711
-        4.1 0.20711
-        5.0 0.20711
-        5.1 0.20711
-    }
-    hint {
-        show on
-        description "Juli@ 5.1 to 2.0 downmix"
-    }
-}
-
-# Asymmetric device @ 44.1 kHz.
+# Asymmetric analog device @ 44.1 kHz.
 pcm.julia {
     type asym
-    playback.pcm "julia_dout_mix_44100"
+    playback.pcm "julia_aout_mix_44100"
     capture.pcm "julia_ain_mix_44100"
     hint {
         show on
-        description "Juli@ asymmetric 44.1 kHz"
+        description "Juli@ asymmetric analog 44.1 kHz"
     }
 }
 
-# Asymmetric device @ 96kHz.
-pcm.julia_96 {
-    type asym
-    playback.pcm "julia_dout_mix_96000"
-    capture.pcm "julia_ain_mix_96000"
-    hint {
-        show on
-        description "Juli@ asymmetric 96 kHz"
-    }
-}
-
-# Mixing with Juli@, digital out, dmix.
-pcm.julia_dout_mix_44100 {
-    type plug
-    slave.pcm {
-        type dmix
-        ipc_key 11
-        slave {
-            pcm "julia_digital_hw"
-            format S32_LE
-            periods 16
-            period_time -1
-            period_size 1024
-            rate 44100
-        }
-    }
-    hint {
-        show on
-        description "Juli@ dmix digital out 44.1 kHz"
-    }
-}
-#
 # Mixing with Juli@, analog out, dmix.
 pcm.julia_aout_mix_44100 {
     type plug
     slave.pcm {
         type dmix
-        ipc_key 11
+        ipc_key 30
         slave {
             pcm "julia_analog_hw"
             format S32_LE
@@ -396,7 +328,7 @@ pcm.julia_ain_mix_44100 {
     type plug
     slave.pcm {
         type dsnoop
-        ipc_key 22
+        ipc_key 40
         slave {
             pcm "julia_analog_hw"
             rate 44100
@@ -408,47 +340,20 @@ pcm.julia_ain_mix_44100 {
     }
 }
 
-# Mixing with Juli@, digital out, dmix.
-pcm.julia_dout_mix_96000 {
-    type plug
-    slave.pcm {
-        type dmix
-        ipc_key 12
-        slave {
-            pcm "julia_digital_hw"
-            format S32_LE
-            periods 16
-            period_time -1
-            period_size 1024
-            rate 96000
-        }
-    }
-    hint {
-        show on
-        description "Juli@ dmix digital out 96 kHz"
-    }
-}
-
-# Mixing dsnoop device for input.
-pcm.julia_ain_mix_96000 {
-    type plug
-    slave.pcm {
-        type dsnoop
-        ipc_key 21
-        slave {
-            pcm "julia_analog_hw"
-            rate 96000
-        }
-    }
-    hint {
-        show on
-        description "Juli@ dsnoop analog in 96 kHz"
-    }
-}
-
 #############################
 ########## SPECIAL ##########
 #############################
+
+# Asymmetric device for HDA audio with Juli@ input.
+pcm.combo {
+    type asym
+    playback.pcm "hda_out_mix_44100_vol"
+    capture.pcm "julia_ain_mix_44100"
+    hint {
+        show on
+        description "HDA + Juli@ combo asymmetric"
+    }
+}
 
 # Control device for equalizer plugin.
 ctl.eq {
@@ -473,22 +378,6 @@ pcm.hda_out_mix_44100_vol {
     hint {
         show on
         description "HDA out with soft volume control"
-    }
-}
-
-# Digital out volume control.
-pcm.julia_vol {
-    type softvol
-    slave {
-        pcm "julia_dout"
-    }
-    control {
-        name "DigitalMaster"
-        card Juli
-    }
-    hint {
-        show on
-        description "Juli@ digital out with volume control"
     }
 }
 
@@ -534,7 +423,7 @@ pcm.julia_movie_balanced_matrix {
         pcm {
             type multi
             slaves.speakers {
-                pcm "julia_dout"
+                pcm "julia_aout"
                 channels 2
             }
             bindings.0.slave speakers
@@ -560,40 +449,6 @@ pcm.julia_movie_balanced_matrix {
     }
 }
 
-# Yet another general movie setup, for night watching.
-pcm.julia_movie_night {
-    type plug
-    slave {
-        format float
-        pcm {
-            type multi
-            slaves.speakers {
-                pcm "julia_aout"
-                channels 2
-            }
-            bindings.0.slave speakers
-            bindings.0.channel 0
-            bindings.1.slave speakers
-            bindings.1.channel 1
-        }
-    }
-    route_policy duplicate
-    ttable {
-        0.0 0.2125
-        1.1 0.2125
-        2.0 0.2125
-        3.1 0.2125
-        4.0 0.5
-        4.1 0.5
-        5.0 0.075
-        5.1 0.075
-    }
-    hint {
-        show on
-        description "Juli@ movie setup, night watching"
-    }
-}
-
 # Plug device for bs2b.
 pcm.julia_binaural {
     type plug
@@ -601,7 +456,7 @@ pcm.julia_binaural {
         rate 44100
         pcm {
             type ladspa
-            slave.pcm "julia_digital"
+            slave.pcm "julia_aout"
             path "/usr/lib/ladspa"
             plugins [ {
                 label bs2b # Bauer stereophonic-to-binaural DSP
@@ -617,60 +472,15 @@ pcm.julia_binaural {
     }
 }
 
-# Plug device for basscut.
-pcm.julia_basscut {
-    type plug
-    slave.pcm "ladspa_basscut"
-}
-
-# Plug device for bassboost.
-pcm.julia_bassboost {
-    type plug
-    slave.pcm "ladspa_bassboost"
-}
-
-# LADSPA device for bass cut.
-pcm.ladspa_basscut {
-    type ladspa
-    channels 2
-    slave.pcm "julia_dout"
-    path "/usr/lib/ladspa"
-    plugins [
-        {
-            label mbeq # Multiband EQ (mbeq_1197.so)
-            policy duplicate
-            input.bindings.0 "Input"
-            output.bindings.0 "Output"
-            input.controls [-70 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
-        }
-    ]
-}
-
-# LADSPA device for bass boost.
-pcm.ladspa_bassboost {
-    type ladspa
-    channels 2
-    slave.pcm "julia_dout"
-    path "/usr/lib/ladspa"
-    plugins [
-        {
-            label tap_equalizer # TAP Equalizer (tap_eq.so)
-            policy duplicate
-            input.bindings.0 "Input"
-            output.bindings.0 "Output"
-            input.controls [0 -10 -10 -10 -10 -10 -10 -10 40 100 200 400 1000 4000 10000 16000]
-        }
-    ]
-}
-
-# Asymmetric device for audio with input.
-pcm.combo {
-    type asym
-    playback.pcm "hda_out_mix_44100_vol"
-    capture.pcm "julia_ain_mix_44100"
+# WAV recording device.
+pcm.file_out {
+    type file
+    slave.pcm "hda"
+    file /dev/shm/alsaout.wav
+    format "wav"
     hint {
         show on
-        description "Combo asymmetric"
+        description "WAV recording"
     }
 }
 
@@ -727,34 +537,6 @@ pcm.loop_in_alsa {
 pcm.loop_in_jack {
     type plug
     slave.pcm "hw:Loopback,1,1"
-}
-
-pcm.loop2_out_alsa {
-    type plug
-    slave.pcm "hw:Loopback,0,2"
-    hint {
-        show on
-        description "ALSA loopback out 2"
-    }
-}
-
-pcm.loop2_out_jack {
-    type plug
-    slave.pcm "hw:Loopback,1,2"
-}
-
-pcm.loop2_in_alsa {
-    type plug
-    slave.pcm "hw:Loopback,0,3"
-    hint {
-        show on
-        description "ALSA loopback in 2"
-    }
-}
-
-pcm.loop2_in_jack {
-    type plug
-    slave.pcm "hw:Loopback,1,3"
 }
 
 # These are for use with virtual machines.

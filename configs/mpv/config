@@ -27,9 +27,13 @@ input-file=/dev/shm/mpvfifo
 profile-desc="common settings for movie profiles"
 
 # verbose options; disable audio errors, print simple file info
-msg-level=ao=no:identify=info
+msg-level=ao=debug:af=debug:identify=info
 
 vo=opengl-hq:scaler-resizes-only:swapinterval=1
+
+# languages
+alang=en,fi
+slang=fi,en
 
 sub-auto=fuzzy # loads all subs containing movie name
 ass-hinting=native
@@ -39,12 +43,9 @@ sub-scale=1.0
 sub-gauss=0.5
 sub-text-border-size=3.0
 sub-text-border-color="#C0000000"
-#sub-text-color="#20FFFFFF" # less visible
-sub-text-color="#C0FFFFFF" # more visible
 
-# languages
-alang=en,fi
-slang=fi,en
+sub-text-color="#20FFFFFF" # less visible
+#sub-text-color="#C0FFFFFF" # more visible
 
 ###############################################################################
 [basic]
@@ -74,6 +75,16 @@ profile=common-movie
 
 
 ###############################################################################
+[surroundmoviebalancedmatrix]
+profile-desc="another surround sound profile for movies"
+
+ao=alsa:device=julia_movie_balanced_matrix
+audio-channels=6
+profile=common-movie
+
+
+
+###############################################################################
 [stereomovie]
 profile-desc="stereo sound profile for movies"
 
@@ -84,26 +95,27 @@ profile=common-movie
 
 
 ###############################################################################
-[hdamovie]
-profile-desc="movie profile with hda audio"
+[hrtfmovie]
+profile-desc="profile with Head-Related Transfer Function for movies"
 
-ao=alsa:device=hda
+af=hrtf
+ao=alsa:device=julia_aout
 profile=common-movie
 
 
 
 ###############################################################################
 [julia]
-profile-desc="profile for general video, using Juli@"
+profile-desc="profile for general video (Juli@)"
 
-ao=alsa:device=julia_aout
+ao=alsa:device=julia
 profile=basic
 
 
 
 ###############################################################################
 [hda]
-profile-desc="profile for general video"
+profile-desc="profile for general video (HDA)"
 
 ao=alsa:device=hda
 profile=basic
@@ -113,4 +125,3 @@ profile=basic
 ###############################################################################
 [default]
 profile=common
-

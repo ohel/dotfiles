@@ -6,8 +6,6 @@ export MAGICK_THREAD_LIMIT=4
 export GDK_USE_XFT=1
 export QT_XFT=true
 export IGNOREEOF=1
-export ALSA_DEFAULT_PCM="hdmi_out"
-export ALSA_DEFAULT_CTL="hdmi_hw"
 
 mkdir -p /dev/shm/thumbnails
 mkdir -p /dev/shm/cache
