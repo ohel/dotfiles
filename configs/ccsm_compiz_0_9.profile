@@ -56,7 +56,6 @@ s0_speed = 4.500000
 s0_timestep = 0.100000
 s0_brightness = 100
 s0_opacity = 100
-s0_focus_on_switch = true
 s0_zoom = 0.000000
 s0_auto_rotate = true
 s0_background_color = #000000ff
@@ -83,20 +82,19 @@ s0_java_taskbar_fix = false
 s0_aiglx_fragment_fix = false
 
 [decor]
-s0_active_shadow_radius = 5.000000
-s0_active_shadow_opacity = 5.000000
+s0_active_shadow_radius = 6.000000
+s0_active_shadow_opacity = 6.000000
 s0_active_shadow_color = #ff0000ff
 s0_active_shadow_x_offset = 0
 s0_active_shadow_y_offset = 0
-s0_inactive_shadow_radius = 10.000000
-s0_inactive_shadow_opacity = 1.500000
+s0_inactive_shadow_radius = 6.000000
+s0_inactive_shadow_opacity = 1.000000
 s0_inactive_shadow_color = #00000080
 s0_inactive_shadow_x_offset = 0
 s0_inactive_shadow_y_offset = 0
 s0_command = /opt/programs/compiz/bin/gtk-window-decorator --metacity-theme "metacity_panther"
 s0_mipmap = true
 s0_decoration_match = !any
-s0_shadow_match = !type=DOCK
 
 [thumbnail]
 s0_fade_speed = 0.000000
