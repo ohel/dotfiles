@@ -3,6 +3,6 @@
 export XAUTHORITY=/home/panther/.Xauthority
 export DISPLAY=:0.0
 
-cp /home/panther/.scripts/udev/canoscan_scanscript.sh /home/panther/ramdisk/scan
-chmod +x /home/panther/ramdisk/scan
+cp /home/panther/.scripts/udev/canoscan_scanscript.sh /dev/shm/scan
+chmod +x /dev/shm/scan
 
