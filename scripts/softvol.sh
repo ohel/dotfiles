@@ -1,4 +1,5 @@
 #!/bin/bash
+# Raise (parameter: +) or lower (parameter: -) the "Soft Master" volume level using ALSA mixer.
 
 current_vol=$(amixer -cPCH get 'Soft Master',0 | grep "Front Left:" | sed "s/[^0-9]*\([0-9]*\).*/\1/")
 

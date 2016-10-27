@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copy and encode music (either to Ogg Vorbis or MP3), preserving simple metadata tags.
+# Replaygain info is applied (lossy) in the process.
 
 destination="$1"
 filein=$(echo $2 | sed s/\'$// | sed s/^\'// | sed s/\'\'\'/\'/g)
@@ -59,21 +61,27 @@ fi
 echo -n "*"
 if test "X$typeflac" != "X"; then
     tmpfile=$(tempfile -d /dev/shm/ --suffix=".ogg")
+
+    # For MP3:
     #tmpfile=$(tempfile -d /dev/shm/ --suffix=".mp3")
-    #echo "ENCODE: $filein"
-    # --apply-replaygain-which-is-not-lossless=t
     #flac -c -s -d "$filein" 2>/dev/null | lame --silent --preset extreme --noreplaygain --id3v2-only --tt "$meta_title" --ta "$meta_artist" --tl "$meta_album" --tn "$meta_track" - $tmpfile
+    # For replaygain: --apply-replaygain-which-is-not-lossless=t
+
     flac -c -s -d "$filein" 2>/dev/null | oggenc --resample 44100 -Q -q 7 -a "$meta_artist" -l "$meta_album" -t "$meta_title" -N "$meta_track" -c "replaygain_album_peak=$meta_rg_ap" -c "replaygain_track_peak=$meta_rg_tp" -c "replaygain_album_gain=$meta_rg_ag" -c "replaygain_track_gain=$meta_rg_tg" -o $tmpfile -
     source="$tmpfile"
+
 elif test "X$typeogg" != "X"; then
     tmpfile=$(tempfile -d /dev/shm/ --suffix=".ogg")
-    #echo "ENCODE: $filein"
+
+    # For MP3:
     #tmpwav=$(tempfile -d /dev/shm/ --suffix=".wav")
     #oggdec -Q -o $tmpwav "$filein"
     #lame --silent --preset extreme --noreplaygain --id3v2-only --tt "$meta_title" --ta "$meta_artist" --tl "$meta_album" --tn "$meta_track" $tmpwav $tmpfile
     #rm $tmpwav
     #source="$tmpfile"
+
     source="$filein"
+
 elif test "X$typemp3" != "X"; then
     tmpfile=$(tempfile -d /dev/shm/ --suffix=".mp3")
     source="$filein"
@@ -90,7 +98,6 @@ fi
 cp $source $destination/"$meta_album"/"$padding""$meta_track"_$(echo $meta_title | tr -c -d "[:alnum:]")_$(basename $tmpfile)
 rm $tmpfile
 
-# echo "DONE: $filein"
 echo -n "*"
 
 exit

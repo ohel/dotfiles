@@ -1,4 +1,6 @@
 #!/bin/sh
+# Display some info about CPU and GPU (AMD).
+
 echo
 echo CPU core frequencies:
 cat /proc/cpuinfo | grep MHz

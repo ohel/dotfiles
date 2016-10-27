@@ -1,4 +1,6 @@
 #!/bin/sh
+# Toggles bluetooth radio.
+
 if [ $(sudo rfkill list bluetooth | grep yes | wc -l) -gt 0 ]
 then
     sudo rfkill unblock bluetooth

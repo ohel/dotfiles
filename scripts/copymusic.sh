@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copy and encode music to a mountpoint. Used by drag'n'dropping files from media player playlist to a terminal window, for copying into a mobile phone.
 
 mountpoint="/mnt/phone"
 destination="/mnt/phone/Music"

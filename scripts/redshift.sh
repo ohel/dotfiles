@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Change screen color temperature using the redshift application.
 
 tempfile=/dev/shm/redshift_temp

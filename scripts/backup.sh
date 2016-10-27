@@ -1,4 +1,6 @@
 #!/bin/sh
+# Backup script for full system, home, virtual machine and misc backup.
+
 mountables=(
     "/mnt/vortex"
     "/mnt/raidstorage"
@@ -31,7 +33,6 @@ systembackupdir="${mountables[1]}/backups/system/"
 systembackupdir2="${mountables[0]}/backups/system/"
 virtualmachinesdir="/opt/virtualmachines/"
 logdir="/var/log/backup/"
-
 
 # Escape asterisks, otherwise shell expansion is made.
 systembackupexcludelist=(
@@ -172,20 +173,6 @@ then
     fi
     echo "Moving log file to $logdir..."
     mv /dev/shm/backup.out $logdir
-
-    distfilesdir=$systembackupdir/distfiles/
-    echo
-    echo "Backing up distfiles..."
-    if ! [ -d $distfilesdir ]
-    then
-        if [ -e $distfilesdir ]
-        then
-            echo "$distfilesdir exists but is not a directory! Aborting..."
-            exit 1
-        fi
-        mkdir $distfilesdir
-    fi
-    rsync -ah --progress --delete /usr/portage/distfiles/ $distfilesdir
 
     excludelist=""
     for excludeitem in ${homebackupexcludelist[@]}

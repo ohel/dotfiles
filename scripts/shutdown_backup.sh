@@ -1,4 +1,6 @@
 #/bin/bash
+# Shut down the computer but first call system backup script depending on how long it is since last backup.
+
 userhome=/home/panther
 backupmountpoint=/mnt/raidstorage
 checkfile=$userhome/.local/share/misc/lastsync/misc

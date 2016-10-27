@@ -1,7 +1,7 @@
 #!/bin/bash
-
-# run with:
-# /usr/bin/terminal --hide-borders --geometry 50x10 -x ~/.scripts/toggle_digital_source.sh autoclose
+# Toggles ESI Juli@ digital out playback source (with monitor). May be used with analog out because of the monitor.
+# For best results, run with:
+# /usr/bin/terminal --hide-borders --geometry 50x10 -x toggle_digital_source.sh autoclose
 
 if amixer -cJuli get 'IEC958',0 | grep ".* Item0: 'PCM Out'" > /dev/null
  then

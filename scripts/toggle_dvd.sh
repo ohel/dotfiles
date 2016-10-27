@@ -1,3 +1,6 @@
+#!/bin/bash
+# Mount or unmount DVD.
+
 device="/dev/sr0"
 mountloc="/mnt/dvd"
 if test "X$(mount | grep $device)" != "X"

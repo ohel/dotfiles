@@ -1,3 +1,6 @@
+#!/bin/bash
+# Toggle a HDD mounted/unmount+sleeping state. Also supports RAID setups for HDD sleep.
+
 mountloc="$1"
 uuid=$(cat /etc/fstab | grep $mountloc | tr -d [:space:] | cut -f 1 -d '/' | cut -f 2 -d '=' | tr -d '"')
 device=$(ls -l /dev/disk/by-uuid/$uuid | cut -f 2 -d '>' | cut -f 3 -d '/')
