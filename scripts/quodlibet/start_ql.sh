@@ -13,6 +13,7 @@
 # where <device> is an ALSA device.
 
 qlexe="/opt/programs/quodlibet/quodlibet.py"
+logfile="/dev/shm/qllog.txt"
 
 if ! ps -ef | grep "pyorbital.py" | grep -v grep > /dev/null
 then
@@ -29,6 +30,7 @@ else
         params="--play-pause"
     elif [ "$1" = "audio" ] && [ "$#" -gt 1 ]; then
         device="$2"
+        params="--toggle-window"
     fi
 fi
 
@@ -39,11 +41,10 @@ then
         sed -i "s/\(^gst_pipeline.*\) device=.*/\1 device=$device/" ~/.quodlibet/config
     fi
 
-    if test "X$params" == "X--play-pause"
-    then
-        params="" # Clear params so that QL may start without --run.
-    fi
+    params="" # Clear params so that QL may start without --run.
+else
+    logfile="/dev/null" # QL is already running, so so is the log file.
 fi
 
-$qlexe $params &>/dev/shm/qllog.txt &
+$qlexe $params &>$logfile &
 
