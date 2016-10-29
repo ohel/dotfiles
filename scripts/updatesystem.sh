@@ -14,12 +14,11 @@ sudo etc-update
 echo Emerging @preserved-rebuild...
 sudo emerge @preserved-rebuild -vj --keep-going --quiet-build
 sudo eclean -d distfiles
+sudo emerge --depclean -av
 echo "********************"
 echo "* Update complete! *"
 echo "********************"
 echo
 echo "Run perl-cleaner and python-updater if necessary."
-echo "To remove obsolete packages:"
-echo "sudo emerge --depclean -av"
 read
 
