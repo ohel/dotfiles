@@ -1,4 +1,6 @@
 #!/bin/sh
+# Remove (move to temporary location) currently playing song in Quod Libet.
+
 qlexe=/opt/programs/quodlibet/quodlibet.py
 playing=$($qlexe --status | cut -f 1 -d ' ' | head -n 1)
 if [ ! "$playing"="playing" ]; then

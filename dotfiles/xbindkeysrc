@@ -26,7 +26,6 @@ Mod4 + w
 "~/.scripts/browser.sh"
 XF86HomePage
 
-
 # Special commands
 ###################
 
@@ -63,61 +62,11 @@ Mod4 + Print
 "i3lock -e -i ~/.themes/lockscreen.png"
 Control + Mod1 + Delete
 
-"claws-mail --select INBOX"
-XF86Mail
-
 "gvim +1 ~/.memo"
 Mod4 + v
 
-# The quick launch buttons are mapped in a strange way.
-# These correspond to quicklaunch 1-5 on a Natural Ergonomic 4000.
-"gvim -c 'e .'"
-XF86Launch5
-"filezilla"
-XF86Launch6
-"gvim +1 ~/.memo"
-XF86Launch7
-"xfce4-terminal -x htop"
-XF86Launch8
-"xfce4-terminal --geometry=120x26"
-XF86Launch9
-
-# Multimedia
-#############
-
-"~/.scripts/quodlibet/start_play_pause.sh"
-XF86AudioPlay
-
-"/opt/programs/quodlibet/quodlibet.py --random=album"
-Mod4 + XF86AudioPlay
-
-# For toggling between two soundcards.
-#"xfce4-terminal --hide-borders --geometry 50x10 -x ~/.scripts/toggle_digital_source.sh autoclose &"
-#XF86AudioMute
-
-#"~/.scripts/quodlibet/vol_down.sh"
-#XF86AudioLowerVolume
-#"~/.scripts/quodlibet/vol_up.sh"
-#XF86AudioRaiseVolume
-
-# If using full software volume control.
-#"~/.scripts/softvol.sh -"
-#XF86AudioLowerVolume
-#"~/.scripts/softvol.sh +"
-#XF86AudioRaiseVolume
-
-"~/.scripts/quodlibet/prev_song.sh"
-Mod4 + XF86AudioLowerVolume
-"~/.scripts/quodlibet/next_song.sh"
-Mod4 + XF86AudioRaiseVolume
-
-"~/.scripts/quodlibet/toggle_visible.sh"
-XF86Favorites
-
-"~/.scripts/screensaver.sh"
-Mod4 + XF86Favorites
-"~/.scripts/screensaver.sh standby"
-Mod1 + Mod4 + XF86Favorites
+"gvim -c 'e ~'"
+Mod1 + Mod4 + v
 
 # Terminal buffer scrolling with Alt+J/K (caps), makes it ergonomic.
 "xdotool keyup j && xdotool key --clearmodifiers Shift+Page_Down"
@@ -136,3 +85,56 @@ Mod4 + End
 Mod4 + Next # Page down
 "/opt/redshift.sh 500"
 Mod4 + Prior # Page up
+
+# Quick launch
+#############
+
+"claws-mail --select INBOX"
+XF86Mail
+
+# The quick launch buttons are sometimes mapped with weird indices.
+# These correspond to quicklaunch 1-5 on a Natural Ergonomic 4000.
+"gvim -c 'e .'"
+XF86Launch5
+"filezilla"
+XF86Launch6
+"gvim +1 ~/.memo"
+XF86Launch7
+"xfce4-terminal -x htop"
+XF86Launch8
+"xfce4-terminal --geometry=120x26"
+XF86Launch9
+
+"~/.scripts/screensaver.sh"
+Mod4 + XF86Favorites
+"~/.scripts/screensaver.sh standby"
+Mod1 + Mod4 + XF86Favorites
+
+# Multimedia
+#############
+
+"~/.scripts/quodlibet/start_ql.sh play-pause"
+XF86AudioPlay
+
+"/opt/programs/quodlibet/quodlibet.py --random=album"
+Mod4 + XF86AudioPlay
+
+"~/.scripts/quodlibet/start_ql.sh toggle-window"
+XF86Favorites
+
+# For toggling between two soundcards.
+"xfce4-terminal --hide-borders --geometry 50x10 -x ~/.scripts/toggle_digital_source.sh autoclose monitor &"
+XF86AudioMute
+
+"~/.scripts/quodlibet/prev_song.sh"
+Mod4 + XF86AudioLowerVolume
+"~/.scripts/quodlibet/next_song.sh"
+Mod4 + XF86AudioRaiseVolume
+
+# Software volume control.
+# Disabled because "volumeicon" supports the keys natively.
+#"~/.scripts/softvol.sh -"
+#XF86AudioLowerVolume
+#"~/.scripts/softvol.sh +"
+#XF86AudioRaiseVolume
+
