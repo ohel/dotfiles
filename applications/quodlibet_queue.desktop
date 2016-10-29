@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+NoDisplay=true
+Name=Quod Libet (Queue)
+Exec=/opt/programs/quodlibet/quodlibet.py --enqueue=%f
+

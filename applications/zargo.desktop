@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+NoDisplay=true
+Name=ArgoUML
+Exec=/opt/bin/java_bin/java -jar /opt/programs/argouml/argouml.jar %s
+MimeType=application/zargo

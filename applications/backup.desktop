@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Backup
+Exec=sudo /home/panther/.scripts/backup.sh
+Icon=stock_folder-copy
+Terminal=true
+Categories=System

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Name=KVM Audio Loopback (ALSA)
+Exec=/opt/virtualmachines/audioloopalsa.sh
+Icon=audio-card
+Terminal=true
+Type=Application
+Categories=Audio

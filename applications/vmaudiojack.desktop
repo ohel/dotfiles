@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Name=KVM Audio Loopback (JACK)
+Exec=/opt/virtualmachines/audioloopjack.sh
+Icon=audio-card
+Terminal=true
+Type=Application
+Categories=Audio

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=DVD Decrypter
+Exec=wine "/opt/programs/win/DVD Decrypter/DVDDecrypter.exe" 2>&1 &
+Icon=dvddecrypter.xpm
+Terminal=false
+StartupNotify=true
+Type=Application
+Categories=Application;AudioVideo;

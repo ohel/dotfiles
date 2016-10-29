@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Name=Audio Loopback ALSA/JACK
+Exec=/home/panther/.scripts/alsaloopjack.sh
+Icon=audio-card
+Terminal=true
+Type=Application
+Categories=Audio

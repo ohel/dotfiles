@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+NoDisplay=true
+Name=playdvd (menu)
+Exec=/home/panther/.scripts/launchers/mplayer_dvd.sh menu %f
+MimeType=application/x-cd-image

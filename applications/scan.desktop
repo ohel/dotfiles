@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Scan documents using script
+Exec=/home/panther/.scripts/launchers/startscan.sh
+Terminal=true
+Type=Application
+Icon=scanner
+Categories=Application;Office

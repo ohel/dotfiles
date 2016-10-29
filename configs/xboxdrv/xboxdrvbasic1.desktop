@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Name=xboxdrv basic 1 (trigger as button, dpad not)
+Exec=/home/panther/.scripts/launchers/xboxdrvbasic.sh 1
+Icon=xfce-games
+Terminal=true
+Type=Application
+Categories=Application;Game;

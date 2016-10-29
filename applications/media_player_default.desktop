@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+NoDisplay=true
+Name=Media player (default)
+Exec=/home/panther/.scripts/launchers/media_player.sh %f
+MimeType=video/x-flv;video/x-msvideo;video/x-ms-wmv;video/quicktime;video/mp4;video/mpeg
+
