@@ -12,14 +12,14 @@ export EDITOR="/usr/bin/vim"
 
 HISTFILESIZE=4096
 HISTSIZE=4096
-# common history for all bash shells
+# Common history for all bash shells.
 PROMPT_COMMAND='history -a; history -c; history -r; echo -ne "\e]0;Terminal: ${PWD}\007"'
 if [ -e ~/.scripts/gitprompt.sh ]
 then
-  source ~/.scripts/gitprompt.sh
-  PS1='\[\e[0;37m\]\w \[\e[1;36m\]$(__git_ps1 "(%s) ")\[\e[1;30m\]\$\[\e[0m\] '
+    source ~/.scripts/gitprompt.sh
+    PS1='\[\e[0;37m\]\w \[\e[1;36m\]$(__git_ps1 "(%s) ")\[\e[1;30m\]\$\[\e[0m\] '
 else
-  PS1='\[\e[0;37m\]\w \[\e[1;30m\]\$\[\e[0m\] '
+    PS1='\[\e[0;37m\]\w \[\e[1;30m\]\$\[\e[0m\] '
 fi
 
 set -o vi
@@ -45,13 +45,15 @@ alias mountiso='sudo mount -o loop -t iso9660'
 alias rcp='rsync -ah --progress'
 alias x='exit'
 
+if [ -d "$HOME/.scripts_extra" ]; then
+    PATH="$HOME/.scripts_extra:$PATH"
+fi
 if [ -d "$HOME/.scripts" ]; then
     PATH="$HOME/.scripts:$PATH"
 fi
-PATH="$PATH:."
+PATH=".:$PATH"
 
 if [ -e ~/.bashrc_extra ]
 then
     source ~/.bashrc_extra
 fi
-

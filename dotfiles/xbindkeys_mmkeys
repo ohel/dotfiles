@@ -1,0 +1,42 @@
+# Multimedia keys xbindkeys config.
+# These are mainly for Microsoft Natural Ergonomic 4000 keyboard and alike.
+# Mod1 = Alt
+# Mod4 = Windows
+# Mod5 = Alt gr
+
+# The quick launch buttons are sometimes mapped with weird indices.
+# These correspond to quicklaunch 1-5 on the Natural Ergonomic 4000.
+"gvim -c 'e .'"
+XF86Launch5
+"filezilla"
+XF86Launch6
+"gvim +1 ~/.memo"
+XF86Launch7
+"xfce4-terminal -x htop"
+XF86Launch8
+"xfce4-terminal --geometry=120x26"
+XF86Launch9
+
+"~/.scripts/screensaver.sh"
+Mod4 + XF86Favorites
+"~/.scripts/screensaver.sh standby"
+Mod1 + Mod4 + XF86Favorites
+
+"~/.scripts/quodlibet/start_ql.sh play-pause"
+XF86AudioPlay
+
+"/opt/programs/quodlibet/quodlibet.py --random=album"
+Mod4 + XF86AudioPlay
+
+"~/.scripts/quodlibet/start_ql.sh toggle-window"
+XF86Favorites
+
+# For toggling between two soundcards.
+"xfce4-terminal --hide-borders --geometry 50x10 -x ~/.scripts/toggle_digital_source.sh autoclose monitor &"
+XF86AudioMute
+
+"~/.scripts/quodlibet/prev_song.sh"
+Mod4 + XF86AudioLowerVolume
+"~/.scripts/quodlibet/next_song.sh"
+Mod4 + XF86AudioRaiseVolume
+

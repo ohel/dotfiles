@@ -3,6 +3,7 @@
 * conkyrc: ~/.conkyrc. A minimal config showing a few RSS feeds and if something eats resources.
 * inputrc: ~/.inputrc.
 * vimrc: ~/.vimrc.
-* xbindkeysmouseemu: Emulate a mouse using xbindkeys with Vim-style hjkl-mapping.
+* xbindkeys_mmkeys: Some special multimedia key mappings.
+* xbindkeys_mouseemu: Emulate a mouse using xbindkeys with Vim-style hjkl-mapping.
 * xbindkeysrc: ~/.xbindkeys. Has quite a few mappings for MS Natural Ergonomic 4000 multimedia keys.
 * xinitrc: ~/.xinitrc. On my main rig I start X using good old xinitrc script. I'm the single user anyway.
