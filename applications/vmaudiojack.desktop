@@ -5,4 +5,4 @@ Exec=/opt/virtualmachines/audioloopjack.sh
 Icon=audio-card
 Terminal=true
 Type=Application
-Categories=Audio
+Categories=Audio;System

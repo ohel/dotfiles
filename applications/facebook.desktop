@@ -4,4 +4,4 @@ Name=Open Facebook in Chromium incognito mode
 Exec=chromium-browser --incognito www.facebook.com
 Icon=facebook
 Terminal=false
-Categories=Internet
+Categories=Network

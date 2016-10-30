@@ -4,4 +4,4 @@ Exec=/home/panther/.scripts/launchers/startscan.sh
 Terminal=true
 Type=Application
 Icon=scanner
-Categories=Application;Office
+Categories=Utility;Office
