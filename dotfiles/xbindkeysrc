@@ -19,6 +19,9 @@ Mod4 + r
 "xfce4-terminal --working-directory=~ --title IPython -e ipython"
 XF86Calculator
 
+"claws-mail --select INBOX"
+XF86Mail
+
 "~/.scripts/browser.sh newwindow"
 Mod1 + Mod4 + w
 "~/.scripts/browser.sh"
@@ -75,64 +78,29 @@ Shift + Mod1 + j
 Shift + Mod1 + k
 
 # Backlight adjustment.
-"/opt/backlight.sh -50"
+"~/.scripts/backlight.sh -50"
 Mod4 + Home
-"/opt/backlight.sh 50"
+"~/.scripts/backlight.sh 50"
 Mod4 + End
 
-# Color temperature using Page Up/Down.
-"/opt/redshift.sh -500"
+# Color temperature adjustment.
+"~/.scripts/redshift.sh -500"
 Mod4 + Next # Page down
-"/opt/redshift.sh 500"
+"~/.scripts/redshift.sh 500"
 Mod4 + Prior # Page up
 
-# Quick launch
-#############
+# Touchpad toggles.
+"~/.scripts/toggle_touchpad.sh"
+XF86TouchpadToggle
+"~/.scripts/toggle_touchpad_tapping.sh"
+Mod5 + m
 
-"claws-mail --select INBOX"
-XF86Mail
-
-# The quick launch buttons are sometimes mapped with weird indices.
-# These correspond to quicklaunch 1-5 on a Natural Ergonomic 4000.
-"gvim -c 'e .'"
-XF86Launch5
-"filezilla"
-XF86Launch6
-"gvim +1 ~/.memo"
-XF86Launch7
-"xfce4-terminal -x htop"
-XF86Launch8
-"xfce4-terminal --geometry=120x26"
-XF86Launch9
-
-"~/.scripts/screensaver.sh"
-Mod4 + XF86Favorites
-"~/.scripts/screensaver.sh standby"
-Mod1 + Mod4 + XF86Favorites
-
-# Multimedia
-#############
-
-"~/.scripts/quodlibet/start_ql.sh play-pause"
-XF86AudioPlay
-
-"/opt/programs/quodlibet/quodlibet.py --random=album"
-Mod4 + XF86AudioPlay
-
-"~/.scripts/quodlibet/start_ql.sh toggle-window"
-XF86Favorites
-
-# For toggling between two soundcards.
-"xfce4-terminal --hide-borders --geometry 50x10 -x ~/.scripts/toggle_digital_source.sh autoclose monitor &"
-XF86AudioMute
-
-"~/.scripts/quodlibet/prev_song.sh"
-Mod4 + XF86AudioLowerVolume
-"~/.scripts/quodlibet/next_song.sh"
-Mod4 + XF86AudioRaiseVolume
+# Bluetooth toggle.
+"~/.scripts/toggle_bluetooth.sh"
+Mod5 + b
 
 # Software volume control.
-# Disabled because "volumeicon" supports the keys natively.
+# Disabled as most mixers support these natively: "volumeicon" is a good one.
 #"~/.scripts/softvol.sh -"
 #XF86AudioLowerVolume
 #"~/.scripts/softvol.sh +"
