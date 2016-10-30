@@ -1,2 +1,2 @@
-ACTION=="add", ENV{SUBSYSTEM}=="usb", ENV{ID_VENDOR}=="Canon", ENV{ID_MODEL}=="CanoScan", RUN+="/bin/su panther -c '/bin/bash ~/.scripts/udev/canoscan.sh'", SYMLINK="canoscan", MODE="0666"
+ACTION=="add", ENV{SUBSYSTEM}=="usb", ENV{ID_VENDOR}=="Canon", ENV{ID_MODEL}=="CanoScan", SYMLINK="canoscan", MODE="0666"
 

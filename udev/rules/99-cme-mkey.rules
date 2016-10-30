@@ -1,1 +1,1 @@
-ACTION=="add", ATTR{product}=="CME M-KEY", RUN+="/bin/su panther -c '/bin/bash ~/.scripts/udev/cmemkey.sh'"
+ACTION=="add", ATTR{product}=="CME M-KEY", RUN+="/bin/su panther -c '/bin/bash /opt/udev/scripts/cmemkey.sh'"

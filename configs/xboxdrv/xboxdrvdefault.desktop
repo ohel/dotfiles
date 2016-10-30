@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Name=xboxdrv default
-Exec=/home/panther/.scripts/launchers/xboxdrvdefault.sh
+Exec=/opt/xboxdrv/xboxdrvdefault.sh
 Icon=xfce-games
 Terminal=true
 Type=Application

@@ -1,5 +1,7 @@
 #!/bin/bash
-export XAUTHORITY=/home/panther/.Xauthority
+# Connect CME M-Key MIDI keyboard to FluidSynth using ALSA. Use GUI (qsynth).
+
+export XAUTHORITY=$HOME/.Xauthority
 export DISPLAY=:0.0
 
 if test "empty$(ps aux | grep qsynth | grep -v sh | grep -v grep)" == "empty"

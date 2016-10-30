@@ -1,5 +1,8 @@
 #!/bin/bash
-export XAUTHORITY=/home/panther/.Xauthority
+# Connect CME M-Key MIDI keyboard to FluidSynth using JACK. Use GUI (qsynth).
+# Use realtime processing if possible.
+
+export XAUTHORITY=$HOME/.Xauthority
 export DISPLAY=:0.0
 
 if test "empty$(ps aux | grep jackd | grep -v grep)" == "empty"

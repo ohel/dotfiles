@@ -1,6 +1,8 @@
 #!/bin/bash
+# Connect CME M-Key MIDI keyboard to FluidSynth using JACK. No GUI.
+# Use realtime processing if possible.
 
-export XAUTHORITY=/home/panther/.Xauthority
+export XAUTHORITY=$HOME/.Xauthority
 export DISPLAY=:0.0
 
 if test "empty$(ps aux | grep jackd | grep -v grep)" == "empty"
@@ -22,7 +24,7 @@ fi
 sleep 0.5
 
 if test "empty$(ps -e | grep fluidsynth)" == "empty"
- then xfce4-terminal -x fluidsynth -a jack -c 2 -C 0 -g 0.5 -G 1 -j -K 16 -L 2 -m alsa_seq -p FluidSynth -r 44100 -R 0 -z 128 -f /home/panther/.config/fluidsynth_config &
+ then xfce4-terminal -x fluidsynth -a jack -c 2 -C 0 -g 0.5 -G 1 -j -K 16 -L 2 -m alsa_seq -p FluidSynth -r 44100 -R 0 -z 128 -f $HOME/.config/fluidsynth_config &
  iter=0
  while test "empty$(ps -e | grep fluidsynth)" == "empty"
  do
