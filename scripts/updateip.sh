@@ -24,7 +24,7 @@ echo -n "Press return to publish WAN IP."
 read
 
 # Upload contents of $ip variable somewhere publicly available in the script.
-source ~/.localscripts/publiship.sh 2>/dev/null
+source ~/.scripts_extra/publiship.sh 2>/dev/null
 
 echo "Done."
 
