@@ -29,6 +29,12 @@ Mod4 + w
 "~/.scripts/browser.sh"
 XF86HomePage
 
+"gvim"
+Mod4 + v
+
+"gvim +1 ~/.memo"
+Mod1 + Mod4 + v
+
 # Special commands
 ###################
 
@@ -64,12 +70,6 @@ Mod4 + Print
 
 "i3lock -e -i ~/.themes/lockscreen.png"
 Control + Mod1 + Delete
-
-"gvim +1 ~/.memo"
-Mod4 + v
-
-"gvim -c 'e ~'"
-Mod1 + Mod4 + v
 
 # Terminal buffer scrolling with Alt+J/K (caps), makes it ergonomic.
 "xdotool keyup j && xdotool key --clearmodifiers Shift+Page_Down"
