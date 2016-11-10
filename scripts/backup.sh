@@ -1,12 +1,14 @@
 #!/bin/sh
-# Backup script for full system, home, virtual machine and misc backup.
+# Backup script for full system, home, and misc backup. Backup process is logged.
 
+# Backup drives.
 mountables=(
-    "/mnt/vortex"
     "/mnt/raidstorage"
+    "/mnt/vortex"
     "/mnt/xfsmedia"
 )
 
+# Source directories for misc backup.
 backup_source_dirs=(
     "/home/panther/docs"
     "/home/panther/docs"
@@ -18,21 +20,21 @@ backup_source_dirs=(
     "/mnt/ssdstorage/music"
 )
 
+# Destination directories for misc backup. Should correspond to source directories.
 backup_dest_dirs=(
-    "${mountables[1]}/backups/docs"
     "${mountables[0]}/backups/docs"
-    "${mountables[1]}/backups/pictures"
-    "${mountables[0]}/backups/media/pictures"
-    "${mountables[0]}/backups/media/audio"
-    "${mountables[0]}/backups/media/video"
-    "${mountables[0]}/backups/media/music"
+    "${mountables[1]}/backups/docs"
+    "${mountables[0]}/backups/pictures"
+    "${mountables[1]}/backups/media/pictures"
+    "${mountables[1]}/backups/media/audio"
+    "${mountables[1]}/backups/media/video"
+    "${mountables[1]}/backups/media/music"
     "${mountables[2]}/music"
 )
 
-systembackupdir="${mountables[1]}/backups/system/"
-systembackupdir2="${mountables[0]}/backups/system/"
-virtualmachinesdir="/opt/virtualmachines/"
-logdir="/var/log/backup/"
+# Locations where to put full system backups. The first one is echoed with deletes to the other.
+systembackupdir="${mountables[0]}/backups/system/"
+systembackupdir2="${mountables[1]}/backups/system/"
 
 # Escape asterisks, otherwise shell expansion is made.
 systembackupexcludelist=(
@@ -43,27 +45,23 @@ systembackupexcludelist=(
     "/var/tmp/\*"
     "/mnt/dvd/\*"
     "/mnt/exports/\*"
-    "/mnt/misc/\*"
-    "/mnt/phone/\*"
     "/mnt/raidstorage/\*"
     "/mnt/ssdstorage/\*"
-    "/mnt/storage1/\*"
-    "/mnt/storage2/\*"
     "/mnt/vortex/\*"
     "/mnt/xfsmedia/\*"
     "/home/\*"
     "/usr/portage/distfiles/\*"
-    "$virtualmachinesdir\*.img"
-    "$virtualmachinesdir\*.qcow2"
-    "$virtualmachinesdir\*.iso"
+    "/opt/virtualmachines/\*"
 )
 
+# Home backup will backup /home/* excluding these.
 homebackupexcludelist=(
     "/home/panther/docs/\*"
-    "/home/panther/media/pictures/\*"
+    "/home/panther/media/\*"
     "/home/panther/misc/\*"
-    "/home/panther/ramdisk/\*"
 )
+
+logdir="/var/log/backup/"
 
 if test "$(echo $HOME)" != "/root"
     then echo You must be root to maintain permissions!
@@ -190,30 +188,6 @@ then
     else
         tar -C / --one-file-system -cpzf $homebackupfile $excludelist ./home
     fi
-
-    if test "X$1" != "Xnovms"
-    then
-        vm_backupdir="$systembackupdir""vm_images/"
-        echo
-        echo "*******************************************************************************"
-        echo "Backing up virtual machine images..."
-        if ! [ -d $vm_backupdir ]
-        then
-            if [ -e $vm_backupdir ]
-            then
-                echo "$vm_backupdir exists but is not a directory! Aborting..."
-                exit 1
-            fi
-            mkdir $vm_backupdir
-        fi
-        if [ $parallel -eq 1 ]
-        then
-            gzipexe="pigz"
-        else
-            gzipexe="gzip"
-        fi
-        find $virtualmachinesdir -regex ".*\.img\|.*\.qcow2\|.*\.iso" -printf "%f\n" | xargs -I {} sh -c "$gzipexe -c $virtualmachinesdir'{}' > $vm_backupdir'{}'.gz"
-    fi
 fi
 
 if test "empty$systembackupdir2" != "empty"
@@ -231,6 +205,6 @@ fi
 
 echo
 echo "*******************************************************************************"
-echo "All done!"
+echo "Backup complete. Remember to backup virtual machines separately."
 echo
 read
