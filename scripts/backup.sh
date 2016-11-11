@@ -197,7 +197,7 @@ then
     echo "Synchronizing $systembackupdir with $systembackupdir2..."
     if ! [ -e $systembackupdir2 ]
     then
-        echo "Destination directory $destdir does not exist, skipping..."
+        echo "Destination directory $systembackupdir2 does not exist, skipping..."
     else
         rsync -avh --progress --delete $systembackupdir $systembackupdir2
     fi
