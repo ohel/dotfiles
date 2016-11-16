@@ -5,7 +5,7 @@
 
 first_ip=${1:-1}
 last_ip=${2:-254}
-net=$(ifconfig | grep -A 1 "encap:Ethernet" | tail -n 1 | cut -f 2 -d ":" | cut -f 1 -d " " | grep "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}$" | cut -f -3 -d .)
+net=$(ifconfig | grep "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | grep -v "127.0.0.1" | head -n 1 | tr -s ' ' | cut -f 3 -d ' ' | cut -f -3 -d .)
 ip=$first_ip
 while [ $ip -le $last_ip ]
 do

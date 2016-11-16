@@ -1,0 +1,12 @@
+[user]
+	name = ohel
+    email = ohel@users.noreply.github.com
+[core]
+	editor = vim
+[push]
+	default = simple
+[alias]
+    amend = commit --amend -C HEAD
+    cleanup = !git reflog expire --expire-unreachable=all --all && git gc --prune=all
+	unstage = reset HEAD --
+    visualize = log --graph --oneline --decorate --all

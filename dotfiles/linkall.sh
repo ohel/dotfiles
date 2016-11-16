@@ -5,6 +5,7 @@ echo "Warning! Original files will be overwritten. Press a key to continue."
 read
 
 ln -sf $(readlink -f ./bashrc) ~/.bashrc
+ln -sf $(readlink -f ./gitconfig) ~/.gitconfig
 ln -sf $(readlink -f ./inputrc) ~/.inputrc
 ln -sf $(readlink -f ./vimrc) ~/.vimrc
 ln -sf $(readlink -f ./xbindkeysrc) ~/.xbindkeysrc

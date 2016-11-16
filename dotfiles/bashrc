@@ -38,7 +38,6 @@ esac
 alias cp='cp -a'
 alias f='find ./ | grep -i --colour'
 alias g='grep -iR --colour'
-alias gitvis='git log --graph --oneline --decorate --all'
 alias gvim='gvim -p'
 alias ls='ls --color=auto -hG --group-directories-first'
 alias mountiso='sudo mount -o loop -t iso9660'
