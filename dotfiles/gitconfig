@@ -8,5 +8,6 @@
 [alias]
     amend = commit --amend -C HEAD
     cleanup = !git reflog expire --expire-unreachable=all --all && git gc --prune=all
-	unstage = reset HEAD --
+    sterilize = clean -dxf
+    unstage = reset HEAD --
     visualize = log --graph --oneline --decorate --all

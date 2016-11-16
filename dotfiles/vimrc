@@ -183,6 +183,31 @@ call unite#custom#profile('default', 'context', {
     \ 'direction' : 'bot',
     \ 'short_source_names' : 1
 \ })
+
+" Unite sources
+call unite#custom_source('menu', 'matchers', ['matcher_fuzzy'])
+call unite#custom_source('source', 'matchers', ['matcher_fuzzy'])
+call unite#custom_source('outline', 'matchers', ['matcher_fuzzy'])
+call unite#custom_source('history/yank', 'matchers', ['matcher_fuzzy'])
+call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep', 'ignore_pattern', join([
+     \ '.a$',
+     \ '.aux$',
+     \ '.bak$',
+     \ 'bower_components/',
+     \ '\.git/',
+     \ '.jar$',
+     \ '.lib$',
+     \ 'node_modules/',
+     \ '.o$',
+     \ '.obj$',
+     \ '.out$',
+     \ '.sass-cache',
+     \ '.so$',
+     \ 'tmp/',
+     \ '.toc$',
+     \ '\.tscache/'
+     \ ], '\|'))
+
 "let mapleader = ' '
 map <space> <leader>
 nnoremap <leader>b :Unite buffer<cr>
@@ -486,28 +511,4 @@ if zoom_functions == "1"
     inoremap <c-mouseup> <c-r>=ShrinkFont()<cr>
     nnoremap <c-mouseup> :call ShrinkFont()<cr>
 endif
-
-" Unite sources
-call unite#custom_source('menu', 'matchers', ['matcher_fuzzy'])
-call unite#custom_source('source', 'matchers', ['matcher_fuzzy'])
-call unite#custom_source('outline', 'matchers', ['matcher_fuzzy'])
-call unite#custom_source('history/yank', 'matchers', ['matcher_fuzzy'])
-call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep', 'ignore_pattern', join([
-     \ '.a$',
-     \ '.aux$',
-     \ '.bak$',
-     \ 'bower_components/',
-     \ '\.git/',
-     \ '.jar$',
-     \ '.lib$',
-     \ 'node_modules/',
-     \ '.o$',
-     \ '.obj$',
-     \ '.out$',
-     \ '.sass-cache',
-     \ '.so$',
-     \ 'tmp/',
-     \ '.toc$',
-     \ '\.tscache/'
-     \ ], '\|'))
 
