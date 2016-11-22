@@ -8,6 +8,8 @@
 [alias]
     amend = commit --amend -C HEAD
     cleanup = !git reflog expire --expire-unreachable=all --all && git gc --prune=all
+    branchlog = !git log --pretty=short $(git rev-parse --abbrev-ref HEAD)
+    linelog = log --pretty=oneline
     sterilize = clean -dxf
     unstage = reset HEAD --
     visualize = log --graph --oneline --decorate --all
