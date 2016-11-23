@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Scan documents using script
-Exec=/home/panther/.scripts/launchers/startscan.sh
+Exec=/home/panther/.scripts/canoscan.sh
 Terminal=true
 Type=Application
 Icon=scanner

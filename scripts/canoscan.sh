@@ -12,6 +12,7 @@ scanner="genesys:libusb:"$(ls -la /dev/canoscan | cut -f 2 -d '>' | cut -f 3-4 -
 scandir=/tmp/scans
 
 mkdir -p $scandir
+setsid thunar $scandir &>/dev/null &
 
 while [ 1 ]
 do
