@@ -6,5 +6,4 @@ then
     exit
 fi
 setsid thunar /tmp/scans &>/dev/null &
-/dev/shm/scan
-
+~/.scripts/canoscan.sh

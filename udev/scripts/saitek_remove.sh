@@ -1,4 +1,6 @@
 #!/bin/bash
+# A script for udev rule to run when removing a Saitex gamepad.
+# It cleans up symlinks created by the adding script.
 # Need to run as root.
 
 rm -rf /dev/input/saitek-xbox360-gamepad

@@ -1,4 +1,6 @@
 #!/bin/bash
+# A script for udev rule to run when adding a Drangonrise gamepad.
+# It runs xboxdrv for the gamepad and symlinks the extra joystick device created by xboxdrv.
 # Need to run as root.
 configfile=/opt/xboxdrv/current_dragonrise
 

@@ -1,4 +1,6 @@
 #!/bin/bash
+# A script for udev rule to run when removing a Drangonrise gamepad.
+# It cleans up symlinks created by the adding script.
 # Need to run as root.
 
 # If arguments given, remove devices (normally the original joystick device).
