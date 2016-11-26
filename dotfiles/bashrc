@@ -42,13 +42,14 @@ alias gvim='gvim -p'
 alias ls='ls --color=auto -hG --group-directories-first'
 alias mountiso='sudo mount -o loop -t iso9660'
 alias rcp='rsync -ah --progress'
+alias rs='rsync -avzu --delete'
 alias x='exit'
 
-if [ -d "$HOME/.scripts_extra" ]; then
-    PATH="$HOME/.scripts_extra:$PATH"
-fi
 if [ -d "$HOME/.scripts" ]; then
     PATH="$HOME/.scripts:$PATH"
+fi
+if [ -d "$HOME/.scripts_extra" ]; then
+    PATH="$HOME/.scripts_extra:$PATH"
 fi
 PATH=".:$PATH"
 
