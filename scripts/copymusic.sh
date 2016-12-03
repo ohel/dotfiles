@@ -1,11 +1,11 @@
 #!/bin/bash
-# Copy and encode music to a given destination ($1). Used by drag'n'dropping files from media player playlist to a terminal window, for copying into a mobile phone.
+# Copy and encode music to a given destination ($1, default ./). Used by drag'n'dropping files from media player playlist to a terminal window, for copying into a mobile phone.
 # Encoding is either Ogg Vorbis (default) or MP3 ($2 equals "mp3"), preserving simple metadata tags.
 # Ogg is encoded to MP3 (for crappy player hardware) but not vice versa.
 # Requires mutagen-inspect and oggenc.
 # The encoding process is naively parallelized.
 
-destination="${1:-/mnt/phone/Music}"
+destination=$(readlink -f ${1:-./})
 parallel_processes=3
 if [[ "$#" -gt 1 && "$2" = "mp3" ]]; then
     encoding="mp3"
