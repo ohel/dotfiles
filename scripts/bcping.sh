@@ -9,6 +9,6 @@ net=$(ifconfig | grep "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" |
 ip=$first_ip
 while [ $ip -le $last_ip ]
 do
-    ping -c 1 -n $net.$ip | grep time &
+    ping -c 1 -n $net.$ip | grep "64 bytes" 2>/dev/null &
     ip=$(expr $ip + 1)
 done
