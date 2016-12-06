@@ -9,6 +9,7 @@
     amend = commit --amend -C HEAD
     cleanup = !git reflog expire --expire-unreachable=all --all && git gc --prune=all
     branchlog = !git log --pretty=short $(git rev-parse --abbrev-ref HEAD)
+    forcepush = push --force-with-lease
     linelog = log --pretty=oneline
     review = log -p --reverse ORIG_HEAD
     sterilize = clean -dxf
