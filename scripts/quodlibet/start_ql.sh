@@ -30,7 +30,6 @@ else
         params="--play-pause"
     elif [ "$1" = "audio" ] && [ "$#" -gt 1 ]; then
         device="$2"
-        params="--toggle-window"
     fi
 fi
 
