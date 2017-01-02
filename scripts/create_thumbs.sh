@@ -32,7 +32,7 @@ do
 
     echo "Created thumbnail: $filename_thumb"
     echo "Copy-paste for the blog:"
-    echo "[![Description.]($filename_thumb)]($1)"
+    echo "[![Alt text.]($filename_thumb \"Image caption.\")]($1)"
     echo ""
 
     shift
