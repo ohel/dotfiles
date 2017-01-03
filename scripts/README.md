@@ -1,10 +1,9 @@
 Some picks from the scripts:
 
 * backlight.sh: Change laptop screen backlight brightness via script.
-* backup.sh: My full system backup script.
+* backup.sh: My full system local backup script.
 * browser.sh: Chromium browser helper script.
-* copymusic.sh: I use this to copy music to my phone. I just drag'n'drop songs from my media player into a terminal window while the script is running. I store my music in lossless format, so this script calls the copymusic_encode.sh script in parallel to encode files on fly.
-* copymusic_encode.sh: Encodes and tags a source audio file to destination file.
+* copymusic.sh: I use this to copy and lossly encode music to my phone. I just drag'n'drop songs from my media player into a terminal window while the script is running.
 * kvm: Kernel-based Virtual Machine scripts.
 * lcd: Matrix Orbital LK202 LCD display control scripts.
 * network_all: An OpenRC script to set up a network interface and a bridge for virtual machines.

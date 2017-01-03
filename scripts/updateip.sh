@@ -1,7 +1,8 @@
 #!/bin/sh
 # When using a dynamic IP and a router that asks for a password every time to see the status page,
 # access that page and grep the IP address for upload to a public site.
-# Useful when gaming with friends.
+# This is useful when gaming with friends or you need to publish your IP for other reasons.
+# Currently the script supports the following router: TW-LTE/4G/3G router, WiFI AC
 
 echo "Enter router password (won't be echoed)."
 stty_orig=`stty -g`
@@ -9,7 +10,8 @@ stty -echo
 read pw
 stty $stty_orig 
 
-ip=$(wget http://10.0.0.1/adm/status.asp --user=panther --password=$pw -q -O - | grep 'id="idv4wanip"' | grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}")
+username=$(whoami)
+ip=$(wget http://10.0.0.1/adm/status.asp --user=$username --password=$pw -q -O - | grep 'id="idv4wanip"' | grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}")
 
 if test "X$ip" == "X"
 then
@@ -23,7 +25,7 @@ echo
 echo -n "Press return to publish WAN IP."
 read
 
-# Upload contents of $ip variable somewhere publicly available in the script.
+# Use a secret script to upload contents of $ip variable somewhere publicly available.
 source ~/.scripts_extra/publiship.sh 2>/dev/null
 
 echo "Done."
