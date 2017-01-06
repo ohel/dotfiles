@@ -12,9 +12,9 @@ read
 sudo emerge -DNju --keep-going --quiet-build world
 sudo etc-update
 echo Emerging @preserved-rebuild...
-sudo emerge @preserved-rebuild -vj --keep-going --quiet-build
+sudo emerge @preserved-rebuild -j --keep-going --quiet-build
 sudo eclean -d distfiles
-sudo emerge --depclean -av
+sudo emerge --depclean -a
 echo "********************"
 echo "* Update complete! *"
 echo "********************"
