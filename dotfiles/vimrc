@@ -245,6 +245,9 @@ nnoremap <silent><leader>n :tabe .<cr>
 " sort
 vnoremap <leader>s :!sort<cr>
 
+" change directory to that of the current file
+nnoremap <leader>d :cd %:h<cr>:echo "wd is now" getcwd()<cr>
+
 
 
 
