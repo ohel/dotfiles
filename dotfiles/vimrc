@@ -311,8 +311,8 @@ nnoremap <c-f> /
 vnoremap <c-f> <esc>/<c-r>*<cr>
 
 " common search and replace hotkey
-nnoremap <c-h> :%s//g\|:silent noh<left><left><left><left><left><left><left><left><left><left><left><left><left><left>
-vnoremap <c-h> :s//g\|:silent noh<left><left><left><left><left><left><left><left><left><left><left><left><left><left>
+nnoremap <c-h> :%s/\v/g\|:silent noh<left><left><left><left><left><left><left><left><left><left><left><left><left><left>
+vnoremap <c-h> :s/\v/g\|:silent noh<left><left><left><left><left><left><left><left><left><left><left><left><left><left>
 
 
 
