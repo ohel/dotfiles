@@ -11,6 +11,7 @@
     branchlog = !git log --pretty=short $(git rev-parse --abbrev-ref HEAD)
     forcepush = push --force-with-lease
     linelog = log --pretty=oneline
+    remotepush = !git push -u origin $(git rev-parse --abbrev-ref HEAD)
     review = log -p --reverse ORIG_HEAD
     sterilize = clean -dxf
     unstage = reset HEAD --
