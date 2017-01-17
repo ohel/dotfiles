@@ -1,15 +1,15 @@
-set window-icon "~/.local/share/icons/zathura_pdf.png"
 set default-bg "#303030"
-set statusbar-bg "#303030"
-set statusbar-fg "#a0a0a0"
-set guioptions "s"
 set font "proggycleanttsz normal 12"
+set guioptions "s"
 set inputbar-fg "#cccccc"
 set page-padding 10
 set recolor-darkcolor "#cccccc"
-set recolor-lightcolor "#303030"
 set recolor-keephue true
+set recolor-lightcolor "#303030"
 set scroll-step 120
+set selection-clipboard clipboard
+set statusbar-bg "#303030"
+set statusbar-fg "#a0a0a0"
+set window-icon "~/.local/share/icons/zathura_pdf.png"
 set zoom-step 20
-
 map c recolor
