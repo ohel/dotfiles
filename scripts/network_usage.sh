@@ -1,11 +1,18 @@
 #!/bin/bash
-# Show network usage (up/down MB/s) for interface $1 if given, or for
-# the first non-loopback interface with IPv4 address listed by ifconfig if not given.
+# Show network usage (up/down MB/s) for interface $1 if given,
+# or by default for the first PCI interface with IPv4 address.
 
 if [ "$#" == 0 ]
 then
-    ip=$(ifconfig | grep "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | grep -v "127.0.0.1" | head -n 1 | tr -s ' ' | cut -f 3 -d ' ')
-    IF=$(ifconfig | grep -B 1 $ip | head -n 1 | cut -f 1 -d ':')
+    for physical_device in $(ls -l /sys/class/net | grep devices\/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')
+    do
+        ip=$(ip addr show $physical_device | grep -o "inet [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | cut -f 2 -d ' ')
+        if test "X$ip" != "X"
+        then
+            IF=$physical_device
+            break
+        fi
+    done
 else
     IF=$1
 fi

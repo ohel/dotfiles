@@ -8,7 +8,7 @@
 # ACTION=="add", ENV{SUBSYSTEM}=="usb", ENV{ID_VENDOR}=="Canon", ENV{ID_MODEL}=="CanoScan", SYMLINK="canoscan", MODE="0666"
 
 scanimagebin="/usr/bin/scanimage"
-scanner="genesys:libusb:"$(ls -la /dev/canoscan | cut -f 2 -d '>' | cut -f 3-4 -d '/' | sed "s/\//\:/")
+scanner="genesys:libusb:"$(ls -l /dev/canoscan | cut -f 2 -d '>' | cut -f 3-4 -d '/' | sed "s/\//\:/")
 scandir=/tmp/scans
 
 mkdir -p $scandir

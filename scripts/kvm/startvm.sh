@@ -1,12 +1,11 @@
 #!/bin/bash
 audio=1
-cdrom_image="/opt/virtualmachines/image.iso"
-cdrom_image="" # if not empty, cdrom_image is booted instead
 vm_name="Xubuntu"
 img_name="xubuntu.img"
 net_id=10 # used as the static IP address in the guest, MAC address and VNC display
-vncviewer="gvncviewer localhost:$net_id"
 vm_bridge=vmbridge
+#cdrom_image="/opt/virtualmachines/image.iso"
+#vncviewer="gvncviewer localhost:$net_id"
 
 if test "X$(brctl show $vm_bridge 2>&1 | grep No)" != "X"
 then
