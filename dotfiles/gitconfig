@@ -4,7 +4,7 @@
 [core]
 	editor = vim
 [push]
-	default = simple
+	default = upstream
 [alias]
     amend = commit --amend -C HEAD
     cleanup = !git reflog expire --expire-unreachable=all --all && git gc --prune=all
