@@ -26,27 +26,34 @@ done
 current_routes=$(ip route show | grep $IF | cut -f 1 -d ' ')
 num_routes=$(expr $(ip route show | wc -l) + $routes_to_create)
 
-openvpn $1 &
+echo "Using config: $1"
+echo -n "Connecting VPN..."
+openvpn $1 &>/dev/null &
 
 # Wait till VPN routes are set up.
 while [ $(ip route show | wc -l) -ne $num_routes ]
 do
     sleep 0.5
+    echo -n "."
 done
+echo -e "\nVPN connection is active."
 
 new_routes=$(ip route show | grep $IF | cut -f 1 -d ' ')
 vpn_ip=""
 for route in $new_routes
 do
-    candidate=$route
+    vpn_ip=$route
     for counterpart in $current_routes
     do
         if test "$route" == "$counterpart"
         then
-            candidate=""
+            vpn_ip=""
         fi
     done
-    vpn_ip=$candidate
+    if test "X$vpn_ip" != "X"
+    then
+        break
+    fi
 done
 if test "X$vpn_ip" == "X"
 then
@@ -63,18 +70,19 @@ iptables -A INPUT -i tun+ -j ACCEPT
 iptables -A OUTPUT -o tun+ -j ACCEPT
 iptables -A INPUT -p udp --sport 1194 -s $vpn_ip -j ACCEPT
 iptables -A OUTPUT -p udp --dport 1194 -d $vpn_ip -j ACCEPT
-echo -e "\n\nCreated iptables rules.\n\n"
+echo "Created iptables rules. Firewall is now enabled."
 
 function killvpn() {
-    echo -e "\n\nKilling VPN connection.\n\n"
+    echo -e "\nKilling VPN connection..."
 }
 
 while [ 1 ]
 do
     trap killvpn 2
     wait
-    echo -e "\n\nVPN connection lost. Reconnecting in 3 seconds. To cancel, press c.\n\n"
-    read -s -N 1 -t 3 cancel
+    echo "VPN connection lost. Reconnecting in 5 seconds..."
+    echo "To cancel, press c."
+    read -s -N 1 -t 5 cancel
     trap 2
 
     if test "X$cancel" == "Xc"
@@ -82,23 +90,26 @@ do
         break
     fi
 
-    echo -e "\n\nAllowing DNS traffic outside VPN.\n\n"
+    echo "DNS traffic allowed outside VPN."
     iptables -A INPUT -p udp --sport 53 -j ACCEPT
     iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
 
     num_routes=$(expr $(ip route show | wc -l) + $routes_to_create)
-    openvpn $1 &
+    echo -n "Reconnecting VPN..."
+    openvpn $1 &>/dev/null &
     while [ $(ip route show | wc -l) -ne $num_routes ]
     do
         sleep 0.5
+        echo -n "."
     done
+    echo -e "\nVPN connection is active."
 
     iptables -D INPUT -p udp --sport 53 -j ACCEPT
     iptables -D OUTPUT -p udp --dport 53 -j ACCEPT
-    echo -e "\n\nDNS traffic disabled outside VPN.\n\n"
+    echo "DNS traffic disabled outside VPN."
 done
 
 iptables -F
 iptables -P INPUT ACCEPT
 iptables -P OUTPUT ACCEPT
-echo -e "\n\nFlushed iptables rules.\n\n"
+echo "Flushed iptables rules. Firewall is now disabled."
