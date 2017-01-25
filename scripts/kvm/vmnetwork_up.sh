@@ -51,9 +51,13 @@ else
     brctl addbr vmbridge
     ip link set vmbridge up
     ip addr add 10.0.1.1/24 dev vmbridge scope host
+    ip addr add fe80::1:1/64 dev vmbridge scope site
     sysctl -q -e -w net.ipv4.conf.vmbridge.forwarding=1
+    sysctl -q -e -w net.ipv6.conf.vmbridge.forwarding=1
 
+    echo "sudo sysctl -q -e -w net.ipv6.conf.vmbridge.forwarding=0" >> network_down
     echo "sudo sysctl -q -e -w net.ipv4.conf.vmbridge.forwarding=0" >> network_down
+    echo "sudo ip addr del fe80::1:1/64 dev vmbridge scope site" >> network_down
     echo "sudo ip addr del 10.0.1.1/24 dev vmbridge scope host" >> network_down
     echo "sudo ip link set vmbridge down" >> network_down
     echo "sudo brctl delbr vmbridge" >> network_down

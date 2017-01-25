@@ -51,7 +51,7 @@ echo "Starting the virtual machine..."
 -name "$vm_name" \
 -boot $bootstring \
 -machine q35,accel=kvm \
--cpu core2duo \
+-cpu host \
 -smp 2 \
 -m 4096 \
 -k fi \
@@ -60,12 +60,21 @@ echo "Starting the virtual machine..."
 -net tap,script="kvm_net_up.sh" \
 -drive file="$img_name",if=virtio,format=raw \
 -vnc :$net_id
+# -cpu core2duo: fixes most problems and some BSODs in Windows
 # -no-kvm-irqchip: required if VM hangs during POST until VNC connection is established
 # -usbdevice tablet: required for Windows guests
 
+sleep 2
+
+# The PID changes so cannot use last PID.
+pid=$(ps -ef | grep "qemu.*$vm_name" | grep -v grep | tr -s ' ' | cut -f 2 -d ' ')
+if test "X$pid" != "X"
+then
+    renice +15 $pid
+fi
+
 if test "X$vncviewer" != "X"
 then
-    sleep 1
     $vncviewer &
 fi
 

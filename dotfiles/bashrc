@@ -12,11 +12,14 @@ export EDITOR="/usr/bin/vim"
 
 HISTFILESIZE=4096
 HISTSIZE=4096
-# Common history for all bash shells.
-PROMPT_COMMAND='history -a; history -c; history -r; echo -ne "\e]0;Terminal: ${PWD}\007"'
-if [ -e ~/.scripts/gitprompt.sh ]
+
+# Common history for all bash shells may be set by environment variable.
+PROMPT_COMMAND='if [ "$COMMON_HISTORY" = "1" ]; then history -a; history -c; history -r; fi; echo -ne "\e]0;Terminal: ${PWD}\007"'
+
+# https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
+if [ -e ~/.config/gitprompt.sh ]
 then
-    source ~/.scripts/gitprompt.sh
+    source ~/.config/gitprompt.sh
     PS1='\[\e[0;37m\]\w \[\e[1;36m\]$(__git_ps1 "(%s) ")\[\e[1;30m\]\$\[\e[0m\] '
 else
     PS1='\[\e[0;37m\]\w \[\e[1;30m\]\$\[\e[0m\] '
@@ -46,13 +49,17 @@ alias rs='rsync -avzu --delete'
 alias x='exit'
 
 if [ -d "$HOME/.scripts" ]; then
-    PATH="$HOME/.scripts:$PATH"
+    export PATH="$HOME/.scripts:$PATH"
 fi
 if [ -d "$HOME/.scripts_extra" ]; then
-    PATH="$HOME/.scripts_extra:$PATH"
+    export PATH="$HOME/.scripts_extra:$PATH"
 fi
-PATH=".:$PATH"
+if [ -d "/opt/bin" ]; then
+    export PATH="$PATH:/opt/bin"
+fi
+export PATH=".:$PATH"
 
+# System specific stuff.
 if [ -e ~/.bashrc_extra ]
 then
     source ~/.bashrc_extra

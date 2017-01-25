@@ -1,12 +1,11 @@
 Some picks from the scripts:
 
 * backlight.sh: Change laptop screen backlight brightness via script.
-* backup.sh: My full system local backup script.
+* backup.sh: My full local system backup script.
 * browser.sh: Chromium browser helper script.
 * copymusic.sh: I use this to copy and lossly encode music to my phone. I just drag'n'drop songs from my media player into a terminal window while the script is running.
 * kvm: Kernel-based Virtual Machine scripts.
 * lcd: Matrix Orbital LK202 LCD display control scripts.
-* network_all: An OpenRC script to set up a network interface and a bridge for virtual machines.
 * updatesystem.sh: My Gentoo system update script.
 * quodlibet: Various scripts to control Quod Libet music player.
 
