@@ -17,9 +17,9 @@ HISTSIZE=4096
 PROMPT_COMMAND='if [ "$COMMON_HISTORY" = "1" ]; then history -a; history -c; history -r; fi; echo -ne "\e]0;Terminal: ${PWD}\007"'
 
 # https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
-if [ -e ~/.config/gitprompt.sh ]
+if [ -e ~/.config/git-prompt.sh ]
 then
-    source ~/.config/gitprompt.sh
+    source ~/.config/git-prompt.sh
     PS1='\[\e[0;37m\]\w \[\e[1;36m\]$(__git_ps1 "(%s) ")\[\e[1;30m\]\$\[\e[0m\] '
 else
     PS1='\[\e[0;37m\]\w \[\e[1;30m\]\$\[\e[0m\] '

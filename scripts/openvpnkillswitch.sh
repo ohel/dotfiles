@@ -29,10 +29,11 @@ do
     fi
 done
 
+echo "Using interface $IF and config file $1"
+
 current_routes=$(ip route show | grep $IF | cut -f 1 -d ' ')
 num_routes=$(expr $(ip route show | wc -l) + $routes_to_create)
 
-echo "Using config: $1"
 echo -n "Connecting VPN..."
 openvpn $1 &>/dev/null &
 
@@ -119,3 +120,4 @@ iptables -F
 iptables -P INPUT ACCEPT
 iptables -P OUTPUT ACCEPT
 echo "Flushed iptables rules. Firewall is now disabled."
+sleep 1
