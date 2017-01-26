@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Toggle Bluetooth radio state
+Exec=/home/panther/.scripts/toggle_bluetooth.sh
+Icon=bluetooth
+Categories=Utility

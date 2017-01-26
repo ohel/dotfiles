@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Scan for Wifi networks
+Exec=/home/panther/.scripts/wifiscan.sh pause
+Icon=network-wireless-symbolic
+Terminal=true
+Categories=Network;Utility

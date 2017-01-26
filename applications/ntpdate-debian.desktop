@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Set system time with NTP
+Exec=sudo /usr/sbin/ntpdate-debian && sudo hwclock -w
+Icon=time-admin
+Categories=System;Network;Utility
