@@ -13,6 +13,12 @@ then
     exit
 fi
 
+if test "X$(which openvpn)" == "X"
+then
+    echo "OpenVPN executable not found."
+    exit
+fi
+
 for physical_device in $(ls -l /sys/class/net | grep devices\/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')
 do
     ip=$(ip addr show $physical_device | grep -o "inet [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | cut -f 2 -d ' ')
