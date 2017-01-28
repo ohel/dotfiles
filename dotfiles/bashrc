@@ -45,6 +45,7 @@ alias gvim='gvim -p'
 alias ls='ls --color=auto -hG --group-directories-first'
 alias mountiso='sudo mount -o loop -t iso9660'
 alias rcp='rsync -ah --progress'
+alias rmdirs='find . -depth -empty -type d -exec rmdir {} \;'
 alias rs='rsync -avzu --delete'
 alias x='exit'
 
