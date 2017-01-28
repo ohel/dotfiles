@@ -1,7 +1,7 @@
 #!/bin/bash
-# Establish an OpenVPN connection using $1 as config.
-# Creates an iptables filter working as a VPN kill switch.
-# VPN server IP is deduced after succesful connection.
+# Establish an OpenVPN connection using $1 as config and
+# create an iptables filter working like a VPN kill switch.
+# VPN server IP is deduced after succesful connection, so it may be dynamic.
 
 # For now we need to know beforehand how many IP routes the VPN
 # connection is expected to create when initializing.
@@ -34,8 +34,10 @@ echo "Using interface $IF and config file $1"
 current_routes=$(ip route show | grep $IF | cut -f 1 -d ' ')
 num_routes=$(expr $(ip route show | wc -l) + $routes_to_create)
 
+modprobe tun
+
 echo -n "Connecting VPN..."
-openvpn $1 &>/dev/null &
+openvpn $1 &>/dev/shm/openvpn.log &
 
 # Wait till VPN routes are set up.
 while [ $(ip route show | wc -l) -ne $num_routes ]
@@ -103,7 +105,7 @@ do
 
     num_routes=$(expr $(ip route show | wc -l) + $routes_to_create)
     echo -n "Reconnecting VPN..."
-    openvpn $1 &>/dev/null &
+    openvpn $1 &>/dev/shm/openvpn.log &
     while [ $(ip route show | wc -l) -ne $num_routes ]
     do
         sleep 0.5
