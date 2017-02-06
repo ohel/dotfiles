@@ -1,18 +1,19 @@
 [user]
-	name = ohel
+    name = ohel
     email = ohel@users.noreply.github.com
 [core]
-	editor = vim
+    editor = vim
 [push]
-	default = upstream
+    default = upstream
 [alias]
     amend = commit --amend -C HEAD
-    cleanup = !git reflog expire --expire-unreachable=all --all && git gc --prune=all
+    branchcleanup = !git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -d
+    branchforcecleanup = !git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -d -f
     branchlog = !git log --pretty=short $(git rev-parse --abbrev-ref HEAD)
     forcepush = push --force-with-lease
     linelog = log --pretty=oneline
     remotepush = !git push -u origin $(git rev-parse --abbrev-ref HEAD)
     review = log -p --reverse ORIG_HEAD
-    sterilize = clean -dxf
+    sterilize = !git reflog expire --expire-unreachable=all --all && git gc --prune=all
     unstage = reset HEAD --
     visualize = log --graph --oneline --decorate --all
