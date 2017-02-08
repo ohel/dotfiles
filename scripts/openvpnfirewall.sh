@@ -2,6 +2,7 @@
 # Establish an OpenVPN connection using $1 as config and
 # create an iptables filter working like a VPN kill switch.
 # VPN server IP is deduced after succesful connection, so it may be dynamic.
+# If "allowlan" is given as $2, LAN traffic is allowed, otherwise it is not.
 
 # For now we need to know beforehand how many IP routes the VPN
 # connection is expected to create when initializing.
@@ -25,6 +26,10 @@ do
     if test "X$ip" != "X"
     then
         IF=$physical_device
+        if test "X$2" == "Xallowlan"
+        then
+            subnet=$(echo $ip | cut -f 1 -d '.')
+        fi
         break
     fi
 done
@@ -73,7 +78,12 @@ fi
 iptables -F
 iptables -P INPUT DROP
 iptables -P OUTPUT DROP
-iptables -A INPUT -i lo -j ACCEPT
+if test "X$subnet" != "X"
+then
+    echo "LAN connections are allowed."
+    iptables -A INPUT -s $subnet.0.0.0/16 -d $subnet.0.0.0/16 -j ACCEPT
+    iptables -A OUTPUT -s $subnet.0.0.0/16 -d $subnet.0.0.0/16 -j ACCEPT
+fi
 iptables -A OUTPUT -o lo -j ACCEPT
 iptables -A INPUT -i tun+ -j ACCEPT
 iptables -A OUTPUT -o tun+ -j ACCEPT

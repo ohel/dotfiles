@@ -6,7 +6,8 @@ Some picks from the scripts:
 * copymusic.sh: I use this to copy and lossly encode music to my phone. I just drag'n'drop songs from my media player into a terminal window while the script is running.
 * kvm: Kernel-based Virtual Machine scripts.
 * lcd: Matrix Orbital LK202 LCD display control scripts.
-* updatesystem.sh: My Gentoo system update script.
+* openvpnfirewall.sh: A generic "kill switch" for OpenVPN connections.
+* update_gentoo.sh: My Gentoo system update script.
 * quodlibet: Various scripts to control Quod Libet music player.
 
 Also contains various other scripts. Every script should have some comment about what it does.
