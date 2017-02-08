@@ -48,11 +48,11 @@ elif test "$mode" == "reverse"
 then
     echo "Starting \"$target\" synchronizing from remote in $countdown seconds."
     sleep $countdown
-    rsync -avzu --delete $excludeparams $server:$remotedir/$target $localdir
+    rsync -avzu --delete $excludeparams $server:$remotedir/$target/ $localdir
 elif test "$mode" == "reversedry"
 then
     echo "Dry run synchronize \"$target\" from remote."
-    rsync -avzun --delete $excludeparams $server:$remotedir/$target $localdir
+    rsync -avzun --delete $excludeparams $server:$remotedir/$target/ $localdir
 else
     echo "Unknown backup mode: $mode. Aborted."
 fi
