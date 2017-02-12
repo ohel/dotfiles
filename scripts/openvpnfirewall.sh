@@ -7,6 +7,7 @@
 # For now we need to know beforehand how many IP routes the VPN
 # connection is expected to create when initializing.
 routes_to_create=5
+logfile=/dev/shm/openvpn.log
 
 if [ "$#" == 0 ]
 then
@@ -35,6 +36,8 @@ do
 done
 
 echo "Using interface $IF and config file $1"
+echo "OpenVPN output is logged into $logfile"
+echo "To kill the connection, press Ctrl-c and then c."
 
 current_routes=$(ip route show | grep $IF | cut -f 1 -d ' ')
 num_routes=$(expr $(ip route show | wc -l) + $routes_to_create)
@@ -42,7 +45,7 @@ num_routes=$(expr $(ip route show | wc -l) + $routes_to_create)
 modprobe tun
 
 echo -n "Connecting VPN..."
-openvpn $1 &>/dev/shm/openvpn.log &
+openvpn $1 &>$logfile &
 
 # Wait till VPN routes are set up.
 while [ $(ip route show | wc -l) -ne $num_routes ]
@@ -50,7 +53,7 @@ do
     sleep 0.5
     echo -n "."
 done
-echo -e "\nVPN connection is active."
+echo -e "\n\nVPN connection is active."
 
 new_routes=$(ip route show | grep $IF | cut -f 1 -d ' ')
 vpn_ip=""
@@ -116,13 +119,13 @@ do
 
     num_routes=$(expr $(ip route show | wc -l) + $routes_to_create)
     echo -n "Reconnecting VPN..."
-    openvpn $1 &>/dev/shm/openvpn.log &
+    openvpn $1 &>$logfile &
     while [ $(ip route show | wc -l) -ne $num_routes ]
     do
         sleep 0.5
         echo -n "."
     done
-    echo -e "\nVPN connection is active."
+    echo -e "\n\nVPN connection is active."
 
     iptables -D INPUT -p udp --sport 53 -j ACCEPT
     iptables -D OUTPUT -p udp --dport 53 -j ACCEPT
