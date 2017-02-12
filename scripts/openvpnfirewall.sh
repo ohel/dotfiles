@@ -81,9 +81,10 @@ fi
 iptables -F
 iptables -P INPUT DROP
 iptables -P OUTPUT DROP
+lanstate="blocked"
 if test "X$subnet" != "X"
 then
-    echo "LAN connections are allowed."
+    lanstate="allowed"
     iptables -A INPUT -s $subnet.0.0.0/16 -d $subnet.0.0.0/16 -j ACCEPT
     iptables -A OUTPUT -s $subnet.0.0.0/16 -d $subnet.0.0.0/16 -j ACCEPT
 fi
@@ -93,7 +94,8 @@ iptables -A INPUT -i tun+ -j ACCEPT
 iptables -A OUTPUT -o tun+ -j ACCEPT
 iptables -A INPUT -p udp --sport 1194 -s $vpn_ip -j ACCEPT
 iptables -A OUTPUT -p udp --dport 1194 -d $vpn_ip -j ACCEPT
-echo "Created iptables rules. Firewall is now enabled."
+echo "Created iptables rules. LAN connections are $lanstate."
+echo "Firewall is active."
 
 function killvpn() {
     echo -e "\nKilling VPN connection..."
@@ -103,7 +105,7 @@ while [ 1 ]
 do
     trap killvpn 2
     wait
-    echo "VPN connection lost. Reconnecting in 5 seconds..."
+    echo -e "\nVPN connection lost. Reconnecting in 5 seconds..."
     echo "To cancel, press c."
     read -s -N 1 -t 5 cancel
     trap 2
@@ -113,9 +115,9 @@ do
         break
     fi
 
-    echo "DNS traffic allowed outside VPN."
     iptables -A INPUT -p udp --sport 53 -j ACCEPT
     iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+    echo "DNS traffic outside VPN tunnel is now allowed."
 
     num_routes=$(expr $(ip route show | wc -l) + $routes_to_create)
     echo -n "Reconnecting VPN..."
@@ -129,11 +131,11 @@ do
 
     iptables -D INPUT -p udp --sport 53 -j ACCEPT
     iptables -D OUTPUT -p udp --dport 53 -j ACCEPT
-    echo "DNS traffic disabled outside VPN."
+    echo "DNS traffic outside VPN tunnel is now blocked."
 done
 
 iptables -F
 iptables -P INPUT ACCEPT
 iptables -P OUTPUT ACCEPT
-echo "Flushed iptables rules. Firewall is now disabled."
+echo -e "\nFlushed iptables rules. Firewall is disabled."
 sleep 1
