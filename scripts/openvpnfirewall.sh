@@ -84,6 +84,7 @@ then
     iptables -A INPUT -s $subnet.0.0.0/16 -d $subnet.0.0.0/16 -j ACCEPT
     iptables -A OUTPUT -s $subnet.0.0.0/16 -d $subnet.0.0.0/16 -j ACCEPT
 fi
+iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 iptables -A INPUT -i tun+ -j ACCEPT
 iptables -A OUTPUT -o tun+ -j ACCEPT
