@@ -1,7 +1,7 @@
 # Default device.
 pcm.!default {
     @func refer
-    name { @func concat 
+    name { @func concat
         strings [ "pcm."
             { @func getenv
                 vars [ ALSA_DEFAULT_PCM ]
@@ -14,7 +14,7 @@ pcm.!default {
 # Default control device.
 ctl.!default {
     @func refer
-    name { @func concat 
+    name { @func concat
         strings [ "ctl."
             { @func getenv
                 vars [ ALSA_DEFAULT_CTL ]

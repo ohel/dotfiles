@@ -20,6 +20,7 @@ volume=100
 
 osd-color="#40FFFFFF"
 
+no-input-default-bindings
 input-file=/dev/shm/mpvfifo
 
 ###############################################################################
@@ -59,9 +60,6 @@ really-quiet
 # video
 vo=opengl:swapinterval=1
 
-# stereo sound
-audio-channels=2
-
 
 
 ###############################################################################
@@ -69,6 +67,7 @@ audio-channels=2
 profile-desc="surround sound profile for movies"
 
 ao=alsa:device=julia_movie
+ad-lavc-downmix=no
 audio-channels=6
 profile=common-movie
 
@@ -79,6 +78,19 @@ profile=common-movie
 profile-desc="another surround sound profile for movies"
 
 ao=alsa:device=julia_movie_balanced_matrix
+ad-lavc-downmix=no
+audio-channels=6
+profile=common-movie
+
+
+
+###############################################################################
+[openalmovie]
+profile-desc="openal profile for movies"
+
+# "hrtf = true" in ~/.alsoftrc enables HRTF with OpenAL
+ao=openal
+ad-lavc-downmix=no
 audio-channels=6
 profile=common-movie
 
@@ -90,16 +102,6 @@ profile-desc="stereo sound profile for movies"
 
 ao=alsa:device=julia_aout
 audio-channels=2
-profile=common-movie
-
-
-
-###############################################################################
-[hrtfmovie]
-profile-desc="profile with Head-Related Transfer Function for movies"
-
-af=hrtf
-ao=alsa:device=julia_aout
 profile=common-movie
 
 
