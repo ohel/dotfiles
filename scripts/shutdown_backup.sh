@@ -33,7 +33,7 @@ then
     date > $backupmountpoint/backups/misc_home/$(basename $userhome)/last_backup_timestamp.txt
     clear
     echo "Starting general backup"
-    sudo $userhome/.scripts/backup.sh misconly
+    sudo $userhome/.scripts/backup_local.sh misconly
 fi
 echo "Shutting down..."
 sudo shutdown -hP now
