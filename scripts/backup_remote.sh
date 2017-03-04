@@ -2,7 +2,7 @@
 # A generic echoing backup script to rsync something to or from a remote location.
 # There are four mandatory parameters, the rest are optional rsync excludes.
 # The parameters are:
-# $1: mode (normal, normaldry, reverse, reverse)
+# $1: mode (normal, normaldry, reverse, reversedry)
 # $2: localdir (the directory to back up)
 # $3: server (SSH)
 # $4: target (directory in server under $remotedir)
