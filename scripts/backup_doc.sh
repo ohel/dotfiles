@@ -11,7 +11,7 @@
 # alias srv_get_file='~/.scripts/backup_doc.sh srv reverse'
 # And one may use it like: srv_put_file ~/docs/path/to/file
 
-localdir="$HOME/docs"
+localdir=$(readlink -m $HOME/docs)
 remotedir="~/backups/docs"
 
 if [ "$#" -lt 2 ]; then
