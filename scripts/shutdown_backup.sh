@@ -29,7 +29,7 @@ then
     fi
     touch $checkfile
     echo "Backing up $userhome/\..*"
-    rsync -avz -f "+ /.**" -f "- /**" --delete $userhome/ $backupmountpoint/backups/home/$(basename $userhome)/
+    rsync -avz -f "+ /.**" -f "- /**" --delete $userhome/ $backupmountpoint/backups/misc_home/$(basename $userhome)/
     date > $backupmountpoint/backups/misc_home/$(basename $userhome)/last_backup_timestamp.txt
     clear
     echo "Starting general backup"
