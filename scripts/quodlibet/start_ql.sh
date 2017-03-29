@@ -35,8 +35,7 @@ fi
 
 if ! ps -ef | grep $qlexe | grep -v grep > /dev/null
 then
-    if test "X$device" != "X"
-    then
+    if test "X$device" != "X"; then
         sed -i "s/\(^gst_pipeline.*\) device=.*/\1 device=$device/" ~/.quodlibet/config
     fi
 
@@ -46,6 +45,9 @@ then
     params="" # Clear params so that QL may start without --run.
 else
     logfile="/dev/null" # QL is already running, so so is the log file.
+    if test "X$device" != "X"; then
+        params="--toggle-window" # No audio stuff to set anymore, so toggle by default.
+    fi
 fi
 
 $qlexe $params &>$logfile &
