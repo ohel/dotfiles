@@ -4,7 +4,6 @@
 # Backup drives.
 mountables=(
     "/mnt/raidstorage"
-    "/mnt/vortex"
     "/mnt/xfsmedia"
 )
 
@@ -14,22 +13,22 @@ backup_source_dirs=(
     "/home/panther/docs"
     "/home/panther/media/pictures"
     "/home/panther/media/pictures"
+    "/mnt/ssdstorage/music"
+    "/mnt/ssdstorage/music"
     "/mnt/raidstorage/media/audio"
     "/mnt/raidstorage/media/video"
-    "/mnt/ssdstorage/music"
-    "/mnt/ssdstorage/music"
 )
 
 # Destination directories for misc backup. Should correspond to source directories.
 backup_dest_dirs=(
     "${mountables[0]}/backups/docs"
     "${mountables[1]}/backups/docs"
-    "${mountables[0]}/backups/pictures"
+    "${mountables[0]}/backups/media/pictures"
     "${mountables[1]}/backups/media/pictures"
+    "${mountables[0]}/backups/media/music"
+    "${mountables[1]}/backups/media/music"
     "${mountables[1]}/backups/media/audio"
     "${mountables[1]}/backups/media/video"
-    "${mountables[1]}/backups/media/music"
-    "${mountables[2]}/music"
 )
 
 # Locations where to put full system backups. The first one is echoed with deletes to the other.
