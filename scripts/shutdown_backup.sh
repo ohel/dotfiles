@@ -3,6 +3,7 @@
 
 userhome=/home/panther
 backupmountpoint=/mnt/raidstorage
+backupdir=backups/misc/home_dirs/$(basename $userhome)
 checkfile=$userhome/.local/share/misc/lastsync/misc
 if ! [ -e $checkfile ]
     then touch $checkfile
@@ -29,8 +30,8 @@ then
     fi
     touch $checkfile
     echo "Backing up $userhome/\..*"
-    rsync -avz -f "+ /.**" -f "- /**" --delete $userhome/ $backupmountpoint/backups/misc_home/$(basename $userhome)/
-    date > $backupmountpoint/backups/misc_home/$(basename $userhome)/last_backup_timestamp.txt
+    rsync -avz -f "+ /.**" -f "- /**" --delete $userhome/ $backupmountpoint/$backupdir/
+    date > $backupmountpoint/$backupdir/last_backup_timestamp.txt
     clear
     echo "Starting general backup"
     sudo $userhome/.scripts/backup_local.sh misconly
