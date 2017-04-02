@@ -42,12 +42,7 @@ systembackupexcludelist=(
     "/dev/shm/\*"
     "/tmp/\*"
     "/var/tmp/\*"
-    "/mnt/dvd/\*"
-    "/mnt/exports/\*"
-    "/mnt/raidstorage/\*"
-    "/mnt/ssdstorage/\*"
-    "/mnt/vortex/\*"
-    "/mnt/xfsmedia/\*"
+    "/mnt/\*/\*"
     "/home/\*"
     "/usr/portage/distfiles/\*"
     "/opt/virtualmachines/\*"
@@ -166,7 +161,7 @@ then
     then
         tar -C / --index-file /dev/shm/backup.out $excludelist -cvpf - ./ | pigz -c > $systembackupfile
     else
-        tar -C / --index-file /dev/shm/backup.out $excludelist -cvpzf $systembackupfile  ./
+        tar -C / --index-file /dev/shm/backup.out $excludelist -cvpzf $systembackupfile ./
     fi
     echo "Moving log file to $logdir..."
     mv /dev/shm/backup.out $logdir
