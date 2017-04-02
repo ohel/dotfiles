@@ -17,6 +17,7 @@ backup_source_dirs=(
     "/mnt/ssdstorage/music"
     "/mnt/raidstorage/media/audio"
     "/mnt/raidstorage/media/video"
+    "/mnt/raidstorage/backups/misc"
 )
 
 # Destination directories for misc backup. Should correspond to source directories.
@@ -29,6 +30,7 @@ backup_dest_dirs=(
     "${mountables[1]}/backups/media/music"
     "${mountables[1]}/backups/media/audio"
     "${mountables[1]}/backups/media/video"
+    "${mountables[1]}/backups/misc"
 )
 
 # Locations where to put full system backups. The first one is echoed with deletes to the other.
