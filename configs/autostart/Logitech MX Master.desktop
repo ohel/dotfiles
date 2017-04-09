@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=0.9.4
+Type=Application
+Name=Logitech MX Master
+Comment=
+Exec=/usr/bin/xinput --set-prop "Logitech MX Master" "Device Accel Constant Deceleration" 0.9 2>/dev/null
+OnlyShowIn=XFCE;
+StartupNotify=false
+Terminal=false
+Hidden=false
+

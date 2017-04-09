@@ -7,6 +7,8 @@ export GDK_USE_XFT=1
 export QT_XFT=true
 export IGNOREEOF=1
 
+[[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources
+
 mkdir -p /dev/shm/thumbnails
 mkdir -p /dev/shm/cache
 mkdir -p /tmp/mhwaveedit
