@@ -40,3 +40,7 @@ Mod4 + XF86AudioLowerVolume
 "~/.scripts/quodlibet/next_song.sh"
 Mod4 + XF86AudioRaiseVolume
 
+# This is for Logitech MX Revolution's hidden thumb button:
+# it sends a Control_L + Alt_L + Tab combo - this makes it a back button.
+"xdotool keyup Tab && xdotool keyup ctrl && xdotool key alt+Left"
+Control + Mod1 + Tab
