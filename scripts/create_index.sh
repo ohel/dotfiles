@@ -7,7 +7,7 @@ root=${1:-"."}
 index="index.html" 
 
 echo "<html lang=\"en\"><head><meta charset=\"utf-8\"></head><body>" > $index
-echo "<ul>" > $index
+echo "<ul>" >> $index
 for filename in `find ./ -maxdepth 1 -type f | sort`; do
     item=`basename "$filename"`
     if test "$item" != "index.html"; then
