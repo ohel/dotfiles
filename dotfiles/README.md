@@ -1,3 +1,4 @@
+* alsoftrc: OpenAL configuration file, pointing to an MHR file which defines the HRTF.
 * asoundrc: ALSA's ~/.asoundrc config file. This includes lots of virtual devices, multi-channel devices, LADSPA devices and more.
 * bashrc: ~/.bashrc.
 * conkyrc: ~/.conkyrc. A minimal config showing a few RSS feeds and if something eats resources.
