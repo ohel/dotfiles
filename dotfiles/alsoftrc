@@ -1,0 +1,4 @@
+hrtf = true
+hrtf-paths = HOME/.config/hrtf_1059.mhr
+[alsa]
+device = default
