@@ -11,6 +11,8 @@
 remotedir="~/backups" # The target directory should exist in this directory on the server.
 countdown=3 # Wait this many seconds before actually starting the operation to prevent accidents.
 
+echo
+
 if [ "$#" -lt 4 ]; then
     echo "Required parameters missing."
     exit
@@ -27,6 +29,7 @@ excludeparams=""
 for excludeitem in ${excludelist[@]}
 do
     excludeparams="$excludeparams --exclude=$excludeitem"
+    echo "Excluding: $excludeitem"
 done
 
 if test "X$(echo $mode | grep nowait\$)" != "X"
@@ -34,6 +37,18 @@ then
     countdown=0
     mode=$(echo $mode | sed s/nowait\$//)
 fi
+
+if test "X$(echo $mode | grep reverse)" != "X"
+then
+    git_dirs=$(find $localdir -type d -name .git | sed "s/\/\.git\$//" | sed "s/^\.\///")
+    for excludeitem in ${git_dirs[@]}
+    do
+        excludeparams="$excludeparams --exclude=$excludeitem"
+        echo "Skipping git working dir: $excludeitem"
+    done
+fi
+
+echo
 
 if test "$mode" == "normal"
 then
