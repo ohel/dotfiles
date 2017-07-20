@@ -43,4 +43,4 @@ then
     touch $testfile
 fi
 
-feh --bg-fill /opt/misc/pics/koli.jpg &
+feh --bg-fill ~/.themes/background &

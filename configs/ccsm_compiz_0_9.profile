@@ -95,6 +95,7 @@ s0_inactive_shadow_y_offset = 0
 s0_command = /opt/programs/compiz/bin/gtk-window-decorator --metacity-theme "metacity_panther"
 s0_mipmap = true
 s0_decoration_match = !any
+s0_shadow_match = (any) & !(class=Remmina)
 
 [thumbnail]
 s0_fade_speed = 0.000000
@@ -215,6 +216,7 @@ s0_prev_button = Button4
 
 [opengl]
 s0_texture_filter = 2
+s0_lighting = true
 s0_texture_compression = true
 
 [neg]
@@ -245,7 +247,7 @@ s0_snapback_semimaximized = false
 s0_background_color = #333333d9
 
 [composite]
-s0_unredirect_match = (any) & !(class=Totem) & !(class=MPlayer) & !(class=Vlc) & !(class=Plugin-container) & !(class=Firefox)
+s0_unredirect_match = (any) & !(class=mpv) & !(class=MPlayer) & !(class=Vlc)
 
 [rotate]
 s0_edge_flip_window = false

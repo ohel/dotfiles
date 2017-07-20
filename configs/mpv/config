@@ -8,14 +8,10 @@ cache=65536
 # monitor aspect ratio
 monitoraspect=16:9
 
-# disable framedrop
-framedrop=no
-
 # loop video forever
-loop=inf
+loop-file=inf
 
-softvol=yes
-softvol-max=100
+volume-max=100
 volume=100
 
 osd-color="#40FFFFFF"
@@ -30,23 +26,24 @@ profile-desc="common settings for movie profiles"
 # verbose options; disable audio errors, print simple file info
 msg-level=ao=debug:af=debug:identify=info
 
-vo=opengl-hq:scaler-resizes-only:swapinterval=1
+profile=opengl-hq
+scaler-resizes-only=yes
 
 # languages
 alang=en,fi
 slang=fi,en
 
 sub-auto=fuzzy # loads all subs containing movie name
-ass-hinting=native
-ass-force-style=FontName=Tahoma,FontSize=12,Bold=0,Outline=1,Shadow=0
+sub-ass-hinting=native
+sub-ass-force-style=FontName=Tahoma,FontSize=12,Bold=0,Outline=1,Shadow=0
 sub-pos=100
 sub-scale=1.0
 sub-gauss=0.5
-sub-text-border-size=3.0
-sub-text-border-color="#C0000000"
+sub-border-size=3.0
+sub-border-color="#C0000000"
 
-sub-text-color="#20FFFFFF" # less visible
-#sub-text-color="#C0FFFFFF" # more visible
+sub-color="#20FFFFFF" # less visible
+#sub-color="#C0FFFFFF" # more visible
 
 ###############################################################################
 [basic]
@@ -58,7 +55,8 @@ no-sub-auto
 really-quiet
 
 # video
-vo=opengl:swapinterval=1
+vo=opengl
+opengl-swapinterval=1
 
 
 
@@ -66,9 +64,10 @@ vo=opengl:swapinterval=1
 [surroundmovie]
 profile-desc="surround sound profile for movies"
 
-ao=alsa:device=julia_movie
-ad-lavc-downmix=no
+ao=alsa
+audio-device=alsa/julia_movie
 audio-channels=6
+ad-lavc-downmix=no
 profile=common-movie
 
 
@@ -77,9 +76,10 @@ profile=common-movie
 [surroundmoviebalancedmatrix]
 profile-desc="another surround sound profile for movies"
 
-ao=alsa:device=julia_movie_balanced_matrix
-ad-lavc-downmix=no
+ao=alsa
+audio-device=alsa/julia_movie_balanced_matrix
 audio-channels=6
+ad-lavc-downmix=no
 profile=common-movie
 
 
@@ -90,8 +90,8 @@ profile-desc="openal profile for movies"
 
 # "hrtf = true" in ~/.alsoftrc enables HRTF with OpenAL
 ao=openal
-ad-lavc-downmix=no
 audio-channels=6
+ad-lavc-downmix=no
 profile=common-movie
 
 
@@ -100,7 +100,8 @@ profile=common-movie
 [stereomovie]
 profile-desc="stereo sound profile for movies"
 
-ao=alsa:device=julia_aout
+ao=alsa
+audio-device=alsa/julia_aout
 audio-channels=2
 profile=common-movie
 
@@ -110,7 +111,8 @@ profile=common-movie
 [julia]
 profile-desc="profile for general video (Juli@)"
 
-ao=alsa:device=julia
+ao=alsa
+audio-device=alsa/julia
 profile=basic
 
 
@@ -119,7 +121,8 @@ profile=basic
 [hda]
 profile-desc="profile for general video (HDA)"
 
-ao=alsa:device=hda
+ao=alsa
+audio-device=alsa/hda
 profile=basic
 
 

@@ -52,9 +52,9 @@ systembackupexcludelist=(
 
 # Home backup will backup /home/* excluding these.
 homebackupexcludelist=(
+    "/home/panther/downloads/\*"
     "/home/panther/docs/\*"
     "/home/panther/media/\*"
-    "/home/panther/misc/\*"
 )
 
 logdir="/var/log/backup/"
