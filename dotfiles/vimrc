@@ -1,45 +1,114 @@
 au GUIEnter * set lines=31 columns=107 " set window size when starting in GUI mode
 let g:dlines=31 " put default window size in memory
 let g:dcols=107
-let g:zoom_functions = 1
+
 set tabstop=4 " tab width
-set guifont=Monospace\ 12
-let g:dfont="ProggyCleanTTSZ"
-let g:daltfont="Monospace"
+set encoding=utf-8
+set showtabline=2 " tab selector always visible
+set expandtab " expand tab to spaces, use c-q<tab> for real tab
+let &shiftwidth=&tabstop " set intend (using keys << or >>) width
+let &softtabstop=&tabstop " set indent width in insert mode using tab
+set hidden " do not close file buffers when opening a new one, use :ls to list buffers
+set hlsearch " highlight search
+set autoread " automatically update file if changed from the outside
+set backspace=indent,eol,start " make backspace clear other than new text also
+set guicursor=n-v-c:hor25-Cursor " set cursor size
+set nocp " nocompatible: enables features which are not Vi compatible
+set ic " set ignore case on searches, remedy with set noic or use \C in search term
+set number  " line numbering
+set textwidth=0 " define text width if autowrapping: 0 disables autowrap, wraps to 80 on manual wrap (gq)
+let g:leave_my_textwidth_alone=1 " don't autowrap lines while typing
+let g:netrw_list_hide='\(^\|\s\s\)\zs\.\S\+' " hide dotfiles by default in Netrw Directory Listing
+set go-=T " hide toolbar
+set go-=m " hide menu
+set go-=t " disable tear-off menus
+set go-=r " disable right scroll bar
+set incsearch " incremental search
+set virtualedit=block " allow selecting non-characters in visual block mode
+set noswapfile
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif " returns cursor to previous position when opening files
+:set pastetoggle=<f4> " toggle paste mode (no auto indent)
 
 if has('win32') || has ('win64')
-    let $VIMHOME = $VIM."/vimfiles"
+
+    let $VIMHOME=$VIM."/vimfiles"
+    set guifont=ProggyCleanTTSZ:h12:cANSI
+    let g:dfont="ProggyCleanTTSZ"
+    let g:daltfont="Bitstream_Vera_Sans_Mono"
+    set undodir=$VIMHOME
+    set undofile
+    " set swap directory
+    if isdirectory("~/.vim")
+       set directory=~/.vim
+    endif
+
 else
-    let $VIMHOME = $HOME."/.vim"
+
+    let $VIMHOME=$HOME."/.vim"
+    set clipboard=unnamedplus " alias unnamed register to +
+    let g:zoom_functions = 1
+    set guifont=Monospace\ 12
+    let g:dfont="ProggyCleanTTSZ"
+    let g:daltfont="Monospace"
+
+    if !filereadable(expand("~/.vim/colors/minigun.vim"))
+        echo("Downloading color scheme...")
+        silent !curl -fLo ~/.vim/colors/minigun.vim --create-dirs https://raw.githubusercontent.com/ohel/dotfiles/master/themes/minigun.vim
+    endif
+    colorscheme minigun
+
+    silent !mkdir -p "$HOME/.vim/undodir"
+    set undodir=~/.vim/undodir
+    set undofile
+
+    " create default ctags database with a command such as:
+    " ctags -R -f ctagsdb --c++-kinds=+p --fields=+iaS --extra=+q /usr/lib64/gcc/x86_64-pc-linux-gnu/$(ls -t1 /usr/lib64/gcc/x86_64-pc-linux-gnu/)/include/
+    if executable('ctags')
+        nnoremap <c-f1> :!ctags -R -f ~/.vim/ctagsdb --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
+    endif
+
+    " plugins
+    if !isdirectory(expand("~/.vim/autoload"))
+        silent call mkdir($HOME . '/.vim/autoload')
+    endif
+    if !filereadable(expand("~/.vim/autoload/plug.vim"))
+        echo("Downloading vim-plug...")
+        silent !curl -fLo ~/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    endif
+    if !isdirectory(expand("~/.vim/bundle"))
+        silent call mkdir($HOME . '/.vim/bundle')
+    endif
+    if !filereadable(expand("~/.vim/autoload/pathogen.vim"))
+        echo("Downloading pathogen...")
+        silent !curl -fLo ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+    endif
+
 endif
 
 if hostname() == "minigun"
     set guifont=ProggyCleanTTSZ\ 12
-
 elseif hostname() == "gainasus"
     let g:zoom_level=2
-
-elseif hostname() == "predator"
-    au GUIEnter * set lines=27 columns=107
-    let g:dlines=27
-    let g:dcols=107
-
-    set guifont=ProggyCleanTTSZ\ 12
-
 elseif hostname() == "oheldell"
     au GUIEnter * set lines=35 columns=130
     let g:dlines=35
     let g:dcols=130
     let g:zoom_level=2
     set tabstop=2
-
 endif
 
-if has('win32') || has ('win64')
-    set guifont=ProggyCleanTTSZ:h12:cANSI
-    let g:dfont="ProggyCleanTTSZ"
-    let g:daltfont="Bitstream_Vera_Sans_Mono"
-endif
+" syntax and file type detection etc.
+syntax on
+filetype on
+au BufNewFile,BufRead *.xaml set filetype=xml
+au BufNewFile,BufRead *.md set filetype=markdown
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+autocmd FileType cpp set tags +=~/.vim/ctagsdb
 
 function! TabOrComplete() " generic tab complete
     if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
@@ -56,88 +125,14 @@ inoremap <tab> <c-r>=TabOrComplete()<cr>
 " insert real tab on shift-tab
 inoremap <s-tab> <c-q><tab>
 " TODO: for some reason (YCM?) mapping tab in vimrc does not work
-function! LoadTabOrComplete() 
+function! LoadTabOrComplete()
     inoremap <tab> <c-r>=TabOrComplete()<cr>
     inoremap <s-tab> <c-q><tab>
 endfunction
 nnoremap <a-t> :call LoadTabOrComplete()<cr>
 
-if !filereadable(expand("~/.vim/colors/minigun.vim"))
-    echo("Downloading color scheme...")
-    silent !curl -fLo ~/.vim/colors/minigun.vim --create-dirs https://raw.githubusercontent.com/ohel/dotfiles/master/themes/minigun.vim
-endif
-colorscheme minigun
-
-set encoding=utf-8
-set showtabline=2 " tab selector always visible
-set expandtab " expand tab to spaces, use c-q<tab> for real tab
-let &shiftwidth=&tabstop " set intend (using keys << or >>) width
-let &softtabstop=&tabstop " set indent width in insert mode using tab
-set hidden " do not close file buffers when opening a new one, use :ls to list buffers
-set hlsearch " highlight search
-set autoread " automatically update file if changed from the outside
-set backspace=indent,eol,start " make backspace clear other than new text also
-set guicursor=n-v-c:hor25-Cursor " set cursor size
-set nocp " nocompatible: enables features which are not Vi compatible
-set ic " set ignore case on searches, remedy with set noic or use \C in search term
-set clipboard=unnamedplus " alias unnamed register to +
-set number  " line numbering
-set textwidth=0 " define text width if autowrapping: 0 disables autowrap, wraps to 80 on manual wrap (gq)
-let g:leave_my_textwidth_alone=1 " don't autowrap lines while typing
-let g:netrw_list_hide='\(^\|\s\s\)\zs\.\S\+' " hide dotfiles by default in Netrw Directory Listing
-set go-=T " hide toolbar
-set go-=m " hide menu
-set go-=t " disable tear-off menus
-set go-=r " disable right scroll bar
-set incsearch " incremental search
-set virtualedit=block " allow selecting non-characters in visual block mode
-" set swap directory
-"if isdirectory("~/.vim")
-"   set directory=~/.vim
-"endif
-set noswapfile
-silent !mkdir -p "$HOME/.vim/undodir"
-set undodir=~/.vim/undodir
-set undofile
-autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif " returns cursor to previous position when opening files
-:set pastetoggle=<f4> " toggle paste mode (no auto indent)
-
-
-
-" syntax and file type detection etc.
-syntax on
-filetype on
-au BufNewFile,BufRead *.xaml set filetype=xml
-au BufNewFile,BufRead *.md set filetype=markdown
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-autocmd FileType cpp set tags +=~/.vim/ctagsdb
-"ctags -R -f ctagsdb --c++-kinds=+p --fields=+iaS --extra=+q /usr/lib64/gcc/x86_64-pc-linux-gnu/$(ls -t1 /usr/lib64/gcc/x86_64-pc-linux-gnu/)/include/
-nnoremap <c-f1> :!ctags -R -f ~/.vim/ctagsdb --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
-
-
-
-" plugins
-if !isdirectory(expand("~/.vim/autoload"))
-    silent call mkdir($HOME . '/.vim/autoload')
-endif
-if !filereadable(expand("~/.vim/autoload/plug.vim"))
-    echo("Downloading vim-plug...")
-    silent !curl -fLo ~/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-endif
-if !isdirectory(expand("~/.vim/bundle"))
-    silent call mkdir($HOME . '/.vim/bundle')
-endif
-if !filereadable(expand("~/.vim/autoload/pathogen.vim"))
-    echo("Downloading pathogen...")
-    silent !curl -fLo ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
-endif
-
-call plug#begin('~/.vim/plugged')
+if exists("plug#begin")
+    call plug#begin('~/.vim/plugged')
     Plug 'jreybert/vimagit'
     Plug 'justinmk/vim-gtfo'
     Plug 'kana/vim-arpeggio'
@@ -148,7 +143,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'Shougo/vimproc.vim', { 'do': 'cd ~/.vim/plugged/vimproc.vim && make -f make_unix.mak' } " allows async operations
     Plug 'tomtom/tcomment_vim' " code commenting
     Plug 'Valloric/YouCompleteMe', { 'do': 'cd ~/.vim/plugged/YouCompleteMe && ./install.py' }
-call plug#end()
+    call plug#end()
+endif
 if filereadable(expand("~/.vim/autoload/pathogen.vim"))
     " https://github.com/tpope/vim-pathogen
     execute pathogen#infect()
@@ -177,58 +173,68 @@ if executable('ag')
     let g:unite_source_rec_git_command= ['ag', '--nocolor', '--follow', '--nogroup', '-g', '']
 endif
 let g:unite_source_rec_async_command = ['find', '-L']
-call unite#custom#profile('default', 'context', {
-    \ 'prompt' : '» ',
-    \ 'winheight' : 20,
-    \ 'direction' : 'bot',
-    \ 'short_source_names' : 1
-\ })
+if exists("unite#custom#profile")
+    call unite#custom#profile('default', 'context', {
+        \ 'prompt' : '» ',
+        \ 'winheight' : 20,
+        \ 'direction' : 'bot',
+        \ 'short_source_names' : 1
+    \ })
+endif
 
 " Unite sources
-call unite#custom_source('menu', 'matchers', ['matcher_fuzzy'])
-call unite#custom_source('source', 'matchers', ['matcher_fuzzy'])
-call unite#custom_source('outline', 'matchers', ['matcher_fuzzy'])
-call unite#custom_source('history/yank', 'matchers', ['matcher_fuzzy'])
-call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep', 'ignore_pattern', join([
-     \ '.a$',
-     \ '.aux$',
-     \ '.bak$',
-     \ 'bower_components/',
-     \ '\.git/',
-     \ '.jar$',
-     \ '.lib$',
-     \ 'node_modules/',
-     \ '.o$',
-     \ '.obj$',
-     \ '.out$',
-     \ '.sass-cache',
-     \ '.so$',
-     \ 'tmp/',
-     \ '.toc$',
-     \ '\.tscache/'
-     \ ], '\|'))
+if exists("unite#custom_source")
+    call unite#custom_source('menu', 'matchers', ['matcher_fuzzy'])
+    call unite#custom_source('source', 'matchers', ['matcher_fuzzy'])
+    call unite#custom_source('outline', 'matchers', ['matcher_fuzzy'])
+    call unite#custom_source('history/yank', 'matchers', ['matcher_fuzzy'])
+    call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep', 'ignore_pattern', join([
+         \ '.a$',
+         \ '.aux$',
+         \ '.bak$',
+         \ 'bower_components/',
+         \ '\.git/',
+         \ '.jar$',
+         \ '.lib$',
+         \ 'node_modules/',
+         \ '.o$',
+         \ '.obj$',
+         \ '.out$',
+         \ '.sass-cache',
+         \ '.so$',
+         \ 'tmp/',
+         \ '.toc$',
+         \ '\.tscache/'
+         \ ], '\|'))
+endif
 
 "let mapleader = ' '
 map <space> <leader>
-nnoremap <leader>b :Unite buffer<cr>
-nnoremap <leader>f :Unite -start-insert file_rec/async buffer<cr>
-vnoremap <leader>f :Unite -start-insert file_rec/async buffer<cr><c-r>*
-nnoremap <leader>g :Unite -start-insert file_rec/git buffer<cr>
-vnoremap <leader>g :Unite -start-insert file_rec/git buffer<cr><c-r>*
-nnoremap <leader>r :Unite grep:.:<cr>
-" search selected text
-vnoremap <leader>r :Unite grep:.::<c-r>*<cr>
-" search current filename
-nnoremap <leader>c :Unite grep:.::<c-r>=expand('%:t')<cr><cr>
-" search Angular.js keywords
-nnoremap <leader>a :Unite -start-insert grep:.::\\.(filter\|provider\|controller\|directive\|factory\|service)\\(\\'.+\\'<cr>
-nnoremap <leader>u :UniteResume<cr>
+if exists("Unite")
+    nnoremap <leader>b :Unite buffer<cr>
+    nnoremap <leader>f :Unite -start-insert file_rec/async buffer<cr>
+    vnoremap <leader>f :Unite -start-insert file_rec/async buffer<cr><c-r>*
+    nnoremap <leader>g :Unite -start-insert file_rec/git buffer<cr>
+    vnoremap <leader>g :Unite -start-insert file_rec/git buffer<cr><c-r>*
+    nnoremap <leader>r :Unite grep:.:<cr>
+    " search selected text
+    vnoremap <leader>r :Unite grep:.::<c-r>*<cr>
+    " search current filename
+    nnoremap <leader>c :Unite grep:.::<c-r>=expand('%:t')<cr><cr>
+    " search Angular.js keywords
+    nnoremap <leader>a :Unite -start-insert grep:.::\\.(filter\|provider\|controller\|directive\|factory\|service)\\(\\'.+\\'<cr>
+    nnoremap <leader>u :UniteResume<cr>
+endif
 
 " jsbeautify
-nnoremap <leader>j :call JsBeautify()<cr>:set syntax=json<cr>
+if exists("JsBeautify")
+    nnoremap <leader>j :call JsBeautify()<cr>:set syntax=json<cr>
+endif
 
 " vimagit
-nnoremap <silent><leader>m :Magit<cr>
+if exists("Magit")
+    nnoremap <silent><leader>m :Magit<cr>
+endif
 
 " tcomment
 let g:tcommentMapLeaderOp1 = 'å'
@@ -243,11 +249,12 @@ let g:gtfo#terminals = { 'unix' : 'xfce4-terminal' }
 nnoremap <silent><leader>n :tabe .<cr>
 
 " sort
-vnoremap <leader>s :!sort<cr>
+if executable('sort')
+    vnoremap <leader>s :!sort<cr>
+endif
 
 " change directory to that of the current file
 nnoremap <leader>d :cd %:h<cr>:echo "wd is now" getcwd()<cr>
-
 
 
 
@@ -344,8 +351,10 @@ nnoremap <f5> :if &go=~#'m'<bar>set go-=m<bar>else<bar>set go+=m<bar>endif<cr>
 inoremap <f5> <esc>:if &go=~#'m'<bar>set go-=m<bar>else<bar>set go+=m<bar>endif<cr>
 
 " insert mode toggles, grave moves to ^ (editing mark)
-call arpeggio#map('i', '', 0, 'fj', '<esc>`^')
-call arpeggio#map('n', '', 0, 'fj', 'i')
+if exists("arpeggio#map")
+    call arpeggio#map('i', '', 0, 'fj', '<esc>`^')
+    call arpeggio#map('n', '', 0, 'fj', 'i')
+endif
 inoremap <c-space> <esc>`^
 nnoremap <c-space> i
 nnoremap <enter> i<c-r>=col('.') == col('$')-1 ? "\<lt>right>" : ""<cr>
@@ -372,7 +381,7 @@ inoremap <c-f4> <esc><c-w>c
 
 
 
-" relative line numbering came in vi 7.3
+" relative line numbering came in vim 7.3
 if version >= 703
     function! ToggleRelativeNumbering()
         if &rnu
