@@ -1,6 +1,6 @@
 #!/bin/sh
 # Scan and list available wifi network ESSIDs.
-interface=$(cat /proc/net/wireless | tail -n +3 | head -n 1 | cut -f 1 -d ':')
+interface=$(ls -l /sys/class/net | grep devices\/pci | grep -o " w[^ ]* ->" | cut -f 2 -d ' ' | head -n 1)
 if test "X$interface" = "X"
 then
     echo No wifi interface found.
