@@ -15,7 +15,7 @@ then
     exit
 fi
 
-if test "X$(which openvpn)" == "X"
+if test "X$(which openvpn)" = "X"
 then
     echo "OpenVPN executable not found."
     exit
@@ -27,7 +27,7 @@ do
     if test "X$ip" != "X"
     then
         IF=$physical_device
-        if test "X$2" == "Xallowlan"
+        if test "X$2" = "Xallowlan"
         then
             subnet=$(echo $ip | cut -f 1 -d '.')
         fi
@@ -62,7 +62,7 @@ do
     vpn_ip=$route
     for counterpart in $current_routes
     do
-        if test "$route" == "$counterpart"
+        if test "$route" = "$counterpart"
         then
             vpn_ip=""
         fi
@@ -72,7 +72,7 @@ do
         break
     fi
 done
-if test "X$vpn_ip" == "X"
+if test "X$vpn_ip" = "X"
 then
     echo "ERROR: VPN IP not found from routes."
     exit
@@ -84,9 +84,14 @@ iptables -P OUTPUT DROP
 lanstate="blocked"
 if test "X$subnet" != "X"
 then
+    lannet=0
+    if test "X$subnet" = "X192"
+    then
+        lannet=168
+    fi
     lanstate="allowed"
-    iptables -A INPUT -s $subnet.0.0.0/16 -d $subnet.0.0.0/16 -j ACCEPT
-    iptables -A OUTPUT -s $subnet.0.0.0/16 -d $subnet.0.0.0/16 -j ACCEPT
+    iptables -A INPUT -s $subnet.$lannet.0.0/16 -d $subnet.$lannet.0.0/16 -j ACCEPT
+    iptables -A OUTPUT -s $subnet.$lannet.0.0/16 -d $subnet.$lannet.0.0/16 -j ACCEPT
 fi
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
@@ -110,7 +115,7 @@ do
     read -s -N 1 -t 5 cancel
     trap 2
 
-    if test "X$cancel" == "Xc"
+    if test "X$cancel" = "Xc"
     then
         break
     fi
