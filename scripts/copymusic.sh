@@ -90,15 +90,15 @@ encode() {
     fi
     echo -n "*"
 
-    mkdir -p $dest_dir/"$meta_album"
+    mkdir -p "$dest_dir"/"$meta_album"
     if [ ${#meta_track} -lt 2 ]
     then
         padding="0"
     else
         padding=""
     fi
-    cp $source $dest_dir/"$meta_album"/"$padding""$meta_track"_$(echo $meta_title | tr -c -d "[:alnum:]")_$(basename $tmpfile)
-    rm $tmpfile
+    cp "$source" "$dest_dir"/"$meta_album"/"$padding""$meta_track"_$(echo $meta_title | tr -c -d "[:alnum:]")_$(basename "$tmpfile")
+    rm "$tmpfile"
 
     echo -n "*"
 }
@@ -128,7 +128,7 @@ do
     album=$(echo "$album" | sed s/" "/_/)
 
     # The underscore is a placeholder for $0.
-    echo $list | tr " " "\000" | xargs --null -I {} -n 1 -P $parallel_processes bash -c 'encode "$@"' _ $encoding $destination "{}" "$album"
+    echo $list | tr " " "\000" | xargs --null -I {} -n 1 -P $parallel_processes bash -c 'encode "$@"' _ $encoding "$destination" "{}" "$album"
 
     echo ""
 	echo "All done."
