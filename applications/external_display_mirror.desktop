@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Name=Mirror display
+Icon=xfce-display-mirror
+Exec=/home/panther/.scripts/external_display.sh mirror
+MimeType=text/plain
+Terminal=true
+Categories=Settings
