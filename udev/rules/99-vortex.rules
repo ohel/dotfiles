@@ -1,1 +1,0 @@
-ACTION=="add", ENV{ID_TYPE}=="disk", ENV{ID_FS_LABEL}=="vortex", RUN+="/bin/mount /dev/%k /mnt/vortex"
