@@ -3,6 +3,11 @@
 
 userhome=/home/panther
 backupmountpoint=/mnt/raidstorage
+
+if ! [ -e $backupmountpoint ]
+    then exit
+fi
+
 backupdir=backups/misc/home_dirs/$(basename $userhome)
 checkfile=$userhome/.local/share/misc/lastsync/misc
 if ! [ -e $checkfile ]

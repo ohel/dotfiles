@@ -3,6 +3,6 @@ Encoding=UTF-8
 Type=Application
 NoDisplay=true
 Name=Media player (surround)
-Exec=.scripts/launchers/media_player.sh sr %f
+Exec=/home/panther/.scripts/launchers/media_player.sh sr %f
 MimeType=video/x-matroska
 Icon=media-playback-start
