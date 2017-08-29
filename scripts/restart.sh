@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 # Safely restart computer.
 
 source /home/panther/.scripts/shutdown_init.sh

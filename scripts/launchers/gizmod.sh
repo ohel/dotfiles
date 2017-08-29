@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 # Gizmo daemon launcher.
 
 if test "$(ps -e | grep gizmod)"

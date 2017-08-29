@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 # Sometimes conky just fails to start. Just keep trying.
 
 while test "empty$(ps -e | grep conky)" == "empty"

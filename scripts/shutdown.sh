@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 # A two-phase shutdown script I use.
 # First check if it is OK to shut down.
 # Then backup stuff if necessary and shut down.
