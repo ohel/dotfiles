@@ -1,5 +1,6 @@
 #!/bin/sh
 # Scan and list available wifi network ESSIDs.
+
 interface=$(ls -l /sys/class/net | grep devices\/pci | grep -o " w[^ ]* ->" | cut -f 2 -d ' ' | head -n 1)
 if test "X$interface" = "X"
 then

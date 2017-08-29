@@ -1,4 +1,5 @@
 hrtf = true
 hrtf-paths = HOME/.config/hrtf_1059.mhr
+drivers = alsa,pulse
 [alsa]
 device = default
