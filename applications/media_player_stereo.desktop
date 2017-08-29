@@ -3,5 +3,6 @@ Encoding=UTF-8
 Type=Application
 NoDisplay=true
 Name=Media player (stereo)
-Exec=/home/panther/.scripts/launchers/media_player.sh st %f
+Exec=.scripts/launchers/media_player.sh st %f
 MimeType=video/x-msvideo
+Icon=media-playback-start

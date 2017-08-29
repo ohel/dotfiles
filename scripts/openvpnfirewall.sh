@@ -6,7 +6,9 @@
 
 # For now we need to know beforehand how many IP routes the VPN
 # connection is expected to create when initializing.
-routes_to_create=5
+# The number may be given as $3, default is 5.
+
+routes_to_create=${3:-5}
 logfile=/dev/shm/openvpn.log
 
 if [ "$#" == 0 ]

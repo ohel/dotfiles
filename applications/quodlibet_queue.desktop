@@ -4,4 +4,4 @@ Type=Application
 NoDisplay=true
 Name=Quod Libet (Queue)
 Exec=/opt/programs/quodlibet/quodlibet.py --enqueue=%f
-
+Icon=playlist

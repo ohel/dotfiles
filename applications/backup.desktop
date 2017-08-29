@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=Backup
-Exec=sudo /home/panther/.scripts/backup.sh
+Name=Backup locally
+Exec=sudo .scripts/backup_local.sh
 Icon=stock_folder-copy
 Terminal=true
 Categories=System

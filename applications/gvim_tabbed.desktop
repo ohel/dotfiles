@@ -5,3 +5,4 @@ NoDisplay=true
 Name=gVim
 Exec=gvim -p %F
 MimeType=text/plain
+Icon=gvim

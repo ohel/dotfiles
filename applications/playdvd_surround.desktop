@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Application
 NoDisplay=true
-Name=playdvd (surround)
-Exec=/home/panther/.scripts/launchers/mplayer_dvd.sh sr %f
+Name=Play DVD image (surround)
+Exec=.scripts/launchers/media_player_dvd.sh sr %f
 MimeType=application/x-cd-image
+Icon=media-playback-start

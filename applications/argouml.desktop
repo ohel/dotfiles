@@ -2,7 +2,7 @@
 Version=1.0
 Name=ArgoUML
 Exec=/opt/programs/argouml/argouml.sh
-Icon=/home/panther/.local/share/icons/argouml.png
+Icon=.local/share/icons/argouml.png
 Terminal=true
 Type=Application
 Categories=Application;Development;

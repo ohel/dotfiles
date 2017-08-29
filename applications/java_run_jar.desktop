@@ -5,3 +5,4 @@ NoDisplay=true
 Name=java
 Exec=/opt/bin/java_bin/java -jar %s
 MimeType=application/x-java-archive
+Icon=java

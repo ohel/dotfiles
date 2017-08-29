@@ -5,3 +5,4 @@ NoDisplay=true
 Name=ArgoUML
 Exec=/opt/bin/java_bin/java -jar /opt/programs/argouml/argouml.jar %s
 MimeType=application/zargo
+Icon=argouml

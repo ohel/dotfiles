@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=KVM Windows 10 Pro (Power On)
+Exec=sudo ./win10pro.sh
+Icon=computer
+Terminal=false
+Type=Application
+Categories=System;Utility
+Hidden=false
+Path=/opt/virtualmachines

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Restart
+Exec=.scripts/restart.sh
+Terminal=false
+Type=Application
+Icon=gnome-session-reboot
+Categories=System

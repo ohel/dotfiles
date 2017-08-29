@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Edit memo
-Exec=gvim -n +1 -c start /home/panther/.memo
+Exec=gvim -n +1 -c start .memo
 Terminal=false
 Type=Application
 Icon=accessories-text-editor
