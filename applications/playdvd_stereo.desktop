@@ -3,6 +3,6 @@ Encoding=UTF-8
 Type=Application
 NoDisplay=true
 Name=Play DVD image (stereo)
-Exec=.scripts/launchers/media_player_dvd.sh st %f
+Exec=/home/panther/.scripts/launchers/media_player_dvd.sh st %f
 MimeType=application/x-cd-image
 Icon=media-playback-start

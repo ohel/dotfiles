@@ -3,5 +3,5 @@ Encoding=UTF-8
 Type=Application
 NoDisplay=true
 Name=View archive contents
-Exec=.scripts/view_archive.sh
+Exec=/home/panther/.scripts/view_archive.sh
 Icon=system-file-manager
