@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Helper script for launching DVDs (DVD image files) in media player.
 # Must correspond with media player config.
 # Unfortunately most media players do not support DVD menus anymore.
@@ -43,4 +43,3 @@ if [ "$#" = 3 ]; then
     track=$3
 fi
 $EXE ${profile:---profile=$profile} dvdread://$track --dvd-device="$2" &
-

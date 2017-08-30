@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Helper script for launching video files in media player.
 # Must correspond with media player config.
 
@@ -41,4 +41,3 @@ else
 fi 
     
 $EXE --profile=$profile "$2" &
-
