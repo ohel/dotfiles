@@ -4,11 +4,6 @@
 # VPN server IP is deduced after succesful connection, so it may be dynamic.
 # If "allowlan" is given as $2, LAN traffic is allowed, otherwise it is not.
 
-# For now we need to know beforehand how many IP routes the VPN
-# connection is expected to create when initializing.
-# The number may be given as $3, default is 5.
-
-routes_to_create=${3:-5}
 logfile=/dev/shm/openvpn.log
 
 if [ "$#" == 0 ]
@@ -41,20 +36,32 @@ echo "Using interface $IF and config file $1"
 echo "OpenVPN output is logged into $logfile"
 echo "To kill the connection, press Ctrl-c and then c."
 
-current_routes=$(ip route show | grep $IF | cut -f 1 -d ' ')
-num_routes=$(expr $(ip route show | wc -l) + $routes_to_create)
+routes=$(ip route show | grep $IF | cut -f 1 -d ' ')
+num_routes=$(ip route show | wc -l)
 
 modprobe tun
 
 echo -n "Connecting VPN..."
 openvpn $1 &>$logfile &
 
-# Wait till VPN routes are set up.
-while [ $(ip route show | wc -l) -ne $num_routes ]
-do
-    sleep 0.5
-    echo -n "."
-done
+# Wait till no more routes seem to be created for the VPN connection. The number of routes depends on the VPN and system configuration.
+wait_routes() {
+    num_routes=$1
+    wait_cycle_count=0
+    while [ $wait_cycle_count -lt 10 ]
+    do
+        echo -n "."
+        sleep 0.25
+        if [ $(ip route show | wc -l) -ne $num_routes ]
+        then
+            wait_cycle_count=0
+            num_routes=$(ip route show | wc -l)
+        else
+            wait_cycle_count=$(expr $wait_cycle_count + 1)
+        fi
+    done
+}
+wait_routes $num_routes
 echo -e "\n\nVPN connection is active."
 
 new_routes=$(ip route show | grep $IF | cut -f 1 -d ' ')
@@ -62,7 +69,7 @@ vpn_ip=""
 for route in $new_routes
 do
     vpn_ip=$route
-    for counterpart in $current_routes
+    for counterpart in $routes
     do
         if test "$route" = "$counterpart"
         then
@@ -126,14 +133,10 @@ do
     iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
     echo "DNS traffic outside VPN tunnel is now allowed."
 
-    num_routes=$(expr $(ip route show | wc -l) + $routes_to_create)
+    num_routes=$(ip route show | wc -l)
     echo -n "Reconnecting VPN..."
     openvpn $1 &>$logfile &
-    while [ $(ip route show | wc -l) -ne $num_routes ]
-    do
-        sleep 0.5
-        echo -n "."
-    done
+    wait_routes $num_routes
     echo -e "\n\nVPN connection is active."
 
     iptables -D INPUT -p udp --sport 53 -j ACCEPT

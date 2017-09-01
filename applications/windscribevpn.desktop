@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Windscribe OpenVPN connection (Finland)
-Exec=sudo ../.scripts/openvpnfirewall.sh Windscribe-Finland.ovpn allowlan 4
+Exec=sudo ../.scripts/openvpnfirewall.sh Windscribe-Finland.ovpn allowlan
 Path=.config
 Terminal=true
 Type=Application
