@@ -47,17 +47,29 @@ openvpn $1 &>$logfile &
 # Wait till no more routes seem to be created for the VPN connection. The number of routes depends on the VPN and system configuration.
 wait_routes() {
     num_routes=$1
+    first_route=${2:-1}
     wait_cycle_count=0
-    while [ $wait_cycle_count -lt 10 ]
+    while [[ $wait_cycle_count -lt 10 || $first_route -ne 0 ]]
     do
         echo -n "."
         sleep 0.25
         if [ $(ip route show | wc -l) -ne $num_routes ]
         then
+            first_route=0
             wait_cycle_count=0
             num_routes=$(ip route show | wc -l)
         else
             wait_cycle_count=$(expr $wait_cycle_count + 1)
+        fi
+        if [[ $wait_cycle_count -gt 40 && $first_route -ne -1 ]]
+        then
+            killall openvpn &>/dev/null
+            echo
+            echo "Failed to connect. Log file is printed below."
+            echo; cat $logfile; echo
+            echo "Press return to exit."
+            read
+            exit
         fi
     done
 }
@@ -136,7 +148,7 @@ do
     num_routes=$(ip route show | wc -l)
     echo -n "Reconnecting VPN..."
     openvpn $1 &>$logfile &
-    wait_routes $num_routes
+    wait_routes $num_routes -1
     echo -e "\n\nVPN connection is active."
 
     iptables -D INPUT -p udp --sport 53 -j ACCEPT
