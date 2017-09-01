@@ -52,11 +52,11 @@ Mod1 + Mod4 + Pause
 "~/.scripts/switch_background.sh"
 Mod4 + Pause
 
-"~/.scripts/switch_display.sh switch"
+"~/.scripts/external_display.sh switch"
 Mod4 + p
-"~/.scripts/switch_display.sh mirror"
+"~/.scripts/external_display.sh mirror"
 Mod1 + Mod4 + p
-"~/.scripts/switch_display.sh extend"
+"~/.scripts/external_display.sh extend"
 Control + Mod1 + Mod4 + p
 
 # Reset active window to upper left corner.
@@ -68,7 +68,7 @@ Print
 "~/.scripts/screenshot.sh 2"
 Mod4 + Print
 
-"i3lock -e -i ~/.themes/lockscreen.png"
+"i3lock -t -e -i ~/.themes/lockscreen.png"
 Control + Mod1 + Delete
 
 # Terminal buffer scrolling with Alt+J/K (caps), makes it ergonomic.
