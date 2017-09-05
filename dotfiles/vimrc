@@ -508,7 +508,7 @@ endif
 function! OnVimEnter()
 
     " Unite
-    if exists("*Unite")
+    if exists(":Unite")
         nnoremap <leader>b :Unite buffer<cr>
         nnoremap <leader>f :Unite -start-insert file_rec/async buffer<cr>
         vnoremap <leader>f :Unite -start-insert file_rec/async buffer<cr><c-r>*
@@ -530,7 +530,7 @@ function! OnVimEnter()
     endif
 
     " vimagit
-    if exists("*Magit")
+    if exists(":Magit")
         nnoremap <silent><leader>m :Magit<cr>
     endif
 
