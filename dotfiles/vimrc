@@ -27,13 +27,16 @@ set incsearch " incremental search
 set virtualedit=block " allow selecting non-characters in visual block mode
 set noswapfile
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif " returns cursor to previous position when opening files
-:set pastetoggle=<f4> " toggle paste mode (no auto indent)
+set pastetoggle=<f4> " toggle paste mode (no auto indent)
 
-"let mapleader = ' '
+" let mapleader = ' '
 map <space> <leader>
 
 " Netrw Directory Listing on new tab
 nnoremap <silent><leader>n :tabe .<cr>
+
+" last command
+nnoremap <silent><leader>c :<up><cr>
 
 " sort
 if executable('sort')
@@ -510,17 +513,22 @@ function! OnVimEnter()
     " Unite
     if exists(":Unite")
         nnoremap <leader>b :Unite buffer<cr>
-        nnoremap <leader>f :Unite -start-insert file_rec/async buffer<cr>
-        vnoremap <leader>f :Unite -start-insert file_rec/async buffer<cr><c-r>*
-        nnoremap <leader>g :Unite -start-insert file_rec/git buffer<cr>
-        vnoremap <leader>g :Unite -start-insert file_rec/git buffer<cr><c-r>*
-        nnoremap <leader>r :Unite grep:.:<cr>
+
+        if !(has('win32') || has('win64')) && (executable('ag') || executable('find'))
+            nnoremap <leader>f :Unite -start-insert file_rec/async buffer<cr>
+            vnoremap <leader>f :Unite -start-insert file_rec/async buffer<cr><c-r>*
+        elseif executable('git')
+            nnoremap <leader>f :Unite -start-insert file_rec/git buffer<cr>
+            vnoremap <leader>f :Unite -start-insert file_rec/git buffer<cr><c-r>*
+        endif
+
+        nnoremap <leader>g :Unite grep:.:<cr>
         " search selected text
-        vnoremap <leader>r :Unite grep:.::<c-r>*<cr>
+        vnoremap <leader>g :Unite grep:.::<c-r>*<cr>
         " search current filename
-        nnoremap <leader>c :Unite grep:.::<c-r>=expand('%:t')<cr><cr>
+        nnoremap <leader>gf :Unite grep:.::<c-r>=expand('%:t')<cr><cr>
         " search Angular.js keywords
-        nnoremap <leader>a :Unite -start-insert grep:.::\\.(filter\|provider\|controller\|directive\|factory\|service)\\(\\'.+\\'<cr>
+        nnoremap <leader>ga :Unite -start-insert grep:.::\\.(filter\|provider\|controller\|directive\|factory\|service)\\(\\'.+\\'<cr>
         nnoremap <leader>u :UniteResume<cr>
     endif
 
