@@ -5,9 +5,13 @@ windows_guest=0
 boot_from_cd=0
 audio=1 # not supported on Windows guests
 auto_vnc=0
-img_name="${1:-"xubuntu.img"}"
-vm_name="${2:-"Xubuntu"}"
+img_name="${1:-"vm.img"}"
+vm_name="${2:-"KVM"}"
 net_id=${3:-10} # used as the last number of static IP address of the guest, MAC address and VNC display
+
+vm_mem_mb=4096
+vm_num_cores=2
+vm_threads_per_core=1
 
 vm_bridge=vmbridge
 cdrom_image="image.iso"
@@ -72,8 +76,8 @@ env QEMU_ALSA_DAC_DEV=$dac QEMU_ALSA_ADC_DEV=$adc qemu-system-x86_64 $soundhw $c
 -boot $bootstring \
 -machine q35,accel=kvm \
 -cpu host \
--smp cores=2,threads=1,sockets=1 \
--m 4096 \
+-smp cores=$vm_num_cores,threads=$vm_threads_per_core,sockets=1 \
+-m $vm_mem_mb \
 -k fi \
 -display none \
 -net nic,model=virtio,macaddr="00:00:00:00:00:$net_id",name=eth0 \
@@ -85,7 +89,7 @@ env QEMU_ALSA_DAC_DEV=$dac QEMU_ALSA_ADC_DEV=$adc qemu-system-x86_64 $soundhw $c
 # -cpu core2duo: fixes most problems and some BSODs in Windows, especially during setup
 # -no-kvm-irqchip: required if VM hangs during POST until VNC connection is established
 # -device usb-host,hostbus=1,hostport=1: check bus and port with lsusb -t to pass a single USB port through to client
-# -device usb-ehci,id=usb,bus=pcie.0,addr=0x4: needed if passing a USB port with device detached (addr seems arbitrary)
+# -device nec-usb-xhci,id=usb,bus=pcie.0,addr=0x4: needed if passing a USB port with device detached (addr seems arbitrary)
 
 sleep 2
 
