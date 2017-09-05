@@ -1,10 +1,6 @@
 #!/bin/bash
 # Start a Qemu-KVM virtual machine. Consider this script a template to copy per virtual machine.
 
-windows_guest=0
-boot_from_cd=0
-audio=1 # not supported on Windows guests
-auto_vnc=0
 img_name="${1:-"vm.img"}"
 vm_name="${2:-"KVM"}"
 net_id=${3:-10} # used as the last number of static IP address of the guest, MAC address and VNC display
@@ -13,26 +9,41 @@ vm_mem_mb=4096
 vm_num_cores=2
 vm_threads_per_core=1
 
+windows_guest=0
+audio=1 # not supported (ignored) on Windows guests
+auto_vm_bridge=1
+auto_vnc=0
+boot_from_cd=0
+
 vm_bridge=vmbridge
 cdrom_image="image.iso"
 
-if test "X$(which gvncviewer)" != "X"
+if test "X$(which gvncviewer 2>/dev/null)" != "X"
 then
     vncviewer="gvncviewer localhost:$net_id"
-elif test "X$(which vncviewer)" != "X"
+elif test "X$(which vncviewer 2>/dev/null)" != "X"
 then
     vncviewer="vncviewer :$net_id"
 fi
 
 if test "X$(brctl show $vm_bridge 2>&1 | grep No)" != "X"
 then
-    echo "The bridge $vm_bridge does not exist. Aborting..."
-    exit
+    if test $auto_vm_bridge = 0
+    then
+        echo "The bridge $vm_bridge does not exist. Aborting..."
+        exit
+    fi
+    ./vmnetwork_up.sh
 fi
 
-modprobe kvm
-modprobe kvm-intel
 modprobe tun
+modprobe kvm
+if test "X$(lscpu | grep Intel)" != "X"
+then
+    modprobe kvm-intel
+else
+    modprobe kvm-amd
+fi
 
 pid=$(ps -ef | grep "qemu.*$vm_name" | grep -v grep | tr -s ' ' | cut -f 2 -d ' ')
 if test "X$pid" != "X"
@@ -90,6 +101,11 @@ env QEMU_ALSA_DAC_DEV=$dac QEMU_ALSA_ADC_DEV=$adc qemu-system-x86_64 $soundhw $c
 # -no-kvm-irqchip: required if VM hangs during POST until VNC connection is established
 # -device usb-host,hostbus=1,hostport=1: check bus and port with lsusb -t to pass a single USB port through to client
 # -device nec-usb-xhci,id=usb,bus=pcie.0,addr=0x4: needed if passing a USB port with device detached (addr seems arbitrary)
+
+# Contents of kvm_net_up.sh:
+#!/bin/sh
+# Argument $1 will be the name of the interface, e.g. tap0
+# /sbin/brctl addif vmbridge $1 && /bin/ip link set $1 up
 
 sleep 2
 

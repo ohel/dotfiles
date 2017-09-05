@@ -4,6 +4,7 @@
 # - Set up virtual machine bridge where VM tap devices should be added.
 # - Set up virtual localhost for consistent host access.
 # Source the network_down script to undo everything.
+
 echo -e "" > network_down
 
 if [ "$#" == 0 ]
