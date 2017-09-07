@@ -442,7 +442,7 @@ endfunction
 nnoremap <f8> :call SetFileFormat()<cr>
 
 " font zooming
-if zoom_functions == "1"
+if exists("g:zoom_functions") && g:zoom_functions == "1"
 
     if !exists("g:zoom_level")
         let g:zoom_level=0
