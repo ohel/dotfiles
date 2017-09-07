@@ -1,15 +1,17 @@
 #!/bin/bash
 # Start a Qemu-KVM virtual machine. Consider this script a template to copy per virtual machine.
+# Assumes the client has drivers installed for the paravirtualized VirtIO Ethernet Adapter,
+# VirtIO SCSI controller, and QXL video device.
 
 img_name="${1:-"vm.img"}"
 vm_name="${2:-"KVM"}"
 net_id=${3:-10} # used as the last number of static IP address of the guest, MAC address and VNC display
 
-vm_mem_mb=4096
+vm_mem_mb=8192
 vm_num_cores=2
 vm_threads_per_core=1
 
-windows_guest=0
+windows_guest=1
 audio=1 # not supported (ignored) on Windows guests
 auto_vm_bridge=1
 auto_vnc=0
@@ -62,9 +64,15 @@ adc=""
 soundhw=""
 if test $audio = 1 && test $windows_guest = 0
 then
-    modprobe snd-aloop
-    dac="hw:Loopback,0,4" # loop_vm_dac_in
-    adc="hw:Loopback,1,5" # loop_vm_adc_out
+    if test "X$(ps -e | grep pulseaudio)" = "X"
+    then
+        modprobe snd-aloop
+        dac="hw:Loopback,0,4" # loop_vm_dac_in
+        adc="hw:Loopback,1,5" # loop_vm_adc_out
+        sound_params="QEMU_ALSA_DAC_DEV=$dac QEMU_ALSA_ADC_DEV=$adc"
+    else
+        sound_params="QEMU_AUDIO_DRV=pa"
+    fi
     soundhw="-soundhw hda"
 fi
 
@@ -80,8 +88,14 @@ then
     cursor_fix="-usbdevice tablet"
 fi
 
+vga=std
+if test "X$(echo quit | qemu-system-x86_64 -vga qxl -machine none -nographic 2>&1 | grep QXL)" = "X"
+then
+    vga=qxl
+fi
+
 echo "Starting the virtual machine..."
-env QEMU_ALSA_DAC_DEV=$dac QEMU_ALSA_ADC_DEV=$adc qemu-system-x86_64 $soundhw $cursor_fix \
+env $sound_params qemu-system-x86_64 $soundhw $cursor_fix \
 -daemonize \
 -name "$vm_name" \
 -boot $bootstring \
@@ -91,7 +105,7 @@ env QEMU_ALSA_DAC_DEV=$dac QEMU_ALSA_ADC_DEV=$adc qemu-system-x86_64 $soundhw $c
 -m $vm_mem_mb \
 -k fi \
 -display none \
--vga std \
+-vga $vga \
 -net nic,model=virtio,macaddr="00:00:00:00:00:$net_id",name=eth0 \
 -net tap,script="kvm_net_up.sh" \
 -drive file="$img_name",if=virtio,format=raw \
@@ -104,7 +118,8 @@ env QEMU_ALSA_DAC_DEV=$dac QEMU_ALSA_ADC_DEV=$adc qemu-system-x86_64 $soundhw $c
 # -no-kvm-irqchip \
 # * Pass a single USB port through to client (check bus and port with lsusb -t):
 # -device usb-host,hostbus=1,hostport=1 \
-# * To pass an USB port with device detached and (no port in lsusb -t output; addr seems arbitrary):
+# (NB: not all USB ports can be passed through: USB 3.0 (XHCI) seems to work better than EHCI.)
+# * To pass an USB port with device detached (no port in lsusb -t output; addr seems arbitrary):
 # -device nec-usb-xhci,id=usb,bus=pcie.0,addr=0x4 \
 
 # Contents of kvm_net_up.sh:
