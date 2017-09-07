@@ -68,61 +68,64 @@ inoremap <tab> <c-r>=TabOrComplete()<cr>
 " insert real tab on shift-tab
 inoremap <s-tab> <c-q><tab>
 
+let g:zoom_functions = 1
+
 if has('win32') || has ('win64')
 
-    let $VIMHOME=$VIM."/vimfiles"
+    let $VIMHOME=$HOME . "/_vim"
+
     set guifont=ProggyCleanTTSZ:h12:cANSI
     let g:dfont="ProggyCleanTTSZ"
-    let g:daltfont="Bitstream_Vera_Sans_Mono"
-    set undodir=$VIMHOME
-    set undofile
-    " set swap directory
-    if isdirectory("~/.vim")
-       set directory=~/.vim
+    let g:daltfont="Consolas"
+
+    if filereadable($VIMRUNTIME . "/colors/minigun.vim")
+        colorscheme minigun
     endif
 
 else
 
-    let $VIMHOME=$HOME."/.vim"
+    let $VIMHOME=$HOME . "/.vim"
     set clipboard=unnamedplus " alias unnamed register to +
-    let g:zoom_functions = 1
+
     set guifont=Monospace\ 12
-    let g:dfont="ProggyCleanTTSZ"
+    let g:dfont="Monospace"
     let g:daltfont="Monospace"
 
-    if !filereadable(expand("~/.vim/colors/minigun.vim"))
+    if !filereadable($VIMHOME . "/colors/minigun.vim")
         echo("Downloading color scheme...")
-        silent !curl -fLo ~/.vim/colors/minigun.vim --create-dirs https://raw.githubusercontent.com/ohel/dotfiles/master/themes/minigun.vim
+        silent !curl -fLo $VIMHOME/colors/minigun.vim --create-dirs https://raw.githubusercontent.com/ohel/dotfiles/master/themes/minigun.vim
     endif
     colorscheme minigun
-
-    silent !mkdir -p "$HOME/.vim/undodir"
-    set undodir=~/.vim/undodir
-    set undofile
 
     " create default ctags database with a command such as:
     " ctags -R -f ctagsdb --c++-kinds=+p --fields=+iaS --extra=+q /usr/lib64/gcc/x86_64-pc-linux-gnu/$(ls -t1 /usr/lib64/gcc/x86_64-pc-linux-gnu/)/include/
     if executable('ctags')
-        nnoremap <c-f1> :!ctags -R -f ~/.vim/ctagsdb --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
+        nnoremap <c-f1> :!ctags -R -f $VIMHOME/ctagsdb --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
     endif
 
     " plugins
-    if !isdirectory(expand("~/.vim/autoload"))
-        silent call mkdir($HOME . '/.vim/autoload')
+    if !isdirectory($VIMHOME . "/autoload")
+        silent call mkdir($HOME . "/.vim/autoload")
     endif
-    if !filereadable(expand("~/.vim/autoload/plug.vim"))
+    if !filereadable($VIMHOME . "/autoload/plug.vim")
         echo("Downloading vim-plug...")
-        silent !curl -fLo ~/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        silent !curl -fLo $VIMHOME/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     endif
-    if !isdirectory(expand("~/.vim/bundle"))
-        silent call mkdir($HOME . '/.vim/bundle')
+    if !isdirectory($VIMHOME . "/bundle")
+        silent call mkdir($HOME . "/.vim/bundle")
     endif
-    if !filereadable(expand("~/.vim/autoload/pathogen.vim"))
+    if !filereadable($VIMHOME . "/autoload/pathogen.vim")
         echo("Downloading pathogen...")
-        silent !curl -fLo ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+        silent !curl -fLo $VIMHOME/autoload/pathogen.vim https://tpo.pe/pathogen.vim
     endif
 
 endif
+
+if !isdirectory($VIMHOME . "/undodir")
+    silent call mkdir ($VIMHOME . "/undodir", "p")
+endif
+set undodir=$VIMHOME/undodir
+set undofile
 
 " syntax and file type detection etc.
 syntax on
@@ -135,68 +138,68 @@ autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-autocmd FileType cpp set tags +=~/.vim/ctagsdb
+autocmd FileType cpp set tags +=$VIMHOME/ctagsdb
 
-if filereadable(expand("~/.vim/autoload/plug.vim"))
-    call plug#begin('~/.vim/plugged')
+if filereadable($VIMHOME . "/autoload/plug.vim")
+    call plug#begin('$VIMHOME/plugged')
     Plug 'jreybert/vimagit'
     Plug 'justinmk/vim-gtfo'
     Plug 'kana/vim-arpeggio'
     Plug 'leafgarland/typescript-vim'
-    Plug 'maksimr/vim-jsbeautify', { 'do': 'cd ~/.vim/plugged/vim-jsbeautify && git submodule update --init --recursive' }
+    Plug 'maksimr/vim-jsbeautify', { 'do': 'cd $VIMHOME/plugged/vim-jsbeautify && git submodule update --init --recursive' }
     Plug 'Shougo/unite-outline' " Unite source providing outline view of current buffer
     Plug 'Shougo/unite.vim'
-    Plug 'Shougo/vimproc.vim', { 'do': 'cd ~/.vim/plugged/vimproc.vim && make -f make_unix.mak' } " allows async operations
+    Plug 'Shougo/vimproc.vim', { 'do': 'cd $VIMHOME/plugged/vimproc.vim && make -f make_unix.mak' } " allows async operations
     Plug 'tomtom/tcomment_vim' " code commenting
-    Plug 'Valloric/YouCompleteMe', { 'on': [], 'do': 'cd ~/.vim/plugged/YouCompleteMe && ./install.py' }
+    Plug 'Valloric/YouCompleteMe', { 'on': [], 'do': 'cd $VIMHOME/plugged/YouCompleteMe && ./install.py' }
     call plug#end()
 endif
 
 " https://github.com/tpope/vim-pathogen
-if filereadable(expand("~/.vim/autoload/pathogen.vim"))
+if filereadable($VIMHOME . "/autoload/pathogen.vim")
     execute pathogen#infect()
 endif
 
 " https://github.com/Quramy/tsuquyomi
-if isdirectory(expand("~/.vim/bundle/tsuquyomi"))
+if isdirectory($VIMHOME . "/bundle/tsuquyomi")
     autocmd FileType typescript setlocal completeopt+=menu,preview
 endif
 
 " http://vim-taglist.sourceforge.net/
-if filereadable(expand("~/.vim/plugin/taglist.vim"))
+if filereadable($VIMHOME . "/plugin/taglist.vim")
     nnoremap <f1> :TlistToggle<cr>
     inoremap <f1> <c-o>:TlistToggle<cr>
 endif
 
 " https://github.com/rkulla/pydiction
-if filereadable(expand("~/.vim/after/ftplugin/python_pydiction.vim"))
-    let g:pydiction_location = '~/.vim/pydiction/complete-dict'
+if filereadable($VIMHOME . "/after/ftplugin/python_pydiction.vim")
+    let g:pydiction_location = '$VIMHOME/pydiction/complete-dict'
     let g:pydiction_menu_height = 15
 endif
 
-if isdirectory(expand("~/.vim/plugged/tcomment_vim"))
+if isdirectory($VIMHOME . "/plugged/tcomment_vim")
     let g:tcommentMapLeaderOp1 = 'å'
 endif
 
-if isdirectory(expand("~/.vim/plugged/vim-gtfo"))
+if isdirectory($VIMHOME . "/plugged/vim-gtfo")
     let g:gtfo#terminals = { 'unix' : 'xfce4-terminal' }
 endif
 
 " YCM may be a bit too intrusive so load it only on demand.
-if isdirectory(expand("~/.vim/plugged/YouCompleteMe"))
+if isdirectory($VIMHOME . "/plugged/YouCompleteMe")
     function! LoadYCM()
         call plug#load('YouCompleteMe') | call youcompleteme#Enable() | YcmCompleter
     endfunction
     nnoremap <a-t> :call LoadYCM()<cr>:echo "YouCompleteMe loaded."<cr>
 endif
 
-if isdirectory(expand("~/.vim/plugged/vim-arpeggio"))
+if isdirectory($VIMHOME . "/plugged/vim-arpeggio")
     " insert mode toggles, grave moves to ^ (editing mark)
     call arpeggio#map('i', '', 0, 'fj', '<esc>`^')
     call arpeggio#map('n', '', 0, 'fj', 'i')
 endif
 
-if isdirectory(expand("~/.vim/plugged/unite.vim"))
+if isdirectory($VIMHOME . "/plugged/unite.vim")
     if executable('ag')
         let g:unite_source_grep_command = 'ag'
         let g:unite_source_grep_default_opts = '--vimgrep -i --silent'
@@ -461,7 +464,7 @@ if exists("g:zoom_functions") && g:zoom_functions == "1"
             let fontsize = 10
         endif
         let g:zoom_level = g:zoom_level + 1
-        if has("win32")
+        if has('win32') || has ('win64')
             let &guifont = fontname . ":h" . fontsize . ":cANSI"
         else
             let &guifont = fontname . " " . fontsize
@@ -485,7 +488,7 @@ if exists("g:zoom_functions") && g:zoom_functions == "1"
             let fontsize = 12
         endif
         let g:zoom_level = g:zoom_level - 1
-        if has("win32")
+        if has('win32') || has ('win64')
             let &guifont = fontname . ":h" . fontsize . ":cANSI"
         else
             let &guifont = fontname . " " . fontsize
@@ -556,6 +559,7 @@ au VimEnter * call OnVimEnter()
 
 if hostname() == "minigun"
     set guifont=ProggyCleanTTSZ\ 12
+    let g:dfont="ProggyCleanTTSZ"
 elseif hostname() == "gainasus"
     let g:zoom_level=2
 elseif hostname() == "oheldell"
