@@ -91,16 +91,21 @@ env QEMU_ALSA_DAC_DEV=$dac QEMU_ALSA_ADC_DEV=$adc qemu-system-x86_64 $soundhw $c
 -m $vm_mem_mb \
 -k fi \
 -display none \
+-vga std \
 -net nic,model=virtio,macaddr="00:00:00:00:00:$net_id",name=eth0 \
 -net tap,script="kvm_net_up.sh" \
 -drive file="$img_name",if=virtio,format=raw \
 -vnc :$net_id
 
 # Common workarounds and tweaks:
-# -cpu core2duo: fixes most problems and some BSODs in Windows, especially during setup
-# -no-kvm-irqchip: required if VM hangs during POST until VNC connection is established
-# -device usb-host,hostbus=1,hostport=1: check bus and port with lsusb -t to pass a single USB port through to client
-# -device nec-usb-xhci,id=usb,bus=pcie.0,addr=0x4: needed if passing a USB port with device detached (addr seems arbitrary)
+# * Fixes most problems and some BSODs in Windows, especially during setup:
+# -cpu core2duo \
+# * Required if VM hangs during POST until VNC connection is established:
+# -no-kvm-irqchip \
+# * Pass a single USB port through to client (check bus and port with lsusb -t):
+# -device usb-host,hostbus=1,hostport=1 \
+# * To pass an USB port with device detached and (no port in lsusb -t output; addr seems arbitrary):
+# -device nec-usb-xhci,id=usb,bus=pcie.0,addr=0x4 \
 
 # Contents of kvm_net_up.sh:
 #!/bin/sh
