@@ -182,7 +182,7 @@ if isdirectory($VIMHOME . "/plugged/tcomment_vim")
 endif
 
 if isdirectory($VIMHOME . "/plugged/vim-gtfo") && executable('xfce4-terminal')
-    let g:gtfo#terminals = { 'unix' : 'gtfo() { xfce4-terminal --default-working-directory=$1; } && gtfo' }
+    let g:gtfo#terminals = { 'unix' : 'gtfo() { xfce4-terminal --default-working-directory="$1"; } && gtfo' }
 endif
 
 " YCM may be a bit too intrusive so load it only on demand.
