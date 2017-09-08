@@ -127,7 +127,7 @@ s0_toggle_window_shaded_key = Disabled
 s0_hsize = 2
 
 [put]
-s0_put_center_key = <Super>r
+s0_put_center_key = <Super>n
 s0_put_left_key = <Super>h
 s0_put_right_key = <Super>l
 s0_put_top_key = <Super>k
@@ -138,6 +138,7 @@ s0_put_bottomleft_key = Disabled
 s0_put_bottomright_key = Disabled
 s0_put_restore_key = Disabled
 s0_put_pointer_key = Disabled
+s0_put_next_output_key = <Super>o
 s0_pad_left = 10
 s0_pad_right = 10
 s0_pad_top = 10
@@ -147,7 +148,7 @@ s0_speed = 12.500000
 s0_timestep = 0.100000
 
 [grid]
-s0_put_center_key = Disabled
+s0_put_center_key = <Alt><Super>o
 s0_put_left_key = <Alt><Super>h
 s0_put_right_key = <Alt><Super>l
 s0_put_top_key = <Alt><Super>k
@@ -157,7 +158,7 @@ s0_put_topright_key = <Alt><Super>KP_Prior
 s0_put_bottomleft_key = <Alt><Super>KP_End
 s0_put_bottomright_key = <Alt><Super>KP_Next
 s0_put_maximize_key = Disabled
-s0_put_restore_key = <Alt><Super>r
+s0_put_restore_key = <Alt><Super>n
 s0_left_maximize = Disabled
 s0_right_maximize = Disabled
 s0_top_left_corner_action = 7
