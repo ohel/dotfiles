@@ -181,6 +181,8 @@ if isdirectory($VIMHOME . "/plugged/tcomment_vim")
     let g:tcommentMapLeaderOp1 = 'å'
 endif
 
+" A '-d directory' style syntax is assumed by vim-gtfo, but xfce4-terminal only
+" supports '--dir=directory' style syntax, so we use a workaround function.
 if isdirectory($VIMHOME . "/plugged/vim-gtfo") && executable('xfce4-terminal')
     let g:gtfo#terminals = { 'unix' : 'gtfo() { xfce4-terminal --default-working-directory="$1"; } && gtfo' }
 endif
