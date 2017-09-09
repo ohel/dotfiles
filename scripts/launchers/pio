@@ -1,0 +1,8 @@
+#!/bin/sh
+# Use PlatformIO via a script.
+# To install and update PlatformIO, use:
+# pip install --target=$piopath -U platformio
+
+piopath=/opt/programs/platformio
+export PYTHONPATH="${PYTHONPATH}:$piopath"
+env python $piopath/platformio "$@"
