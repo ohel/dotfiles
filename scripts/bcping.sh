@@ -5,10 +5,23 @@
 
 first_ip=${1:-1}
 last_ip=${2:-254}
-net=$(ifconfig | grep "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | grep -v "127.0.0.1" | head -n 1 | tr -s ' ' | cut -f 3 -d ' ' | cut -f -3 -d .)
+
+for physical_device in $(ls -l /sys/class/net | grep devices\/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')
+do
+    ip=$(ip addr show $physical_device | grep -o "inet [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | cut -f 2 -d ' ')
+    if test "X$ip" != "X"
+    then
+        subnet=$(echo $ip | cut -f 1 -d '.')
+        break
+    fi
+done
+
 ip=$first_ip
 while [ $ip -le $last_ip ]
 do
-    ping -c 1 -n $net.$ip | grep "64 bytes" 2>/dev/null &
+    ping -c 1 -n $subnet.$ip 2>/dev/null | grep "64 bytes" &
     ip=$(expr $ip + 1)
 done
+
+sleep 0.1
+echo
