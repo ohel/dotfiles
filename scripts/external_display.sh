@@ -31,6 +31,7 @@ then
     echo "Switching off external display."
     xrandr --output $primary_display --mode "$primary_mode" --primary
     xrandr --output $secondary_display --off
+    secondary_background=""
     rm $testfile
 elif test "X$secondary_mode" != "X"
 then
