@@ -42,5 +42,4 @@ rootheight=$(($rootheight>1200?1200:$rootheight))
 width=$rootwidth
 height=$(expr $rootheight - ${panelheight:-0})
 
-set -x
 xfreerdp /v:$ip /size:"$width"x"$height" /network:lan -decorations +clipboard -grab-keyboard /u:$user /p:$pass $cliparams
