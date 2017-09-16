@@ -198,7 +198,7 @@ endif
 if isdirectory($VIMHOME . "/plugged/vim-arpeggio")
     " insert mode toggles, grave moves to ^ (editing mark)
     call arpeggio#map('i', '', 0, 'fj', '<esc>`^')
-    call arpeggio#map('n', '', 0, 'fj', 'i')
+    call arpeggio#map('n', '', 0, 'fj', 'i<c-r>=col(".") == col("$")-1 ? "\<lt>right>" : ""<cr>')
 endif
 
 if isdirectory($VIMHOME . "/plugged/unite.vim")
@@ -287,16 +287,18 @@ inoremap <silent> <s-end> <c-o>v<end><left>
 " common copy hotkeys
 nnoremap <c-insert> V"+y<esc>:echo "Line copied."<cr>
 vnoremap <c-insert> "+y<esc>:echo "Copied."<cr>
-inoremap <c-insert> <esc>`^bve
 vnoremap <c-c> "+y<esc>:echo "Copied."<cr>
+" go to visual mode for copying word under cursor
+inoremap <c-insert> <esc>`^bve
 
 " common insert hotkeys
-nnoremap <s-insert> "+P
-inoremap <s-insert> <esc>"+pa
+nnoremap <s-insert> "+Pl
+inoremap <s-insert> <c-r>=col('.') == col('$') ? "\<lt>esc>`^\"+pa" : "\<lt>esc>`^\"+Pa"<cr>
 inoremap <c-v> <c-r>=col('.') == col('$') ? "\<lt>esc>`^\"+pa" : "\<lt>esc>`^\"+Pa"<cr>
+cnoremap <c-b> <c-r>"
 " replace contents
-vnoremap <s-insert> "_x"+P
-vnoremap <c-v> "_x"+P
+vnoremap <silent> <s-insert> :<backspace><backspace><backspace><backspace><backspace>execute col('.') == col('$')-1 ? "normal! gv\"_x\"+pl" : "normal! gv\"_x\"+Pl"<cr>
+vnoremap <silent> <c-v> :<backspace><backspace><backspace><backspace><backspace>execute col('.') == col('$')-1 ? "normal! gv\"_x\"+pl" : "normal! gv\"_x\"+Pl"<cr>
 
 " common search hotkey
 inoremap <c-f> <esc>`^/
