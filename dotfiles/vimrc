@@ -69,33 +69,34 @@ inoremap <tab> <c-r>=TabOrComplete()<cr>
 inoremap <s-tab> <c-q><tab>
 
 let g:zoom_functions = 1
+let $VIMHOME=$HOME . "/.vim"
 
 if has('win32') || has ('win64')
 
-    let $VIMHOME=$HOME . "/_vim"
+    " vim in MinGW always uses .vim
+    if !isdirectory($HOME . "/.vim")
+        let $VIMHOME=$HOME . "/_vim"
+    endif
 
     set guifont=ProggyCleanTTSZ:h12:cANSI
     let g:dfont="ProggyCleanTTSZ"
     let g:daltfont="Consolas"
 
-    if filereadable($VIMRUNTIME . "/colors/minigun.vim")
-        colorscheme minigun
-    endif
-
 else
 
-    let $VIMHOME=$HOME . "/.vim"
+    if !filereadable($VIMHOME . "/colors/minigun.vim")
+        if !isdirectory($VIMHOME . "/colors")
+            silent call mkdir($VIMHOME . "/colors")
+        endif
+        echo("Downloading color scheme...")
+        silent !curl -fLo $VIMHOME/colors/minigun.vim --create-dirs https://raw.githubusercontent.com/ohel/dotfiles/master/themes/minigun.vim
+    endif
+
     set clipboard=unnamedplus " alias unnamed register to +
 
     set guifont=Monospace\ 12
     let g:dfont="Monospace"
     let g:daltfont="Monospace"
-
-    if !filereadable($VIMHOME . "/colors/minigun.vim")
-        echo("Downloading color scheme...")
-        silent !curl -fLo $VIMHOME/colors/minigun.vim --create-dirs https://raw.githubusercontent.com/ohel/dotfiles/master/themes/minigun.vim
-    endif
-    silent! colorscheme minigun
 
     " create default ctags database with a command such as:
     " ctags -R -f ctagsdb --c++-kinds=+p --fields=+iaS --extra=+q /usr/lib64/gcc/x86_64-pc-linux-gnu/$(ls -t1 /usr/lib64/gcc/x86_64-pc-linux-gnu/)/include/
@@ -105,20 +106,24 @@ else
 
     " plugins
     if !isdirectory($VIMHOME . "/autoload")
-        silent call mkdir($HOME . "/.vim/autoload")
+        silent call mkdir($VIMHOME . "/autoload")
     endif
     if !filereadable($VIMHOME . "/autoload/plug.vim")
         echo("Downloading vim-plug...")
         silent !curl -fLo $VIMHOME/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     endif
-    if !isdirectory($VIMHOME . "/bundle")
-        silent call mkdir($HOME . "/.vim/bundle")
-    endif
     if !filereadable($VIMHOME . "/autoload/pathogen.vim")
         echo("Downloading pathogen...")
         silent !curl -fLo $VIMHOME/autoload/pathogen.vim https://tpo.pe/pathogen.vim
     endif
+    if !isdirectory($VIMHOME . "/bundle")
+        silent call mkdir($VIMHOME . "/bundle")
+    endif
 
+endif
+
+if filereadable($VIMHOME . "/colors/minigun.vim") || filereadable($VIMRUNTIME . "/colors/minigun.vim")
+    colorscheme minigun
 endif
 
 if !isdirectory($VIMHOME . "/undodir")
@@ -141,7 +146,9 @@ autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 autocmd FileType cpp set tags +=$VIMHOME/ctagsdb
 
 if filereadable($VIMHOME . "/autoload/plug.vim")
-    call plug#begin('$VIMHOME/plugged')
+    silent! call plug#begin($VIMHOME . "/plugged")
+endif
+if exists("*plug#begin")
     Plug 'jreybert/vimagit'
     Plug 'justinmk/vim-gtfo'
     Plug 'kana/vim-arpeggio'
@@ -157,7 +164,7 @@ endif
 
 " https://github.com/tpope/vim-pathogen
 if filereadable($VIMHOME . "/autoload/pathogen.vim")
-    execute pathogen#infect()
+    silent! execute pathogen#infect()
 endif
 
 " https://github.com/Quramy/tsuquyomi
