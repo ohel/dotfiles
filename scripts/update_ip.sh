@@ -22,11 +22,14 @@ fi
 echo
 echo WAN IP: $ip
 echo
-echo -n "Press return to publish WAN IP."
-read
 
 # Use a secret script to upload contents of $ip variable somewhere publicly available.
-source ~/.scripts_extra/publiship.sh 2>/dev/null
+if [ -e ~/.scripts_extra/publish_ip.sh ]
+then
+    echo -n "Press return to publish WAN IP."
+    read
 
-echo "Done."
+    sh ~/.scripts_extra/publish_ip.sh $ip 2>/dev/null
 
+    echo "Done."
+fi
