@@ -23,16 +23,48 @@ cd /usr/src
 if test "X$1" != "Xrt"
 then
     old_version=$(readlink linux | cut -f 2 -d '-')
-    grep_opts="-v"
+    rt_grep_opts="-v"
 else
     old_version=$(find ./ -maxdepth 1 -type d | grep rt | sort | tail -n 2 | head -n 1 | cut -f 2 -d '/' | cut -f 2 -d '-')
 fi
-new_version=$(find ./ -maxdepth 1 -type d | grep $grep_opts rt | sort | tail -n 1 | cut -f 2 -d '/' | cut -f 2 -d '-')
+new_version=$(find ./ -maxdepth 1 -type d | grep $rt_grep_opts rt | sort | tail -n 1 | cut -f 2 -d '/' | cut -f 2 -d '-')
+
+function cleanup {
+    keep_version=$1
+    rt_grep_opts=$2
+    prefix=$3
+    old_versions=$(ls -d /usr/src/$prefix-* | grep $rt_grep_opts rt | grep -v $keep_version | xargs -I {} basename {} | cut -f 2 -d '-')
+    if [ ${#old_versions[0]} -gt 0 ]
+    then
+        echo "Found old versions in /usr/src:"
+        echo $old_versions
+        echo
+        echo "Press y to remove them, any other key to skip."
+        echo "Files of those versions in /boot and /lib/modules will also be removed."
+        read -n1 remove
+        if test "X$remove" = "Xy"
+        then
+            echo
+            for version in $old_versions
+            do
+                rm -rf /usr/src/linux-$version
+                rm -rf /lib/modules/$version
+                rm /boot/System.map-$version 2>/dev/null
+                rm /boot/kernel-$version 2>/dev/null
+                echo "Removed kernel version $version files."
+            done
+        fi
+    else
+        echo "Found nothing to clean up."
+    fi
+    echo
+}
 
 if test $old_version = $new_version
 then
-    echo "New kernel was not found, aborting."
+    echo "New kernel was not found."
     cd $cwd
+    cleanup $new_version $rt_grep_opts $prefix
     exit
 fi
 
@@ -41,38 +73,33 @@ echo "Press any key to continue, Ctrl-C to abort."
 read
 
 cp $prefix-$old_version/.config $prefix-$new_version/
-echo "Config file copied."
 
 cd $prefix-$new_version
 make oldconfig
-echo "Config file prepared. Starting to compile."
 make
-echo "Done compiling. Installing modules..."
+echo "Compiled kernel."
 make modules_install
+echo "Installed modules."
 
-echo "Copying System.map..."
 cp System.map /boot/System.map-$new_version
-echo "Copying kernel image..."
+echo "Copied System.map."
 cp arch/x86_64/boot/bzImage /boot/kernel-$new_version
+echo "Copied kernel image."
 
 if test "X$1" != "Xrt"
 then
-    echo "Updating kernel symlink..."
     cd ..
     rm linux
     ln -s $prefix-$new_version linux
+    echo "Updated kernel symlink."
 else
     echo "Using RT kernel, symlink is not updated."
 fi
 
-echo "Updating grub config..."
 sed -i "s/$old_version/$new_version/g" /boot/grub/grub.conf
+echo "Updated grub config."
+echo
 
 cd "$cwd"
 
-echo "All done."
-echo "Existing kernel modules in /lib/modules:"
-ls /lib/modules/
-echo "Existing kernels in /boot:"
-ls /boot/kernel*
-echo
+cleanup $new_version $rt_grep_opts $prefix
