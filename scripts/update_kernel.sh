@@ -23,17 +23,18 @@ cd /usr/src
 if test "X$1" != "Xrt"
 then
     old_version=$(readlink linux | cut -f 2 -d '-')
-    rt_grep_opts="-v"
+    rt_grep_opts="-v -s"
 else
-    old_version=$(find ./ -maxdepth 1 -type d | grep rt | sort | tail -n 2 | head -n 1 | cut -f 2 -d '/' | cut -f 2 -d '-')
+    old_version=$(find ./ -maxdepth 1 -type d | grep rt | tail -n 2 | head -n 1 | cut -f 2 -d '/' | cut -f 2- -d '-')
+    rt_grep_opts="-s"
 fi
-new_version=$(find ./ -maxdepth 1 -type d | grep $rt_grep_opts rt | sort | tail -n 1 | cut -f 2 -d '/' | cut -f 2 -d '-')
+new_version=$(find ./ -maxdepth 1 -type d | grep $rt_grep_opts rt | tail -n 1 | cut -f 2 -d '/' | cut -f 2- -d '-')
 
 function cleanup {
     keep_version=$1
     rt_grep_opts=$2
     prefix=$3
-    old_versions=$(ls -d /usr/src/$prefix-* | grep $rt_grep_opts rt | grep -v $keep_version | xargs -I {} basename {} | cut -f 2 -d '-')
+    old_versions=$(ls -d /usr/src/$prefix-* | grep $rt_grep_opts rt | grep -v $keep_version | xargs -I {} basename {} | cut -f 2- -d '-')
     if [ ${#old_versions[0]} -gt 0 ]
     then
         echo "Found old versions in /usr/src:"
