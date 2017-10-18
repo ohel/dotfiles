@@ -18,22 +18,28 @@ shift
 
 while [ -n "$1" ]
 do
+    echo ""
+
+    if test "X$(echo $1 | grep thumb_.*\.jpg)" != "X"; then
+        echo "Skipped creating thumbnail for $1"
+        shift
+        continue
+    fi
 
     filename_thumb=thumb_"${1%.*}".jpg
-
     if [ -e "$filename_thumb" ]
     then
-        echo "Error: the picture $filename_thumb exists. Move it away."
+        echo "The thumbnail $filename_thumb already exists."
+        echo "Skipped creating thumbnail for $1"
         shift
         continue
     fi
 
     convert "$1" -resize "$size"x"$size" -strip -quality 75 "$filename_thumb"
 
-    echo "Created thumbnail: $filename_thumb"
-    echo "Copy-paste for the blog:"
+    echo "Created thumbnail $filename_thumb"
+    echo "Copy-paste for a Markdown blog post:"
     echo "[![Alt text]($filename_thumb \"Optional image caption.\")]($1)"
-    echo ""
 
     shift
 
