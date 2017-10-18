@@ -4,8 +4,10 @@
 # A dummy .htaccess file is written also.
 # Creates image thumbnail links if they exist (thumb_*.jpg).
 
-root=${1:-"."}
-index="index.html" 
+root=${1:-$(basename $(pwd))}
+index="index.html"
+
+echo "Creating index for /$root"
 
 echo "<html lang=\"en\"><head><meta charset=\"utf-8\">" > $index
 echo "<style> a { text-decoration: none; } </style>" >> $index
