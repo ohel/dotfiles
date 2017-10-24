@@ -1,3 +1,4 @@
+au VimEnter * call OnVimEnter()
 au GUIEnter * set lines=31 columns=107 " set window size when starting in GUI mode
 let g:dlines=31 " put default window size in memory
 let g:dcols=107
@@ -18,7 +19,6 @@ set ic " set ignore case on searches, remedy with set noic or use \C in search t
 set number  " line numbering
 set textwidth=0 " define text width if autowrapping: 0 disables autowrap, wraps to 80 on manual wrap (gq)
 let g:leave_my_textwidth_alone=1 " don't autowrap lines while typing
-let g:netrw_list_hide='\(^\|\s\s\)\zs\.\S\+' " hide dotfiles by default in Netrw Directory Listing
 set go-=T " hide toolbar
 set go-=m " hide menu
 set go-=t " disable tear-off menus
@@ -31,9 +31,6 @@ set pastetoggle=<f4> " toggle paste mode (no auto indent)
 
 " let mapleader = ' '
 map <space> <leader>
-
-" Netrw Directory Listing on new tab
-nnoremap <silent><leader>n :tabe .<cr>
 
 " last command
 nnoremap <silent><leader>c :<up><cr>
@@ -566,7 +563,24 @@ function! OnVimEnter()
 
 endfunction
 
-au VimEnter * call OnVimEnter()
+
+
+" netrw explorer config
+let g:netrw_list_hide='\(^\|\s\s\)\zs\.\S\+' " hide dotfiles by default in Netrw Directory Listing
+let g:netrw_liststyle = 3
+let g:netrw_banner = 0
+let g:netrw_browse_split = 4
+let g:netrw_winsize = 25
+function! ToggleNetrw()
+    if &ft ==# "netrw"
+        :exe "vertical resize ".string(&columns * 0.25)
+    else
+        :exe "normal :Vexplore .\<cr>"
+    endif
+endfunction
+nnoremap <silent><leader>n :call ToggleNetrw()<cr>
+
+
 
 if hostname() == "minigun"
     set guifont=ProggyCleanTTSZ\ 12
