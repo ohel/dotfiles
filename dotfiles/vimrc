@@ -533,6 +533,8 @@ function! OnVimEnter()
             vnoremap <leader>f :Unite -start-insert file_rec/git buffer<cr><c-r>*
         endif
 
+        nnoremap <leader>u :UniteResume<cr>
+        nnoremap <leader>o :Unite outline<cr>
         nnoremap <leader>g :Unite grep:.:<cr>
         " search selected text
         vnoremap <leader>g :Unite grep:.::<c-r>*<cr>
@@ -540,7 +542,6 @@ function! OnVimEnter()
         nnoremap <leader>gf :Unite grep:.::<c-r>=expand('%:t')<cr><cr>
         " search Angular.js keywords
         nnoremap <leader>ga :Unite -start-insert grep:.::\\.(filter\|provider\|controller\|directive\|factory\|service)\\(\\'.+\\'<cr>
-        nnoremap <leader>u :UniteResume<cr>
     endif
 
     " jsbeautify
@@ -573,7 +574,7 @@ let g:netrw_browse_split = 4
 let g:netrw_winsize = 25
 function! ToggleNetrw()
     if &ft ==# "netrw"
-        :exe "vertical resize ".string(&columns * 0.25)
+        :exe "normal \<c-w>c"
     else
         :exe "normal :Vexplore .\<cr>"
     endif
