@@ -65,7 +65,9 @@ if test $old_version = $new_version
 then
     echo "New kernel was not found."
     cd $cwd
-    cleanup $new_version $rt_grep_opts $prefix
+    cleanup $new_version "$rt_grep_opts" $prefix
+    echo "All done."
+    read
     exit
 fi
 
@@ -103,4 +105,7 @@ echo
 
 cd "$cwd"
 
-cleanup $new_version $rt_grep_opts $prefix
+cleanup $new_version "$rt_grep_opts" $prefix
+
+echo All done.
+read
