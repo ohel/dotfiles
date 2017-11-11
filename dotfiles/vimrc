@@ -156,6 +156,12 @@ if exists("*plug#begin")
     Plug 'Shougo/vimproc.vim', { 'do': 'cd $VIMHOME/plugged/vimproc.vim && make -f make_unix.mak' } " allows async operations
     Plug 'tomtom/tcomment_vim' " code commenting
     Plug 'Valloric/YouCompleteMe', { 'on': [], 'do': 'cd $VIMHOME/plugged/YouCompleteMe && ./install.py' }
+    if executable('node') && executable('yarn')
+        " default trigger is <leader>p
+        Plug 'prettier/vim-prettier', {
+          \ 'do': 'yarn install',
+          \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown'] }
+    endif
     call plug#end()
 endif
 
