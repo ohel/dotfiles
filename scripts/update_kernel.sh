@@ -25,10 +25,10 @@ then
     old_version=$(readlink linux | cut -f 2 -d '-')
     rt_grep_opts="-v -s"
 else
-    old_version=$(find ./ -maxdepth 1 -type d | grep rt | tail -n 2 | head -n 1 | cut -f 2 -d '/' | cut -f 2- -d '-')
+    old_version=$(find ./ -maxdepth 1 -type d | grep rt | sort | tail -n 2 | head -n 1 | cut -f 2 -d '/' | cut -f 2- -d '-')
     rt_grep_opts="-s"
 fi
-new_version=$(find ./ -maxdepth 1 -type d | grep $rt_grep_opts rt | tail -n 1 | cut -f 2 -d '/' | cut -f 2- -d '-')
+new_version=$(find ./ -maxdepth 1 -type d | grep $rt_grep_opts rt | sort | tail -n 1 | cut -f 2 -d '/' | cut -f 2- -d '-')
 
 function cleanup {
     keep_version=$1
