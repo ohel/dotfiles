@@ -15,10 +15,12 @@ echo Emerging @preserved-rebuild...
 sudo emerge @preserved-rebuild -j --keep-going --quiet-build
 sudo eclean -d distfiles
 sudo emerge --depclean -a
+echo
+echo "Run if necessary:"
+echo "sudo perl-cleaner --reallyall"
+echo
 echo "********************"
 echo "* Update complete! *"
 echo "********************"
 echo
-echo "Run perl-cleaner and python-updater if necessary."
 read
-
