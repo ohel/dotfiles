@@ -71,6 +71,12 @@ then
     exit
 fi
 
+if [ ! -e $prefix-$old_version/.config ]
+then
+    echo "The config file for the old version could not be found, aborting."
+    exit
+fi
+
 echo "Updating from kernel $old_version to $new_version."
 echo "Press any key to continue, Ctrl-C to abort."
 read
