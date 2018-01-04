@@ -300,13 +300,13 @@ vnoremap <c-c> "+y<esc>:echo "Copied."<cr>
 inoremap <c-insert> <esc>`^bve
 
 " common insert hotkeys
-nnoremap <s-insert> "+Pl
+nnoremap <s-insert> "+P
 inoremap <s-insert> <c-r>=col('.') == col('$') ? "\<lt>esc>`^\"+pa" : "\<lt>esc>`^\"+Pa"<cr>
 inoremap <c-v> <c-r>=col('.') == col('$') ? "\<lt>esc>`^\"+pa" : "\<lt>esc>`^\"+Pa"<cr>
 cnoremap <c-b> <c-r>"
 " replace contents
-vnoremap <silent> <s-insert> :<backspace><backspace><backspace><backspace><backspace>execute col('.') == col('$')-1 ? "normal! gv\"_x\"+pl" : "normal! gv\"_x\"+Pl"<cr>
-vnoremap <silent> <c-v> :<backspace><backspace><backspace><backspace><backspace>execute col('.') == col('$')-1 ? "normal! gv\"_x\"+pl" : "normal! gv\"_x\"+Pl"<cr>
+vnoremap <silent> <s-insert> :<esc>`>:execute col('.') == col('$')-1 ? "normal! gv\"_x\"+p" : "normal! gv\"_x\"+Pl"<cr>
+vnoremap <silent> <c-v> :<esc>`>:execute col('.') == col('$')-1 ? "normal! gv\"_x\"+p" : "normal! gv\"_x\"+Pl"<cr>
 
 " common search hotkey
 inoremap <c-f> <esc>`^/
