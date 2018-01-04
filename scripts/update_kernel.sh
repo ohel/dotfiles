@@ -10,12 +10,14 @@ cwd="$(pwd)"
 if test "$(echo $HOME)" != "/root"
 then
     echo "You must be root to update kernel."
+    read
     exit
 fi
 
 if [ ! -e /usr/src/linux ]
 then
     echo "The symbolic link /usr/src/linux does not exist, aborting."
+    read
     exit
 fi
 
@@ -74,6 +76,7 @@ fi
 if [ ! -e $prefix-$old_version/.config ]
 then
     echo "The config file for the old version could not be found, aborting."
+    read
     exit
 fi
 
@@ -86,6 +89,14 @@ cp $prefix-$old_version/.config $prefix-$new_version/
 cd $prefix-$new_version
 make oldconfig
 make
+
+if [ ! -e arch/x86_64/boot/bzImage ]
+then
+    echo "Unable to find bzImage. Aborting."
+    read
+    exit
+fi
+
 echo "Compiled kernel."
 make modules_install
 echo "Installed modules."
