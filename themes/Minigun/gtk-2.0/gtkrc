@@ -1,4 +1,4 @@
-#Minigun by Panther, based on Crude
+# Minigun gtk-2.0 by Panther, based on Crude.
 
 # Set GtkSettings color scheme property.
 # This can be overriden (via an xsetting) with eg. the gnome-appearance-properties.
