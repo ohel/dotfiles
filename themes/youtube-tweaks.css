@@ -1,10 +1,12 @@
 /* To be used with Dark Grey Youtube theme and Stylish extension.
- * Hides the comment reply and like buttons, and annoying stuff from the video frame.
+ * Hides annoying stuff from the video frame plus the the comment reply and like buttons.
  * */
 #movie_player > div.ytp-gradient-top,
 #movie_player > div.ytp-chrome-top.ytp-watch-later-button-visible.ytp-share-button-visible,
 #movie_player > div.ytp-gradient-bottom,
-div.comment-renderer-content > div.comment-renderer-footer {
+#movie_player > div.ytp-player-content.ytp-iv-player-content > div.annotation.annotation-type-custom.iv-branding,
+#movie_player > div.ytp-chrome-top.ytp-share-button-visible,
+#toolbar.ytd-comment-action-buttons-renderer
+{
 	display:none;
 }
-
