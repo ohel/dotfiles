@@ -375,10 +375,10 @@ function! SetTabWidth(newwidth)
     let &tabstop=a:newwidth
     let &shiftwidth=a:newwidth
     let &softtabstop=a:newwidth
-    echo "Tab width set to: " a:newwidth
+    echo "Tab width set to:" a:newwidth
 endfunction
 
-call SetTabWidth(4) " Default tab width.
+silent call SetTabWidth(4) " Default tab width.
 
 function! WhitespaceToTabWidth()
     normal! ^
@@ -600,5 +600,5 @@ elseif hostname() == "oheldell"
     let g:dlines=35
     let g:dcols=130
     let g:zoom_level=2
-    call SetTabWidth(2)
+    silent call SetTabWidth(2)
 endif
