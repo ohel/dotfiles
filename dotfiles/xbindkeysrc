@@ -78,9 +78,9 @@ Shift + Mod1 + j
 Shift + Mod1 + k
 
 # Backlight adjustment.
-"~/.scripts/backlight.sh -50"
+"~/.scripts/backlight.sh -25"
 Mod4 + Home
-"~/.scripts/backlight.sh 50"
+"~/.scripts/backlight.sh 25"
 Mod4 + End
 
 # Color temperature adjustment.
@@ -105,4 +105,3 @@ Mod5 + b
 #XF86AudioLowerVolume
 #"~/.scripts/softvol.sh +"
 #XF86AudioRaiseVolume
-
