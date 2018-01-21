@@ -1,46 +1,45 @@
 au VimEnter * call OnVimEnter()
-au GUIEnter * set lines=31 columns=107 " set window size when starting in GUI mode
-let g:dlines=31 " put default window size in memory
+au GUIEnter * set lines=31 columns=107 " Set window size when starting in GUI mode.
+let g:dlines=31 " Put default window size in memory.
 let g:dcols=107
 
-set tabstop=4 " tab width
 set encoding=utf-8
-set showtabline=2 " tab selector always visible
-set expandtab " expand tab to spaces, use c-q<tab> for real tab
-let &shiftwidth=&tabstop " set intend (using keys << or >>) width
-let &softtabstop=&tabstop " set indent width in insert mode using tab
-set hidden " do not close file buffers when opening a new one, use :ls to list buffers
-set hlsearch " highlight search
-set autoread " automatically update file if changed from the outside
-set backspace=indent,eol,start " make backspace clear other than new text also
-set guicursor=n-v-c:hor25-Cursor " set cursor size
-set nocp " nocompatible: enables features which are not Vi compatible
-set ic " set ignore case on searches, remedy with set noic or use \C in search term
-set number  " line numbering
-set textwidth=0 " define text width if autowrapping: 0 disables autowrap, wraps to 80 on manual wrap (gq)
-let g:leave_my_textwidth_alone=1 " don't autowrap lines while typing
-set go-=T " hide toolbar
-set go-=m " hide menu
-set go-=t " disable tear-off menus
-set go-=r " disable right scroll bar
-set incsearch " incremental search
-set virtualedit=block " allow selecting non-characters in visual block mode
+set showtabline=2 " Tab selector always visible.
+set expandtab " Expand tab to spaces, use c-q<tab> for real tab.
+let &shiftwidth=&tabstop " Set intend (using keys << or >>) width.
+let &softtabstop=&tabstop " Set indent width in insert mode using tab.
+set hidden " Do not close file buffers when opening a new one, use :ls to list buffers.
+set hlsearch " Highlight search.
+set autoread " Automatically update file if changed from the outside.
+set backspace=indent,eol,start " Make backspace clear other than new text also.
+set guicursor=n-v-c:hor25-Cursor " Set cursor size.
+set nocp " Nocompatible: enables features which are not Vi compatible.
+set ic " Set ignore case on searches, remedy with set noic or use \C in search term.
+set number  " Line numbering.
+set textwidth=0 " Define text width if autowrapping: 0 disables autowrap, wraps to 80 on manual wrap (gq).
+let g:leave_my_textwidth_alone=1 " Don't autowrap lines while typing.
+set go-=T " Hide toolbar.
+set go-=m " Hide menu.
+set go-=t " Disable tear-off menus.
+set go-=r " Disable right scroll bar.
+set incsearch " Incremental search.
+set virtualedit=block " Allow selecting non-characters in visual block mode.
 set noswapfile
-autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif " returns cursor to previous position when opening files
-set pastetoggle=<f4> " toggle paste mode (no auto indent)
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif " Returns cursor to previous position when opening files.
+set pastetoggle=<f4> " Toggle paste mode (no auto indent).
 
-" let mapleader = ' '
+" Same as "let mapleader = ' '", but more flexible.
 map <space> <leader>
 
-" last command
+" Last command.
 nnoremap <silent><leader>c :<up><cr>
 
-" sort
+" Sort.
 if executable('sort')
     vnoremap <leader>s :!sort<cr>
 endif
 
-" change directory to that of the current file
+" Change directory to that of the current file.
 nnoremap <leader>d :cd %:h<cr>:echo "wd is now" getcwd()<cr>
 
 if executable('ag')
@@ -48,7 +47,7 @@ if executable('ag')
     set grepformat=%f:%l:%c:%m
 endif
 
-" generic tab complete
+" Generic tab complete.
 function! TabOrComplete()
     if col('.') > 1 && strpart( getline('.'), col('.')-2, 2 ) =~ '^\w'
         if empty(&omnifunc)
@@ -62,7 +61,7 @@ function! TabOrComplete()
 endfunction
 inoremap <tab> <c-r>=TabOrComplete()<cr>
 
-" insert real tab on shift-tab
+" Insert real tab on shift-tab.
 inoremap <s-tab> <c-q><tab>
 
 let g:zoom_functions = 1
@@ -70,7 +69,7 @@ let $VIMHOME=$HOME . "/.vim"
 
 if has('win32') || has ('win64')
 
-    " vim in MinGW always uses .vim
+    " Vim in MinGW always uses .vim.
     if !isdirectory($HOME . "/.vim")
         let $VIMHOME=$HOME . "/_vim"
     endif
@@ -89,19 +88,19 @@ else
         silent !curl -fLo $VIMHOME/colors/minigun.vim --create-dirs https://raw.githubusercontent.com/ohel/dotfiles/master/themes/minigun.vim
     endif
 
-    set clipboard=unnamedplus " alias unnamed register to +
+    set clipboard=unnamedplus " Alias unnamed register to +.
 
     set guifont=Monospace\ 12
     let g:dfont="Monospace"
     let g:daltfont="Monospace"
 
-    " create default ctags database with a command such as:
+    " Create default ctags database with a command such as:
     " ctags -R -f ctagsdb --c++-kinds=+p --fields=+iaS --extra=+q /usr/lib64/gcc/x86_64-pc-linux-gnu/$(ls -t1 /usr/lib64/gcc/x86_64-pc-linux-gnu/)/include/
     if executable('ctags')
         nnoremap <c-f1> :!ctags -R -f $VIMHOME/ctagsdb --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
     endif
 
-    " plugins
+    " Plugins checking.
     if !isdirectory($VIMHOME . "/autoload")
         silent call mkdir($VIMHOME . "/autoload")
     endif
@@ -129,7 +128,7 @@ endif
 set undodir=$VIMHOME/undodir
 set undofile
 
-" syntax and file type detection etc.
+" Syntax and file type detection etc.
 syntax on
 filetype on
 au BufNewFile,BufRead *.xaml set filetype=xml
@@ -151,12 +150,12 @@ if exists("*plug#begin")
     Plug 'kana/vim-arpeggio'
     Plug 'leafgarland/typescript-vim'
     Plug 'maksimr/vim-jsbeautify', { 'do': 'cd $VIMHOME/plugged/vim-jsbeautify && git submodule update --init --recursive' }
-    Plug 'Shougo/unite-outline' " Unite source providing outline view of current buffer
+    Plug 'Shougo/unite-outline' " Unite source providing outline view of current buffer.
     Plug 'Shougo/unite.vim'
-    Plug 'Shougo/vimproc.vim', { 'do': 'cd $VIMHOME/plugged/vimproc.vim && make -f make_unix.mak' } " allows async operations
-    Plug 'tomtom/tcomment_vim' " code commenting
+    Plug 'Shougo/vimproc.vim', { 'do': 'cd $VIMHOME/plugged/vimproc.vim && make -f make_unix.mak' } " Allows async operations.
+    Plug 'tomtom/tcomment_vim' " Code commenting.
     Plug 'Valloric/YouCompleteMe', { 'on': [], 'do': 'cd $VIMHOME/plugged/YouCompleteMe && ./install.py' }
-    " default trigger is <leader>p
+    " Default trigger for prettier is: <leader>p
     Plug 'prettier/vim-prettier', {
       \ 'do': 'yarn install',
       \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown'] }
@@ -204,7 +203,7 @@ if isdirectory($VIMHOME . "/plugged/YouCompleteMe")
 endif
 
 if isdirectory($VIMHOME . "/plugged/vim-arpeggio")
-    " insert mode toggles, grave moves to ^ (editing mark)
+    " Insert mode toggles, grave moves to ^ (editing mark).
     call arpeggio#map('i', '', 0, 'fj', '<esc>`^')
     call arpeggio#map('n', '', 0, 'fj', 'i<c-r>=col(".") == col("$")-1 ? "\<lt>right>" : ""<cr>')
 endif
@@ -252,22 +251,22 @@ endif
 
 
 
-" uppercase commands for typos
+" Uppercase commands to counteract common typos.
 command W w
 command Q q
 command WQ wq
 command Wq wq
 
-" convert Alt Gr + space to normal space
+" Convert Alt Gr + space to normal space (counteract a common typo).
 inoremap   <space>
 
 
 
-" save
+" Save.
 inoremap <c-s> <c-r>=col('.') == col('$') ? "\<lt>esc>`^:w\<lt>cr>a" : "\<lt>esc>`^:w\<lt>cr>i"<cr>
 nnoremap <c-s> :w<cr>
 
-" tab navigation
+" Tab navigation.
 nnoremap <c-tab> :tabnext<cr>
 nnoremap <c-s-tab> :tabprevious<cr>
 inoremap <c-tab> <c-o>:tabnext<cr>
@@ -275,14 +274,14 @@ inoremap <c-s-tab> <c-o>:tabprevious<cr>
 vnoremap <c-tab> <esc>:tabnext<cr>
 vnoremap <c-s-tab> <esc>:tabprevious<cr>
 
-" select all
+" Select all.
 inoremap <c-a> <esc>gg<s-v>G
 
-" wrap to next/previous line on arrow key presses
+" Wrap to next/previous line on arrow key presses.
 inoremap <silent> <left> <c-r>=col('.') == 1 ? "\<lt>c-o>gkg$" : "\<lt>left>"<cr>
 inoremap <silent> <right> <c-r>=col('.') == col('$') ? "\<lt>c-o>gjg0" : "\<lt>right>"<cr>
 
-" emulate common shift + keys functionality
+" Emulate common shift + keys functionality.
 inoremap <silent> <s-up> <c-o>v<up>
 vnoremap <silent> <s-up> <up>
 inoremap <silent> <s-down> <c-o>v<down>
@@ -292,57 +291,57 @@ inoremap <silent> <s-right> <c-r>=col('.') == col('$') ? "\<lt>c-o>gjg0v" : "\<l
 inoremap <silent> <s-home> <left><c-o>v<home>
 inoremap <silent> <s-end> <c-o>v<end><left>
 
-" common copy hotkeys
+" Common copy hotkeys.
 nnoremap <c-insert> V"+y<esc>:echo "Line copied."<cr>
 vnoremap <c-insert> "+y<esc>:echo "Copied."<cr>
 vnoremap <c-c> "+y<esc>:echo "Copied."<cr>
-" go to visual mode for copying word under cursor
+" Go to visual mode for copying word under cursor.
 inoremap <c-insert> <esc>`^bve
 
-" common insert hotkeys
+" Common insert hotkeys.
 nnoremap <s-insert> "+P
 inoremap <s-insert> <c-r>=col('.') == col('$') ? "\<lt>esc>`^\"+pa" : "\<lt>esc>`^\"+Pa"<cr>
 inoremap <c-v> <c-r>=col('.') == col('$') ? "\<lt>esc>`^\"+pa" : "\<lt>esc>`^\"+Pa"<cr>
 cnoremap <c-b> <c-r>"
-" replace contents
-vnoremap <silent> <s-insert> :<esc>`>:execute col('.') == col('$')-1 ? "normal! gv\"_x\"+p" : "normal! gv\"_x\"+Pl"<cr>
-vnoremap <silent> <c-v> :<esc>`>:execute col('.') == col('$')-1 ? "normal! gv\"_x\"+p" : "normal! gv\"_x\"+Pl"<cr>
+" Replace contents.
+vnoremap <silent> <expr> <s-insert> mode() ==# "V" ? "\"+P" : ":<esc>`>:execute col('.') == col('$')-1 ? \"normal! gv\\\"_x\\\"+p\" : \"normal! gv\\\"_x\\\"+Pl\"<cr>"
+vnoremap <silent> <expr> <c-v> mode() ==# "V" ? "\"+P" : ":<esc>`>:execute col('.') == col('$')-1 ? \"normal! gv\\\"_x\\\"+p\" : \"normal! gv\\\"_x\\\"+Pl\"<cr>"
 
-" common search hotkey
+" Common search hotkey.
 inoremap <c-f> <esc>`^/
 nnoremap <c-f> /
 vnoremap <c-f> <esc>/<c-r>*<cr>
 
-" common search and replace hotkey
+" Common search and replace hotkey.
 nnoremap <c-h> :%s/\v/g\|:silent noh<left><left><left><left><left><left><left><left><left><left><left><left><left><left>
 vnoremap <c-h> :s/\v/g\|:silent noh<left><left><left><left><left><left><left><left><left><left><left><left><left><left>
 
 
 
-" up/down + select for dropdown lists (c-j also works)
+" Select and scroll up/down for dropdown lists (c-j also works for selection).
 inoremap <a-k> <up>
 inoremap <a-j> <down>
 inoremap <a-h> <cr>
-" mainly for taglist plugin etc. to select ergonomically
+" Mainly for taglist plugin etc. to select ergonomically using home row.
 nmap <c-j> <cr>
 
-" move screen lines
+" Move screen lines.
 inoremap <home> <c-o>g0
 inoremap <end> <c-o>g$
-" these disable functionality with menus, use mapped up/down
+" These disable functionality with menus, use mapped up/down instead from above.
 inoremap <up> <c-o>gk
 inoremap <down> <c-o>gj
 
 
 
-" switch to alternate file (usually previously edited buffer)
+" Switch to alternate file (usually previously edited buffer).
 inoremap <a-s> <c-o>:b#<cr>
 nnoremap <a-s> :b#<cr>
 
-" uppercase word under cursor
+" Uppercase word under cursor.
 nnoremap <a-u> gUiw
 
-" toggle menubar
+" Toggle menubar.
 nnoremap <f5> :if &go=~#'m'<bar>set go-=m<bar>else<bar>set go+=m<bar>endif<cr>
 inoremap <f5> <esc>:if &go=~#'m'<bar>set go-=m<bar>else<bar>set go+=m<bar>endif<cr>
 
@@ -350,19 +349,19 @@ inoremap <c-space> <esc>`^
 nnoremap <c-space> i
 nnoremap <enter> i<c-r>=col('.') == col('$')-1 ? "\<lt>right>" : ""<cr>
 
-" center search matches
+" Center search matches.
 nnoremap n nzz
 nnoremap N Nzz
 
-" clear search highlight
+" Clear search highlight.
 nnoremap <silent> <c-n> :silent noh<cr>
 
-" incremental search next without highlight and select match
+" Incremental search next without highlight and select match.
 cnoremap <c-cr> <cr>:noh<cr>zz
 cnoremap <c-n> <cr>:noh<cr>/<up>
 cnoremap <a-n> <cr>NN:noh<cr>/<up>
 
-" close window
+" Close window.
 nnoremap <a-w> <c-w>c
 vnoremap <a-w> <c-w>c
 inoremap <a-w> <esc><c-w>c
@@ -372,7 +371,27 @@ inoremap <c-f4> <esc><c-w>c
 
 
 
-" relative line numbering came in vim 7.3
+function! SetTabWidth(newwidth)
+    let &tabstop=a:newwidth
+    let &shiftwidth=a:newwidth
+    let &softtabstop=a:newwidth
+    echo "Tab width set to: " a:newwidth
+endfunction
+
+call SetTabWidth(4) " Default tab width.
+
+function! WhitespaceToTabWidth()
+    normal! ^
+    let tabwidth = col('.') - 1
+    if tabwidth > 0
+        call SetTabWidth(tabwidth)
+    endif
+endfunction
+
+" Set tab width to current line whitespace width.
+nnoremap <leader><tab> :call WhitespaceToTabWidth()<cr>
+
+" Relative line numbering came in Vim 7.3.
 if version >= 703
     function! ToggleRelativeNumbering()
         if &rnu
@@ -401,47 +420,28 @@ endfunction
 inoremap <silent> <f2> <c-r>=ToggleWrap()<cr>
 nnoremap <silent> <f2> :call ToggleWrap()<cr>
 
-" set tab width to current line whitespace width
-function! WhitespaceToTabWidth()
-
-    normal! ^
-    let tabwidth = col('.') - 1
-    if tabwidth > 0
-        let &tabstop=tabwidth
-        let &shiftwidth=tabwidth
-        let &softtabstop=tabwidth
-        echo "Tab width set to" tabwidth
-    endif
-
-endfunction
-nnoremap <leader><tab> :call WhitespaceToTabWidth()<cr>
-
-" print file info
+" Print file info: encoding and format.
 function! PrintFileInfo()
-
     redir => filename
     silent !echo %:p
     redir END
     let filename = substitute(filename, '.*\n\(.*\n\)', '\1', '')
     let n = confirm(filename . "\n" . &fileencoding . "\n" . &ff, "", 1, "Info")
-
 endfunction
 nnoremap <f6> :call PrintFileInfo()<cr>
 
-" set file encoding dialog
+" Set file encoding dialog.
 function! SetFileEncoding()
-
     let n = confirm("Select file encoding:\n(current: " . &fileencoding . ")", "&UTF-8\n&ISO-8859-1\n&Cancel", 3, "Question")
     if n == 1
         set fileencoding=utf-8
     elseif n == 2
         set fileencoding=iso-8859-1
     endif
-
 endfunction
 nnoremap <f7> :call SetFileEncoding()<cr>
 
-" set file format dialog
+" Set file format dialog.
 function! SetFileFormat()
 
     let n = confirm("Select format for writing the file:\n(current: " . &ff . ")", "&Unix\n&Dos\n&Mac\n&Cancel", 4, "Question")
@@ -456,7 +456,7 @@ function! SetFileFormat()
 endfunction
 nnoremap <f8> :call SetFileFormat()<cr>
 
-" font zooming
+" Font zooming.
 if exists("g:zoom_functions") && g:zoom_functions == "1"
 
     if !exists("g:zoom_level")
@@ -540,11 +540,11 @@ function! OnVimEnter()
         nnoremap <leader>u :UniteResume<cr>
         nnoremap <leader>o :Unite outline<cr>
         nnoremap <leader>g :Unite grep:.:<cr>
-        " search selected text
+        " Search selected text.
         vnoremap <leader>g :Unite grep:.::<c-r>*<cr>
-        " search current filename
+        " Search current filename.
         nnoremap <leader>gf :Unite grep:.::<c-r>=expand('%:t')<cr><cr>
-        " search Angular.js keywords
+        " Search Angular.js keywords.
         nnoremap <leader>ga :Unite -start-insert grep:.::\\.(filter\|provider\|controller\|directive\|factory\|service)\\(\\'.+\\'<cr>
     endif
 
@@ -560,7 +560,7 @@ function! OnVimEnter()
 
     " tcomment
     if exists("g:loaded_tcomment")
-        " toggle comment for the current/selected line(s)
+        " Toggle comment for the current/selected line(s).
         nmap <silent><a-c> åc
         vmap <silent><a-c> å
         imap <silent><a-c> <esc>åc^
@@ -570,8 +570,8 @@ endfunction
 
 
 
-" netrw explorer config
-let g:netrw_list_hide='\(^\|\s\s\)\zs\.\S\+' " hide dotfiles by default in Netrw Directory Listing
+" Netrw explorer config.
+let g:netrw_list_hide='\(^\|\s\s\)\zs\.\S\+' " Hide dotfiles by default in Netrw Directory Listing.
 let g:netrw_liststyle = 3
 let g:netrw_banner = 0
 let g:netrw_browse_split = 4
@@ -587,6 +587,7 @@ nnoremap <silent><leader>n :call ToggleNetrw()<cr>
 
 
 
+" Host specific stuff.
 if hostname() == "minigun"
     set guifont=ProggyCleanTTSZ\ 12
     let g:dfont="ProggyCleanTTSZ"
@@ -599,5 +600,5 @@ elseif hostname() == "oheldell"
     let g:dlines=35
     let g:dcols=130
     let g:zoom_level=2
-    set tabstop=2
+    call SetTabWidth(2)
 endif
