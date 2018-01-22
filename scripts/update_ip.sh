@@ -13,15 +13,15 @@ stty $stty_orig
 username=$(whoami)
 ip=$(wget http://10.0.0.1/adm/status.asp --user=$username --password=$pw -q -O - | grep 'id="idv4wanip"' | grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}")
 
+echo
+echo WAN IP: $ip
+echo
+
 if test "X$ip" == "X"
 then
     echo "Error."
     exit
 fi
-
-echo
-echo WAN IP: $ip
-echo
 
 # Use a secret script to upload contents of $ip variable somewhere publicly available.
 if [ -e ~/.scripts_extra/publish_ip.sh ]
