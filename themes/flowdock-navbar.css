@@ -1,0 +1,17 @@
+/* For the Stylish browser extension, use with all Flowdock URLs.
+ * Widens the Flowdock navbar and makes it a bit more compact at the same time.
+ * */
+#tab-bar {
+    width: 20%;
+    max-width: 300px;
+    min-width: 150px;
+}
+
+#tab-list > div.scroll-wrapper.has-scrollbar > div.tab-list-content.scroll-content.touch-scrollable > div.flow-list > ol > li > a.tab-link > div > div {
+    width: 2px;
+    margin-right: 4px;
+}
+
+#tab-list > div.scroll-wrapper.has-scrollbar > div.tab-list-content.scroll-content.touch-scrollable > div.flow-list > ol > li > a.tab-link > div > div > span {
+    display: none;
+}
