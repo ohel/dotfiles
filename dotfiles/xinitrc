@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # E.g. for Japanese input
 #export XMODIFIERS=@im=scim
 #export GTK_IM_MODULE=scim
@@ -19,7 +21,14 @@ xset dpms 900 0 0
 # Disable DPMS, disable screensaver. Using a television, it doesn't support DPMS anyway.
 xset -dpms; xset s off
 
-exec xfce4-session &
+# To use this as Xsession, simply: ln -s ~/.xinitrc ~/.xsession && chmod +x ~/.xinitrc
+if test $(basename "$0") == .xsession
+then
+    exec xfce4-session
+else
+    exec xfce4-session &
 
-# This application does absolutely nothing, it just waits to be killed, keeping X alive.
-exec /opt/programs/lastofxinitrc/lastofxinitrc
+    # This application does absolutely nothing, it just waits to be killed, keeping X alive.
+    # It is as stable as it gets, even if the real session manager might be unstable.
+    exec /opt/programs/lastofxinitrc/lastofxinitrc
+fi
