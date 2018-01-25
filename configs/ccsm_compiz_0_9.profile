@@ -117,12 +117,12 @@ s0_focus_prevention_level = 0
 s0_focus_prevention_match = any
 s0_raise_window_button = Disabled
 s0_lower_window_button = Disabled
-s0_minimize_window_key = <Super>z
+s0_minimize_window_key = Disabled
 s0_maximize_window_key = Disabled
 s0_unmaximize_or_minimize_window_key = Disabled
 s0_window_menu_button = Disabled
-s0_show_desktop_key = <Super>m
-s0_toggle_window_maximized_key = <Super>x
+s0_show_desktop_key = Disabled
+s0_toggle_window_maximized_key = Disabled
 s0_toggle_window_shaded_key = Disabled
 s0_hsize = 2
 
