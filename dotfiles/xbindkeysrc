@@ -109,11 +109,15 @@ Mod4 + Next # Page down
 "~/.scripts/redshift.sh 500"
 Mod4 + Prior # Page up
 
+# Toggle keyboard layout between Finnish and English (US).
+"setxkbmap -query | grep layout:.*fi && setxkbmap -layout us || setxkbmap -layout fi"
+Mod5 + k
+
 # Touchpad toggles.
 "~/.scripts/toggle_touchpad.sh"
 XF86TouchpadToggle
 "~/.scripts/toggle_touchpad_tapping.sh"
-Mod5 + m
+Mod5 + t
 
 # Bluetooth toggle.
 "~/.scripts/toggle_bluetooth.sh"
