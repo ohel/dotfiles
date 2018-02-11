@@ -110,8 +110,9 @@ Mod4 + Next # Page down
 Mod4 + Prior # Page up
 
 # Toggle keyboard layout between Finnish and English (US).
+# Note that modifier keys may be different between keymaps, breaking some bound keys.
 "setxkbmap -query | grep layout:.*fi && setxkbmap -layout us || setxkbmap -layout fi"
-Mod5 + k
+Control + Shift + Mod1 + k
 
 # Touchpad toggles.
 "~/.scripts/toggle_touchpad.sh"
