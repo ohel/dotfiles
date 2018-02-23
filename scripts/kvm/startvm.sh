@@ -85,7 +85,7 @@ fi
 if test $windows_guest = 1
 then
     # Required for Windows guests.
-    cursor_fix="-usbdevice tablet"
+    usb_devices="-device nec-usb-xhci,id=usb,bus=pcie.0,addr=0x4 -device usb-tablet"
 fi
 
 vga=std
@@ -95,7 +95,7 @@ then
 fi
 
 echo "Starting the virtual machine..."
-env $sound_params qemu-system-x86_64 $soundhw $cursor_fix \
+env $sound_params qemu-system-x86_64 $soundhw $usb_devices \
 -daemonize \
 -name "$vm_name" \
 -boot $bootstring \
@@ -119,7 +119,7 @@ env $sound_params qemu-system-x86_64 $soundhw $cursor_fix \
 # * Pass a single USB port through to client (check bus and port with lsusb -t):
 # -device usb-host,hostbus=1,hostport=1 \
 # (NB: not all USB ports can be passed through: USB 3.0 (XHCI) seems to work better than EHCI.)
-# * To pass an USB port with device detached (no port in lsusb -t output; addr seems arbitrary):
+# * To pass an USB port with device detached (no port in lsusb -t output; addr seems arbitrary; note that the usb-tablet device for Windows needs this, too):
 # -device nec-usb-xhci,id=usb,bus=pcie.0,addr=0x4 \
 
 # Contents of kvm_net_up.sh:
