@@ -655,7 +655,7 @@ notebook > stack {
 	/*background-clip: border-box;*/
 	color: @theme_fg_color; /* gdebi bug? */
 	border-style: solid;
-	border-width: 0px 1px 1px 1px;
+	border-width: 0px;
 }
 
 /* make exceptions for Nemo, Nautilus and SpaceFM */
