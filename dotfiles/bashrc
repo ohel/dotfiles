@@ -14,6 +14,7 @@ HISTFILESIZE=4096
 HISTSIZE=4096
 
 # Common history for all bash shells may be set by environment variable.
+# Not on by default as it may get a bit bothersome.
 PROMPT_COMMAND='if [ "$COMMON_HISTORY" = "1" ]; then history -a; history -c; history -r; fi; echo -ne "\e]0;Terminal: ${PWD}\007"'
 
 # https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
@@ -40,14 +41,30 @@ esac
 
 alias cp='cp -a'
 alias f='find ./ | grep -i --colour'
-alias g='grep -iR --colour'
-alias gvim='gvim -p'
 alias ls='ls --color=auto -hG --group-directories-first'
-alias mountiso='sudo mount -o loop -t iso9660'
-alias rcp='rsync -ah --progress'
 alias rmdirs='find . -depth -empty -type d -exec rmdir {} \;'
-alias rs='rsync -avzu --delete'
 alias x='exit'
+
+if test "X$(which rg 2>/dev/null)" != "X"
+then
+    alias g='rg -S -uu'
+elif test "X$(which ag 2>/dev/null)" != "X"
+then
+    alias g='ag'
+else
+    alias g='grep -iR --colour'
+fi
+
+if test "X$(which gvim 2>/dev/null)" != "X"
+then
+    alias gvim='gvim -p'
+fi
+
+if test "X$(which rsync 2>/dev/null)" != "X"
+then
+    alias rcp='rsync -ah --progress'
+    alias rs='rsync -avzu --delete'
+fi
 
 if [ -d "$HOME/.scripts" ]; then
     export PATH="$HOME/.scripts:$PATH"

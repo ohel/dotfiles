@@ -43,10 +43,10 @@ endif
 nnoremap <leader>d :cd %:h<cr>:echo "wd is now" getcwd()<cr>
 
 if executable('rg')
-    set grepprg=rg\ --vimgrep\ $*
+    set grepprg=rg\ --smart-case\ --vimgrep\ -uu\ $*
     set grepformat=%f:%l:%c:%m
 elseif executable('ag')
-    set grepprg=ag\ --vimgrep\ $*
+    set grepprg=ag\ --smart-case --vimgrep\ $*
     set grepformat=%f:%l:%c:%m
 endif
 
@@ -214,12 +214,12 @@ endif
 if isdirectory($VIMHOME . "/plugged/unite.vim")
     if executable('rg')
         let g:unite_source_grep_command = 'rg'
-        let g:unite_source_grep_default_opts = '--vimgrep --ignore-case'
+        let g:unite_source_grep_default_opts = '--vimgrep --smart-case -uu'
         let g:unite_source_grep_recursive_opt = ''
         let g:unite_source_rec_git_command= ['rg', '--color', 'never', '--follow', '--no-heading', '--with-filename', '--files', '-g', '']
     elseif executable('ag')
         let g:unite_source_grep_command = 'ag'
-        let g:unite_source_grep_default_opts = '--vimgrep --ignore-case --silent'
+        let g:unite_source_grep_default_opts = '--vimgrep --smart-case --silent'
         let g:unite_source_grep_recursive_opt = ''
         let g:unite_source_rec_git_command= ['ag', '--nocolor', '--follow', '--nogroup', '-g', '']
     endif
