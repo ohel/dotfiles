@@ -82,12 +82,6 @@ then
     bootstring="d -cdrom $cdrom_image"
 fi
 
-if test $windows_guest = 1
-then
-    # Required for Windows guests.
-    usb_devices="-device nec-usb-xhci,id=usb,bus=pcie.0,addr=0x4 -device usb-tablet"
-fi
-
 vga=std
 if test "X$(echo quit | qemu-system-x86_64 -vga qxl -machine none -nographic 2>&1 | grep QXL)" = "X"
 then
@@ -95,8 +89,9 @@ then
 fi
 
 echo "Starting the virtual machine..."
-env $sound_params qemu-system-x86_64 $soundhw $usb_devices \
+env $sound_params qemu-system-x86_64 $soundhw \
 -daemonize \
+-enable-kvm \
 -name "$vm_name" \
 -boot $bootstring \
 -machine q35,accel=kvm \
@@ -109,6 +104,12 @@ env $sound_params qemu-system-x86_64 $soundhw $usb_devices \
 -net nic,model=virtio,macaddr="00:00:00:00:00:$net_id",name=eth0 \
 -net tap,script="kvm_net_up.sh" \
 -drive file="$img_name",if=virtio,format=raw \
+-device ich9-usb-uhci1 \
+-device ich9-usb-uhci2 \
+-device ich9-usb-uhci3 \
+-device ich9-usb-ehci1 \
+-device usb-tablet \
+-device nec-usb-xhci \
 -vnc :$net_id
 
 # Common workarounds and tweaks:
@@ -116,11 +117,13 @@ env $sound_params qemu-system-x86_64 $soundhw $usb_devices \
 # -cpu core2duo \
 # * Required if VM hangs during POST until VNC connection is established:
 # -no-kvm-irqchip \
+# * To fix cursor position in Windows clients, use the usb-tablet device. It might help in VNC connections with other guests also:
+# -device usb-tablet \
 # * Pass a single USB port through to client (check bus and port with lsusb -t):
 # -device usb-host,hostbus=1,hostport=1 \
-# (NB: not all USB ports can be passed through: USB 3.0 (XHCI) seems to work better than EHCI.)
-# * To pass an USB port with device detached (no port in lsusb -t output; addr seems arbitrary; note that the usb-tablet device for Windows needs this, too):
-# -device nec-usb-xhci,id=usb,bus=pcie.0,addr=0x4 \
+#   * After Qemu version 2.10.50 (approximately), passed devices nowadays need to have a manually defined USB host controller. However, there is no need to define the "id", "bus" or "addr" parameters manually anymore. They are handled automatically. The USB device speed must also match the host controller speed: for example, a USB headset probably requires nec-usb-xhci.
+#   * In short: first define the controller, then the device which should attach to it.
+#   * The deprecated -usbdevice option implied the ich9-usb-uhci[123] and ich-9-usb-echi1 controllers.
 
 # Contents of kvm_net_up.sh:
 #!/bin/sh
