@@ -46,7 +46,7 @@ if executable('rg')
     set grepprg=rg\ --smart-case\ --vimgrep\ -uu\ $*
     set grepformat=%f:%l:%c:%m
 elseif executable('ag')
-    set grepprg=ag\ --smart-case --vimgrep\ $*
+    set grepprg=ag\ --smart-case\ --vimgrep\ $*
     set grepformat=%f:%l:%c:%m
 endif
 
