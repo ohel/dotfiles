@@ -5,14 +5,14 @@
 
 img_name="${1:-"vm.img"}"
 vm_name="${2:-"KVM"}"
-net_id=${3:-10} # used as the last number of static IP address of the guest, MAC address and VNC display
+net_id=${3:-10} # Used as the last number of static IP address of the guest, MAC address and VNC display.
 
 vm_mem_mb=8192
 vm_num_cores=2
 vm_threads_per_core=1
 
 windows_guest=1
-audio=1 # not supported (ignored) on Windows guests
+audio=0 # Note: on modern Windows guests the audio emulation bugs so that there are cracks and pops all the time.
 auto_vm_bridge=1
 auto_vnc=0
 boot_from_cd=0
@@ -62,7 +62,7 @@ fi
 dac=""
 adc=""
 soundhw=""
-if test $audio = 1 && test $windows_guest = 0
+if test "$audio" == "1"
 then
     if test "X$(ps -e | grep pulseaudio)" = "X"
     then
