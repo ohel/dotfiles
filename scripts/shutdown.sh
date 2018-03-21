@@ -1,13 +1,12 @@
 #!/bin/bash
-# A two-phase shutdown script I use.
-# First check if it is OK to shut down.
-# Then backup stuff if necessary and shut down.
-# Also enable Wake-On-LAN in case it is disabled somehow.
+# A common shutdown script I use.
 
 scriptsdir=$(dirname "$(readlink -f "$0")")
 
+# Check if OK to shut down.
 source $scriptsdir/shutdown_init.sh
 
+# Enable Wake-On-Lan.
 if test "X$(which ethtool 2>/dev/null)" != "X"
 then
     for physical_device in $(ls -l /sys/class/net | grep devices\/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')
@@ -21,4 +20,8 @@ then
     done
 fi
 
-source $scriptsdir/shutdown_backup.sh
+# Do backups if necessary.
+source $scriptsdir/backup_interval.sh
+
+echo "Shutting down..."
+sudo shutdown -hP now

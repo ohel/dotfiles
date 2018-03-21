@@ -1,5 +1,5 @@
 #!/bin/bash
-# Shut down the computer but first call system backup script depending on how long it is since last backup.
+# Call system backup script depending on how long it is since last backup.
 # Backup is skipped if backup mount point doesn't exist.
 
 backup() {
@@ -46,6 +46,3 @@ backup() {
 }
 
 backup
-
-echo "Shutting down..."
-sudo shutdown -hP now
