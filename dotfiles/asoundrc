@@ -484,6 +484,19 @@ pcm.file_out {
     }
 }
 
+# Bluetooth device.
+pcm.bluetooth {
+    type plug
+    slave.pcm {
+        type bluealsa
+        device { @func getenv
+            vars [ ALSA_BLUETOOTH_MAC ]
+            default "00:00:00:00:00:00"
+        }
+        profile "a2dp"
+    }
+}
+
 #############################
 ########### LOOP ############
 #############################
