@@ -1,6 +1,7 @@
 #!/bin/bash
-# Power on the default bluetooth controller, start bluealsa and connect to device: ALSA_BLUETOOTH_MAC.
-# Assumes the bluetooth device has been paired beforehand.
+# Power on the default bluetooth controller and connect to device: ALSA_BLUETOOTH_MAC.
+# Assumes the bluetooth device has been paired beforehand and bluealsa is running.
+# To pair a device, power on a controller using bluetoothctl and trust, pair and connect the device.
 
 if test "X$ALSA_BLUETOOTH_MAC" == "X"
 then
