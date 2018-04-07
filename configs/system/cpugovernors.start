@@ -1,0 +1,6 @@
+# Enable user setting of CPU governors. Useful for DOSBox for example.
+for cpu in $(ls -d1 /sys/devices/system/cpu/cpu?)
+do
+    chmod a+w $cpu/cpufreq/scaling_governor 2>/dev/null
+    einfo "Governor access rights set to everyone for $cpu."
+done

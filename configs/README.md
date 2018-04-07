@@ -5,3 +5,4 @@
 * ranger: ranger file manager config files located in ~/.config/ranger.
 * renamepatterns.saved: Quod Libet rename pattern for music library.
 * scans.phatch: An action list to use with Phatch when scanning lots of A4 text documents.
+* system: Various local system startup scripts which in Gentoo are run from /etc/local.d. On Ubuntu the contents are in a single file called /etc/rc.local.
