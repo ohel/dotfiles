@@ -52,21 +52,21 @@ echo
 
 if test "$mode" == "normal"
 then
-    echo "Starting \"$target\" backup to remote in $countdown seconds."
+    echo "Starting \"$target\" backup *TO* remote in $countdown seconds."
     sleep $countdown
     rsync -avzu --delete $excludeparams $localdir $server:$remotedir/$target
 elif test "$mode" == "normaldry"
 then
-    echo "Dry run backup \"$target\" to remote."
+    echo "Dry run backup \"$target\" *TO* remote."
     rsync -avzun --delete $excludeparams $localdir $server:$remotedir/$target
 elif test "$mode" == "reverse"
 then
-    echo "Starting \"$target\" synchronizing from remote in $countdown seconds."
+    echo "Starting \"$target\" synchronizing *FROM* remote in $countdown seconds."
     sleep $countdown
     rsync -avzu --delete $excludeparams $server:$remotedir/$target/ $localdir
 elif test "$mode" == "reversedry"
 then
-    echo "Dry run synchronize \"$target\" from remote."
+    echo "Dry run synchronize \"$target\" *FROM* remote."
     rsync -avzun --delete $excludeparams $server:$remotedir/$target/ $localdir
 else
     echo "Unknown backup mode: $mode. Aborted."
