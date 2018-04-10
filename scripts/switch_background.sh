@@ -1,7 +1,7 @@
 #!/bin/sh
 # Toggle alternative background.
 
-checkfile="/dev/shm/backgroundchanged"
+checkfile=~/.cache/backgroundchanged
 if [ -f $checkfile ]
 then
  ln -sf ~/.themes/crepuscular_rays_crop_browner.png ~/.themes/background
@@ -14,4 +14,3 @@ else
 fi
 
 xfdesktop --reload &
-

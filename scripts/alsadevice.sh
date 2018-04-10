@@ -23,7 +23,7 @@ else
         ctl="hdmi_hw"
     elif [ "$1" = "julia" ]; then
         pcm="julia"
-        ctl="julia_digital_hw"
+        ctl="julia_analog_hw"
     elif [ "$1" = "eq" ]; then
         pcm="hda_eq"
         ctl="hda_hw"

@@ -4,7 +4,7 @@
 # VPN server IP is deduced after succesful connection, so it may be dynamic.
 # If "allowlan" is given as $2, LAN traffic is allowed, otherwise it is not.
 
-logfile=/dev/shm/openvpn.log
+logfile=~/.cache/openvpn.log
 
 if [ "$#" == 0 ]
 then

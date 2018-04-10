@@ -1,8 +1,11 @@
 #!/bin/bash
 
-# E.g. for Japanese input
-#export XMODIFIERS=@im=scim
-#export GTK_IM_MODULE=scim
+# E.g. for Japanese input, just export USE_SCIM=true before this script.
+if test "X$(echo $USE_SCIM)" = "Xtrue"
+then
+    export XMODIFIERS=@im=scim
+    export GTK_IM_MODULE=scim
+fi
 
 export MAGICK_THREAD_LIMIT=4
 export GDK_USE_XFT=1
@@ -11,24 +14,35 @@ export IGNOREEOF=1
 
 [[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources
 
-mkdir -p /dev/shm/thumbnails
-mkdir -p /dev/shm/cache
-mkdir -p /tmp/mhwaveedit
-mkfifo /dev/shm/mpvfifo 2>/dev/null
+# Sometimes I link .thumbnails and .cache to directories under .commoncache
+# and .commoncache itself somewhere under /dev/shm.
+mkdir -p $(readlink ~/.commoncache) 2>/dev/null
+mkdir -p $(readlink ~/.thumbnails) 2>/dev/null
+mkdir -p $(readlink ~/.cache) 2>/dev/null
+which mpv 2>/dev/null && [[ -d ~/.commoncache ]] && mkfifo ~/.commoncache/mpvfifo
 
-# Set standby, suspend, off for DPMS.
+# This temporary directory is needed if using mhwaveedit.
+which mhwaveedit 2>/dev/null && mkdir -p /tmp/mhwaveedit
+
+# Set default standby, suspend, off timeouts for DPMS.
 xset dpms 900 0 0
-# Disable DPMS, disable screensaver. Using a television, it doesn't support DPMS anyway.
+# Disable DPMS, disable screensaver. If using a television, DPMS is not supported anyway.
 xset -dpms; xset s off
 
-# To use this as Xsession, simply: ln -s ~/.xinitrc ~/.xsession && chmod +x ~/.xinitrc
-if test $(basename "$0") == .xsession
+[[ -f ~/.asound.state ]] && /usr/sbin/alsactl restore -f ~/.asound.state
+[[ -d ~/.sessions ]] && ln -sf ~/.sessions ~/.cache/sessions
+
+# This application does absolutely nothing, it just waits to be killed, keeping X alive.
+# It is as stable as it gets, even if the real session manager might be unstable.
+# The code consists of a single pause() call.
+lastone=$(ls /opt/programs/pause/pause 2>/dev/null)
+
+# To use this as Xsession, simply do this:
+# ln -s ~/.xinitrc ~/.xsession && chmod +x ~/.xinitrc
+if [ $(basename "$0") = ".xsession" ] || [ "X$lastone" = "X" ]
 then
     exec xfce4-session
 else
     exec xfce4-session &
-
-    # This application does absolutely nothing, it just waits to be killed, keeping X alive.
-    # It is as stable as it gets, even if the real session manager might be unstable.
-    exec /opt/programs/lastofxinitrc/lastofxinitrc
+    exec $lastone
 fi

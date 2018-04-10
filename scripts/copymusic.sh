@@ -14,7 +14,7 @@ else
 fi
 
 encode() {
-    tempdir=/dev/shm
+    tempdir=~/.cache
     encoding=$1
     dest_dir="$2"
     filein=$(echo $3 | sed s/\'$// | sed s/^\'// | sed s/\'\'\'/\'/g)

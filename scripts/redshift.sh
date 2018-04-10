@@ -1,7 +1,7 @@
 #!/bin/bash
 # Change screen color temperature using the redshift application.
 
-tempfile=/dev/shm/redshift_temp
+tempfile=~/.cache/redshift_temp
 default=6000
 max=6500
 min=3500

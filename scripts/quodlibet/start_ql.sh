@@ -12,8 +12,8 @@
 #   audio <device>
 # where <device> is an ALSA device.
 
-qlexe="/opt/programs/quodlibet/quodlibet.py"
-logfile="/dev/shm/qllog.txt"
+qlexe=/opt/programs/quodlibet/quodlibet.py
+logfile=~/.cache/qllog.txt
 
 if ! ps -ef | grep "pyorbital.py" | grep -v grep > /dev/null
 then
@@ -51,4 +51,3 @@ else
 fi
 
 $qlexe $params &>$logfile &
-

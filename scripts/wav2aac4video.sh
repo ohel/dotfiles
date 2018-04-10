@@ -27,7 +27,7 @@ then
     exit
 fi
 
-tmpfile=/dev/shm/out
+tmpfile=~/.cache/out
 
 echo Extracting audio...
 ffmpeg -loglevel fatal -i $input -c copy -map 0:a:0 $tmpfile.wav
