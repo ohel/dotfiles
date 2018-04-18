@@ -787,6 +787,7 @@ treeview .view {
 treeview.view.separator,
 treeview.view.separator:hover {
 	color: alpha(@light_frame_color, 0.6);
+  min-height: 1px;
 }
 
 treeview.view:hover {
