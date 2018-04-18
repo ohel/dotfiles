@@ -17,7 +17,7 @@ volume=100
 osd-color="#40FFFFFF"
 
 no-input-default-bindings
-input-file=/dev/shm/mpvfifo
+input-file=~/.commoncache/mpvfifo
 
 ###############################################################################
 [common-movie]
@@ -45,19 +45,6 @@ sub-border-color="#C0000000"
 sub-color="#20FFFFFF" # less visible
 #sub-color="#C0FFFFFF" # more visible
 
-###############################################################################
-[basic]
-
-# don't load subtitles
-no-sub-auto
-
-# don't print anything unnecessary
-really-quiet
-
-# video
-vo=opengl
-opengl-swapinterval=1
-
 
 
 ###############################################################################
@@ -67,6 +54,7 @@ profile-desc="surround sound profile for movies"
 ao=alsa
 audio-device=alsa/julia_movie
 audio-channels=6
+alsa-ignore-chmap
 ad-lavc-downmix=no
 profile=common-movie
 
@@ -79,6 +67,7 @@ profile-desc="another surround sound profile for movies"
 ao=alsa
 audio-device=alsa/julia_movie_balanced_matrix
 audio-channels=6
+alsa-ignore-chmap
 ad-lavc-downmix=no
 profile=common-movie
 
@@ -91,6 +80,7 @@ profile-desc="openal profile for movies"
 # "hrtf = true" in ~/.alsoftrc enables HRTF with OpenAL
 ao=openal
 audio-channels=6
+alsa-ignore-chmap
 ad-lavc-downmix=no
 profile=common-movie
 
@@ -103,27 +93,26 @@ profile-desc="stereo sound profile for movies"
 ao=alsa
 audio-device=alsa/julia_aout
 audio-channels=2
+alsa-ignore-chmap
 profile=common-movie
 
 
 
 ###############################################################################
-[julia]
-profile-desc="profile for general video (Juli@)"
+[general]
+profile-desc="profile for general video"
 
 ao=alsa
-audio-device=alsa/julia
-profile=basic
 
+# don't load subtitles
+no-sub-auto
 
+# don't print anything unnecessary
+really-quiet
 
-###############################################################################
-[hda]
-profile-desc="profile for general video (HDA)"
-
-ao=alsa
-audio-device=alsa/hda
-profile=basic
+# video
+vo=opengl
+opengl-swapinterval=1
 
 
 
