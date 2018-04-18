@@ -1267,10 +1267,18 @@ spinbutton button:disabled {
 /**************
  * Scrollbars *
  **************/
+
 scrollbar {
 	background-image: none;
 	border-style: solid;
 }
+
+scrollbar.overlay-indicator:not(.dragging):not(.hovering) {
+  border-color: transparent;
+  opacity: 0.4;
+  background-color: transparent; }
+scrollbar.overlay-indicator.dragging, scrollbar.overlay-indicator.hovering {
+  opacity: 0.8; }
 
 scrollbar trough {
 	border-style: none;
@@ -1355,6 +1363,7 @@ scrollbar.vertical slider:hover:active {
 scrollbar button,
 scrollbar.horizontal button,
 scrollbar.vertical button {
+  padding: 0;
 	min-width: 12px;
 	min-height: 12px;
 	color: @theme_fg_color;
