@@ -2,8 +2,8 @@
 
 @define-color base_color #3d3d3e;
 @define-color bg_color #3d3d3e;
-@define-color text_color #ffffff;
-@define-color fg_color #ffffff;
+@define-color text_color #eeeeee;
+@define-color fg_color #eeeeee;
 @define-color selected_bg_color #141414;
 @define-color selected_fg_color #3399FF;
 
@@ -58,7 +58,7 @@
 @define-color less_dark_color #4d4d4d;
 @define-color darker_color #383838;
 
-@define-color menu_controls_color #ffffff;
+@define-color menu_controls_color #eeeeee;
 
 @define-color focus_border alpha(@theme_fg_color, 0.30);
 
@@ -76,7 +76,7 @@
 
 @define-color content_view_bg @less_dark_color;
 
-@define-color osd_highlight #ffffff;
+@define-color osd_highlight #eeeeee;
 @define-color osd_lowlight #525252;
 @define-color osd_base #212526;
 @define-color osd_fg #ededed;
