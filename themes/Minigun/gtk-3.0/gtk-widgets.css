@@ -1077,19 +1077,14 @@ combobox *:disabled {
  * Buttons *
  ***********/
 button {
+	color: @theme_fg_color;
 	min-height: 16px;
 	min-width: 16px;
 	padding: 2px 4px;
 
-	border-radius: 0px;
-	border-width: 3px;
+	border-radius: 1px;
+	border-width: 1px;
 	border-style: solid;
-	/*text-shadow: 0 -1px black;*/
-
-	color: @theme_fg_color;
-	background-image: linear-gradient(to bottom,
-	                                  @button_gradient_color_a,
-	                                  @button_gradient_color_b);
 }
 
 button.image-button,
