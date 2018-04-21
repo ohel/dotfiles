@@ -515,51 +515,48 @@ ctl.bluetooth {
 
 pcm.loop {
     type asym
-    playback.pcm "loop_out_alsa"
-    capture.pcm "loop_in_alsa"
+    playback.pcm "loop_playback_in"
+    capture.pcm "loop_record_out"
     hint {
         show on
-        description "ALSA loopback"
+        description "Asymmetric ALSA loopback device"
     }
 }
 
-pcm.loop2 {
-    type asym
-    playback.pcm "loop2_out_alsa"
-    capture.pcm "loop2_in_alsa"
-    hint {
-        show on
-        description "ALSA loopback 2"
-    }
-}
-
-# These are for use with JACK.
-pcm.loop_out_alsa {
+pcm.loop_playback_in {
     type plug
     slave.pcm "hw:Loopback,0,0"
     hint {
         show on
-        description "ALSA loopback out"
+        description "ALSA playback loop in"
     }
 }
 
-pcm.loop_out_jack {
+pcm.loop_playback_out {
     type plug
     slave.pcm "hw:Loopback,1,0"
+    hint {
+        show on
+        description "ALSA playback loop out"
+    }
 }
 
-pcm.loop_in_alsa {
+pcm.loop_record_in {
     type plug
     slave.pcm "hw:Loopback,0,1"
     hint {
         show on
-        description "ALSA loopback in"
+        description "ALSA record loop in"
     }
 }
 
-pcm.loop_in_jack {
+pcm.loop_record_out {
     type plug
     slave.pcm "hw:Loopback,1,1"
+    hint {
+        show on
+        description "ALSA record loop out"
+    }
 }
 
 # These are for use with virtual machines.

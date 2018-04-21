@@ -1,9 +1,8 @@
 #!/bin/bash
-# Connect JACK to an alsa loopback device (ends are named loop_in_jack, loop_out_jack).
+# Connect JACK to an ALSA loopback device.
 
+alsa_in -j "ALSA output" -d loop_playback_out &
+alsa_out -j "ALSA input" -d loop_record_in &
 echo "ALSA/JACK bridge is active."
-alsa_in -j "ALSA output" -dloop_out_jack &
-alsa_out -j "ALSA input" -dloop_in_jack &
-alsa_in -j "ALSA output 2" -dloop2_out_jack &
-alsa_out -j "ALSA input 2" -dloop2_in_jack 
-
+echo "Wait some time to reach absolute resample-rate stability."
+wait
