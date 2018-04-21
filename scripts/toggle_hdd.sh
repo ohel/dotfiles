@@ -13,7 +13,7 @@ then
     exit
 fi
 
-mountloc=$(cat /etc/fstab | grep 2a95f4c5-e218-41d0-92b3-9fc904cca974 | tr -s [:space:] | tr '\t' ' ' | cut -f 2 -d ' ')
+mountloc=$(cat /etc/fstab | grep $uuid | tr -s [:space:] | tr '\t' ' ' | cut -f 2 -d ' ')
 mounted=0
 if [ "X$(mount | grep $mountloc)" != "X" ] && [ "X$2" != "Xmount" ]
 then
