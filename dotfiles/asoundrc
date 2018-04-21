@@ -484,7 +484,8 @@ pcm.file_out {
     }
 }
 
-# Bluetooth device.
+# Bluetooth device. The control device is implicitly called ctl.bluealsa.
+# Also notice the --a2dp-force-audio-cd parameter for bluealsa.
 pcm.bluetooth {
     type plug
     slave.pcm {
@@ -495,6 +496,15 @@ pcm.bluetooth {
         }
         profile "a2dp"
     }
+    hint {
+        show on
+        description "Bluetooth audio device"
+    }
+}
+
+# Control device for program compatibility.
+ctl.bluetooth {
+    type bluealsa
 }
 
 #############################
