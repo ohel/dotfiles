@@ -17,7 +17,7 @@ echo
 echo WAN IP: $ip
 echo
 
-if test "X$ip" == "X"
+if test "X$ip" = "X"
 then
     echo "Error."
     exit

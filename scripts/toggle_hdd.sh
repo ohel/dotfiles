@@ -1,14 +1,24 @@
 #!/bin/bash
 # Toggle a HDD mounted/unmount+sleeping state. Also supports RAID setups for HDD sleep.
+# The first parameter is the mount location as in fstab.
+# The second parameter ("sleep" or "mount") is optional, and may be used to select the operation.
 
 mountloc="$1"
-uuid=$(cat /etc/fstab | grep $mountloc | tr -d [:space:] | cut -f 1 -d '/' | cut -f 2 -d '=' | tr -d '"')
+uuid=$(cat /etc/fstab | grep $mountloc | tr -d [:space:] | tr '\t' ' ' | cut -f 1 -d '/' | cut -f 2 -d '=' | tr -d '"')
 device=$(ls -l /dev/disk/by-uuid/$uuid | cut -f 2 -d '>' | cut -f 3 -d '/')
-mounted=false
-if test "skip$(mount | grep $mountloc)" != "skip"
+
+if test "X$device" = "X"
 then
-    mounted=true
-    echo Unmounting $mountloc...
+    echo "Device not found."
+    exit
+fi
+
+mountloc=$(cat /etc/fstab | grep 2a95f4c5-e218-41d0-92b3-9fc904cca974 | tr -s [:space:] | tr '\t' ' ' | cut -f 2 -d ' ')
+mounted=0
+if [ "X$(mount | grep $mountloc)" != "X" ] && [ "X$2" != "Xmount" ]
+then
+    mounted=1
+    echo "Unmounting $mountloc..."
     sudo umount $mountloc &
 fi
 
@@ -20,7 +30,7 @@ else
 fi
 
 shouldmount=1
-if $mounted
+if [ $mounted -eq 1 ] || [ "X$2" = "Xsleep" ]
 then
     wait
     sleep 2 # Wait for a couple of seconds for the unmount to finish.
@@ -31,17 +41,17 @@ then
 else
     for device in $devices
     do
-        if test "empty$(sudo hdparm -C /dev/$device | grep standby)" == "empty"
+        if test "X$(sudo hdparm -C /dev/$device | grep standby)" = "X"
         then
-            if test "empty$(mount | grep /dev/$device)" == "empty"
+            if test "X$(mount | grep /dev/$device)" = "X"
             then
-                # No mounted drives were found, however the drive is not sleeping. Put it to sleep.
+                # The drive is not mounted but not sleeping either. Put it to sleep.
                 sudo hdparm -Y /dev/$device &
                 shouldmount=0
             fi
         fi
     done
-    if [ $shouldmount -eq 1 ]
+    if [ $shouldmount -eq 1 ] || [ "X$2" = "Xmount" ]
     then
 		echo "Mounting $mountloc..."
 		sudo mount $mountloc
