@@ -7,10 +7,19 @@ then
     export GTK_IM_MODULE=scim
 fi
 
-export MAGICK_THREAD_LIMIT=4
-export GDK_USE_XFT=1
-export QT_XFT=true
+# Ignore EOF once.
 export IGNOREEOF=1
+
+# Thread limit for ImageMagick
+export MAGICK_THREAD_LIMIT=4
+
+# Enable X fonts.
+export GDK_USE_XFT=1
+export QT_XFT=1
+
+# Qt5.7 no longer supports GTK styles so to get something reasonable (i.e. dark color scheme)
+# one must use qt5ct to change the look of Qt5 applications.
+export QT_QPA_PLATFORMTHEME=qt5ct
 
 [[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources
 
