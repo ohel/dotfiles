@@ -7,6 +7,8 @@
 # $3: server (SSH)
 # $4: target (directory in server under $remotedir)
 # The mode parameter may be postfixed with nowait (e.g. normalnowait) to skip the countdown.
+# By default git working directories are skipped when syncing from a remote location.
+# The mode parameter may be postfixed with gitdirs (e.g. reversegitdirs) to include git directories.
 
 remotedir="~/backups" # The target directory should exist in this directory on the server.
 countdown=3 # Wait this many seconds before actually starting the operation to prevent accidents.
@@ -38,7 +40,7 @@ then
     mode=$(echo $mode | sed s/nowait\$//)
 fi
 
-if test "X$(echo $mode | grep reverse)" != "X"
+if [[ "X$(echo $mode | grep reverse)" != "X" && "X$(echo $mode | grep gitdirs\$)" == "X" ]]
 then
     git_dirs=$(find $localdir -type d -name .git | sed "s/\/\.git\$//" | sed "s/^\.\///")
     for excludeitem in ${git_dirs[@]}
@@ -47,27 +49,29 @@ then
         echo "Skipping git working dir: $excludeitem"
     done
 fi
+mode=$(echo $mode | sed s/gitdirs\$//)
 
 echo
 
-if test "$mode" == "normal"
+rsync_options="-avzu --delete"
+if [ "$mode" == "normal" ]
 then
     echo "Starting \"$target\" backup *TO* remote in $countdown seconds."
     sleep $countdown
-    rsync -avzu --delete $excludeparams $localdir $server:$remotedir/$target
-elif test "$mode" == "normaldry"
+    rsync $rsync_options $excludeparams $localdir $server:$remotedir/$target
+elif [ "$mode" == "normaldry" ]
 then
     echo "Dry run backup \"$target\" *TO* remote."
-    rsync -avzun --delete $excludeparams $localdir $server:$remotedir/$target
-elif test "$mode" == "reverse"
+    rsync -n $rsync_options $excludeparams $localdir $server:$remotedir/$target
+elif [ "$mode" == "reverse" ]
 then
     echo "Starting \"$target\" synchronizing *FROM* remote in $countdown seconds."
     sleep $countdown
-    rsync -avzu --delete $excludeparams $server:$remotedir/$target/ $localdir
-elif test "$mode" == "reversedry"
+    rsync $rsync_options $excludeparams $server:$remotedir/$target/ $localdir
+elif [ "$mode" == "reversedry" ]
 then
     echo "Dry run synchronize \"$target\" *FROM* remote."
-    rsync -avzun --delete $excludeparams $server:$remotedir/$target/ $localdir
+    rsync -n $rsync_options $excludeparams $server:$remotedir/$target/ $localdir
 else
     echo "Unknown backup mode: $mode. Aborted."
 fi
