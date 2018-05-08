@@ -14,13 +14,13 @@ then
         ip=$(ip addr show $physical_device | grep -o "inet [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | cut -f 2 -d ' ')
         if test "X$ip" != "X"
         then
-            ethtool -s $physical_device wol g
+            ethtool -s $physical_device wol g 2>/dev/null
             break
         fi
     done
 fi
 
-# Do backups if necessary.
+# Do scheduled backups.
 source $scriptsdir/backup_interval.sh
 
 echo "Shutting down..."

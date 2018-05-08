@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Shut down
-Exec=.scripts/shutdown.sh
+Exec=sudo .scripts/shutdown.sh
 Terminal=true
 Type=Application
 Icon=system-log-out
