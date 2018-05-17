@@ -23,7 +23,7 @@ fi
 order=1
 for result in ${results[@]}
 do
-  echo $order: $result
+  echo $order: $result :$order
   order=`expr $order + 1`
 done
 
