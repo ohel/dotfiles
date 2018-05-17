@@ -8,7 +8,7 @@ export LC_MONETARY='fi_FI.utf8'
 export LC_PAPER='fi_FI.utf8'
 export LC_TELEPHONE='fi_FI.utf8'
 export LC_MEASUREMENT='fi_FI.utf8'
-export EDITOR="/usr/bin/vim"
+which vim &>/dev/null && export EDITOR="$(which vim)"
 
 HISTFILESIZE=4096
 HISTSIZE=4096
@@ -41,44 +41,32 @@ esac
 
 alias cp='cp -a'
 alias f='find ./ | grep -i --colour'
+alias g='grep -iR --colour'
 alias ls='ls --color=auto -hG --group-directories-first'
-alias rmdirs='find . -depth -empty -type d -exec rmdir {} \;'
+alias rmemptydirs='find . -depth -empty -type d -exec rmdir {} \;'
 alias x='exit'
 
-if test "X$(which rg 2>/dev/null)" != "X"
-then
-    alias g='rg -S -uu'
-elif test "X$(which ag 2>/dev/null)" != "X"
-then
-    alias g='ag'
-else
-    alias g='grep -iR --colour'
-fi
+which ag &>/dev/null && alias g='ag'
+which rg &>/dev/null && alias g='rg -S -uu'
+which gvim &>/dev/null && alias gvim='gvim -p'
+which rsync &>/dev/null && alias rcp='rsync -ah --progress' && alias rs='rsync -avzu --delete'
 
-if test "X$(which gvim 2>/dev/null)" != "X"
-then
-    alias gvim='gvim -p'
-fi
+[ -e "$HOME/.scripts/grepedit.sh" ] && alias ge='~/.scripts/grepedit.sh'
+[ -e "$HOME/.scripts/grepfind.sh" ] && alias gf='~/.scripts/grepfind.sh'
+[ -e "$HOME/.scripts/launchers/media_player.sh" ] && alias mplay='~/.scripts/launchers/media_player.sh'
+[ -e "$HOME/.scripts/launchers/media_player_dvd.sh" ] && alias playdvd='~/.scripts/launchers/media_player_dvd.sh'
+[ -e "$HOME/.scripts/alsadevice.sh" ] && alias alsadevice='source ~/.scripts/alsadevice.sh'
 
-if test "X$(which rsync 2>/dev/null)" != "X"
-then
-    alias rcp='rsync -ah --progress'
-    alias rs='rsync -avzu --delete'
-fi
-
-if [ -d "$HOME/.scripts" ]; then
-    export PATH="$HOME/.scripts:$PATH"
-fi
-if [ -d "$HOME/.scripts_extra" ]; then
-    export PATH="$HOME/.scripts_extra:$PATH"
-fi
-if [ -d "/opt/bin" ]; then
-    export PATH="$PATH:/opt/bin"
-fi
+[ -d "$HOME/.scripts" ] && export PATH="$HOME/.scripts:$PATH"
+[ -d "$HOME/.scripts_extra" ] && export PATH="$HOME/.scripts_extra:$PATH"
+[ -d "/opt/bin" ] && export PATH="$PATH:/opt/bin"
 export PATH=".:$PATH"
 
-# System specific stuff.
-if [ -e ~/.bashrc_extra ]
-then
-    source ~/.bashrc_extra
+if [ -d "$HOME/.nvm" ]; then
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
+
+# System specific stuff.
+[ -e ~/.bashrc_extra ] && source ~/.bashrc_extra
