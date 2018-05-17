@@ -36,8 +36,8 @@ function cleanup {
     keep_version=$1
     rt_grep_opts=$2
     prefix=$3
-    old_versions=$(ls -d /usr/src/$prefix-* | grep $rt_grep_opts rt | grep -v $keep_version | xargs -I {} basename {} | cut -f 2- -d '-')
-    if [ ${#old_versions[0]} -gt 0 ]
+    old_versions=($(ls -d /usr/src/$prefix-* | grep $rt_grep_opts rt | grep -v $keep_version | xargs -I {} basename {} | cut -f 2- -d '-'))
+    if [ ${#old_versions[@]} -gt 0 ]
     then
         echo "Found old versions in /usr/src:"
         echo $old_versions
