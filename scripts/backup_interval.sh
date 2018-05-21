@@ -6,6 +6,7 @@
 # Rsync excludes are read from ~/.config/backup_exclude.
 
 backup() {
+    scriptsdir=${1:-$HOME}
     backupmountpoint=/mnt/raidstorage
     backupdir=backups/misc/home_dirs/
 
@@ -35,7 +36,9 @@ backup() {
     then
         backup=$(mount | grep $backupmountpoint)
         if test "empty$backup" == "empty"
-            then sudo mount $backupmountpoint
+        then
+            echo "Mounting $backupmountpoint..."
+            sudo mount $backupmountpoint
         fi
         backup=$(mount | grep $backupmountpoint)
         if test "empty$backup" == "empty"
@@ -73,8 +76,8 @@ backup() {
 
         clear
         echo "Starting general backup."
-        sudo $userhome/.scripts/backup_local.sh misconly
+        sudo $scriptsdir/backup_local.sh misconly
     fi
 }
 
-backup
+backup $(dirname "$(readlink -f "$0")")
