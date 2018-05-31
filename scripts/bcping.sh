@@ -11,11 +11,12 @@ do
     ip=$(ip addr show $physical_device | grep -o "inet [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | cut -f 2 -d ' ')
     if test "X$ip" != "X"
     then
-        subnet=$(echo $ip | cut -f 1 -d '.')
+        subnet=$(echo $ip | cut -f 1-3 -d '.')
         break
     fi
 done
 
+echo Pinging subnet $subnet.
 ip=$first_ip
 while [ $ip -le $last_ip ]
 do
