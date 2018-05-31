@@ -13,11 +13,13 @@ vm_threads_per_core=1
 
 windows_guest=1
 audio=0 # Note: on modern Windows guests the audio emulation bugs so that there are cracks and pops all the time.
-auto_vm_bridge=1
+auto_network=1
 auto_vnc=0
 boot_from_cd=0
+bridged_network=0
 
 vm_bridge=vmbridge
+net_bridge=netbridge
 cdrom_image="image.iso"
 
 if test "X$(which gvncviewer 2>/dev/null)" != "X"
@@ -28,14 +30,23 @@ then
     vncviewer="vncviewer :$net_id"
 fi
 
+if test $bridged_network = 1
+then
+    if test "X$(brctl show $net_bridge 2>&1 | grep No)" != "X"
+    then
+        echo "Set up the bridged network manually first."
+        exit
+    fi
+fi
+
 if test "X$(brctl show $vm_bridge 2>&1 | grep No)" != "X"
 then
-    if test $auto_vm_bridge = 0
+    if test $auto_network = 0
     then
         echo "The bridge $vm_bridge does not exist. Aborting..."
         exit
     fi
-    ./vmnetwork_up.sh
+    ./vmnetwork.sh
 fi
 
 modprobe tun
@@ -88,8 +99,14 @@ then
     vga=qxl
 fi
 
+bridged_net_devices=""
+if test $bridged_network = 1
+then
+    bridged_net_devices="-device virtio-net-pci,netdev=net"$net_id"_1 -netdev tap,id=net"$net_id"_1,br=$net_bridge,script=kvm_tap_netbridge.sh"
+fi
+
 echo "Starting the virtual machine..."
-env $sound_params qemu-system-x86_64 $soundhw \
+env $sound_params qemu-system-x86_64 \
 -daemonize \
 -enable-kvm \
 -name "$vm_name" \
@@ -101,8 +118,7 @@ env $sound_params qemu-system-x86_64 $soundhw \
 -k fi \
 -display none \
 -vga $vga \
--net nic,model=virtio,macaddr="00:00:00:00:00:$net_id",name=eth0 \
--net tap,script="kvm_net_up.sh" \
+-device virtio-net-pci,netdev=net"$net_id"_0 -netdev tap,id=net"$net_id"_0,br=$vm_bridge,script=kvm_tap_vmbridge.sh \
 -drive file="$img_name",if=virtio,format=raw \
 -device ich9-usb-uhci1 \
 -device ich9-usb-uhci2 \
@@ -110,6 +126,8 @@ env $sound_params qemu-system-x86_64 $soundhw \
 -device ich9-usb-ehci1 \
 -device usb-tablet \
 -device nec-usb-xhci \
+$bridged_net_devices \
+$soundhw \
 -vnc :$net_id
 
 # Common workarounds and tweaks:
@@ -121,14 +139,10 @@ env $sound_params qemu-system-x86_64 $soundhw \
 # -device usb-tablet \
 # * Pass a single USB port through to client (check bus and port with lsusb -t):
 # -device usb-host,hostbus=1,hostport=1 \
-#   * After Qemu version 2.10.50 (approximately), passed devices nowadays need to have a manually defined USB host controller. However, there is no need to define the "id", "bus" or "addr" parameters manually anymore. They are handled automatically. The USB device speed must also match the host controller speed: for example, a USB headset probably requires nec-usb-xhci.
+#   * After Qemu version 2.10.50 (approximately), passed devices nowadays need to have a manually defined USB host controller. However, there is no need to define the "id", "bus" or "addr" parameters manually anymore, they are handled automatically. The USB device speed must also match the host controller speed: for example, a USB headset probably requires nec-usb-xhci.
 #   * In short: first define the controller, then the device which should attach to it.
 #   * The deprecated -usbdevice option implied the ich9-usb-uhci[123] and ich-9-usb-echi1 controllers.
-
-# Contents of kvm_net_up.sh:
-#!/bin/sh
-# Argument $1 will be the name of the interface, e.g. tap0
-# /sbin/brctl addif vmbridge $1 && /bin/ip link set $1 up
+# * The br parameter for netdev does not work, it always adds the tap device to first bridge found. Therefore we need to use scripts.
 
 sleep 2
 
