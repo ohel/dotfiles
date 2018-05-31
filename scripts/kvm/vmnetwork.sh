@@ -30,6 +30,10 @@ fi
 
 echo "Using adapter: $nic with IP: $ip"
 
+forward=$(sysctl -q -e net.ipv4.conf.$nic.forwarding | cut -f 3 -d ' ')
+sysctl -q -e -w net.ipv4.conf.$nic.forwarding=1
+echo "sudo sysctl -q -e -w net.ipv4.conf.$nic.forwarding=$forward" >> $reset_script
+
 # Network bridge. Note: not all interfaces support bridging.
 if [ "X$2" == "Xbridge" ]
 then
