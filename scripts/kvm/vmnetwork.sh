@@ -25,6 +25,11 @@ then
     done
 else
     nic=$1
+    if test "X$(ls -l /sys/class/net | grep devices\/pci | cut -f 10 -d ' ' | grep $nic)" != "X$nic"
+    then
+        echo "Network device not found: $nic"
+        exit
+    fi
     ip=$(ip addr show $nic| grep -o "inet [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | cut -f 2 -d ' ')
 fi
 
