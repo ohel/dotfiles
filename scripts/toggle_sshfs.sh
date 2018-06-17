@@ -1,6 +1,12 @@
 #!/bin/bash
 # Given a mountpoint, a remote host and a remote mountpoint, mount or unmount an sshfs.
 
+if [ "$#" -eq 0 ]
+then
+    echo "Usage: toggle_sshfs.sh <local mountpoint> <remote host> <remote mountpoint>"
+    exit
+fi
+
 if test "$(mount | grep $1)X" == "X"
 then
     echo Mounting $1...

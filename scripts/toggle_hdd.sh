@@ -3,6 +3,12 @@
 # The first parameter is the mount location as in fstab.
 # The second parameter ("sleep" or "mount") is optional, and may be used to select the operation.
 
+if [ "$#" -eq 0 ]
+then
+    echo "Usage: toggle_hdd.sh <mount location> [sleep|mount]"
+    exit
+fi
+
 mountloc="$1"
 uuid=$(cat /etc/fstab | grep $mountloc | tr -d [:space:] | tr '\t' ' ' | cut -f 1 -d '/' | cut -f 2 -d '=' | tr -d '"')
 device=$(ls -l /dev/disk/by-uuid/$uuid | cut -f 2 -d '>' | cut -f 3 -d '/')

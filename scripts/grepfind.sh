@@ -5,6 +5,7 @@ editor=gvim
 
 if [ "$#" -eq 0 ]
 then
+    echo "Give the search term as a parameter."
     exit
 fi
 
