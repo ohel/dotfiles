@@ -3,6 +3,8 @@
 # create an iptables filter working like a VPN kill switch.
 # VPN server IP is deduced after succesful connection, so it may be dynamic.
 # If "allowlan" is given as $2, LAN traffic is allowed, otherwise it is not.
+# NB: the script will flush the iptables filter chain.
+# IPv4 is assumed for VPN operation. IPv6 traffic is blocked with ip6tables.
 
 logfile=~/.cache/openvpn.log
 
@@ -102,6 +104,9 @@ fi
 iptables -F
 iptables -P INPUT DROP
 iptables -P OUTPUT DROP
+ip6tables -F
+ip6tables -P INPUT DROP
+ip6tables -P OUTPUT DROP
 lanstate="blocked"
 if test "X$subnet" != "X"
 then
@@ -120,7 +125,7 @@ iptables -A INPUT -i tun+ -j ACCEPT
 iptables -A OUTPUT -o tun+ -j ACCEPT
 iptables -A INPUT -p udp --sport 1194 -s $vpn_ip -j ACCEPT
 iptables -A OUTPUT -p udp --dport 1194 -d $vpn_ip -j ACCEPT
-echo "Created iptables rules. LAN connections are $lanstate."
+echo "Created iptables filters. LAN connections are $lanstate."
 echo "Firewall is active."
 
 function killvpn() {
@@ -159,5 +164,8 @@ done
 iptables -F
 iptables -P INPUT ACCEPT
 iptables -P OUTPUT ACCEPT
-echo -e "\nFlushed iptables rules. Firewall is disabled."
+ip6tables -F
+ip6tables -P INPUT ACCEPT
+ip6tables -P OUTPUT ACCEPT
+echo -e "\nFlushed iptables filter chain. Firewall is disabled."
 sleep 1

@@ -4,7 +4,7 @@
 # This is useful when gaming with friends or you need to publish your IP for other reasons.
 # The script supports the following router models:
 #    1. TW-LTE/4G/3G router, WiFI AC
-#    2. FAST3686 (DNA Valokuitu Plus)
+#    2. FAST3686 (DNA Valokuitu Plus) - You must login once from your computer, then the router remembers you until restart.
 
 routermodel=2
 lanip=10.0.0.1
