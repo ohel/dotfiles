@@ -22,11 +22,11 @@ XF86Calculator
 "claws-mail --select INBOX"
 XF86Mail
 
-"~/.scripts/browser.sh newwindow"
+"~/.scripts/launchers/chromium.sh newwindow"
 Mod1 + Mod4 + w
-"~/.scripts/browser.sh"
+"~/.scripts/launchers/chromium.sh"
 Mod4 + w
-"~/.scripts/browser.sh"
+"~/.scripts/launchers/chromium.sh"
 XF86HomePage
 
 "gvim"
@@ -131,7 +131,7 @@ Mod5 + t
 Mod5 + b
 
 # Software volume control.
-# Disabled as most mixers support these natively: "volumeicon" is a good one.
+# Disabled, as most mixers support these natively: "volumeicon" is a good one.
 #"~/.scripts/softvol.sh -"
 #XF86AudioLowerVolume
 #"~/.scripts/softvol.sh +"

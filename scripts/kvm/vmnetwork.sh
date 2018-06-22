@@ -48,12 +48,11 @@ then
   else
       brctl addbr netbridge
       ip link set netbridge up
-      sysctl -q -e -w net.ipv4.conf.netbridge.forwarding=1
       ifconfig $nic 0.0.0.0
       brctl addif netbridge $nic
       dhclient netbridge
+      sysctl -q -e -w net.ipv4.conf.netbridge.forwarding=1
 
-      echo "sudo sysctl -q -e -w net.ipv4.conf.netbridge.forwarding=0" >> $reset_script
       echo "sudo ip link set netbridge down" >> $reset_script
       echo "sudo brctl delbr netbridge" >> $reset_script
       echo "sudo ifconfig $nic $ip" >> $reset_script
@@ -75,10 +74,6 @@ else
     sysctl -q -e -w net.ipv4.conf.vmbridge.forwarding=1
     sysctl -q -e -w net.ipv6.conf.vmbridge.forwarding=1
 
-    echo "sudo sysctl -q -e -w net.ipv6.conf.vmbridge.forwarding=0" >> $reset_script
-    echo "sudo sysctl -q -e -w net.ipv4.conf.vmbridge.forwarding=0" >> $reset_script
-    echo "sudo ip addr del fe80::1:1/64 dev vmbridge scope site" >> $reset_script
-    echo "sudo ip addr del 10.0.1.1/24 dev vmbridge scope host" >> $reset_script
     echo "sudo ip link set vmbridge down" >> $reset_script
     echo "sudo brctl delbr vmbridge" >> $reset_script
 fi

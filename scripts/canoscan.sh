@@ -1,7 +1,7 @@
 #!/bin/bash
 # Batch scanning script for Canon Lide scanner. An ugly hack for single user desktops.
-# The scanner or the driver has a bug which causes the scanning operation to fail sometimes.
-# This script takes care of that. There also is (or at least used to be) a bug which causes
+# The scanner or the driver causes the scanning operation to fail sometimes.
+# This script takes care of that. There also might be a bug which causes
 # the scans to be weirdly deformed unless color mode and high resolution is used.
 
 # The corresponding udev script could be for example something like:
@@ -35,4 +35,3 @@ do
         fi
     done
 done
-
