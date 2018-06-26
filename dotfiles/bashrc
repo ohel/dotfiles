@@ -17,14 +17,13 @@ HISTSIZE=4096
 # Not on by default as it may get a bit bothersome.
 PROMPT_COMMAND='if [ "$COMMON_HISTORY" = "1" ]; then history -a; history -c; history -r; fi; echo -ne "\e]0;Terminal: ${PWD}\007"'
 
+prompt_prefix="\u@\h:"
+[ -e ~/.config/prompt_prefix ] && prompt_prefix=$(cat ~/.config/prompt_prefix)
+
+prompt_git=""
 # https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
-if [ -e ~/.config/git-prompt.sh ]
-then
-    source ~/.config/git-prompt.sh
-    PS1='\[\e[0;37m\]\w \[\e[1;36m\]$(__git_ps1 "(%s) ")\[\e[1;30m\]\$\[\e[0m\] '
-else
-    PS1='\[\e[0;37m\]\w \[\e[1;30m\]\$\[\e[0m\] '
-fi
+[ -e ~/.config/git-prompt.sh ] && source ~/.config/git-prompt.sh && prompt_git='$(__git_ps1 "(%s) ")'
+PS1='\[\e[0;37m\]'$prompt_prefix'\w \[\e[1;36m\]'$prompt_git'\[\e[1;30m\]\$\[\e[0m\] '
 
 set -o vi
 shopt -s globstar # recursive glob like **/*.log or cd **/scripts
@@ -64,8 +63,8 @@ export PATH=".:$PATH"
 
 if [ -d "$HOME/.nvm" ]; then
     export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 fi
 
 # System specific stuff.
