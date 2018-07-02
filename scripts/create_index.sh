@@ -16,24 +16,28 @@ for filename in `find ./ -maxdepth 1 -type f | sort`; do
     item=`basename "$filename"`
     if test "$item" != "index.html" &&
        test "$item" != ".htaccess" &&
-       test "X$(echo $item | grep thumb_.*\.jpg)" = "X"; then
-        echo "<li><a href=\"/$root/$item\">$item" >> $index
-        if test "X$(ls thumb_${item%.*}.jpg 2>/dev/null)" != "X"; then
-            echo "</br><img src=\"thumb_${item%.*}.jpg\" alt=\"img\">" >> $index
-        fi
-        echo "</a></li>" >> $index
+       test "X$(echo $item | grep thumb_.*\.jpg)" = "X"
+    then
+       echo "<li><a href=\"/$root/$item\">$item" >> $index
+       if test "X$(ls thumb_${item%.*}.jpg 2>/dev/null)" != "X"
+       then
+           echo "</br><img src=\"thumb_${item%.*}.jpg\" alt=\"img\">" >> $index
+       fi
+       echo "</a></li>" >> $index
     fi
 done
 echo "</ol><ul>" >> $index
-for filepath in `find ./ -maxdepth 1 -mindepth 1 -type d | sort`; do
-  path=`basename "$filepath"`
-  echo "<li>$path" >> $index
-  echo "<ol>" >> $index
-  for i in `find "$filepath" -maxdepth 1 -mindepth 1 -type f | sort`; do
-    file=`basename "$i"`
-    echo "<li><a href=\"/$root/$path/$file\">$file</a></li>" >> $index
-  done
-  echo "</ol></li>" >> $index
+for filepath in `find ./ -maxdepth 1 -mindepth 1 -type d | sort`
+do
+    path=`basename "$filepath"`
+    echo "<li>$path" >> $index
+    echo "<ol>" >> $index
+    for i in `find "$filepath" -maxdepth 1 -mindepth 1 -type f | sort`
+    do
+        file=`basename "$i"`
+        echo "<li><a href=\"/$root/$path/$file\">$file</a></li>" >> $index
+    done
+    echo "</ol></li>" >> $index
 done
 echo "</ul></body></html>" >> $index
 
