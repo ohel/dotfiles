@@ -9,8 +9,14 @@ index="index.html"
 
 echo "Creating index for /$root"
 
-echo "<html lang=\"en\"><head><meta charset=\"utf-8\">" > $index
-echo "<style> a { text-decoration: none; } </style>" >> $index
+cat > $index << EOF
+<html lang="en"><head><meta charset="utf-8">
+<style>
+    html { font-family: sans-serif; }
+    a { text-decoration: none; }
+    hr { border-style: outset; border-width: 2px; }
+</style>
+EOF
 echo "</head><body><ol>" >> $index
 for filename in `find ./ -maxdepth 1 -type f | sort`; do
     item=`basename "$filename"`
@@ -23,7 +29,7 @@ for filename in `find ./ -maxdepth 1 -type f | sort`; do
        then
            echo "</br><img src=\"thumb_${item%.*}.jpg\" alt=\"img\">" >> $index
        fi
-       echo "</a></li>" >> $index
+       echo "</a></li><hr>" >> $index
     fi
 done
 echo "</ol><ul>" >> $index
@@ -47,4 +53,4 @@ echo "DirectoryIndex $index" >> .htaccess
 chmod a+r .htaccess $index
 
 echo "Created index.html and .htaccess."
-echo "Remember to chmod -R a+r the files and directories."
+echo "Remember to chmod -R a+r the linked files and directories."
