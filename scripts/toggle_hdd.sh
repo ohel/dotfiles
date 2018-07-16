@@ -45,19 +45,22 @@ then
     	sudo hdparm -Y /dev/$device &
     done
 else
-    for device in $devices
-    do
-        if test "X$(sudo hdparm -C /dev/$device | grep standby)" = "X"
-        then
-            if test "X$(mount | grep /dev/$device)" = "X"
+    if [ "X$2" != "Xmount" ]
+    then
+        for device in $devices
+        do
+            if test "X$(sudo hdparm -C /dev/$device | grep standby)" = "X"
             then
-                # The drive is not mounted but not sleeping either. Put it to sleep.
-                sudo hdparm -Y /dev/$device &
-                shouldmount=0
+                if test "X$(mount | grep /dev/$device)" = "X"
+                then
+                    # The drive is not mounted but not sleeping either. Put it to sleep.
+                    sudo hdparm -Y /dev/$device &
+                    shouldmount=0
+                fi
             fi
-        fi
-    done
-    if [ $shouldmount -eq 1 ] || [ "X$2" = "Xmount" ]
+        done
+    fi
+    if [ $shouldmount -eq 1 ]
     then
 		echo "Mounting $mountloc..."
 		sudo mount $mountloc
