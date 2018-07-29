@@ -1,20 +1,15 @@
 #!/bin/bash
-# Power on the default bluetooth controller and connect to device: ALSA_BLUETOOTH_MAC.
-# Assumes the bluetooth device has been paired beforehand and bluealsa is running.
-# To pair a device, power on a controller using bluetoothctl and trust, pair and connect the device.
+# Power on the default bluetooth controller and connect to device: XBOX_BLUETOOTH_MAC.
+# Assumes the bluetooth device has been paired beforehand and xpadneo is installed.
+# To pair a device, power on a controller using bluetoothctl and pair, trust, and connect the device.
+# xpadneo: https://github.com/atar-axis/xpadneo
 
-if test "X$ALSA_BLUETOOTH_MAC" == "X"
+if test "X$XBOX_BLUETOOTH_MAC" == "X"
 then
-    echo "Define the environment variable ALSA_BLUETOOTH_MAC first."
+    echo "Define the environment variable XBOX_BLUETOOTH_MAC first."
     exit
 fi
-BT_DEV_MAC=$ALSA_BLUETOOTH_MAC
-
-if test "X$(ps -e | grep bluealsa | grep -v `basename "$0"`)" == "X"
-then
-    echo "Bluealsa is not running."
-    exit
-fi
+BT_DEV_MAC=$XBOX_BLUETOOTH_MAC
 
 echo "Checking bluetooth controller."
 coproc bluetoothctl

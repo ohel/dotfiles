@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Connect to Xbox One controller using Bluetooth
+Exec=.scripts/xboxonebt.sh
+Terminal=false
+Type=Application
+Icon=bluetooth
+Categories=System;Utility;Audio
