@@ -523,6 +523,11 @@ pcm.loop {
     }
 }
 
+ctl.loop {
+    type hw
+    card Loopback
+}
+
 pcm.loop_playback_in {
     type plug
     slave.pcm "hw:Loopback,0,0"
@@ -538,6 +543,27 @@ pcm.loop_playback_out {
     hint {
         show on
         description "ALSA playback loop out"
+    }
+}
+
+# Mixing with loopback.
+pcm.loop_playback_in_mix {
+    type plug
+    slave.pcm {
+        type dmix
+        ipc_key 50
+        slave {
+            pcm "hw:Loopback,0,0"
+            format S32_LE
+            periods 16
+            period_time -1
+            period_size 512
+            rate 44100
+        }
+    }
+    hint {
+        show on
+        description "Loopback mixer device, use device loop_playback_out to listen."
     }
 }
 

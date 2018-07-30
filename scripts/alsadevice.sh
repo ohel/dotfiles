@@ -9,6 +9,7 @@ if [ "$#" = 0 ]; then
     echo "julia (julia)"
     echo "eq    (hda_eq)"
     echo "file  (file_out)"
+    echo "loop  (loop_playback_in_mix)"
     echo "null"
     echo ""
 else
@@ -33,6 +34,9 @@ else
     elif [ "$1" = "file" ]; then
         pcm="file_out"
         ctl="hda_hw"
+    elif [ "$1" = "loop" ]; then
+        pcm="loop_playback_in_mix"
+        ctl="loop"
     else
         echo "Unknown device."
     fi

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Connect to Bluetooth audio with BlueALSA and JACK for mixing
+Exec=.scripts/bluejack.sh
+Terminal=true
+Type=Application
+Icon=bluetooth
+Categories=System;Utility;Audio
