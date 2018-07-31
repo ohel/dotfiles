@@ -152,8 +152,7 @@ pcm.hda_out_mix_44100 {
         slave {
             pcm "hda_hw"
             format S16_LE
-            periods 16
-            period_time -1
+            periods 8
             period_size 1024
             rate 44100
         }
@@ -310,8 +309,7 @@ pcm.julia_aout_mix_44100 {
         slave {
             pcm "julia_analog_hw"
             format S32_LE
-            periods 16
-            period_time -1
+            periods 8
             period_size 1024
             rate 44100
         }
@@ -555,8 +553,7 @@ pcm.loop_playback_in_mix {
         slave {
             pcm "hw:Loopback,0,0"
             format S32_LE
-            periods 16
-            period_time -1
+            periods 4
             period_size 512
             rate 44100
         }
