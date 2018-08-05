@@ -8,13 +8,11 @@ if [ "$#" = 0 ]; then
     exit
 fi
 
+device=${2:-$1}
 profile="$1"
-device="$2"
-track=$3
-
 if [ "$#" = 1 ]; then
     profile="sr"
-    device="$1"
 fi
 
-~/.scripts/launchers/media_player.sh $profile --cache=no dvdread://$track --dvd-device="$device"
+scriptdir=$(dirname "$(readlink -f "$0")")
+$scriptdir/media_player.sh $profile --cache=no dvdread://$3 --dvd-device="$device"

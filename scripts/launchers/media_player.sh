@@ -15,7 +15,7 @@ if [ "$#" = 0 ]; then
     echo "                          srbm    (surroundmoviebalancedmatrix)"
     echo "                          openal  (openalmovie)"
     echo ""
-    echo "If profile shortcut is omitted, $DEFAULTPROFILE profile is assumed."
+    echo "If profile is omitted or none of the above, the default is: $DEFAULTPROFILE"
     exit
 fi
 
@@ -37,5 +37,5 @@ else
     profile=$DEFAULTPROFILE
 fi 
     
-set -x
+# This enables passing other parameters instead of just a filename.
 $EXE --profile=$profile "${@:2}" &
