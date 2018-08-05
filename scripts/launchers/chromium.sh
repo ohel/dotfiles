@@ -22,8 +22,10 @@ elif test "$(ps -ef | grep chromium-browser | grep -v grep)X" = "X"
 then
     chromium-browser
 else
+    # To open a blank page: chromium-browser about:blank
     # Instead of opening a blank page, use Ctrl+t new tab shortcut to open speed dial page.
-    #chromium-browser about:blank
     # Assuming Win+w is the shortcut for this script, keyup w first.
-    xdotool keyup w && xdotool keyup Mod4 && xdotool key Ctrl+t
+    # We first have to sleep for a tiny bit for the window to get focus.
+    sleep 0.15
+    xdotool keyup w && xdotool keyup super && xdotool key ctrl+t
 fi
