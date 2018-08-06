@@ -1,5 +1,5 @@
 #!/bin/bash
-# Change screen color temperature using the redshift application.
+# Change screen color temperature using the redshift tool.
 
 tempfile=~/.cache/redshift_temp
 default=6000
@@ -25,4 +25,4 @@ then
     current=$new
 fi
 
-redshift -O $current
+redshift -PO $current

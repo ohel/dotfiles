@@ -103,17 +103,17 @@ Mod4 + Home
 "~/.scripts/backlight.sh 25"
 Mod4 + End
 
+# Quick night mode using redshift.
+"redshift -P -o -l 0:0 -b 0.4 -t 4500:4500"
+Mod1 + Mod4 + Home
+"redshift -x"
+Mod1 + Mod4 + End
+
 # Color temperature adjustment.
 "~/.scripts/redshift.sh -500"
 Mod4 + Next # Page down
 "~/.scripts/redshift.sh 500"
 Mod4 + Prior # Page up
-
-# Quick night mode using redshift.
-"redshift -o -l 0:0 -b 0.4 -t 4500:4500"
-Mod1 + Mod4 + End
-"redshift -x"
-Mod1 + Mod4 + Home
 
 # Toggle keyboard layout between Finnish and English (US).
 # Note that modifier keys may be different between keymaps, breaking some bound keys.
