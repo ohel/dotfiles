@@ -1,3 +1,9 @@
+# The following environment variables are used in this config:
+# ALSA_DEFAULT_PCM
+# ALSA_DEFAULT_CTL
+# ALSA_HIFI_PCM
+# ALSA_BLUETOOTH_MAC
+
 # Default device.
 pcm.!default {
     @func refer
@@ -356,18 +362,9 @@ pcm.hifi {
             }
         ]
     }
-}
-
-# The real device to use with virtual multichannel devices.
-pcm.multichannel_device {
-    @func refer
-    name { @func concat
-        strings [ "pcm."
-            { @func getenv
-                vars [ ALSA_MULTICHANNEL_PCM ]
-                default "default"
-            }
-        ]
+    hint {
+        show on
+        description "Hi-Fi output"
     }
 }
 
@@ -379,7 +376,7 @@ pcm.movie {
         pcm {
             type multi
             slaves.speakers {
-                pcm "multichannel_device"
+                pcm "hifi"
                 channels 2
             }
             bindings.0.slave speakers
@@ -413,7 +410,7 @@ pcm.movie_balanced_matrix {
         pcm {
             type multi
             slaves.speakers {
-                pcm "multichannel_device"
+                pcm "hifi"
                 channels 2
             }
             bindings.0.slave speakers

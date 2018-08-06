@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Spotify (ALSA override)
+GenericName=Music Player
+Icon=spotify-client
+Exec=env ALSA_DEFAULT_PCM=hifi spotify %U
+Terminal=false
+MimeType=x-scheme-handler/spotify;
+Categories=Audio;Music;Player;AudioVideo;
+StartupWMClass=spotify
