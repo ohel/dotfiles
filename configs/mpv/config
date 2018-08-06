@@ -52,7 +52,7 @@ sub-color="#20FFFFFF" # less visible
 profile-desc="surround sound profile for movies"
 
 ao=alsa
-audio-device=alsa/julia_movie
+audio-device=alsa/movie
 audio-channels=6
 alsa-ignore-chmap
 ad-lavc-downmix=no
@@ -65,7 +65,7 @@ profile=common-movie
 profile-desc="another surround sound profile for movies"
 
 ao=alsa
-audio-device=alsa/julia_movie_balanced_matrix
+audio-device=alsa/movie_balanced_matrix
 audio-channels=6
 alsa-ignore-chmap
 ad-lavc-downmix=no
@@ -91,7 +91,7 @@ profile=common-movie
 profile-desc="stereo sound profile for movies"
 
 ao=alsa
-audio-device=alsa/julia_aout
+audio-device=alsa/hifi
 audio-channels=2
 alsa-ignore-chmap
 profile=common-movie

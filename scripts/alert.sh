@@ -4,7 +4,7 @@
 # Use crontab to schedule the alert checking.
 
 wav=${1:-~/.local/share/misc/alert.wav}
-alsadev=${2:-julia_aout}
+alsadev=${2:-hifi}
 
 if [ -e ~/alert.set ]
 then

@@ -130,19 +130,6 @@ pcm.hda {
     }
 }
 
-# Virtual equalizer device.
-pcm.hda_eq {
-    type plug
-    slave.pcm {
-        type equal
-        slave.pcm "hda"
-    }
-    hint {
-        show on
-        description "HDA with equalizer"
-    }
-}
-
 # Mixing with integrated.
 pcm.hda_out_mix_44100 {
     type plug
@@ -159,7 +146,7 @@ pcm.hda_out_mix_44100 {
     }
     hint {
         show on
-        description "HDA dmix out"
+        description "HDA mix out"
     }
 }
 
@@ -174,7 +161,7 @@ pcm.hda_in_mix_44100 {
     }
     hint {
         show on
-        description "HDA dsnoop in"
+        description "HDA mix in"
     }
 }
 
@@ -316,7 +303,7 @@ pcm.julia_aout_mix_44100 {
     }
     hint {
         show on
-        description "Juli@ dmix analog out 44.1 kHz"
+        description "Juli@ mix analog out 44.1 kHz"
     }
 }
 
@@ -334,7 +321,7 @@ pcm.julia_ain_mix_44100 {
     }
     hint {
         show on
-        description "Juli@ dsnoop analog in 44.1 kHz"
+        description "Juli@ mix analog in 44.1 kHz"
     }
 }
 
@@ -345,17 +332,12 @@ pcm.julia_ain_mix_44100 {
 # Asymmetric device for HDA audio with Juli@ input.
 pcm.combo {
     type asym
-    playback.pcm "hda_out_mix_44100_vol"
+    playback.pcm "hda_out_mix_44100"
     capture.pcm "julia_ain_mix_44100"
     hint {
         show on
-        description "HDA + Juli@ combo asymmetric"
+        description "HDA out / Juli@ analog in"
     }
-}
-
-# Control device for equalizer plugin.
-ctl.eq {
-    type equal
 }
 
 # Null output.
@@ -363,31 +345,41 @@ pcm.null {
     type null
 }
 
-# Soft volume control.
-pcm.hda_out_mix_44100_vol {
-    type softvol
-    slave {
-        pcm "hda_out_mix_44100"
-    }
-    control {
-        name "Soft Master"
-        card PCH
-    }
-    hint {
-        show on
-        description "HDA out with soft volume control"
+# The go-to Hi-Fi device. May be used to override mixing/resampling etc.
+pcm.hifi {
+    @func refer
+    name { @func concat
+        strings [ "pcm."
+            { @func getenv
+                vars [ ALSA_HIFI_PCM ]
+                default "default"
+            }
+        ]
     }
 }
 
-# General movie setup.
-pcm.julia_movie {
+# The real device to use with virtual multichannel devices.
+pcm.multichannel_device {
+    @func refer
+    name { @func concat
+        strings [ "pcm."
+            { @func getenv
+                vars [ ALSA_MULTICHANNEL_PCM ]
+                default "default"
+            }
+        ]
+    }
+}
+
+# General surround downmix movie setup.
+pcm.movie {
     type plug
     slave {
         format float
         pcm {
             type multi
             slaves.speakers {
-                pcm "julia_aout"
+                pcm "multichannel_device"
                 channels 2
             }
             bindings.0.slave speakers
@@ -409,19 +401,19 @@ pcm.julia_movie {
     }
     hint {
         show on
-        description "Juli@ movie setup"
+        description "Movie setup, downmix 5.1 to stereo, custom matrix"
     }
 }
 
 # Another general movie setup with balanced sound matrix.
-pcm.julia_movie_balanced_matrix {
+pcm.movie_balanced_matrix {
     type plug
     slave {
         format float
         pcm {
             type multi
             slaves.speakers {
-                pcm "julia_aout"
+                pcm "multichannel_device"
                 channels 2
             }
             bindings.0.slave speakers
@@ -443,18 +435,18 @@ pcm.julia_movie_balanced_matrix {
     }
     hint {
         show on
-        description "Juli@ movie setup, balanced matrix"
+        description "Movie setup, downmix 5.1 to stereo, balanced matrix"
     }
 }
 
 # Plug device for bs2b.
-pcm.julia_binaural {
+pcm.binaural {
     type plug
     slave {
         rate 44100
         pcm {
             type ladspa
-            slave.pcm "julia_aout"
+            slave.pcm "default"
             path "/usr/lib/ladspa"
             plugins [ {
                 label bs2b # Bauer stereophonic-to-binaural DSP
@@ -466,20 +458,61 @@ pcm.julia_binaural {
     }
     hint {
         show on
-        description "Juli@ binaural"
+        description "Bauer stereophonic-to-binaural DSP @ 44.1 kHz"
+    }
+}
+
+# Software volume control.
+pcm.softvol {
+    @args [ CARD ]
+    type softvol
+    slave {
+        pcm "default"
+    }
+    control {
+        name "Soft Master"
+        @args.CARD {
+            type string
+            default {
+                @func refer
+                name 'default.pcm.card'
+            }
+        }
+    }
+    hint {
+        show on
+        description "Software volume control"
     }
 }
 
 # WAV recording device.
-pcm.file_out {
+pcm.wav {
     type file
-    slave.pcm "hda"
+    slave.pcm "default"
     file /dev/shm/alsaout.wav
     format "wav"
     hint {
         show on
         description "WAV recording"
     }
+}
+
+# Virtual equalizer device.
+pcm.eq {
+    type plug
+    slave.pcm {
+        type equal
+        slave.pcm "default"
+    }
+    hint {
+        show on
+        description "Equalizer"
+    }
+}
+
+# Control device for equalizer plugin.
+ctl.eq {
+    type equal
 }
 
 # Bluetooth device. The control device is implicitly called ctl.bluealsa.
@@ -586,20 +619,35 @@ pcm.loop_record_out {
 pcm.loop_vm_dac_in {
     type plug
     slave.pcm "hw:Loopback,0,4"
+    hint {
+        show on
+        description "Loop: VM DAC in (use in guest)"
+    }
 }
 
 pcm.loop_vm_dac_out {
     type plug
     slave.pcm "hw:Loopback,1,4"
+    hint {
+        show on
+        description "Loop: VM DAC out (use in host)"
+    }
 }
 
 pcm.loop_vm_adc_in {
     type plug
     slave.pcm "hw:Loopback,0,5"
+    hint {
+        show on
+        description "Loop: VM ADC in (use in host)"
+    }
 }
 
 pcm.loop_vm_adc_out {
     type plug
     slave.pcm "hw:Loopback,1,5"
+    hint {
+        show on
+        description "Loop: VM ADC out (use in guest)"
+    }
 }
-
