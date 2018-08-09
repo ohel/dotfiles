@@ -25,4 +25,11 @@ then
     current=$new
 fi
 
-redshift -PO $current
+# The -P reset parameter was introduced in redshift 1.12.
+version=$(redshift -V | cut -f 2 -d ' ' | tr -d '.')
+if [ $version -gt 111 ];
+then
+    resetparam="-P"
+fi
+
+redshift $resetparam -O $current
