@@ -25,7 +25,7 @@ then
     done
 else
     nic=$1
-    if test "X$(ls -l /sys/class/net | grep devices\/pci | cut -f 11 -d ' ' | grep -o $nic)" != "X$nic"
+    if test "X$(ls -l /sys/class/net | grep devices\/pci | grep -o "\-> [^ ]*" | grep -o $nic)" != "X$nic"
     then
         echo "Network device not found: $nic"
         exit
