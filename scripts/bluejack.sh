@@ -11,7 +11,11 @@
 
 tmp_bashrc=/dev/shm/bluejackbashrc
 scriptsdir=$(dirname "$(readlink -f "$0")")
-$scriptsdir/bluealsa.sh
+if ! $scriptsdir/bluealsa.sh;
+then
+    echo "BlueALSA is not connected. Exiting."
+    exit 1
+fi
 
 killall jackd
 killall alsa_in

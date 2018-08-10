@@ -29,7 +29,7 @@ echo -e "info $BT_DEV_MAC\nexit" >&${COPROC[1]}
 output=$(cat <&${COPROC[0]})
 if test "X$(echo $output | grep 'Connected: yes')" == "X"
 then
-    echo "Connecting to device $BT_DEV_MAC."
+    echo "Connecting to device: $BT_DEV_MAC"
     coproc bluetoothctl
     echo -e "connect $BT_DEV_MAC\nexit" >&${COPROC[1]}
     wait $COPROC_PID
