@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=DOSBox
+Name=DOSBox (custom)
 Type=Application
 Comment=DOS emulator
 Exec=.scripts/launchers/dosbox.sh
