@@ -2,45 +2,28 @@
 if [ "$#" = 0 ]; then
     echo "Usage: source alsadevice.sh <device>"
     echo ""
-    echo "Valid devices:"
-    echo "combo (combo)"
-    echo "hda   (hda)"
-    echo "hdmi  (hdmi_out)"
-    echo "julia (julia)"
-    echo "eq    (hda_eq)"
-    echo "file  (file_out)"
-    echo "loop  (loop_playback_in_mix)"
+    echo "Example devices:"
+    echo "eq"
+    echo "hda"
+    echo "hdmi"
+    echo "hifi"
+    echo "loop (loop_playback_in_mix)"
     echo "null"
+    echo "wav"
     echo ""
 else
-    if [ "$1" = "combo" ]; then
-        pcm="combo"
-        ctl="hda_hw"
-    elif [ "$1" = "hda" ]; then
-        pcm="hda"
-        ctl="hda_hw"
-    elif [ "$1" = "hdmi" ]; then
-        pcm="hdmi_out"
+    pcm="$1"
+    if [ "$pcm" = "hdmi" ]; then
         ctl="hdmi_hw"
-    elif [ "$1" = "julia" ]; then
-        pcm="julia"
-        ctl="julia_analog_hw"
-    elif [ "$1" = "eq" ]; then
-        pcm="hda_eq"
-        ctl="hda_hw"
-    elif [ "$1" = "null" ]; then
-        pcm="null"
-        ctl="hda_hw"
-    elif [ "$1" = "file" ]; then
-        pcm="file_out"
-        ctl="hda_hw"
-    elif [ "$1" = "loop" ]; then
+    elif [ "$pcm" = "hifi" ]; then
+        ctl="hifi"
+    elif [ "$pcm" = "loop" ]; then
         pcm="loop_playback_in_mix"
         ctl="loop"
-    else
-        echo "Unknown device."
     fi
  
-    export ALSA_DEFAULT_PCM=$pcm
-    export ALSA_DEFAULT_CTL=$ctl
+    export ALSA_OVERRIDE_PCM=$pcm
+    if [ "X$ctl" != "X" ]; then
+        export ALSA_OVERRIDE_CTL=$ctl
+    fi
 fi

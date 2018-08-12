@@ -1,11 +1,50 @@
-# The following environment variables are used in this config:
+# The following environment variables are used in this config.
+# Each are optional. The OVERRIDE overrides DEFAULT if set.
+# ALSA_OVERRIDE_PCM
+# ALSA_OVERRIDE_CTL
 # ALSA_DEFAULT_PCM
 # ALSA_DEFAULT_CTL
 # ALSA_HIFI_PCM
+# ALSA_HIFI_CTL
 # ALSA_BLUETOOTH_MAC
 
-# Default device.
+# Default device. Just generic abstractions.
 pcm.!default {
+    @func refer
+    name { @func concat
+        strings [ "pcm."
+            { @func getenv
+                vars [ ALSA_OVERRIDE_PCM ]
+                default { @func getenv
+                    vars [ ALSA_DEFAULT_PCM ]
+                    default "asound_default"
+                }
+            }
+        ]
+    }
+}
+
+# Default control device. Just generic abstractions.
+ctl.!default {
+    @func refer
+    name { @func concat
+        strings [ "ctl."
+            { @func getenv
+                vars [ ALSA_OVERRIDE_CTL ]
+                default { @func getenv
+                    vars [ ALSA_DEFAULT_CTL ]
+                    default "asound_default"
+                }
+            }
+        ]
+    }
+}
+
+# Configured real default device to prevent reference loops such as:
+# ALSA_DEFAULT_PCM = eq, eq.slave = default, default.pcm = ALSA_DEFAULT_PCM
+# Instead we will have:
+# ALSA_OVERRIDE_PCM = eq, eq.slave = asound_default, asound_default.pcm = ALSA_DEFAULT_PCM
+pcm.asound_default {
     @func refer
     name { @func concat
         strings [ "pcm."
@@ -17,8 +56,8 @@ pcm.!default {
     }
 }
 
-# Default control device.
-ctl.!default {
+# Configured real default control device to prevent reference loops.
+ctl.asound_default {
     @func refer
     name { @func concat
         strings [ "ctl."
@@ -358,13 +397,26 @@ pcm.hifi {
         strings [ "pcm."
             { @func getenv
                 vars [ ALSA_HIFI_PCM ]
-                default "default"
+                default "asound_default"
             }
         ]
     }
     hint {
         show on
         description "Hi-Fi output"
+    }
+}
+
+# Hi-Fi control device.
+ctl.hifi {
+    @func refer
+    name { @func concat
+        strings [ "ctl."
+            { @func getenv
+                vars [ ALSA_HIFI_CTL ]
+                default "asound_default"
+            }
+        ]
     }
 }
 
@@ -443,7 +495,7 @@ pcm.binaural {
         rate 44100
         pcm {
             type ladspa
-            slave.pcm "default"
+            slave.pcm "asound_default"
             path "/usr/lib/ladspa"
             plugins [ {
                 label bs2b # Bauer stereophonic-to-binaural DSP
@@ -464,7 +516,7 @@ pcm.softvol {
     @args [ CARD ]
     type softvol
     slave {
-        pcm "default"
+        pcm "asound_default"
     }
     control {
         name "Soft Master"
@@ -472,7 +524,7 @@ pcm.softvol {
             type string
             default {
                 @func refer
-                name 'default.pcm.card'
+                name 'asound_default.pcm.card'
             }
         }
     }
@@ -485,9 +537,16 @@ pcm.softvol {
 # WAV recording device.
 pcm.wav {
     type file
-    slave.pcm "default"
-    file /dev/shm/alsaout.wav
+    slave.pcm "asound_default"
     format "wav"
+    file { @func concat
+        strings [
+            { @func getenv
+                vars [ HOME ]
+                default "/dev/shm"
+            }
+        "/alsa_out.wav" ]
+    }
     hint {
         show on
         description "WAV recording"
@@ -499,7 +558,7 @@ pcm.eq {
     type plug
     slave.pcm {
         type equal
-        slave.pcm "default"
+        slave.pcm "asound_default"
     }
     hint {
         show on
