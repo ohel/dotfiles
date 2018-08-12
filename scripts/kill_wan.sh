@@ -1,5 +1,5 @@
 #!/bin/bash
-# Prevent all network connections except those to LAN. Forwarding IPv4 is also disabled.
+# Prevent all network connections except those to LAN. IP forwarding is also disabled.
 
 if test "X$(which iptables 2>/dev/null)" = "X"
 then
@@ -25,6 +25,7 @@ then
     iptables -P OUTPUT ACCEPT
 
     sysctl -q -e -w net.ipv4.conf.$IF.forwarding=1
+    sysctl -q -e -w net.ipv6.conf.$IF.forwarding=1
 
     echo "Flushed iptables rules. WAN connections are allowed."
     sleep 1
@@ -56,6 +57,7 @@ then
 fi
 
 sysctl -q -e -w net.ipv4.conf.$IF.forwarding=0
+sysctl -q -e -w net.ipv6.conf.$IF.forwarding=0
 
 echo "WAN connections are prevented."
 sleep 1
