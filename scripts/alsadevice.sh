@@ -5,7 +5,7 @@ if [ "$#" = 0 ]; then
     echo "Example devices:"
     echo "eq"
     echo "hda"
-    echo "hdmi"
+    echo "hdmi (hdmi_out)"
     echo "hifi"
     echo "loop (loop_playback_in_mix)"
     echo "null"
@@ -14,6 +14,7 @@ if [ "$#" = 0 ]; then
 else
     pcm="$1"
     if [ "$pcm" = "hdmi" ]; then
+        pcm="hdmi_out"
         ctl="hdmi_hw"
     elif [ "$pcm" = "hifi" ]; then
         ctl="hifi"
