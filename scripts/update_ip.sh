@@ -3,24 +3,38 @@
 # access that page and grep the IP address for upload to a public site.
 # This is useful when gaming with friends or you need to publish your IP for other reasons.
 # The script supports the following router models:
-#    1. TW-LTE/4G/3G router, WiFI AC
-#    2. FAST3686 (DNA Valokuitu Plus) - You must login once from your computer, then the router remembers you until restart.
+#    tw: TW-LTE/4G/3G router, WiFI AC
+#    fast: FAST3686 (DNA Valokuitu Plus)
 
-routermodel=2
-lanip=10.0.0.1
+routermodel=${1:-fast}
 
-if test "$routermodel" = 1
-then
+username=$(whoami)
+routerip=$(ip route | grep default | grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}")
+readpw() {
     echo "Enter router password (won't be echoed)."
     stty_orig=`stty -g`
     stty -echo
     read pw
     stty $stty_orig 
-    username=$(whoami)
-    wanipv4=$(wget http://$lanip/adm/status.asp --user=$username --password=$pw -q -O - | grep 'id="idv4wanip"' | grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}")
-elif test "$routermodel" = 2
+}
+
+if test "$routermodel" = "tw"
 then
-    wanipv4=$(wget http://$lanip/RgSetup.asp -q -O - | grep -o "id=\"wanipaddr[^<]*" | cut -f 2 -d '>')
+    readpw
+    wanipv4=$(wget http://$routerip/adm/status.asp --user=$username --password=$pw -q -O - | grep 'id="idv4wanip"' | grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}")
+elif test "$routermodel" = "fast"
+then
+    # Check if login is needed. The router remembers logged in computers with some kind of logic.
+    responsepage=$(wget http://$routerip/RgSetup.asp -q -O -)
+    if test "X$(echo $responsepage | grep loginUsername)" != "X";
+    then
+        username=admin
+        readpw
+        skey=$(echo $responsepage | grep -o "SessionKey = [0-9]*;" | tr -dc "[:digit:]")
+        wget -q -O /dev/null "http://$routerip/goform/login?sessionKey=$skey" --post-data="loginOrInitDS=0&loginUsername=$username&loginPassword=$pw&currentDsFrequency=450000000&currentUSChannelID=2"
+        responsepage=$(wget http://$routerip/RgSetup.asp -q -O -)
+    fi
+    wanipv4=$(echo $responsepage | grep -o "id=\"wanipaddr[^<]*" | cut -f 2 -d '>')
 fi
 
 echo
