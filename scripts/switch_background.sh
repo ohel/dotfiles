@@ -1,11 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 # Toggle alternative background when using xfdesktop.
+# The alternative background kills conky if in use.
 
 checkfile=~/.cache/backgroundchanged
 if [ -f $checkfile ]
 then
+    conkylauncher=~/.scripts/launchers/conky.sh
     ln -sf ~/.themes/background.png ~/.themes/background
-    exec ~/.scripts/launchers/conky.sh &
+    [ -e $conkylauncher ] && $conkylauncher &
     rm $checkfile
 else
     ln -sf ~/.themes/background_alt.png ~/.themes/background

@@ -32,7 +32,7 @@ Mod4 + XF86AudioPlay
 XF86Favorites
 
 # For toggling between two soundcards.
-"xfce4-terminal --hide-borders --geometry 50x10 -x ~/.scripts/toggle_digital_source.sh autoclose monitor &"
+"xfce4-terminal --hide-borders --geometry 50x10 -x ~/.scripts/toggle_julia_digital.sh autoclose monitor &"
 XF86AudioMute
 
 "~/.scripts/ql_change_song.sh previous"
