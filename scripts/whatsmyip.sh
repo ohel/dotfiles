@@ -1,8 +1,7 @@
 #!/bin/sh
-# When using a dynamic IP and a router that asks for a password every time to see the status page,
-# access that page and grep the IP address for upload to a public site.
-# This is useful when gaming with friends or you need to publish your IP for other reasons.
-# The script supports the following router models:
+# When using a router with dynamic mode, access router status page and grep the IP address.
+# This is useful for example when gaming with friends.
+# The script supports the following router models (pass as parameter):
 #    tw: TW-LTE/4G/3G router, WiFI AC
 #    fast: FAST3686 (DNA Valokuitu Plus)
 
