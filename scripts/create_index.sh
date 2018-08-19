@@ -12,12 +12,12 @@ echo "Creating index for /$root"
 cat > $index << EOF
 <html lang="en"><head><meta charset="utf-8">
 <style>
-    body { background-image: radial-gradient(at bottom right, darkgray, black); padding: 3em; }
+    body { background-color: dimgray; padding: 3em; }
     html { font-family: sans-serif; }
-    a { color: whitesmoke; text-decoration: none; text-shadow: 1px 1px black; }
+    a { color: white; text-decoration: none; }
     img { margin-top: 0.5em; }
     hr { border-color: darkgray; border-style: outset; border-width: 2px; }
-    ol { color: gray; text-shadow: 1px 1px black; }
+    ol { color: cyan; }
 </style>
 </head><body><ol>
 EOF
