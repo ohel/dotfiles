@@ -14,6 +14,7 @@ scriptsdir=$(dirname "$(readlink -f "$0")")
 if ! $scriptsdir/bluealsa.sh;
 then
     echo "BlueALSA is not connected. Exiting."
+    sleep 1
     exit 1
 fi
 

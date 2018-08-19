@@ -6,12 +6,14 @@
 if test "X$ALSA_BLUETOOTH_MAC" == "X"
 then
     echo "Define the environment variable ALSA_BLUETOOTH_MAC first."
+    sleep 1
     exit 1
 fi
 
 if test "X$(ps -e | grep bluealsa | grep -v `basename "$0"`)" == "X"
 then
     echo "Bluealsa is not running."
+    sleep 1
     exit 1
 fi
 
@@ -26,5 +28,6 @@ output=$(cat <&${COPROC[0]})
 if test "X$(echo $output | grep 'Connected: yes')" == "X"
 then
     echo "Connection did not succeed yet."
+    sleep 1
     exit 1
 fi
