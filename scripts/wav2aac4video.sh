@@ -30,7 +30,7 @@ fi
 tmpfile=~/.cache/out
 
 echo Extracting audio...
-ffmpeg -loglevel fatal -i $input -c copy -map 0:a:0 $tmpfile.wav
+ffmpeg -loglevel error -acodec pcm_s16le -i $input -c copy -map 0:a:0 $tmpfile.wav
 
 if test "X$(which sox 2>/dev/null)" != "X"
 then
@@ -46,11 +46,11 @@ then
     bitrate=$(echo 48000*$quality | bc)
     fdkaac -S -b $bitrate $tmpfile.normalized.wav -o $tmpfile.m4a
 else
-    ffmpeg -loglevel fatal -i $tmpfile.normalized.wav -codec:a libfdk_aac -aq 0.0$quality -ar 44100 $tmpfile.m4a
+    ffmpeg -loglevel error -i $tmpfile.normalized.wav -codec:a libfdk_aac -aq 0.0$quality -ar 44100 $tmpfile.m4a
 fi
 
 echo Muxing with video...
-ffmpeg -loglevel fatal -i $input -i $tmpfile.m4a -c copy -map 0:v:0 -map 1:a:0 $(basename -s .avi $input).mp4
+ffmpeg -loglevel error -i $input -i $tmpfile.m4a -c copy -map 0:v:0 -map 1:a:0 $(basename -s .avi $input).mp4
 rm $tmpfile.normalized.wav $tmpfile.wav $tmpfile.m4a 2>/dev/null
 echo Done.
 
