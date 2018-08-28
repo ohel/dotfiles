@@ -4,7 +4,7 @@
 if test "X$(which iptables 2>/dev/null)" = "X"
 then
     echo "Executable iptables not in path. Do you have (root) access?"
-    exit
+    exit 1
 fi
 
 for physical_device in $(ls -l /sys/class/net | grep devices\/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')
@@ -29,7 +29,7 @@ then
 
     echo "Flushed iptables rules. WAN connections are allowed."
     sleep 1
-    exit
+    exit 0
 fi
 
 iptables -F

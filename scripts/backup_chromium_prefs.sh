@@ -16,12 +16,12 @@ then
         then
             mkdir $profiledir
         else
-            exit
+            exit 1
         fi
     if ! [ -e $profiledir ]
     then
         echo "Unable to create $profiledir."
-        exit
+        exit 1
     fi
 fi
 

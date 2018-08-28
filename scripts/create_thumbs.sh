@@ -5,7 +5,7 @@ if [[ "$#" -lt 1 ]] || ! [[ $1 =~ ^[0-9]+$ ]]
 then
     echo "Give the maximum thumbnail size as a first parameter (\$1 x \$1 pixels)."
     echo "A nice example size for blog articles is 450."
-    exit
+    exit 1
 fi
 size=$1
 

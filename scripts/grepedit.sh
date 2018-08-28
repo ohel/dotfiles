@@ -7,12 +7,12 @@ ag_exe=$(which ag 2>/dev/null)
 if test "X$rg_exe$ag_exe" = "X"
 then
     echo "Neither rg or ag was found."
-    exit
+    exit 1
 fi
 
 if [ "$#" -eq 0 ]
 then
-    exit
+    exit 1
 fi
 
 rg $1 2>/dev/null || ag $1
@@ -22,7 +22,7 @@ read -a words
 greps=""
 for word in "${words[@]}"
 do
-  greps="$greps | grep -i $word"
+    greps="$greps | grep -i $word"
 done
 
 if test "X$rg_exe" = "X"

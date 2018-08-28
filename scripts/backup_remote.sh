@@ -15,9 +15,10 @@ countdown=3 # Wait this many seconds before actually starting the operation to p
 
 echo
 
-if [ "$#" -lt 4 ]; then
+if [ "$#" -lt 4 ]
+then
     echo "Required parameters missing."
-    exit
+    exit 1
 fi
 
 mode=$1

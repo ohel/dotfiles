@@ -6,7 +6,7 @@
 if test "X$XBOX_BLUETOOTH_MAC" == "X"
 then
     echo "Define the environment variable XBOX_BLUETOOTH_MAC first."
-    exit
+    exit 1
 fi
 
 scriptsdir=$(dirname "$(readlink -f "$0")")

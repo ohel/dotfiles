@@ -16,7 +16,7 @@ remotedir="~/backups/docs"
 
 if [ "$#" -lt 2 ]; then
     echo "Required parameters missing."
-    exit
+    exit 1
 fi
 server=$1
 mode=$2
@@ -31,7 +31,7 @@ if test "$mode" == "normal"
 then
     if [ ! -e "$localdir/$docpath" ]; then
         echo "Error: file not found under $localdir."
-        exit
+        exit 1
     fi
     rsync -avzu $localdir/$docpath $server:$remotedir/$docpath
 elif test "$mode" == "normaldry"

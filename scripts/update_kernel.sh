@@ -11,14 +11,14 @@ if test "$(echo $HOME)" != "/root"
 then
     echo "You must be root to update kernel."
     read
-    exit
+    exit 1
 fi
 
 if [ ! -e /usr/src/linux ]
 then
     echo "The symbolic link /usr/src/linux does not exist, aborting."
     read
-    exit
+    exit 1
 fi
 
 cd /usr/src
@@ -70,14 +70,14 @@ then
     cleanup $new_version "$rt_grep_opts" $prefix
     echo "All done."
     read
-    exit
+    exit 0
 fi
 
 if [ ! -e $prefix-$old_version/.config ]
 then
     echo "The config file for the old version could not be found, aborting."
     read
-    exit
+    exit 1
 fi
 
 echo "Updating from kernel $old_version to $new_version."
@@ -94,7 +94,7 @@ if [ ! -e arch/x86_64/boot/bzImage ]
 then
     echo "Unable to find bzImage. Aborting."
     read
-    exit
+    exit 1
 fi
 
 echo "Compiled kernel."

@@ -6,7 +6,7 @@ backlight=/sys/class/backlight/intel_backlight
 
 if [ "$#" -eq 0 ]
 then
-    exit
+    exit 1
 fi
 
 max=$(cat $backlight/max_brightness);

@@ -3,12 +3,14 @@
 # For best results, run with:
 # /usr/bin/terminal --hide-borders --geometry 50x10 -x toggle_digital_source.sh autoclose [monitor]
 
-autoclose=0
+autoclose=0 # If run in a terminal, will close it.
 monitor=0
-if [ "$1" = "autoclose" ] || [ "$2" = "autoclose" ]; then
+if [ "$1" = "autoclose" ] || [ "$2" = "autoclose" ]
+then
     autoclose=1
 fi
-if [ "$1" = "monitor" ] || [ "$2" = "monitor" ]; then
+if [ "$1" = "monitor" ] || [ "$2" = "monitor" ]
+then
     monitor=1
 fi
 

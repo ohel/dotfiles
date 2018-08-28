@@ -4,7 +4,7 @@
 # and some applications simply refuse to play anything at all into a bluealsa device.
 # JACK server however plays with a bluealsa device nicely.
 
-# The script starts a JACK server using the bluealsa device 'bluetooth' as output and
+# The script starts a JACK server using the BlueALSA device 'bluetooth' as output and
 # connects the ALSA loopback device 'loop_playback_out' to it.
 # Finally a new bash shell is started, with the other end of the loopback device
 # as the default audio device.

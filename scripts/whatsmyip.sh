@@ -1,9 +1,8 @@
 #!/bin/sh
-# When using a router with dynamic mode, access router status page and grep the IP address.
-# This is useful for example when gaming with friends.
-# The script supports the following router models (pass as parameter):
-#    tw: TW-LTE/4G/3G router, WiFI AC
-#    fast: FAST3686 (DNA Valokuitu Plus)
+# When using a router with dynamic WAN IPv4 address, access router status page and get the address.
+# Supports the following router models (pass as parameter):
+#    tw: Telewell TW-LTE/4G/3G router, WiFI AC
+#    fast: Sagemcom FAST3686 (DNA Valokuitu Plus)
 
 routermodel=${1:-fast}
 
@@ -42,8 +41,8 @@ echo
 
 if test "X$wanipv4" = "X"
 then
-    echo "Error."
-    exit
+    echo "Error retrieving IPv4."
+    exit 1
 fi
 
 # Use a secret script to upload contents of $ip variable somewhere publicly available.

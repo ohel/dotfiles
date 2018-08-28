@@ -4,7 +4,7 @@
 if [ "$#" -eq 0 ]
 then
     echo "Usage: toggle_sshfs.sh <local mountpoint> <remote host> <remote mountpoint>"
-    exit
+    exit 1
 fi
 
 if test "$(mount | grep $1)X" == "X"

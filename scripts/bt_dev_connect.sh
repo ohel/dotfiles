@@ -8,7 +8,7 @@ BT_DEV_MAC=$1
 if test "X$BT_DEV_MAC" == "X"
 then
     echo "Give the Bluetooth device MAC as a parameter."
-    exit
+    exit 1
 fi
 
 echo "Checking Bluetooth controller."
@@ -35,4 +35,5 @@ then
     wait $COPROC_PID
 else
     echo "Already connected."
+    exit 3
 fi

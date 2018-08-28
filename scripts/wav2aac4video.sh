@@ -13,18 +13,18 @@ quality=${2:-2}
 if [[ $quality -lt 1 || $quality -gt 5 ]]
 then
     echo "Audio quality must be between 1 and 5, given as integer."
-    exit
+    exit 1
 fi
 
 if test "X$input" == "X"
 then
     echo "Define a .avi file."
-    exit
+    exit 1
 fi
 if test "$(basename -s .avi $input)" == "$input"
 then
     echo "Input video must have a .avi suffix."
-    exit
+    exit 1
 fi
 
 tmpfile=~/.cache/out

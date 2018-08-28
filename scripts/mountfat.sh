@@ -7,4 +7,5 @@ if [ "$#" -eq 0 ]; then
     ls -d -1 /dev/s* | grep "/dev/sd[g-z]\{1,1\}[0-9]\{0,1\}$"
     exit
 fi
-sudo mount -o uid=panther,gid=panther /dev/sd$(echo $1 | sed "s/\(\/dev\/\)\?sd//") $2
+user=$(whoami)
+sudo mount -o uid=$user,gid=$user /dev/sd$(echo $1 | sed "s/\(\/dev\/\)\?sd//") $2

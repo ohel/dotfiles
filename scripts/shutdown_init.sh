@@ -6,7 +6,7 @@ if test "X$(ps -ef | grep qemu.* | grep -v grep)" != "X"
 then
     echo "A virtual machine is running."
     read
-    exit
+    exit 1
 fi
 
 if [ -e /proc/mdstat ]
@@ -18,7 +18,7 @@ then
         echo "RAID device note:"
         cat "/proc/mdstat"
         read
-        exit
+        exit 1
     fi
 
     if test "X$(cat /proc/mdstat | grep resync)" != "X"
@@ -26,7 +26,7 @@ then
         echo "RAID devices resyncing:"
         cat "/proc/mdstat"
         echo
-        echo "CTRL-C to cancel shutdown."
+        echo "Press CTRL-C to cancel shutdown, return to continue."
         read
     fi
 fi

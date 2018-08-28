@@ -2,11 +2,11 @@
 # Download YouTube videos using youtube-dl in a well compressed, good-quality format.
 
 audio_fid=171 # vorbis@128k
-video_fid=247 # vp9, 25fps, 720p
+video_fid=247 # vp9, 720p
 
 if [ "$#" -ne 1 ]
 then
-    exit
+    exit 1
 fi
 
 destination=$(youtube-dl -f $audio_fid -o "%(title)s" $1 | grep Destination | cut -f 2 -d ':' | sed -e 's/^[[:space:]]*//')

@@ -60,22 +60,25 @@ homebackupexcludelist=(
 logdir="/var/log/backup/"
 
 if test "$(echo $HOME)" != "/root"
-    then echo You must be root to maintain permissions!
-    exit
+then
+    echo You must be root to maintain permissions!
+    exit 1
 fi
 
 echo "Mounting partitions if not already mounted..."
 for mountable in ${mountables[@]}
 do
     if test "empty$(cat /etc/mtab | grep $mountable)" == "empty"
-        then mount $mountable 2>/dev/null &
+    then
+        mount $mountable 2>/dev/null &
     fi
 done
 wait
 for mountable in ${mountables[@]}
 do
     if test "empty$(cat /etc/mtab | grep $mountable)" == "empty"
-        then echo "Mounting $mountable failed."
+    then
+        echo "Mounting $mountable failed."
         sleep 1
     fi
 done
@@ -125,14 +128,14 @@ done
 
 if test "X$1" == "Xmisconly"
 then
-    exit
+    exit 0
 fi
 
 if ! [ -e $systembackupdir ]
 then
     echo "System backup directory $systembackupdir does not exist."
     echo "Aborting system backup..."
-    exit
+    exit 1
 fi
 
 if test "X$1" != "Xsynconly"

@@ -11,13 +11,13 @@ logfile=~/.cache/openvpn.log
 if [ "$#" == 0 ]
 then
     echo "You must give the OpenVPN config file as parameter."
-    exit
+    exit 1
 fi
 
 if test "X$(which openvpn)" = "X"
 then
     echo "OpenVPN executable not found."
-    exit
+    exit 1
 fi
 
 for physical_device in $(ls -l /sys/class/net | grep devices\/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')
@@ -71,7 +71,7 @@ wait_routes() {
             echo; cat $logfile; echo
             echo "Press return to exit."
             read
-            exit
+            exit 1
         fi
     done
 }
@@ -98,7 +98,7 @@ done
 if test "X$vpn_ip" = "X"
 then
     echo "ERROR: VPN IP not found from routes."
-    exit
+    exit 1
 fi
 
 iptables -F

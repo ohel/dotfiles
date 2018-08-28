@@ -6,7 +6,7 @@
 if [ "$#" -eq 0 ]
 then
     echo "Usage: toggle_hdd.sh <mount location> [sleep|mount]"
-    exit
+    exit 1
 fi
 
 mountloc="$1"
@@ -16,7 +16,7 @@ device=$(ls -l /dev/disk/by-uuid/$uuid | cut -f 2 -d '>' | cut -f 3 -d '/')
 if test "X$device" = "X"
 then
     echo "Device not found."
-    exit
+    exit 1
 fi
 
 mountloc=$(cat /etc/fstab | grep $uuid | tr -s [:space:] | tr '\t' ' ' | cut -f 2 -d ' ')
