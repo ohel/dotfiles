@@ -21,7 +21,7 @@ fi
 killall jackd
 killall alsa_in
 
-/usr/bin/jackd -r -p512 -dalsa -dbluetooth -r44100 -p512 -n2 -s -S -P -o2 &
+/usr/bin/jackd -r -p128 -dalsa -dbluetooth -r44100 -p512 -n2 -s -S -P -o2 &
 echo "Waiting for jackd to start 3..."
 sleep 1
 echo "Waiting for jackd to start 2..."
