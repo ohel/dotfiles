@@ -188,7 +188,7 @@ if filereadable($VIMHOME . "/after/ftplugin/python_pydiction.vim")
 endif
 
 if isdirectory($VIMHOME . "/plugged/tcomment_vim")
-    let g:tcommentMapLeaderOp1 = 'å'
+    let g:tcomment_opleader1 = 'å'
 endif
 
 " A '-d directory' style syntax is assumed by vim-gtfo, but xfce4-terminal only
@@ -569,6 +569,8 @@ function! OnVimEnter()
     " tcomment
     if exists("g:loaded_tcomment")
         " Toggle comment for the current/selected line(s).
+        " For some reason this does not work here:
+        " :execute "normal! " . eval(string(g:tcomment_opleader1)) . "c"<cr>
         nmap <silent><a-c> åc
         vmap <silent><a-c> å
         imap <silent><a-c> <esc>åc^
