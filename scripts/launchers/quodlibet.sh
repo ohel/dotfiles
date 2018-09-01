@@ -39,7 +39,7 @@ then
         sed -i "s/\(^gst_pipeline.*\) device=.*/\1 device=$device/" ~/.quodlibet/config
     fi
 
-    if [ $params = "--toggle-window" ]; then
+    if [ "$params" = "--toggle-window" ]; then
         exit # Don't start QL if just toggling.
     fi
     params="" # Clear params so that QL may start without --run.

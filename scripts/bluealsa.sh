@@ -17,20 +17,28 @@ then
     exit 1
 fi
 
+checkconnection() {
+    coproc bluetoothctl
+    echo -e "info $1\nexit" >&${COPROC[1]}
+    output=$(cat <&${COPROC[0]})
+    return $(test "X$(echo $output | grep 'Connected: yes')" == "X")
+}
+
 scriptsdir=$(dirname "$(readlink -f "$0")")
 if $scriptsdir/bt_dev_connect.sh $ALSA_BLUETOOTH_MAC;
 then
     echo "Waiting for connection."
-    sleep 10
-fi
-
-echo "Checking Bluetooth device."
-coproc bluetoothctl
-echo -e "info $BT_DEV_MAC\nexit" >&${COPROC[1]}
-output=$(cat <&${COPROC[0]})
-if test "X$(echo $output | grep 'Connected: yes')" == "X"
-then
+    counter=10
+    while [ $counter -gt 0 ]
+    do
+        counter=$(expr $counter - 1)
+        if checkconnection $ALSA_BLUETOOTH_MAC
+        then
+            sleep 1
+        else
+            exit 0
+        fi
+    done
     echo "Connection did not succeed yet."
-    sleep 1
     exit 1
 fi
