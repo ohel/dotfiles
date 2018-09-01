@@ -70,10 +70,10 @@ else
     sleep 1
     env ALSA_DEFAULT_PCM=loop_playback_in_mix ALSA_DEFAULT_CTL=loop $bt_env_program &>/dev/null &
     clear
-    echo "Started $bt_env_program in environment where:"
+    echo "Started $bt_env_program in an environment where:"
     echo
-    echo     ALSA_DEFAULT_PCM=loop_playback_in_mix
-    echo     ALSA_DEFAULT_CTL=loop
+    echo "    ALSA_DEFAULT_PCM=loop_playback_in_mix"
+    echo "    ALSA_DEFAULT_CTL=loop"
     echo
     echo "Press return to exit and kill jackd."
     read
