@@ -25,14 +25,16 @@ fi
 
 killall alsa_in &>/dev/null
 killall jackd &>/dev/null
+sleep 1
 
 /usr/bin/jackd -r -p128 -dalsa -dbluetooth -r44100 -p512 -n2 -s -S -P -o2 >/dev/null &
-echo "Waiting for jackd to start 3..."
-sleep 1
-echo "Waiting for jackd to start 2..."
-sleep 1
-echo "Waiting for jackd to start 1..."
-sleep 1
+echo -n "Waiting for jackd to start 3..."
+tput cub 4 && sleep 1
+echo -n "2"
+tput cub 1 && sleep 1
+echo -n "1"
+tput cub 1 && sleep 1
+tput cuf 4 && echo
 
 # This is a hack to trick alsa_in below into using a correct format.
 # If audio is playing when starting alsa_in, audio will work after that, too.
