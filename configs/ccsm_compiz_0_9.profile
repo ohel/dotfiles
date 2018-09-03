@@ -110,18 +110,18 @@ s0_font_background_color = #0000007f
 s0_color = #ffdf3fff
 
 [core]
-s0_active_plugins = core;crashhandler;composite;opengl;decor;imgjpeg;imgsvg;mousepoll;put;grid;place;compiztoolbox;ezoom;imgpng;neg;cube;move;rotate;scale;resize;text;switcher;scaleaddon;thumbnail;session;resizeinfo;
+s0_active_plugins = core;crashhandler;composite;opengl;decor;imgjpeg;imgsvg;mousepoll;put;annotate;grid;place;compiztoolbox;ezoom;imgpng;neg;cube;move;rotate;scale;resize;text;switcher;scaleaddon;thumbnail;session;resizeinfo;
 s0_audible_bell = false
 s0_outputs = 1920x1080+0+0;
 s0_focus_prevention_level = 0
 s0_focus_prevention_match = any
+s0_close_window_key = Disabled
 s0_raise_window_button = Disabled
 s0_lower_window_button = Disabled
 s0_minimize_window_key = Disabled
 s0_maximize_window_key = Disabled
 s0_unmaximize_or_minimize_window_key = Disabled
 s0_window_menu_button = Disabled
-s0_show_desktop_key = Disabled
 s0_toggle_window_maximized_key = Disabled
 s0_toggle_window_shaded_key = Disabled
 s0_hsize = 2
@@ -146,6 +146,16 @@ s0_pad_bottom = 10
 s0_avoid_offscreen = true
 s0_speed = 12.500000
 s0_timestep = 0.100000
+
+[annotate]
+s0_initiate_line_button = Disabled
+s0_initiate_rectangle_button = Disabled
+s0_initiate_ellipse_button = Disabled
+s0_erase_button = Disabled
+s0_clear_button = <Alt><Super>Button3
+s0_clear_key = Disabled
+s0_stroke_color = #ff00ffff
+s0_stroke_width = 5.000000
 
 [grid]
 s0_put_center_key = <Alt><Super>o
