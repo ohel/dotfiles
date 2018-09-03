@@ -9,7 +9,7 @@
 #   toggle-window (default if QL is running; does not start the player if parameter given)
 #   play-pause (starts the player if it is not running)
 # Parameter to change audio device in the config before launching the player:
-#   audio <device>
+#   audio <device> [<gst pipeline file>]
 # where <device> is an ALSA device.
 
 qlexe=/opt/programs/quodlibet/quodlibet.py
@@ -30,16 +30,29 @@ else
         params="--play-pause"
     elif [ "$1" = "audio" ] && [ "$#" -gt 1 ]; then
         device="$2"
+        pipelinefile="$3"
     fi
 fi
 
 if ! ps -ef | grep $qlexe | grep -v grep > /dev/null
 then
-    if test "X$device" != "X"; then
+    if [ "$pipelinefile" != "" ]
+    then
+        if ! [ -e $pipelinefile ]
+        then
+            echo "Pipeline file $pipelinefile does not exist."
+            exit 1
+        fi
+        pipeline=$(cat $pipelinefile)
+        sed -i "s/\(^gst_pipeline = \).*/\1 $pipeline/" ~/.quodlibet/config
+    fi
+    if [ "$device" != "" ]
+    then
         sed -i "s/\(^gst_pipeline.*\) device=.*/\1 device=$device/" ~/.quodlibet/config
     fi
 
-    if [ "$params" = "--toggle-window" ]; then
+    if [ "$params" = "--toggle-window" ]
+    then
         exit # Don't start QL if just toggling.
     fi
     params="" # Clear params so that QL may start without --run.

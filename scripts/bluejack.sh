@@ -72,6 +72,7 @@ else
     sleep 1
     env ALSA_DEFAULT_PCM=loop_playback_in_mix ALSA_DEFAULT_CTL=loop $bt_env_program &>/dev/null &
     clear
+    echo -ne '\e[8;7;50t'
     echo "Started $bt_env_program in an environment where:"
     echo
     echo "    ALSA_DEFAULT_PCM=loop_playback_in_mix"

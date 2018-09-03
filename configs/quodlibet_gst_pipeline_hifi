@@ -1,0 +1,1 @@
+audiocheblimit mode=high-pass cutoff=20 poles=4 type=1 ripple=0 ! audioconvert ! equalizer-nbands num-bands=3 band1::freq=118 band1::bandwidth=6.0 band1::gain=-5.0 ! alsasink device=hifi
