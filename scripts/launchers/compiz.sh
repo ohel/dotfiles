@@ -2,10 +2,13 @@
 # Compiz 0.9 series installed with prefix /opt/programs/compiz.
 
 if test "$(ps -e | grep compiz)"
-    then
+then
     killall -9 compiz
     killall -9 gtk-window-decorator
 fi
 LD_LIBRARY_PATH=/opt/programs/compiz/lib64:/opt/programs/compiz/lib/compiz exec /opt/programs/compiz/bin/compiz ccp --replace &
-exec /opt/programs/compiz/bin/gtk-window-decorator --replace &
-#exec /opt/programs/compiz/bin/gtk-window-decorator --metacity-theme "metacity_panther" &
+
+/opt/programs/compiz/bin/gtk-window-decorator --replace &
+
+# This would use the metacity theme /usr/share/themes/current_compiz but it only works if Metacity is installed.
+# /opt/programs/compiz/bin/gtk-window-decorator --replace --metacity-theme current_compiz &

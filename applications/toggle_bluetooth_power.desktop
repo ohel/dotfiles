@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Toggle Bluetooth controller power 
+Exec=.scripts/toggle_bluetooth.sh power
+Icon=bluetooth
+Categories=System;Utility

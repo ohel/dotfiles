@@ -52,6 +52,6 @@ if [ $(basename "$0") = ".xsession" ] || [ "X$lastone" = "X" ]
 then
     exec xfce4-session
 else
-    exec xfce4-session &
+    xfce4-session &
     exec $lastone
 fi

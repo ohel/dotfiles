@@ -1,12 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
-Version=0.9.4
 Type=Application
 Name=Multimedia keys
-Comment=
-Exec=/home/panther/.scripts_extra/mmkeys.sh
+Comment=Set extra bindings
+Exec=.scripts_extra/mmkeys.sh
 OnlyShowIn=XFCE;
 StartupNotify=false
 Terminal=false
 Hidden=false
-

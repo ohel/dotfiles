@@ -1,12 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
-Version=0.9.4
 Type=Application
 Name=Conky
-Comment=
-Exec=/home/panther/.scripts/launchers/conky.sh
+Comment=Display RSS feeds and info on desktop
+Exec=.scripts/launchers/conky.sh
 OnlyShowIn=XFCE;
 StartupNotify=false
 Terminal=false
 Hidden=false
-

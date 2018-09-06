@@ -1,12 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
-Version=0.9.4
 Type=Application
 Name=Reset LCD
-Comment=
-Exec=/home/panther/.scripts/lcd/reset.sh
+Comment=Reset Matrix Orbital LCD
+Exec=.scripts/lcd/reset.sh
 OnlyShowIn=XFCE;
 StartupNotify=false
 Terminal=false
 Hidden=false
-
