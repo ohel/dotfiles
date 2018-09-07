@@ -13,6 +13,9 @@ Mod4 + e
 "thunar"
 XF86Search
 
+"xfce4-settings-manager"
+XF86Tools
+
 "xfce4-terminal --geometry=120x30 -e ranger"
 Mod4 + r
 
@@ -35,33 +38,6 @@ Mod4 + v
 "gvim +1 ~/.memo"
 Mod1 + Mod4 + v
 
-# Window manipulation
-######################
-
-# Reset active window to upper left corner.
-"wmctrl -r :ACTIVE: -e 0,0,0,-1,-1"
-Mod4 + BackSpace
-
-# Classically Alt+F4 closes a window whatever the window manager.
-# However, prevent closing the desktop window.
-"wmctrl -l | grep "0x0$(echo "obase=16; $(xdotool getactivewindow)" | bc).*Desktop$" || wmctrl -c :ACTIVE:"
-Mod1 + F4
-
-# Toggle window maximized.
-"wmctrl -r :ACTIVE: -b toggle,maximized_vert,maximized_horz"
-Mod4 + x
-
-# Minimize window.
-"xdotool getactivewindow windowminimize"
-Mod4 + z
-
-# Show desktop.
-"wmctrl -k on"
-Mod4 + m
-
-# Special commands
-###################
-
 "xfce4-popup-whiskermenu"
 Control + Escape
 "xfce4-popup-whiskermenu"
@@ -76,6 +52,13 @@ Mod1 + Mod4 + Pause
 "~/.scripts/switch_background.sh"
 Mod4 + Pause
 
+# Screen locking.
+"i3lock -t -e -i ~/.themes/lockscreen.png"
+Control + Mod1 + Delete
+
+# External display.
+"~/.scripts/external_display.sh switch"
+XF86Display
 "~/.scripts/external_display.sh switch"
 Mod4 + p
 "~/.scripts/external_display.sh mirror"
@@ -83,13 +66,11 @@ Mod1 + Mod4 + p
 "~/.scripts/external_display.sh extend"
 Control + Mod1 + Mod4 + p
 
+# Screen capturing.
 "~/.scripts/screenshot.sh"
 Print
 "~/.scripts/screenshot.sh 2"
 Mod4 + Print
-
-"i3lock -t -e -i ~/.themes/lockscreen.png"
-Control + Mod1 + Delete
 
 # Terminal buffer scrolling with Alt+J/K (caps), makes it ergonomic.
 "xdotool keyup j && xdotool key --clearmodifiers Shift+Page_Down"
@@ -136,3 +117,27 @@ Mod5 + b
 #XF86AudioLowerVolume
 #"~/.scripts/softvol.sh +"
 #XF86AudioRaiseVolume
+
+# Window manipulation
+######################
+
+# Reset active window to upper left corner.
+"wmctrl -r :ACTIVE: -e 0,0,0,-1,-1"
+Mod4 + BackSpace
+
+# Classically Alt+F4 closes a window whatever the window manager.
+# However, prevent closing the desktop window.
+"wmctrl -l | grep "0x0$(echo "obase=16; $(xdotool getactivewindow)" | bc).*Desktop$" || wmctrl -c :ACTIVE:"
+Mod1 + F4
+
+# Toggle window maximized.
+"wmctrl -r :ACTIVE: -b toggle,maximized_vert,maximized_horz"
+Mod4 + x
+
+# Minimize window.
+"xdotool getactivewindow windowminimize"
+Mod4 + z
+
+# Show desktop.
+"wmctrl -k on"
+Mod4 + m

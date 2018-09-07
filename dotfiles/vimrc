@@ -604,7 +604,7 @@ if hostname() == "minigun"
 elseif hostname() == "gainasus"
     let g:dfont="ProggyCleanTTSZ"
     let g:zoom_level=2
-elseif hostname() == "oheldell"
+elseif hostname() == "lenoohel"
     au GUIEnter * set lines=35 columns=130
     let g:dfont="ProggyCleanTTSZ"
     let g:dlines=35
