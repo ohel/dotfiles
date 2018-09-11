@@ -21,7 +21,7 @@ export QT_XFT=1
 # one must use qt5ct to change the look of Qt5 applications.
 export QT_QPA_PLATFORMTHEME=qt5ct
 
-[[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources
+[ -f ~/.Xresources ] && xrdb -merge -I$HOME ~/.Xresources
 
 # Sometimes I link .thumbnails and .cache to directories under .commoncache
 # and .commoncache itself somewhere under /dev/shm.
@@ -38,8 +38,8 @@ xset dpms 900 0 0
 # Disable DPMS, disable screensaver. If using a television, DPMS is not supported anyway.
 xset -dpms; xset s off
 
-[[ -f ~/.asound.state ]] && /usr/sbin/alsactl restore -f ~/.asound.state
-[[ -d ~/.sessions ]] && ln -sf ~/.sessions ~/.cache/sessions
+[ -f ~/.asound.state ] && /usr/sbin/alsactl restore -f ~/.asound.state
+[ -d ~/.sessions ] && ln -sf ~/.sessions ~/.cache/sessions
 
 # This application does absolutely nothing, it just waits to be killed, keeping X alive.
 # It is as stable as it gets, even if the real session manager might be unstable.

@@ -606,9 +606,10 @@ elseif hostname() == "gainasus"
     let g:zoom_level=2
 elseif hostname() == "lenoohel"
     au GUIEnter * set lines=35 columns=130
+    set guifont=Monospace\ 10
     let g:dfont="ProggyCleanTTSZ"
     let g:dlines=35
     let g:dcols=130
-    let g:zoom_level=2
+    let g:zoom_level=1
     silent call SetTabWidth(2)
 endif
