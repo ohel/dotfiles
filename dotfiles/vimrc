@@ -27,9 +27,12 @@ set noswapfile
 set number  " Line numbering.
 set pastetoggle=<f4> " Toggle paste mode (no auto indent).
 set showtabline=2 " Tab selector always visible.
-set termguicolors " Use truecolor if possible.
 set textwidth=0 " Define text width if autowrapping: 0 disables autowrap, wraps to 80 on manual wrap (gq).
 set virtualedit=block " Allow selecting non-characters in visual block mode.
+
+if version >= 800
+    set termguicolors " Use truecolor if possible. Support came in version 7.4.1770.
+endif
 
 " Same as "let mapleader = ' '", but more flexible.
 map <space> <leader>
