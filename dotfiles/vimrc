@@ -1,32 +1,35 @@
-au VimEnter * call OnVimEnter()
-au GUIEnter * set lines=31 columns=107 " Set window size when starting in GUI mode.
-let g:dlines=31 " Put default window size in memory.
-let g:dcols=107
+autocmd VimEnter * call OnVimEnter()
+autocmd GUIEnter * set lines=31 columns=107 " Set window size when starting in GUI mode.
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif " Returns cursor to previous position when opening files.
 
-set encoding=utf-8
-set showtabline=2 " Tab selector always visible.
-set expandtab " Expand tab to spaces, use c-q<tab> for real tab.
+let g:dlines=31 " Also set default size into memory.
+let g:dcols=107
+let g:leave_my_textwidth_alone=1 " Don't autowrap lines while typing.
+
 let &shiftwidth=&tabstop " Set intend (using keys << or >>) width.
 let &softtabstop=&tabstop " Set indent width in insert mode using tab.
-set hidden " Do not close file buffers when opening a new one, use :ls to list buffers.
-set hlsearch " Highlight search.
+
 set autoread " Automatically update file if changed from the outside.
 set backspace=indent,eol,start " Make backspace clear other than new text also.
-set guicursor=n-v-c:hor25-Cursor " Set cursor size.
-set nocp " Nocompatible: enables features which are not Vi compatible.
-set ic " Set ignore case on searches, remedy with set noic or use \C in search term.
-set number  " Line numbering.
-set textwidth=0 " Define text width if autowrapping: 0 disables autowrap, wraps to 80 on manual wrap (gq).
-let g:leave_my_textwidth_alone=1 " Don't autowrap lines while typing.
-set go-=T " Hide toolbar.
+set encoding=utf-8
+set expandtab " Expand tab to spaces, use c-q<tab> for real tab.
 set go-=m " Hide menu.
-set go-=t " Disable tear-off menus.
 set go-=r " Disable right scroll bar.
+set go-=t " Disable tear-off menus.
+set go-=T " Hide toolbar.
+set guicursor=n-v-c:hor25-Cursor " Set cursor size.
+set hidden " Do not close file buffers when opening a new one, use :ls to list buffers.
+set hlsearch " Highlight search.
+set ic " Set ignore case on searches, remedy with set noic or use \C in search term.
 set incsearch " Incremental search.
-set virtualedit=block " Allow selecting non-characters in visual block mode.
+set nocp " Nocompatible: enables features which are not Vi compatible.
 set noswapfile
-autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif " Returns cursor to previous position when opening files.
+set number  " Line numbering.
 set pastetoggle=<f4> " Toggle paste mode (no auto indent).
+set showtabline=2 " Tab selector always visible.
+set termguicolors " Use truecolor if possible.
+set textwidth=0 " Define text width if autowrapping: 0 disables autowrap, wraps to 80 on manual wrap (gq).
+set virtualedit=block " Allow selecting non-characters in visual block mode.
 
 " Same as "let mapleader = ' '", but more flexible.
 map <space> <leader>
@@ -134,34 +137,35 @@ set undofile
 " Syntax and file type detection etc.
 syntax on
 filetype on
-au BufNewFile,BufRead *.xaml set filetype=xml
-au BufNewFile,BufRead *.md set filetype=markdown
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 autocmd FileType cpp set tags +=$VIMHOME/ctagsdb
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+autocmd BufNewFile,BufRead *.md set filetype=markdown
+autocmd BufNewFile,BufRead *.xaml set filetype=xml
 
 if filereadable($VIMHOME . "/autoload/plug.vim")
     silent! call plug#begin($VIMHOME . "/plugged")
 endif
 if exists("*plug#begin")
+    Plug 'ap/vim-css-color'
     Plug 'jreybert/vimagit'
     Plug 'justinmk/vim-gtfo'
     Plug 'kana/vim-arpeggio'
     Plug 'leafgarland/typescript-vim'
     Plug 'maksimr/vim-jsbeautify', { 'do': 'cd $VIMHOME/plugged/vim-jsbeautify && git submodule update --init --recursive' }
+    " Default trigger for prettier is: <leader>p
+    Plug 'prettier/vim-prettier', {
+      \ 'do': 'yarn install',
+      \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown'] }
     Plug 'Shougo/unite-outline' " Unite source providing outline view of current buffer.
     Plug 'Shougo/unite.vim'
     Plug 'Shougo/vimproc.vim', { 'do': 'cd $VIMHOME/plugged/vimproc.vim && make -f make_unix.mak' } " Allows async operations.
     Plug 'tomtom/tcomment_vim' " Code commenting.
     Plug 'Valloric/YouCompleteMe', { 'on': [], 'do': 'cd $VIMHOME/plugged/YouCompleteMe && ./install.py' }
-    " Default trigger for prettier is: <leader>p
-    Plug 'prettier/vim-prettier', {
-      \ 'do': 'yarn install',
-      \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown'] }
     call plug#end()
 endif
 
@@ -605,7 +609,7 @@ elseif hostname() == "gainasus"
     let g:dfont="ProggyCleanTTSZ"
     let g:zoom_level=2
 elseif hostname() == "lenoohel"
-    au GUIEnter * set lines=35 columns=130
+    autocmd GUIEnter * set lines=35 columns=130
     set guifont=Monospace\ 10
     let g:dfont="ProggyCleanTTSZ"
     let g:dlines=35

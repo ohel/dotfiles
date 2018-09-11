@@ -29,7 +29,7 @@ then
         username=admin
         readpw
         skey=$(echo $responsepage | grep -o "SessionKey = [0-9]*;" | tr -dc "[:digit:]")
-        wget -q -O /dev/null "http://$routerip/goform/login?sessionKey=$skey" --post-data="loginOrInitDS=0&loginUsername=$username&loginPassword=$pw&currentDsFrequency=450000000&currentUSChannelID=2"
+        wget -q -O /dev/null "http://$routerip/goform/login?sessionKey=$skey" --post-data="loginUsername=$username&loginPassword=$pw"
         responsepage=$(wget http://$routerip/RgSetup.asp -q -O -)
     fi
     wanipv4=$(echo $responsepage | grep -o "id=\"wanipaddr[^<]*" | cut -f 2 -d '>')
