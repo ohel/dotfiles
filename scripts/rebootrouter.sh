@@ -48,7 +48,7 @@ fi
 echo Rebooting...
 sleep 30
 echo Pinging router...
-while [ "$pingresponse" != "" ]
+while [ "$pingresponse" == "" ]
 do
     pingresponse=$(ping -c 1 $routerip 2>/dev/null | grep " 0% packet loss")
 done
