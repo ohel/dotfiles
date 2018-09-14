@@ -339,7 +339,7 @@ pcm.loop_playback_in_mix {
     type plug
     slave.pcm {
         type dmix
-        ipc_key 50
+        ipc_key 10000
         slave {
             pcm "hw:Loopback,0,0"
             format S32_LE
@@ -455,7 +455,7 @@ pcm.hda_out_mix_44100 {
     type plug
     slave.pcm {
         type dmix
-        ipc_key 10
+        ipc_key 20000
         slave {
             pcm "hda_hw"
             format S16_LE
@@ -473,7 +473,7 @@ pcm.hda_out_mix_44100 {
 # Mixing input device.
 pcm.hda_in_mix_44100 {
     type dsnoop
-    ipc_key 20
+    ipc_key 30000
     slave {
         pcm "hda_hw"
         format S16_LE
@@ -665,7 +665,7 @@ pcm.julia_aout_mix_44100 {
     type plug
     slave.pcm {
         type dmix
-        ipc_key 30
+        ipc_key 40000
         slave {
             pcm "julia_analog_hw"
             format S32_LE
@@ -685,7 +685,7 @@ pcm.julia_ain_mix_44100 {
     type plug
     slave.pcm {
         type dsnoop
-        ipc_key 40
+        ipc_key 50000
         slave {
             pcm "julia_analog_hw"
             rate 44100

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Connect to Bluetooth audio with BlueALSA
-Exec=.scripts/bluealsa.sh
-Terminal=false
+Exec=.scripts/bluealsa.sh alsa xfce4-panel
+Terminal=true
 Type=Application
 Icon=bluetooth
 Categories=System;Utility;Audio
