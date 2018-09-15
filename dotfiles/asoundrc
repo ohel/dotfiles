@@ -24,9 +24,9 @@
 #
 # This enables pipelining certain devices without reference loops.
 # The point of the environmental variables is to support multiple audio devices, some of which might not use a mixer.
-# One may define a HIFI device for use with certain media players for example, overriding resampling.
+# One may define a HIFI device for use with certain media players for example, skipping resampling.
 #
-# Control devices are defined for PCM devices for program compatibility.
+# Control devices corresponding to PCM devices are defined for program compatibility.
 
 pcm.asound_default {
     @func refer
@@ -203,7 +203,9 @@ pcm.binaural {
             plugins [ {
                 label bs2b # Bauer stereophonic-to-binaural DSP
                 input {
-                    controls [ 2 0 ] # crossfeed level (1-3), high boost (0, 1)
+                    # Lowpass frequency [Hz], feeding level [dB].
+                    # 650, 9.5 = Jan Meier's preset.
+                    controls [ 650 9.5 ]
                 }
             } ]
         }
