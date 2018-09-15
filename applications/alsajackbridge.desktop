@@ -1,7 +1,6 @@
 [Desktop Entry]
-Version=1.0
-Name=Audio Loopback ALSA/JACK
-Exec=.scripts/alsaloopjack.sh
+Name=ALSA/JACK loopback bridge
+Exec=.scripts/alsajackbridge.sh
 Icon=audio-card
 Terminal=true
 Type=Application
