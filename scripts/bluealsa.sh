@@ -28,9 +28,8 @@ loop_in=loop_playback_in_mix
 loop_out=loop_playback_out
 loop_ctl=loop
 bt_audio=bluetooth
-# Some overruns may occur with too small a number,
-# but who cares as long as it's not eating CPU time too much.
-buffer_size=256
+# Overruns may occur and CPU usage increase with too small a number.
+buffer_size=512
 
 tmp_bashrc=/dev/shm/bluealsabashrc
 

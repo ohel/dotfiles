@@ -25,20 +25,24 @@ checkconnection() {
 }
 
 scriptsdir=$(dirname "$(readlink -f "$0")")
-if $scriptsdir/bt_dev_connect.sh $ALSA_BLUETOOTH_MAC;
-then
-    echo "Waiting for connection."
-    seconds=20
-    while [ $seconds -gt 0 ]
-    do
-        seconds=$(expr $seconds - 1)
-        if checkconnection $ALSA_BLUETOOTH_MAC
-        then
+
+# Despite waiting infinitely, the connection doesn't always succeed on first try.
+retries=3
+while [ $retries -gt 0 ]
+do
+    if $scriptsdir/bt_dev_connect.sh $ALSA_BLUETOOTH_MAC;
+    then
+        seconds=10
+        while [ $seconds -gt 0 ]
+        do
+            ! checkconnection $ALSA_BLUETOOTH_MAC && echo "Connected to $ALSA_BLUETOOTH_MAC" && exit 0
             sleep 1
-        else
-            exit 0
-        fi
-    done
-    echo "Connection did not succeed yet."
-    exit 1
-fi
+            seconds=$(expr $seconds - 1)
+        done
+    fi
+    retries=$(expr $retries - 1)
+    echo "Retrying connection..."
+done
+
+echo "Connection did not succeed yet."
+exit 1

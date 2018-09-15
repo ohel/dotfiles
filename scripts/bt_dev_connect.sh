@@ -11,29 +11,27 @@ then
     exit 1
 fi
 
-echo "Checking Bluetooth controller."
 coproc bluetoothctl
 echo -e "show\nexit" >&${COPROC[1]}
 output=$(cat <&${COPROC[0]})
 if test "X$(echo $output | grep 'Powered: yes')" == "X"
 then
-    echo "Powering on Bluetooth controller."
+    echo "Powering on Bluetooth controller..."
     coproc bluetoothctl
     echo -e "power on\nexit" >&${COPROC[1]}
     wait $COPROC_PID
 fi
 
-echo "Checking Bluetooth device."
 coproc bluetoothctl
 echo -e "info $BT_DEV_MAC\nexit" >&${COPROC[1]}
 output=$(cat <&${COPROC[0]})
 if test "X$(echo $output | grep 'Connected: yes')" == "X"
 then
-    echo "Connecting to device: $BT_DEV_MAC"
+    echo "Connecting to device $BT_DEV_MAC..."
     coproc bluetoothctl
     echo -e "connect $BT_DEV_MAC\nexit" >&${COPROC[1]}
     wait $COPROC_PID
 else
     echo "Already connected."
-    exit 3
+    exit 0
 fi
