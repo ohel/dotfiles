@@ -78,7 +78,7 @@ then
     PROMPT_COMMAND='echo -ne "\e]0;ALSA loop\007"'
     PS1='\[\e[0;37m\]\w \[\e[1;36m\]ALSA loop \[\e[1;30m\]\$\[\e[0m\] '
     cd
-    echo -ne '\e[8;7;50t'
+    echo -ne '\e[8;8;50t'
     echo "ALSA defaults in this shell are:"
     echo
     echo "    ALSA_DEFAULT_PCM=$loop_in"

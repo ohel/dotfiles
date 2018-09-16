@@ -58,7 +58,9 @@ endif
 
 " Generic tab complete.
 function! TabOrComplete()
-    if col('.') > 1 && strpart( getline('.'), col('.')-2, 2 ) =~ '^\w'
+    if col('.') > 1 && strpart( getline('.'), 0, col('.') ) =~ '.*/\S*$'
+        return "\<c-x>\<c-f>"
+    elseif col('.') > 1 && strpart( getline('.'), col('.')-2, 2 ) =~ '^\w'
         if empty(&omnifunc)
             return "\<c-n>"
         else
