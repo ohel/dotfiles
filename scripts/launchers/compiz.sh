@@ -1,7 +1,7 @@
 #!/bin/sh
 # Compiz 0.9 series installed with prefix /opt/programs/compiz.
 
-if test "$(ps -e | grep compiz)"
+if [ "$(ps -e | grep compiz)" ]
 then
     killall -9 compiz
     killall -9 gtk-window-decorator

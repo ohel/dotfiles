@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Creates a secondary mouse pointer.
 # I used to use this with a Kensington trackball to play World of Goo with two mice using a Wii emulator.
 

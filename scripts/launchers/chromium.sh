@@ -6,19 +6,19 @@
 # - open the given URL or a new Chromium window with newwindow parameter
 
 focuswin=$(wmctrl -l | grep -e "Chromium" | tail -n 1 | cut -f 1 -d ' ')
-if test "X$focuswin" != "X"
+if [ "$focuswin" ]
 then
     wmctrl -i -a $focuswin
 fi
 
-if test "X$1" = "Xnewwindow"
+if [ "$1" = "newwindow" ]
 then
     chromium-browser
     exit
-elif [ "$#" -eq 1 ];
+elif [ "$#" -eq 1 ]
 then
     chromium-browser "$1"
-elif test "$(ps -ef | grep chromium-browser | grep -v grep)X" = "X"
+elif [ ! "$(ps -ef | grep chromium-browser | grep -v grep)" ]
 then
     chromium-browser
 else
@@ -26,6 +26,6 @@ else
     # Instead of opening a blank page, use Ctrl+t new tab shortcut to open speed dial page.
     # Assuming Win+w is the shortcut for this script, keyup w first.
     # We first have to sleep for a tiny bit for the window to get focus.
-    sleep 0.15
+    sleep 0.15 || sleep 1
     xdotool keyup w && xdotool keyup super && xdotool key ctrl+t
 fi

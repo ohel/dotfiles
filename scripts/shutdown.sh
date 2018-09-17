@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 # A common shutdown script I use.
 
 scriptsdir=$(dirname "$(readlink -f "$0")")
 
 # Check if OK to shut down.
-source $scriptsdir/shutdown_init.sh
+. $scriptsdir/shutdown_init.sh
 
 # Enable Wake-On-Lan.
 if test "X$(which ethtool 2>/dev/null)" != "X"
@@ -21,7 +21,7 @@ then
 fi
 
 # Do scheduled backups.
-source $scriptsdir/backup_interval.sh
+. $scriptsdir/backup_interval.sh
 
 echo "Shutting down..."
 sudo shutdown -hP now

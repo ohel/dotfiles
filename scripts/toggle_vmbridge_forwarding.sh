@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Toggles a virtual bridge forwarding. May be used to cut a VM from Internet.
 
 oldval=$(cat /proc/sys/net/ipv4/conf/vmbridge/forwarding)

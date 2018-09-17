@@ -35,13 +35,13 @@ do
     echo "Excluding: $excludeitem"
 done
 
-if test "X$(echo $mode | grep nowait\$)" != "X"
+if [ "$(echo $mode | grep nowait\$)" ]
 then
     countdown=0
     mode=$(echo $mode | sed s/nowait\$//)
 fi
 
-if [[ "X$(echo $mode | grep reverse)" != "X" && "X$(echo $mode | grep gitdirs\$)" == "X" ]]
+if [[ "$(echo $mode | grep reverse)" != "" && "$(echo $mode | grep gitdirs\$)" == "" ]]
 then
     git_dirs=$(find $localdir -type d -name .git | sed "s/\/\.git\$//" | sed "s/^\.\///")
     for excludeitem in ${git_dirs[@]}

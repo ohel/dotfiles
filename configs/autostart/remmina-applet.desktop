@@ -1,4 +1,5 @@
 [Desktop Entry]
+Version=1.0
 Name=Remmina Applet
 Comment=Connect to remote desktops through the applet menu
 Icon=remmina
@@ -6,3 +7,4 @@ Exec=remmina -i
 Terminal=false
 Type=Application
 Hidden=false
+

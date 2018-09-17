@@ -7,14 +7,19 @@ type_rar=$(file "$filename" | grep RAR)
 type_gzip=$(file "$filename" | grep gzip)
 type_tar=$(file "$filename" | grep tar)
 type_7z=$(file "$filename" | grep 7-zip)
-if test "X$type_zip" != "X"; then
+if [ "$type_zip" ];
+then
     unzip -d "$(echo "$filename" | sed "s/.zip//")" -x "$filename"
-elif test "X$type_rar" != "X"; then
+elif [ "$type_rar" ]
+then
     rar x "$filename"
-elif test "X$type_gzip" != "X"; then
+elif [ "$type_gzip" ]
+then
     tar xzf "$filename"
-elif test "X$type_tar" != "X"; then
+elif [ "$type_tar" ]
+then
     tar xf "$filename"
-elif test "X$type_7z" != "X"; then
+elif [ "$type_7z" ]
+then
     7z x "$filename"
 fi

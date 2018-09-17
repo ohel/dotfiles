@@ -10,19 +10,11 @@ if ! [ -e $profiledir ]
 then
     echo "Error: directory $profiledir does not exist."
     echo "Create it? (Press y to create, any other key to exit.)"
-        read -n1 create
-        echo
-        if test "X$create" = "Xy"
-        then
-            mkdir $profiledir
-        else
-            exit 1
-        fi
-    if ! [ -e $profiledir ]
-    then
-        echo "Unable to create $profiledir."
-        exit 1
-    fi
+    read -n1 create
+    echo
+    [ "$create" != "y" ] && exit 1
+    mkdir $profiledir
+    ! [ -e $profiledir ] && echo "Unable to create $profiledir." && exit 1
 fi
 
 if [ "$#" == 0 ]

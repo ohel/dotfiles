@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 # Show network usage (up/down MB/s) for interface $1 if given,
 # or by default for the first PCI interface with IPv4 address.
 
-if [ "$#" == 0 ]
+if [ "$#" = 0 ]
 then
     for physical_device in $(ls -l /sys/class/net | grep devices\/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')
     do
@@ -36,4 +36,3 @@ do
     RMBPS=$(echo "scale=2; $RBPS / 1048576" | bc)
     printf "%s | %s\n" "${pad:${#TMBPS}}$TMBPS" "${pad:${#RMBPS}}$RMBPS"
 done
-

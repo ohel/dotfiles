@@ -3,9 +3,7 @@
 
 count=$(expr 1 + $(ls ~/screenshot*.png 2>/dev/null | grep "screenshot[0-9]*.png" | wc -l))
 
-if [ "$#" = 1 ]; then
-    sleep $1
-fi
+[ "$#" = 1 ] && sleep $1
 
 while [ -e ~/screenshot$count.png ]
 do

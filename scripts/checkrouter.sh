@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # When using an unstable consumer class router that likes to break down
 # every now and then, detect when it's behaving badly and reboot it
 # by calling a script with router model parameter.

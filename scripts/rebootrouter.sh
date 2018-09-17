@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Reboot an unstable consumer class router.
 # Supports the following router models (pass as parameter):
 #    fast: Sagemcom FAST3686 (DNA Valokuitu Plus)
@@ -21,13 +21,13 @@ readpw() {
 }
 
 echo "Preparing to reboot router at $routerip. Press return to continue."
-read
+read tmp
 
-if [ "$routermodel" == "fast" ]
+if [ "$routermodel" = "fast" ]
 then
     # Check if login is needed. The router remembers logged in computers with some kind of logic.
     responsepage=$(wget http://$routerip/RgSetup.asp -q -O -)
-    if [ "$(echo $responsepage | grep loginUsername)" != "" ]
+    if [ "$(echo $responsepage | grep loginUsername)" ]
     then
         username=admin
         readpw
@@ -48,9 +48,9 @@ fi
 echo Rebooting...
 sleep 30
 echo Pinging router...
-while [ "$pingresponse" == "" ]
+while ! [ "$pingresponse" ]
 do
     pingresponse=$(ping -c 1 $routerip 2>/dev/null | grep " 0% packet loss")
 done
 echo Got ping response, router is up. Press return to exit.
-read
+read tmp

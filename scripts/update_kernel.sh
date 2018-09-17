@@ -7,7 +7,7 @@ prefix="linux"
 
 cwd="$(pwd)"
 
-if test "$(echo $HOME)" != "/root"
+if [ "$(echo $HOME)" != "/root" ]
 then
     echo "You must be root to update kernel."
     read
@@ -22,7 +22,7 @@ then
 fi
 
 cd /usr/src
-if test "X$1" != "Xrt"
+if [ "$1" != "rt" ]
 then
     old_version=$(readlink linux | cut -f 2 -d '-')
     rt_grep_opts="-v -s"
@@ -45,7 +45,7 @@ function cleanup {
         echo "Press y to remove them, any other key to skip."
         echo "Files of those versions in /boot and /lib/modules will also be removed."
         read -n1 remove
-        if test "X$remove" = "Xy"
+        if [ "$remove" == "y" ]
         then
             echo
             for version in $old_versions
@@ -63,7 +63,7 @@ function cleanup {
     echo
 }
 
-if test $old_version = $new_version
+if [ "$old_version" == "$new_version" ]
 then
     echo "New kernel was not found."
     cd $cwd
@@ -106,7 +106,7 @@ echo "Copied System.map."
 cp arch/x86_64/boot/bzImage /boot/kernel-$new_version
 echo "Copied kernel image."
 
-if test "X$1" != "Xrt"
+if [ "$1" != "rt" ]
 then
     cd ..
     rm linux

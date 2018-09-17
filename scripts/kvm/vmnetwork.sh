@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Set up networking for KVM virtual machines:
 # - SNAT to first PCI NIC, or $1 if given.
 # - Optionally ($2 == "bridge") set up network bridge where bridged VM tap devices should be added.
@@ -8,16 +8,16 @@
 
 reset_script=network_reset
 
-echo -e "" > $reset_script
+echo "" > $reset_script
 
 modprobe tun
 
-if [ "$#" == 0 ]
+if [ "$#" = 0 ]
 then
     for physical_device in $(ls -l /sys/class/net | grep devices\/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')
     do
         ip=$(ip addr show $physical_device | grep -o "inet [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | cut -f 2 -d ' ')
-        if test "X$ip" != "X"
+        if [ "$ip" ]
         then
             nic=$physical_device
             break
@@ -25,7 +25,7 @@ then
     done
 else
     nic=$1
-    if test "X$(ls -l /sys/class/net | grep devices\/pci | grep -o "\-> [^ ]*" | grep -o $nic)" != "X$nic"
+    if [ "$(ls -l /sys/class/net | grep devices\/pci | grep -o "\-> [^ ]*" | grep -o $nic)" != "$nic" ]
     then
         echo "Network device not found: $nic"
         exit
@@ -40,7 +40,7 @@ sysctl -q -e -w net.ipv4.conf.$nic.forwarding=1
 echo "sudo sysctl -q -e -w net.ipv4.conf.$nic.forwarding=$forward" >> $reset_script
 
 # Network bridge. Note: not all interfaces support bridging.
-if [ "X$2" == "Xbridge" ]
+if [ "$2" = "bridge" ]
 then
   if brctl show | cut -f 1 | grep netbridge\$ >/dev/null
   then

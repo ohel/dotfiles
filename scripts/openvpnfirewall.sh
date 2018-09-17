@@ -54,7 +54,7 @@ wait_routes() {
     while [[ $wait_cycle_count -lt 10 || $first_route -ne 0 ]]
     do
         echo -n "."
-        sleep 0.25
+        sleep 0.25 || sleep 1
         if [ $(ip route show | wc -l) -ne $num_routes ]
         then
             first_route=0

@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 # Link commonly used dotfiles from correct locations to the ones in this directory.
 
 echo "Warning! Original files will be overwritten. Press a key to continue."
-read
+read tmp
 
 ln -sf $(readlink -f ./bashrc) ~/.bashrc
 ln -sf $(readlink -f ./gitconfig) ~/.gitconfig

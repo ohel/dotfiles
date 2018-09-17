@@ -10,7 +10,7 @@ if [ -e ~/alert.set ]
 then
     echo $(date) >> ~/alert.hit
     # Try a specific sound device first, use default device as a fallback.
-    if test "X$(aplay -q -D $alsadev $wav)" != ""
+    if [ "$(aplay -q -D $alsadev $wav)" ]
     then
         aplay -q $wav
     fi

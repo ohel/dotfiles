@@ -8,7 +8,7 @@ then
 fi
 emerge -DNtuvp world
 echo "Press return to start merging."
-read
+read tmp
 sudo emerge -DNju --keep-going --quiet-build world
 sudo etc-update
 echo Emerging @preserved-rebuild...
@@ -23,4 +23,4 @@ echo "********************"
 echo "* Update complete! *"
 echo "********************"
 echo
-read
+read tmp

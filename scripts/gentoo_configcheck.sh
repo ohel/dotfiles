@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Check for unnecessary keyword and use configs on a Gentoo system.
 # Just to keep things clean every now and then. Check out the output visually.
 

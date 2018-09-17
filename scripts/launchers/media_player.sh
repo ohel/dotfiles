@@ -5,7 +5,8 @@
 DEFAULTPROFILE="general"
 EXE="nice -n -1 /usr/bin/mpv "
 
-if [ "$#" = 0 ]; then
+if [ "$#" = 0 ]
+then
     echo "Usage: media_player.sh [profile shortcut] <filename>"
     echo ""
     echo "Valid profile shortcuts:"
@@ -19,18 +20,23 @@ if [ "$#" = 0 ]; then
     exit
 fi
 
-if [ "$#" = 1 ]; then
+if [ "$#" = 1 ]
+then
     $EXE --profile=$DEFAULTPROFILE "$1" &
     exit
 fi
 
-if [ "$1" = "st" ]; then
+if [ "$1" = "st" ]
+then
     profile="stereomovie"
-elif [ "$1" = "sr" ]; then
+elif [ "$1" = "sr" ]
+then
     profile="surroundmovie"
-elif [ "$1" = "srbm" ]; then
+elif [ "$1" = "srbm" ]
+then
     profile="surroundmoviebalancedmatrix"
-elif [ "$1" = "openal" ]; then
+elif [ "$1" = "openal" ]
+then
     profile="openalmovie"
 else
     echo "Using $DEFAULTPROFILE"

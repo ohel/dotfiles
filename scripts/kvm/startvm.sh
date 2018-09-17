@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Start a Qemu-KVM virtual machine. Consider this script a template to copy per virtual machine.
 # Assumes the client has drivers installed for the paravirtualized VirtIO Ethernet Adapter,
 # VirtIO SCSI controller, and QXL video device.
@@ -22,36 +22,36 @@ vm_bridge=vmbridge
 net_bridge=netbridge
 cdrom_image="image.iso"
 
-if test "X$(which gvncviewer 2>/dev/null)" != "X"
+if [ "$(which gvncviewer 2>/dev/null)" ]
 then
     vncviewer="gvncviewer localhost:$net_id"
-elif test "X$(which vncviewer 2>/dev/null)" != "X"
+elif [ "$(which vncviewer 2>/dev/null)" ]
 then
     vncviewer="vncviewer :$net_id"
 fi
 
-if test $bridged_network = 1
+if [ "$bridged_network" = 1 ]
 then
-    if test "X$(brctl show $net_bridge 2>&1 | grep No)" != "X"
+    if [ "$(brctl show $net_bridge 2>&1 | grep No)" ]
     then
         echo "Set up the bridged network manually first."
-        exit
+        exit 1
     fi
 fi
 
-if test "X$(brctl show $vm_bridge 2>&1 | grep No)" != "X"
+if [ "$(brctl show $vm_bridge 2>&1 | grep No)" ]
 then
-    if test $auto_network = 0
+    if [ "$auto_network" = 0 ]
     then
         echo "The bridge $vm_bridge does not exist. Aborting..."
-        exit
+        exit 1
     fi
     ./vmnetwork.sh
 fi
 
 modprobe tun
 modprobe kvm
-if test "X$(lscpu | grep Intel)" != "X"
+if [ "$(lscpu | grep Intel)" ]
 then
     modprobe kvm-intel
 else
@@ -59,48 +59,48 @@ else
 fi
 
 pid=$(ps -ef | grep "qemu.*$vm_name" | grep -v grep | tr -s ' ' | cut -f 2 -d ' ')
-if test "X$pid" != "X"
+if [ "$pid" ]
 then
     echo $vm_name virtual machine is already running with PID: $pid
     echo "Press return to kill."
-    read
+    read tmp
     kill $pid
     sleep 2
     echo "Press return to restart the virtual machine."
-    read
+    read tmp
 fi
 
 dac=""
 adc=""
 soundhw=""
-if test "$audio" == "1"
+if [ "$audio" = 1 ]
 then
-    if test "X$(ps -e | grep pulseaudio)" = "X"
+    if [ "$(ps -e | grep pulseaudio)" ]
     then
+        sound_params="QEMU_AUDIO_DRV=pa"
+    else
         modprobe snd-aloop
         dac="hw:Loopback,0,4" # loop_vm_dac_in
         adc="hw:Loopback,1,5" # loop_vm_adc_out
         sound_params="QEMU_ALSA_DAC_DEV=$dac QEMU_ALSA_ADC_DEV=$adc"
-    else
-        sound_params="QEMU_AUDIO_DRV=pa"
     fi
     soundhw="-soundhw hda"
 fi
 
 bootstring="c"
-if test $boot_from_cd = 1
+if [ "$boot_from_cd" = 1 ]
 then
     bootstring="d -cdrom $cdrom_image"
 fi
 
 vga=std
-if test "X$(echo quit | qemu-system-x86_64 -vga qxl -machine none -nographic 2>&1 | grep QXL)" = "X"
+if [ ! "$(echo quit | qemu-system-x86_64 -vga qxl -machine none -nographic 2>&1 | grep QXL)" ]
 then
     vga=qxl
 fi
 
 bridged_net_devices=""
-if test $bridged_network = 1
+if [ "$bridged_network" = 1 ]
 then
     bridged_net_devices="-device virtio-net-pci,netdev=net"$net_id"_1 -netdev tap,id=net"$net_id"_1,br=$net_bridge,script=kvm_tap_netbridge.sh"
 fi
@@ -148,12 +148,12 @@ sleep 2
 
 # The PID changes so we cannot use last PID.
 pid=$(ps -ef | grep "qemu.*$vm_name" | grep -v grep | tr -s ' ' | cut -f 2 -d ' ')
-if test "X$pid" != "X"
+if [ "$pid" ]
 then
     renice +15 $pid
 fi
 
-if test $auto_vnc = 1 && "X$vncviewer" != "X"
+if [ "$auto_vnc" = 1 ] && [ "$vncviewer" ]
 then
     $vncviewer &
 fi

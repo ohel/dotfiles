@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Backup user home directories and call system backup script
 # depending on how long it is since last backup.
 # The backup schedule timestamp checkfile is called backup_interval_checkfile,
@@ -10,38 +10,32 @@ backup() {
     backupmountpoint=/mnt/raidstorage
     backupdir=backups/misc/home_dirs/
 
-    if ! [ -e $backupmountpoint ]
-        then return
-    fi
+    [ ! -e $backupmountpoint ] && return
 
-    if test "$(whoami)" == "root"
+    if [ "$(whoami)" = "root" ]
     then
         checkfile=/opt/backup_interval_checkfile
     else
         checkfile=~/.config/backup_interval_checkfile
     fi
 
-    if ! [ -e $checkfile ]
-        then touch $checkfile
-    fi
+    [ ! -e $checkfile ] && touch $checkfile
     lastsyncmisc=$(expr $(date +%s) - $(stat -c %Z $checkfile))
 
     sync=0
     # 302400 seconds = 84 hours, or 3½ days.
-    if [ $lastsyncmisc -gt 302400 ]
-        then sync=1
-    fi
+    [ $lastsyncmisc -gt 302400 ] && sync=1
 
     if [ $sync -eq 1 ]
     then
         backup=$(mount | grep $backupmountpoint)
-        if test "empty$backup" == "empty"
+        if [ ! "$backup" ]
         then
             echo "Mounting $backupmountpoint..."
             sudo mount $backupmountpoint
         fi
         backup=$(mount | grep $backupmountpoint)
-        if test "empty$backup" == "empty"
+        if [ ! "$backup" ]
         then
             echo "Unable to mount $backupmountpoint! Aborting backup."
             sleep 3
@@ -49,14 +43,14 @@ backup() {
         fi
         touch $checkfile
 
-        if test "$(whoami)" == "root"
+        if test "$(whoami)" = "root"
         then
-            users=$(ls -1 /home)
+            dircmd="ls -d /home/*"
         else
-            users=$(whoami)
+            dircmd="ls -d /home/$(whoami)"
         fi
 
-        for user in ${users[@]}
+        for user in $($dircmd | sed "s/.*\///g")
         do
             userbackupdir=$backupmountpoint/$backupdir/$user
 

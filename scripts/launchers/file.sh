@@ -5,4 +5,4 @@ for arg
 do
 	file "$arg"
 done
-read
+read tmp

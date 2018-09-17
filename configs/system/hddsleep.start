@@ -1,5 +1,5 @@
 # Put all storage devices to sleep.
-if test "X$(grep nohddsleep /proc/cmdline)" != "X"
+if [ "$(grep nohddsleep /proc/cmdline)" ]
 then
     einfo "Disk drives not shut down as per kernel parameter."
 else

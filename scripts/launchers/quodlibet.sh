@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # A startup script for Quod Libet. Output is redirected to a log file.
 #
 # By default, starts the player or if it's running, toggles its visibility.
@@ -21,14 +21,18 @@ then
     sleep 1
 fi
 
-if [ "$#" = 0 ]; then
+if [ "$#" = 0 ]
+then
     params="--toggle-window"
 else
-    if [ "$1" = "toggle-window" ]; then
+    if [ "$1" = "toggle-window" ]
+    then
         params="--toggle-window"
-    elif [ "$1" = "play-pause" ]; then
+    elif [ "$1" = "play-pause" ]
+    then
         params="--play-pause"
-    elif [ "$1" = "audio" ] && [ "$#" -gt 1 ]; then
+    elif [ "$1" = "audio" ] && [ "$#" -gt 1 ]
+    then
         device="$2"
         pipelinefile="$3"
     fi
@@ -36,9 +40,9 @@ fi
 
 if ! ps -ef | grep $qlexe | grep -v grep > /dev/null
 then
-    if [ "$pipelinefile" != "" ]
+    if [ "$pipelinefile" ]
     then
-        if ! [ -e $pipelinefile ]
+        if [ ! -e $pipelinefile ]
         then
             echo "Pipeline file $pipelinefile does not exist."
             exit 1
@@ -46,7 +50,7 @@ then
         pipeline=$(cat $pipelinefile)
         sed -i "s/\(^gst_pipeline = \).*/\1 $pipeline/" ~/.quodlibet/config
     fi
-    if [ "$device" != "" ]
+    if [ "$device" ]
     then
         sed -i "s/\(^gst_pipeline.*\) device=.*/\1 device=$device/" ~/.quodlibet/config
     fi
@@ -58,9 +62,10 @@ then
     params="" # Clear params so that QL may start without --run.
 else
     logfile="/dev/null" # QL is already running, so so is the log file.
-    if test "X$device" != "X"; then
+    if [ "$device" ]
+    then
         params="--toggle-window" # No audio stuff to set anymore, so toggle by default.
     fi
 fi
 
-$qlexe $params &>$logfile &
+$qlexe $params >$logfile 2>&1 &

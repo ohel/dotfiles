@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 # Mount or unmount DVD.
 
 device="/dev/sr0"
 mountloc="/mnt/dvd"
-if test "X$(mount | grep $device)" != "X"
+if [ "$(mount | grep $device)" ]
 then
     echo Unmounting $device...
     sudo umount $mountloc

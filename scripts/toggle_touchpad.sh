@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Two ways to enable or disable a touchpad.
 
 #id=$(xinput | grep Elan | cut -f 2 -d '=' | cut -f 1)
@@ -10,10 +10,9 @@
 #    xinput set-prop "$id" "Device Enabled" 0
 #fi
 
-if test "X$(lsmod | grep elan_i2c)" == "X"
+if [ "$(lsmod | grep elan_i2c)" ]
 then
-    sudo modprobe elan_i2c
-else
     sudo modprobe -r elan_i2c
+else
+    sudo modprobe elan_i2c
 fi
-

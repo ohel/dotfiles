@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Given a mountpoint, a remote host and a remote mountpoint, mount or unmount an sshfs.
 
 if [ "$#" -eq 0 ]
@@ -7,7 +7,7 @@ then
     exit 1
 fi
 
-if test "$(mount | grep $1)X" == "X"
+if [ ! "$(mount | grep $1)" ]
 then
     echo Mounting $1...
     dir=$(ssh $2 "readlink -f $3")

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # When using a router with dynamic WAN IPv4 address, access router status page and get the address.
 # Supports the following router models (pass as parameter):
 #    tw: Telewell TW-LTE/4G/3G router, WiFI AC
@@ -22,17 +22,17 @@ readpw() {
     stty $stty_orig
 }
 
-if [ "$routermodel" == "tw" ]
+if [ "$routermodel" = "tw" ]
 then
     readpw
     wanipv4=$(wget http://$routerip/adm/status.asp --user=$username --password=$pw -q -O - \
         | grep 'id="idv4wanip"' \
         | grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}")
-elif [ "$routermodel" == "fast" ]
+elif [ "$routermodel" = "fast" ]
 then
     # Check if login is needed. The router remembers logged in computers with some kind of logic.
     responsepage=$(wget http://$routerip/RgSetup.asp -q -O -)
-    if [ "$(echo $responsepage | grep loginUsername)" != "" ]
+    if [ "$(echo $responsepage | grep loginUsername)" ]
     then
         username=admin
         readpw
@@ -49,7 +49,7 @@ echo
 echo WAN IPv4: $wanipv4
 echo
 
-if [ "$wanipv4" == "" ]
+if ! [ "$wanipv4" ]
 then
     echo "Error retrieving IPv4."
     exit 1
@@ -59,7 +59,7 @@ fi
 if [ -e ~/.scripts_extra/publish_ip.sh ]
 then
     echo -n "Press return to publish WAN IPv4."
-    read
+    read tmp
 
     sh ~/.scripts_extra/publish_ip.sh $wanipv4 2>/dev/null
 

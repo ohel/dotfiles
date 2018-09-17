@@ -6,12 +6,16 @@ type_zip=$(file "$filename" | grep Zip)
 type_rar=$(file "$filename" | grep RAR)
 type_gzip=$(file "$filename" | grep gzip)
 type_tar=$(file "$filename" | grep tar)
-if test "X$type_zip" != "X"; then
+if [ "$type_zip" ]
+then
     unzip -l "$filename" | gvim -R -
-elif test "X$type_rar" != "X"; then
+elif [ "$type_rar" ]
+then
     unrar vp "$filename" | gvim -R -
-elif test "X$type_gzip" != "X"; then
+elif [ "$type_gzip" ]
+then
     tar ztvf "$filename" | gvim -R -
-elif test "X$type_tar" != "X"; then
+elif [ "$type_tar" ]
+then
     tar tvf "$filename" | gvim -R -
 fi

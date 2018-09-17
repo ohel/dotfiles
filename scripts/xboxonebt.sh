@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 # Connect to device with MAC address XBOX_BLUETOOTH_MAC as set in the environment.
 # Uses a helper script to connect.
 # Assumes xpadneo is installed: https://github.com/atar-axis/xpadneo
 
-if test "X$XBOX_BLUETOOTH_MAC" == "X"
+if [ ! "$XBOX_BLUETOOTH_MAC" ]
 then
     echo "Define the environment variable XBOX_BLUETOOTH_MAC first."
     exit 1

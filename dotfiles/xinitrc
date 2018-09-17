@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
 # E.g. for Japanese input, just export USE_SCIM=true before this script.
-if test "X$(echo $USE_SCIM)" = "Xtrue"
+if [ "$(echo $USE_SCIM)" = "true" ]
 then
     export XMODIFIERS=@im=scim
     export GTK_IM_MODULE=scim
@@ -28,7 +28,7 @@ export QT_QPA_PLATFORMTHEME=qt5ct
 mkdir -p $(readlink ~/.commoncache) 2>/dev/null
 mkdir -p $(readlink ~/.thumbnails) 2>/dev/null
 mkdir -p $(readlink ~/.cache) 2>/dev/null
-which mpv 2>/dev/null && [[ -d ~/.commoncache ]] && mkfifo ~/.commoncache/mpvfifo
+which mpv 2>/dev/null && [ -d ~/.commoncache ] && mkfifo ~/.commoncache/mpvfifo
 
 # This temporary directory is needed if using mhwaveedit.
 which mhwaveedit 2>/dev/null && mkdir -p /tmp/mhwaveedit
@@ -48,7 +48,7 @@ lastone=$(ls /opt/programs/pause/pause 2>/dev/null)
 
 # To use this as Xsession, simply do this:
 # ln -s ~/.xinitrc ~/.xsession && chmod +x ~/.xinitrc
-if [ $(basename "$0") = ".xsession" ] || [ "X$lastone" = "X" ]
+if [ $(basename "$0") = ".xsession" ] || [ ! "$lastone" ]
 then
     exec xfce4-session
 else

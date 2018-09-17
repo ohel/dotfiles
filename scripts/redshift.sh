@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Change screen color temperature using the redshift tool.
 
 tempfile=~/.cache/redshift_temp

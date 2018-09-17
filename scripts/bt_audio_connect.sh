@@ -3,14 +3,14 @@
 # Uses a helper script to connect.
 # Assumes BlueALSA is running.
 
-if test "X$ALSA_BLUETOOTH_MAC" == "X"
+if ! [ "$ALSA_BLUETOOTH_MAC" ]
 then
     echo "Define the environment variable ALSA_BLUETOOTH_MAC first."
     sleep 1
     exit 1
 fi
 
-if test "X$(ps -e | grep bluealsa | grep -v `basename "$0"`)" == "X"
+if ! [ "$(ps -e | grep bluealsa | grep -v `basename "$0"`)" ]
 then
     echo "BlueALSA is not running."
     sleep 1

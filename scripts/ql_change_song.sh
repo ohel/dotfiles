@@ -5,7 +5,7 @@
 qlexe=/opt/programs/quodlibet/quodlibet.py
 if ps -ef | grep $qlexe | grep -v grep > /dev/null
 then
-    if test "X$1" = "Xprevious";
+    if [ "$1" = "Xprevious" ]
     then
         $qlexe --seek=0:0
         $qlexe --previous

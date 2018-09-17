@@ -14,33 +14,26 @@
 localdir=$(readlink -m $HOME/docs)
 remotedir="~/backups/docs"
 
-if [ "$#" -lt 2 ]; then
-    echo "Required parameters missing."
-    exit 1
-fi
+[ "$#" -lt 2 ] && echo "Required parameters missing." && exit 1
+
 server=$1
 mode=$2
 doc=${3:-$2}
-if [ "$#" -lt 3 ]; then
-    mode="normal"
-fi
+[ "$#" -lt 3 ] && mode="normal"
 
 docpath=$(readlink -m $doc | cut -c $(echo $(echo $localdir | wc -c)+1 | bc )-)
 
-if test "$mode" == "normal"
+if [ "$mode" == "normal" ]
 then
-    if [ ! -e "$localdir/$docpath" ]; then
-        echo "Error: file not found under $localdir."
-        exit 1
-    fi
+    ! [ -e "$localdir/$docpath" ] && echo "Error: file not found under $localdir." && exit 1
     rsync -avzu $localdir/$docpath $server:$remotedir/$docpath
-elif test "$mode" == "normaldry"
+elif [ "$mode" == "normaldry" ]
 then
     rsync -avzun $localdir/$docpath $server:$remotedir/$docpath
-elif test "$mode" == "reverse"
+elif [ "$mode" == "reverse" ]
 then
     rsync -avzu $server:$remotedir/$docpath $localdir/$docpath
-elif test "$mode" == "reversedry"
+elif [ "$mode" == "reversedry" ]
 then
     rsync -avzun $server:$remotedir/$docpath $localdir/$docpath
 else

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Backup script for full system, home, and misc backup. Backup process is logged.
 
 # Backup drives.
@@ -59,7 +59,7 @@ homebackupexcludelist=(
 
 logdir="/var/log/backup/"
 
-if test "$(echo $HOME)" != "/root"
+if [ "$(echo $HOME)" != "/root" ]
 then
     echo You must be root to maintain permissions!
     exit 1
@@ -68,19 +68,12 @@ fi
 echo "Mounting partitions if not already mounted..."
 for mountable in ${mountables[@]}
 do
-    if test "empty$(cat /etc/mtab | grep $mountable)" == "empty"
-    then
-        mount $mountable 2>/dev/null &
-    fi
+    [ ! "$(cat /etc/mtab | grep $mountable)" ] && mount $mountable 2>/dev/null &
 done
 wait
 for mountable in ${mountables[@]}
 do
-    if test "empty$(cat /etc/mtab | grep $mountable)" == "empty"
-    then
-        echo "Mounting $mountable failed."
-        sleep 1
-    fi
+    [ ! "$(cat /etc/mtab | grep $mountable)" ] && echo "Mounting $mountable failed." && sleep 1
 done
 
 echo "Starting backup in three seconds..."
@@ -90,13 +83,9 @@ sleep 1
 echo "Starting backup in one second..."
 sleep 1
 
+parallel=0
 # If pigz is found, use threaded compression.
-if [ $(which pigz 2>/dev/null) ]
-then
-    parallel=1
-else
-    parallel=0
-fi
+[ $(which pigz 2>/dev/null) ] && parallel=1
 
 datestring=$(date +%F)
 echo
@@ -114,7 +103,7 @@ while [ $index -lt $num_of_misc ]
 do
     sourcedir="${backup_source_dirs[$index]}/"
     destdir="${backup_dest_dirs[$index]}/"
-    if ! [ -e $destdir ]
+    if [ ! -e $destdir ]
     then
         echo "Destination directory $destdir does not exist, skipping..."
     else
@@ -126,19 +115,16 @@ do
     index=$(expr $index + 1)
 done
 
-if test "X$1" == "Xmisconly"
-then
-    exit 0
-fi
+[ "$1" == "misconly" ] && exit 0
 
-if ! [ -e $systembackupdir ]
+if [ ! -e $systembackupdir ]
 then
     echo "System backup directory $systembackupdir does not exist."
     echo "Aborting system backup..."
     exit 1
 fi
 
-if test "X$1" != "Xsynconly"
+if [ "$1" != "synconly" ]
 then
     echo
     echo "*******************************************************************************"
@@ -189,12 +175,12 @@ then
     fi
 fi
 
-if test "empty$systembackupdir2" != "empty"
+if [ "$systembackupdir2" ]
 then
     echo
     echo "*******************************************************************************"
     echo "Synchronizing $systembackupdir with $systembackupdir2..."
-    if ! [ -e $systembackupdir2 ]
+    if [ ! -e $systembackupdir2 ]
     then
         echo "Destination directory $systembackupdir2 does not exist, skipping..."
     else

@@ -4,16 +4,8 @@
 rg_exe=$(which rg 2>/dev/null)
 ag_exe=$(which ag 2>/dev/null)
 
-if test "X$rg_exe$ag_exe" = "X"
-then
-    echo "Neither rg or ag was found."
-    exit 1
-fi
-
-if [ "$#" -eq 0 ]
-then
-    exit 1
-fi
+! [ "$rg_exe$ag_exe" ] && echo "Neither rg or ag was found." && exit 1
+[ "$#" -eq 0 ] && exit 1
 
 rg $1 2>/dev/null || ag $1
 
@@ -25,11 +17,11 @@ do
     greps="$greps | grep -i $word"
 done
 
-if test "X$rg_exe" = "X"
+if [ "$rg_exe" ]
 then
-    cmd="ag -l --nogroup --nocolor --column $1 . $greps | xargs gvim -p"
-else
     cmd="rg -l --no-heading --with-filename --color never --column $1 . $greps | xargs gvim -p"
+else
+    cmd="ag -l --nogroup --nocolor --column $1 . $greps | xargs gvim -p"
 fi
 
 eval $(echo $cmd)

@@ -3,11 +3,7 @@
 
 editor=gvim
 
-if [ "$#" -eq 0 ]
-then
-    echo "Give the search term as a parameter."
-    exit 1
-fi
+[ "$#" -eq 0 ] && echo "Give the search term as a parameter." && exit 1
 
 results=($(find ./ | grep -i $1))
 
@@ -25,17 +21,14 @@ order=1
 for result in ${results[@]}
 do
     echo $order: $result :$order
-    order=`expr $order + 1`
+    order=$(expr $order + 1)
 done
 
 echo -n "Edit the one with order number: "
 read -a index
 
 index=$(echo $index | tr -c -d [:digit:])
-if test "X$index" = "X"
-then
-    exit 1
-fi
-index=`expr $index - 1`
+! [ "$index" ] && exit 1
+index=$(expr $index - 1)
 
 $editor ${results[$index]}

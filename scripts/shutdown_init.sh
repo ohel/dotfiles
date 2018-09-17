@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 # A script which checks whether any QEMU-KVM virtual machines are running, or if RAID devices are resyncing.
 # Call this script before the actual shutdown (script), this will hold for input if anything needs attention.
 
 if test "X$(ps -ef | grep qemu.* | grep -v grep)" != "X"
 then
     echo "A virtual machine is running."
-    read
+    read tmp
     exit 1
 fi
 
@@ -17,7 +17,7 @@ then
     then
         echo "RAID device note:"
         cat "/proc/mdstat"
-        read
+        read tmp
         exit 1
     fi
 
@@ -27,6 +27,6 @@ then
         cat "/proc/mdstat"
         echo
         echo "Press CTRL-C to cancel shutdown, return to continue."
-        read
+        read tmp
     fi
 fi

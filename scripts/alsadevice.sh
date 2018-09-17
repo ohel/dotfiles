@@ -1,3 +1,4 @@
+#!/bin/sh
 # Source this file to quickly set default ALSA device.
 if [ "$#" = 0 ]; then
     echo "Usage: source alsadevice.sh <device>"

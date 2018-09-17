@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Mount a device using simple-mtpfs.
 
 user=panther
@@ -7,7 +7,7 @@ vid=$1 # vendor ID, from udev
 mid=$2 # model ID, from udev
 options=$3 # -u if unmount, otherwise empty
 
-if test "X$options" = "X-u"
+if [ "$options" = "-u" ]
 then
     # Needs array intersection for multiple MTP devices to work nicely.
     mountpoint=$(mount | grep simple-mtpfs | grep -o "/tmp/mtp-mount-..." | head -n 1)

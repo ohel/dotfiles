@@ -5,7 +5,7 @@
 
 BT_DEV_MAC=$1
 
-if test "X$BT_DEV_MAC" == "X"
+if ! [ "$BT_DEV_MAC" ]
 then
     echo "Give the Bluetooth device MAC as a parameter."
     exit 1
@@ -14,7 +14,7 @@ fi
 coproc bluetoothctl
 echo -e "show\nexit" >&${COPROC[1]}
 output=$(cat <&${COPROC[0]})
-if test "X$(echo $output | grep 'Powered: yes')" == "X"
+if [ "$(echo $output | grep 'Powered: no')" ]
 then
     echo "Powering on Bluetooth controller..."
     coproc bluetoothctl
@@ -25,7 +25,7 @@ fi
 coproc bluetoothctl
 echo -e "info $BT_DEV_MAC\nexit" >&${COPROC[1]}
 output=$(cat <&${COPROC[0]})
-if test "X$(echo $output | grep 'Connected: yes')" == "X"
+if [ "$(echo $output | grep 'Connected: no')" ]
 then
     echo "Connecting to device $BT_DEV_MAC..."
     coproc bluetoothctl

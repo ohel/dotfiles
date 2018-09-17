@@ -9,10 +9,7 @@ then
 fi
 size=$1
 
-if [ "$#" -lt 2 ]
-then
-    echo "Give the names of the pictures as parameters after the size parameter."
-fi
+[ "$#" -lt 2 ] && echo "Give the names of the pictures as parameters after the size parameter."
 
 shift
 
@@ -20,7 +17,8 @@ while [ -n "$1" ]
 do
     echo ""
 
-    if test "X$(echo $1 | grep thumb_.*\.jpg)" != "X"; then
+    if [ "$(echo $1 | grep thumb_.*\.jpg)" ]
+    then
         echo "Skipped creating thumbnail for $1"
         shift
         continue

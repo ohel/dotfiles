@@ -7,10 +7,12 @@ git_dirs=$(find ./ -type d -name \*.git | sed "s/\/\.git\$//" | sed "s/^\.\///")
 for dir in ${git_dirs[@]}
 do
     cd $cwd/$dir
-    if test "X$1" = "Xstatus"; then
+    if [ "$1" == "status" ]
+    then
         pwd
         git status 2>/dev/null
-    elif test "X$1" = "Xpull"; then
+    elif [ "$1" == "pull" ]
+    then
         echo Pulling repository: $dir
         git pull --ff-only -q &
     else

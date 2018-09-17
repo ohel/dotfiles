@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Create a simple index.html from directory contents up to one level of sub directories.
 # White spaces are not supported in file or directory names.
 # A dummy .htaccess file is written also.
@@ -23,14 +23,14 @@ cat > $index << EOF
 EOF
 
 # Files in base directory, with thumbnails.
-for filename in `find ./ -maxdepth 1 -type f | sort`; do
-    item=`basename "$filename"`
-    if test "$item" != "index.html" &&
-       test "$item" != ".htaccess" &&
-       test "X$(echo $item | grep thumb_.*\.jpg)" = "X"
+for filename in $(find ./ -maxdepth 1 -type f | sort); do
+    item=$(basename "$filename")
+    if [ "$item" != "index.html" ] &&
+        [ "$item" != ".htaccess" ] &&
+        [ ! "$(echo $item | grep thumb_.*\.jpg)" ]
     then
         echo "<li><a href=\"/$root/$item\">$item" >> $index
-        if test "X$(ls thumb_${item%.*}.jpg 2>/dev/null)" != "X"
+        if [ "$(ls thumb_${item%.*}.jpg 2>/dev/null)" ]
         then
            echo "</br><img src=\"thumb_${item%.*}.jpg\" alt=\"img\">" >> $index
         fi
@@ -42,14 +42,14 @@ echo "</ol><ul>" >> $index
 # Subdirectories.
 for filepath in `find ./ -maxdepth 1 -mindepth 1 -type d | sort`
 do
-    path=`basename "$filepath"`
+    path=$(basename "$filepath")
     echo "<li><a href=\"/$root/$path\">$path</a>" >> $index
 
     # Files in a subdirectory.
     echo "<ol>" >> $index
-    for i in `find "$filepath" -maxdepth 1 -mindepth 1 -type f | sort`
+    for i in $(find "$filepath" -maxdepth 1 -mindepth 1 -type f | sort)
     do
-        file=`basename "$i"`
+        file=$(basename "$i")
         echo "<li><a href=\"/$root/$path/$file\">$file</a></li>" >> $index
     done
     echo "</ol></li>" >> $index

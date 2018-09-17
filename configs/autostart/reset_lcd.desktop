@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Name=Reset Matrix Orbital LCD
+Comment=Reset Matrix Orbital LCD
+Exec=.scripts/matrix_orbital/reset.sh
+OnlyShowIn=XFCE;
+StartupNotify=false
+Terminal=false
+Hidden=false
+

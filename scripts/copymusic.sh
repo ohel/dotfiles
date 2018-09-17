@@ -7,12 +7,8 @@
 
 destination=$(readlink -f ${1:-./})
 parallel_processes=3
-if [[ "$#" -gt 1 && "$2" = "mp3" ]]
-then
-    encoding="mp3"
-else
-    encoding="ogg"
-fi
+encoding="ogg"
+[ "$#" -gt 1 ] && [ "$2" = "mp3" ] && encoding="mp3"
 
 encode() {
     tempdir=~/.cache
@@ -30,7 +26,7 @@ encode() {
     tagtrack="tracknumber="
     tagartist="artist="
     tagtitle="title="
-    if test "X$typemp3" != "X"
+    if [ "$typemp3" ]
     then
         tagalbum="^TALB="
         tagtrack="^TRCK="
@@ -54,35 +50,35 @@ encode() {
     meta_title="${meta_title:-"unknown title"}"
 
     echo -n "*"
-    if test "X$typeflac" != "X"
+    if [ "$typeflac" ]
     then
         tmpfile=$(tempfile -d $tempdir/ --suffix=".ogg")
-        if test "$encoding" == "mp3"
+        if [ "$encoding" == "mp3" ]
         then
             tmpfile=$(tempfile -d $tempdir/ --suffix=".mp3")
             flac -c -s -d "$filein" 2>/dev/null | lame --silent --preset extreme --noreplaygain --id3v2-only --tt "$meta_title" --ta "$meta_artist" --tl "$meta_album" --tn "$meta_track" - $tmpfile
-        elif test "$encoding" == "ogg"
+        elif [ "$encoding" == "ogg" ]
         then
             flac -c -s -d "$filein" 2>/dev/null | oggenc --resample 44100 -Q -q 7 -a "$meta_artist" -l "$meta_album" -t "$meta_title" -N "$meta_track" -c "replaygain_album_peak=$meta_rg_ap" -c "replaygain_track_peak=$meta_rg_tp" -c "replaygain_album_gain=$meta_rg_ag" -c "replaygain_track_gain=$meta_rg_tg" -o $tmpfile -
         fi
         source="$tmpfile"
 
-    elif test "X$typeogg" != "X"
+    elif [ "$typeogg" ]
     then
         tmpfile=$(tempfile -d $tempdir/ --suffix=".ogg")
-        if test "$encoding" == "mp3"
+        if [ "$encoding" == "mp3" ]
         then
             tmpwav=$(tempfile -d $tempdir/ --suffix=".wav")
             oggdec -Q -o $tmpwav "$filein"
             lame --silent --preset extreme --noreplaygain --id3v2-only --tt "$meta_title" --ta "$meta_artist" --tl "$meta_album" --tn "$meta_track" $tmpwav $tmpfile
             rm $tmpwav
             source="$tmpfile"
-        elif test "$encoding" == "ogg"
+        elif [ "$encoding" == "ogg" ]
         then
             source="$filein"
         fi
 
-    elif test "X$typemp3" != "X"
+    elif [ "$typemp3" ]
     then
         tmpfile=$(tempfile -d $tempdir/ --suffix=".mp3")
         source="$filein"
@@ -90,12 +86,9 @@ encode() {
     echo -n "*"
 
     mkdir -p "$dest_dir"/"$meta_album"
-    if [ ${#meta_track} -lt 2 ]
-    then
-        padding="0"
-    else
-        padding=""
-    fi
+    padding=""
+    [ ${#meta_track} -lt 2 ] && padding="0"
+
     cp "$source" "$dest_dir"/"$meta_album"/"$padding""$meta_track"_$(echo $meta_title | tr -c -d "[:alnum:]")_$(basename "$tmpfile")
     rm "$tmpfile"
 
@@ -109,10 +102,7 @@ do
 	echo "Drag flac, ogg or mp3 files to the terminal window to start copying:"
 	read list
 
-	if test "empty$list" == "empty"
-    then
-        exit 0
-	fi
+	! [ "$list" ] && exit 0
 
     echo "Type in an album name or leave empty to read from tags:"
     read album
@@ -134,4 +124,3 @@ do
 	echo "All done."
 	echo ""
 done
-

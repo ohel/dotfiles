@@ -1,13 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 # Change laptop screen backlight brightness via script.
 # Give a brightness delta integer (positive or negative prefixed with -) as parameter.
 
 backlight=/sys/class/backlight/intel_backlight
 
-if [ "$#" -eq 0 ]
-then
-    exit 1
-fi
+[ "$#" -eq 0 ] && exit 1
 
 max=$(cat $backlight/max_brightness);
 current=$(cat $backlight/brightness);

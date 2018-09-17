@@ -70,7 +70,7 @@ else
     pid=$!
 fi
 
-if [ "$bt_env_program" = "" ]
+if ! [ "$bt_env_program" ]
 then
     cat > $tmp_bashrc << EOF
     export ALSA_DEFAULT_PCM=$loop_in
