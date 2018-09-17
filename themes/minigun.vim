@@ -14,7 +14,7 @@ hi DiffDelete   guifg=#000000 guibg=#000000 gui=none ctermfg=000 ctermbg=000
 
 hi Number		guifg=#eeeeee gui=none ctermfg=255
 
-hi Folded		guifg=#ffffff guibg=#000000 ui=none ctermfg=015 ctermbg=000
+hi Folded		guifg=#ffffff guibg=#000000 gui=none ctermfg=015 ctermbg=000
 hi vimFold		guifg=#ffffff guibg=#000000 gui=none ctermfg=015 ctermbg=000
 hi FoldColumn	guifg=#ffffff guibg=#000000 gui=none ctermfg=015 ctermbg=000
 
@@ -23,7 +23,7 @@ hi NonText		guifg=#585858 guibg=#303030 gui=none ctermfg=240 ctermbg=236
 hi Folded		guifg=#585858 guibg=#303030 gui=none ctermfg=240 ctermbg=236
 hi FoldeColumn  guifg=#585858 guibg=#303030 gui=none ctermfg=240 ctermbg=236
 
-hi VertSplit	guifg=#3a3a3a guibg=#3a3a3a ui=none ctermfg=237 ctermbg=237
+hi VertSplit	guifg=#3a3a3a guibg=#3a3a3a gui=none ctermfg=237 ctermbg=237
 hi StatusLine   guibg=#3a3a3a guifg=#ffffff gui=none ctermfg=015 ctermbg=237
 hi StatusLineNC guibg=#3a3a3a guifg=#808080 gui=none ctermfg=244 ctermbg=237
 
@@ -39,7 +39,7 @@ hi Title		guifg=#ff0000 gui=none ctermfg=009
 hi WarningMsg	guifg=#ff0000 gui=none ctermfg=009
 hi Number		guifg=#00ffff gui=none ctermfg=014
 
-hi MatchParen	guifg=#ffffff uibg=#585858 ctermfg=015 ctermbg=240
+hi MatchParen	guifg=#ffffff guibg=#585858 ctermfg=015 ctermbg=240
 hi Comment		guifg=#8a8a8a gui=none ctermfg=245
 hi Constant		guifg=#ff5f00 gui=none ctermfg=202
 hi String		guifg=#ffff00 gui=none ctermfg=011
