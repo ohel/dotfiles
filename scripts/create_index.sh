@@ -40,7 +40,7 @@ done
 echo "</ol><ul>" >> $index
 
 # Subdirectories.
-for filepath in `find ./ -maxdepth 1 -mindepth 1 -type d | sort`
+for filepath in $(find ./ -maxdepth 1 -mindepth 1 -type d | sort)
 do
     path=$(basename "$filepath")
     echo "<li><a href=\"/$root/$path\">$path</a>" >> $index

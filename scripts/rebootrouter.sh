@@ -1,5 +1,5 @@
 #!/bin/sh
-# Reboot an unstable consumer class router.
+# Reboot a router. This comes in handy with unstable consumer devices.
 # Supports the following router models (pass as parameter):
 #    fast: Sagemcom FAST3686 (DNA Valokuitu Plus)
 
@@ -14,7 +14,7 @@ readpw() {
         return
     fi
     echo "Enter router password (won't be echoed)."
-    stty_orig=`stty -g`
+    stty_orig=$(stty -g)
     stty -echo
     read pw
     stty $stty_orig

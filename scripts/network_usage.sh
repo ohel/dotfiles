@@ -7,7 +7,7 @@ then
     for physical_device in $(ls -l /sys/class/net | grep devices\/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')
     do
         ip=$(ip addr show $physical_device | grep -o "inet [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | cut -f 2 -d ' ')
-        if test "X$ip" != "X"
+        if [ "$ip" ]
         then
             IF=$physical_device
             break
@@ -25,13 +25,13 @@ echo "  up  | down "
 pad="     "
 while true
 do
-    R1=`cat /sys/class/net/$IF/statistics/rx_bytes`
-    T1=`cat /sys/class/net/$IF/statistics/tx_bytes`
+    R1=$(cat /sys/class/net/$IF/statistics/rx_bytes)
+    T1=$(cat /sys/class/net/$IF/statistics/tx_bytes)
     sleep 1
-    R2=`cat /sys/class/net/$IF/statistics/rx_bytes`
-    T2=`cat /sys/class/net/$IF/statistics/tx_bytes`
-    TBPS=`expr $T2 - $T1`
-    RBPS=`expr $R2 - $R1`
+    R2=$(cat /sys/class/net/$IF/statistics/rx_bytes)
+    T2=$(cat /sys/class/net/$IF/statistics/tx_bytes)
+    TBPS=$(expr $T2 - $T1)
+    RBPS=$(expr $R2 - $R1)
     TMBPS=$(echo "scale=2; $TBPS / 1048576" | bc)
     RMBPS=$(echo "scale=2; $RBPS / 1048576" | bc)
     printf "%s | %s\n" "${pad:${#TMBPS}}$TMBPS" "${pad:${#RMBPS}}$RMBPS"

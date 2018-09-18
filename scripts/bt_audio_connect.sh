@@ -3,14 +3,14 @@
 # Uses a helper script to connect.
 # Assumes BlueALSA is running.
 
-if ! [ "$ALSA_BLUETOOTH_MAC" ]
+if [ ! "$ALSA_BLUETOOTH_MAC" ]
 then
     echo "Define the environment variable ALSA_BLUETOOTH_MAC first."
     sleep 1
     exit 1
 fi
 
-if ! [ "$(ps -e | grep bluealsa | grep -v `basename "$0"`)" ]
+if [ ! "$(ps -e | grep "bluealsa$")" ]
 then
     echo "BlueALSA is not running."
     sleep 1
@@ -30,7 +30,7 @@ scriptsdir=$(dirname "$(readlink -f "$0")")
 retries=3
 while [ $retries -gt 0 ]
 do
-    if $scriptsdir/bt_dev_connect.sh $ALSA_BLUETOOTH_MAC;
+    if $scriptsdir/bt_dev_connect.sh $ALSA_BLUETOOTH_MAC
     then
         seconds=10
         while [ $seconds -gt 0 ]

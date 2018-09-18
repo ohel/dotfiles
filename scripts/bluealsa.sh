@@ -35,7 +35,7 @@ tmp_bashrc=/dev/shm/bluealsabashrc
 
 scriptsdir=$(dirname "$(readlink -f "$0")")
 
-if ! $scriptsdir/bt_audio_connect.sh;
+if ! $scriptsdir/bt_audio_connect.sh
 then
     echo "Bluetooth audio is not connected. Exiting."
     sleep 1
@@ -70,7 +70,7 @@ else
     pid=$!
 fi
 
-if ! [ "$bt_env_program" ]
+if [ ! "$bt_env_program" ]
 then
     cat > $tmp_bashrc << EOF
     export ALSA_DEFAULT_PCM=$loop_in

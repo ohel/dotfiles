@@ -16,7 +16,7 @@ readpw() {
         return
     fi
     echo "Enter router password (won't be echoed)."
-    stty_orig=`stty -g`
+    stty_orig=$(stty -g)
     stty -echo
     read pw
     stty $stty_orig
