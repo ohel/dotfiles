@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Select a Bluetooth audio device to use with BlueALSA
+Exec=.scripts/bluealsa_dev_select.sh nobak
+Terminal=true
+Type=Application
+Icon=bluetooth
+Categories=System;Utility;Audio
