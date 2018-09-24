@@ -1,8 +1,19 @@
 #!/bin/sh
 # Use PlatformIO via a script.
-# To install and update PlatformIO, use:
-# pip install --target=$piopath -U platformio
+# One may install PlatformIO locally and use this script from a
+# directory in PATH, for example from /opt/bin.
+# Everything then basically works as if pio was installed globally.
+# As a bonus, there is an install shortcut for the script:
+# pio install [destdir], where destdir defaults to current working dir.
 
-piopath=/opt/programs/platformio
+piopath=/opt/platformio
+
+if [ "$1" ] && [ "$1" == "install" ]
+then
+    [ "$2" ] && piopath="$2"
+    pip install --target="$piopath" -U platformio
+    exit
+fi
+
 export PYTHONPATH="${PYTHONPATH}:$piopath"
 env python $piopath/platformio "$@"

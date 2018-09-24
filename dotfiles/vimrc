@@ -129,6 +129,9 @@ else
 
 endif
 
+" Note: on Windows the colorscheme might not be found unless it is copied under
+" the global installation directory, e.g.
+" C:\Program Files (x86)\Vim\vimfiles\colors
 if filereadable($VIMHOME . "/colors/minigun.vim") || filereadable($VIMRUNTIME . "/colors/minigun.vim")
     colorscheme minigun
 endif
