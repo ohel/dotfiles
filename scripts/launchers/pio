@@ -6,9 +6,9 @@
 # As a bonus, there is an install shortcut for the script:
 # pio install [destdir], where destdir defaults to current working dir.
 
-piopath=/opt/platformio
+piopath=~/.local/bin/
 
-if [ "$1" ] && [ "$1" == "install" ]
+if [ "$1" = "install" ]
 then
     [ "$2" ] && piopath="$2"
     pip install --target="$piopath" -U platformio
