@@ -10,7 +10,7 @@
 input=$1
 quality=${2:-2}
 
-if [ $quality -lt 1 || $quality -gt 5 ]
+if [ $quality -lt 1 ] || [ $quality -gt 5 ]
 then
     echo "Audio quality must be between 1 and 5, given as integer."
     exit 1
