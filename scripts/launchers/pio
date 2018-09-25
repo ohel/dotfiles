@@ -3,8 +3,7 @@
 # One may install PlatformIO locally and use this script from a
 # directory in PATH, for example from /opt/bin.
 # Everything then basically works as if pio was installed globally.
-# As a bonus, there is an install shortcut for the script:
-# pio install [destdir], where destdir defaults to current working dir.
+# As a bonus, there is a pip install shortcut for the script.
 
 piopath=~/.local/bin/
 
