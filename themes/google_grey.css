@@ -1,0 +1,33 @@
+/* For a custom CSS browser extension.
+ * Low contrast greyish theme for Google.
+ * */
+@-moz-document regexp("https?://.*\\.google\\..*") {
+
+* {
+	background: #303030 !important;
+	color: #c0c0c0 !important;
+}
+
+a {
+    color: #ffffff !important;
+}
+
+cite {
+    color: #00c0c0 !important;
+}
+
+g-flat-button {
+    background-color: #a0a0a0 !important;
+    color: #ffffff !important;
+}
+
+g-raised-button div, g-raised-button span {
+    background-color: #00a0a0 !important;
+    color: #ffffff !important;
+}
+
+div.lst-c * {
+    background-color: #000000 !important;
+}
+
+}

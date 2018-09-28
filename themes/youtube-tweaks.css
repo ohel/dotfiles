@@ -1,6 +1,8 @@
-/* To be used with Dark Grey Youtube theme and Stylish extension.
+/* For a custom CSS browser extension, use with dark YouTube theme.
  * Hides annoying stuff from the video frame plus the the comment reply and like buttons.
  * */
+@-moz-document domain("youtube.com") {
+
 #movie_player > div.ytp-gradient-top,
 #movie_player > div.ytp-chrome-top.ytp-watch-later-button-visible.ytp-share-button-visible,
 #movie_player > div.ytp-gradient-bottom,
@@ -8,5 +10,7 @@
 #movie_player > div.ytp-chrome-top.ytp-share-button-visible,
 #toolbar.ytd-comment-action-buttons-renderer
 {
-	display:none;
+    display:none;
+}
+
 }

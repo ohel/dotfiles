@@ -1,6 +1,8 @@
-/* For the Stylish browser extension, use with all Flowdock URLs.
+/* For a custom CSS browser extension, use with all Flowdock URLs.
  * Widens the Flowdock navbar and makes it a bit more compact at the same time.
  * */
+@-moz-document domain("flowdock.com") {
+
 #tab-bar {
     width: 20%;
     max-width: 300px;
@@ -14,4 +16,6 @@
 
 #tab-list > div.scroll-wrapper.has-scrollbar > div.tab-list-content.scroll-content.touch-scrollable > div.flow-list > ol > li > a.tab-link > div > div > span {
     display: none;
+}
+
 }
