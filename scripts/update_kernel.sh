@@ -22,13 +22,13 @@ then
 fi
 
 cd /usr/src
-if [ "$1" != "rt" ]
+if [ "$1" == "rt" ]
 then
-    old_version=$(readlink linux | cut -f 2 -d '-')
-    rt_grep_opts="-v -s"
-else
     old_version=$(ls -v1 --file-type | grep '/' | cut -f 1 -d '/' | grep rt | tail -n 2 | head -n 1 | cut -f 2- -d '-')
     rt_grep_opts="-s"
+else
+    old_version=$(readlink linux | cut -f 2 -d '-')
+    rt_grep_opts="-v -s"
 fi
 new_version=$(ls -v1 --file-type | grep '/' | cut -f 1 -d '/' | grep $rt_grep_opts rt | tail -n 1 | cut -f 2- -d '-')
 
@@ -52,6 +52,12 @@ function cleanup {
             do
                 rm -rf /usr/src/linux-$version
                 rm -rf /lib/modules/$version
+
+                # For some reason RT kernels in /lib/modules are named like
+                # <version>-rt-rt<revision>, not like <version>-rt<revision>.
+                rt_version=$(echo $version | grep rt | sed "s/-rt/-rt-rt/")
+                [ "$rt_version" ] && rm -rf /lib/modules/$rt_version
+
                 rm /boot/System.map-$version 2>/dev/null
                 rm /boot/kernel-$version 2>/dev/null
                 echo "Removed kernel version $version files."
