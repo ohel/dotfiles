@@ -12,6 +12,22 @@ a {
     color: #ffffff !important;
 }
 
+/* Search box. */
+div.lst-c * {
+    background-color: #000000 !important;
+}
+
+/* Image backgrounds in search results. */
+div.THL2l {
+    background: none !important;
+}
+
+/* Video backgrounds in search results. */
+div.OIL2le {
+    background: none !important;
+}
+
+/* Site URL in search results. */
 cite {
     color: #00c0c0 !important;
 }
@@ -24,10 +40,6 @@ g-flat-button {
 g-raised-button div, g-raised-button span {
     background-color: #00a0a0 !important;
     color: #ffffff !important;
-}
-
-div.lst-c * {
-    background-color: #000000 !important;
 }
 
 }
