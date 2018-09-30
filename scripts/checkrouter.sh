@@ -4,6 +4,7 @@
 # by calling a script with router model parameter.
 
 routermodel=${1:-fast}
+autoparam=$2
 
 routerip=$(ip route | grep default | grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}")
 
@@ -13,4 +14,4 @@ echo "Pinging router to check if reboot required..."
 echo "Packet loss detected. Going to reboot router."
 
 scriptsdir=$(dirname "$(readlink -f "$0")")
-setsid xfce4-terminal -e "bash -c '$scriptsdir/rebootrouter.sh $routermodel'"
+setsid xfce4-terminal -e "bash -c '$scriptsdir/rebootrouter.sh $routermodel $autoparam'"

@@ -1,9 +1,11 @@
 #!/bin/sh
 # Reboot a router. This comes in handy with unstable consumer devices.
-# Supports the following router models (pass as parameter):
+# If $2 equals "auto", no user input is asked (unless a password is required).
+# Supports the following router models (pass as $1):
 #    fast: Sagemcom FAST3686 (DNA Valokuitu Plus)
 
 routermodel=${1:-fast}
+internetpingaddress="8.8.8.8"
 
 routerip=$(ip route | grep default | grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}")
 
@@ -20,8 +22,12 @@ readpw() {
     stty $stty_orig
 }
 
-echo "Preparing to reboot router at $routerip. Press return to continue."
-read tmp
+echo Preparing to reboot router at $routerip.
+if [ "$2" != "auto" ]
+then
+    echo Press return to continue.
+    read tmp
+fi
 
 if [ "$routermodel" = "fast" ]
 then
@@ -31,7 +37,7 @@ then
     then
         username=admin
         readpw
-        echo "Logging in..."
+        echo Logging in...
         skey=$(echo $responsepage | grep -o "SessionKey = [0-9]*;" | tr -dc "[:digit:]")
         wget -q -O /dev/null "http://$routerip/goform/login?sessionKey=$skey" \
             --post-data="loginUsername=$username&loginPassword=$pw"
@@ -47,10 +53,24 @@ fi
 
 echo Rebooting...
 sleep 30
+
 echo Pinging router...
 while ! [ "$pingresponse" ]
 do
     pingresponse=$(ping -c 1 $routerip 2>/dev/null | grep " 0% packet loss")
 done
-echo Got ping response, router is up. Press return to exit.
-read tmp
+echo Got ping response, router is up.
+
+pingresponse=""
+echo Pinging the Internet...
+while ! [ "$pingresponse" ]
+do
+    pingresponse=$(ping -c 1 $internetpingaddress 2>/dev/null | grep " 0% packet loss")
+done
+echo Got ping response, router is operational.
+
+if [ "$2" != "auto" ]
+then
+    echo Press return to exit.
+    read tmp
+fi
