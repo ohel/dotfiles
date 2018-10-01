@@ -25,6 +25,7 @@ EOF
 # Files in base directory, with thumbnails.
 for filename in $(find ./ -maxdepth 1 -type f | sort); do
     item=$(basename "$filename")
+    size=$(du -h "$filename" | xargs echo | cut -f 1 -d ' ')
     if [ "$item" != "index.html" ] &&
         [ "$item" != ".htaccess" ] &&
         [ ! "$(echo $item | grep thumb_.*\.jpg)" ]
@@ -34,7 +35,7 @@ for filename in $(find ./ -maxdepth 1 -type f | sort); do
         then
            echo "</br><img src=\"thumb_${item%.*}.jpg\" alt=\"img\">" >> $index
         fi
-        echo "</a></li><hr>" >> $index
+        echo "</a>($size)</li><hr>" >> $index
     fi
 done
 echo "</ol><ul>" >> $index
