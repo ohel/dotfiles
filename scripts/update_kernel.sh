@@ -40,7 +40,7 @@ function cleanup {
     if [ ${#old_versions[@]} -gt 0 ]
     then
         echo "Found old versions in /usr/src:"
-        echo $old_versions
+        echo ${old_versions[@]}
         echo
         echo "Press y to remove them, any other key to skip."
         echo "Files of those versions in /boot and /lib/modules will also be removed."
@@ -48,7 +48,7 @@ function cleanup {
         if [ "$remove" == "y" ]
         then
             echo
-            for version in $old_versions
+            for version in ${old_versions[@]}
             do
                 rm -rf /usr/src/linux-$version
                 rm -rf /lib/modules/$version
