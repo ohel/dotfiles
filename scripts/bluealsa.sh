@@ -66,6 +66,7 @@ then
     jack_connect "Loop out:capture_1" "system:playback_1" &>/dev/null
     jack_connect "Loop out:capture_2" "system:playback_2" &>/dev/null
 else
+    sleep 1
     arecord -f cd --buffer-size $buffer_size -D $loop_out | env LIBASOUND_THREAD_SAFE=0 aplay --buffer-size $buffer_size -D $bt_audio &
     pid=$!
 fi

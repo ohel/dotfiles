@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Show network usage (up/down MB/s) for interface $1 if given,
 # or by default for the first PCI interface with IPv4 address.
 
@@ -18,10 +18,11 @@ else
 fi
 
 echo "Monitoring interface: $IF"
-echo "up = tx_bytes [MB/s]"
-echo "down = rx_bytes [MB/s]"
+echo
+echo " Unit: [MB/s]"
 echo "-------------"
-echo "  up  | down "
+echo "   UP |  DOWN"
+echo "      |"
 pad="     "
 while true
 do
