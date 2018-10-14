@@ -1,1 +1,2 @@
+# CME M-key MIDI keyboard. Fires up a plug'n'play script.
 ACTION=="add", ATTR{product}=="CME M-KEY", RUN+="/bin/su panther -c '/bin/bash /opt/udev/scripts/cmemkey.sh'"

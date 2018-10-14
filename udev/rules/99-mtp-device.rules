@@ -1,2 +1,3 @@
+# MTP device custom automounter rules.
 ACTION=="add", ENV{DEVLINKS}=="/dev/libmtp*", ENV{ID_BUS}=="usb", RUN+="/bin/bash /opt/udev/scripts/mountmtp.sh %E{ID_VENDOR_ID} %E{ID_MODEL_ID}"
 ACTION=="remove", ENV{DEVLINKS}=="/dev/libmtp*", ENV{ID_BUS}=="usb", RUN+="/bin/bash /opt/udev/scripts/mountmtp.sh %E{ID_VENDOR_ID} %E{ID_MODEL_ID} -u"

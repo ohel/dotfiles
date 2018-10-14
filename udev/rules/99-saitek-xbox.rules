@@ -1,2 +1,3 @@
+# Set up a Saitek Xbox 360 gamepad.
 ACTION=="add", ENV{ID_VENDOR}=="Saitek", ENV{ID_MODEL}=="Cyborg_Rumble_Pad_-_PC_Xbox_360", RUN+="/bin/bash /opt/udev/scripts/saitek.sh %E{BUSNUM} %E{DEVNUM}"
 ACTION=="remove", ENV{ID_VENDOR}=="Saitek", ENV{ID_MODEL}=="Cyborg_Rumble_Pad_-_PC_Xbox_360", RUN+="/bin/bash /opt/udev/scripts/saitek_remove.sh"

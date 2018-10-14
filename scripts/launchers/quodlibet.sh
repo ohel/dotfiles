@@ -2,7 +2,6 @@
 # A startup script for Quod Libet. Output is redirected to a log file.
 #
 # By default, starts the player or if it's running, toggles its visibility.
-# Also starts up the Matrix Orbital LCD application.
 # Can be used to modify audio output settings by parameters. Useful when using multiple soundcards.
 #
 # Supported parameters, passed on to Quod Libet prefixed with --:
@@ -14,12 +13,6 @@
 
 qlexe=/opt/programs/quodlibet/quodlibet.py
 logfile=~/.cache/qllog.txt
-
-if ! ps -ef | grep "pyorbital.py" | grep -v grep > /dev/null
-then
-    /opt/programs/misc/pyorbital.py 2>&1 &
-    sleep 1
-fi
 
 if [ "$#" = 0 ]
 then
