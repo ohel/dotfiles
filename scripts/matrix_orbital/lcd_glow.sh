@@ -2,7 +2,7 @@
 # Make an LCD device backlight glow.
 
 dev=/dev/serial/matrix_orbital
-int=0.05
+int=0.08
 
 while [ 1 ]
 do
