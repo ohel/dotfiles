@@ -1,8 +1,0 @@
-#!/bin/bash
-for arg
-do
-	echo -e -n $(octave -q --eval "dec2hex([$arg 0])" | head -3 | tail -1)" "
-	echo -e -n \\x$(octave -q --eval "dec2hex([$arg 0])" | head -3 | tail -1) > /dev/ttyUSB0
-done
-echo ""
-

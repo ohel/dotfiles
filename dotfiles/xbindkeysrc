@@ -19,7 +19,7 @@ XF86Tools
 "xfce4-terminal --geometry=120x30 -e ranger"
 Mod4 + r
 
-"xfce4-terminal --working-directory=$HOME --title IPython -e ipython"
+"xfce4-terminal --working-directory=$HOME --title IPython -e ipython3"
 XF86Calculator
 
 "claws-mail --select INBOX"

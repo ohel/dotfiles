@@ -1,2 +1,2 @@
 #!/bin/bash
-echo -e "\xFE\x46" > /dev/ttyUSB0
+echo -e "\xFEF" > /dev/ttyUSB0

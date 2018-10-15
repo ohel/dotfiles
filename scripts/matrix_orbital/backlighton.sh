@@ -1,2 +1,3 @@
 #!/bin/bash
-echo -e "\xFE\x42\x00" > /dev/ttyUSB0
+# last byte = minutes the light is on, 0 = permanently
+echo -e "\xFEB\x00" > /dev/ttyUSB0

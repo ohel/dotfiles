@@ -1,2 +1,2 @@
 #!/bin/bash
-echo -n -e "\xFE\x48" > /dev/ttyUSB0
+echo -en "\xFEH" > /dev/serial/matrix_orbital
