@@ -6,7 +6,7 @@ let g:dlines=31 " Also set default size into memory.
 let g:dcols=107
 let g:leave_my_textwidth_alone=1 " Don't autowrap lines while typing.
 
-let &shiftwidth=&tabstop " Set intend (using keys << or >>) width.
+let &shiftwidth=&tabstop " Set indent (using keys << or >>) width.
 let &softtabstop=&tabstop " Set indent width in insert mode using tab.
 
 set autoread " Automatically update file if changed from the outside.
