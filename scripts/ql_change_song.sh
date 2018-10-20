@@ -3,13 +3,13 @@
 # If $1 = "previous", seek to previous song instead.
 
 qlexe=/opt/programs/quodlibet/quodlibet.py
-if ps -ef | grep $qlexe | grep -v grep > /dev/null
+
+[ ! $(ps -ef | grep $qlexe$) ] && exit 1
+
+if [ "$1" = "previous" ]
 then
-    if [ "$1" = "Xprevious" ]
-    then
-        $qlexe --seek=0:0
-        $qlexe --previous
-    else
-        $qlexe --next
-    fi
+    $qlexe --seek=0:0
+    $qlexe --previous
+else
+    $qlexe --next
 fi
