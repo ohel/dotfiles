@@ -10,22 +10,22 @@ menuitem radio:disabled,
 menuitem.check,
 menuitem.check:hover,
 menuitem.check:disabled {
-	background-color: transparent;
-	-gtk-icon-source: none;
-	border-style: none;
-	border-image: none;
+    background-color: transparent;
+    -gtk-icon-source: none;
+    border-style: none;
+    border-image: none;
 }
 
 menuitem radio:active,
 
 menuitem radio:checked {
-	-gtk-icon-source: url("assets/radio-menuitem-checked.svg");
+    -gtk-icon-source: url("assets/radio-menuitem-checked.svg");
 }
 
 menuitem radio:active:hover,
 
 menuitem radio:checked:hover {
-	-gtk-icon-source: url("assets/radio-menuitem-checked-prelight.svg");
+    -gtk-icon-source: url("assets/radio-menuitem-checked-prelight.svg");
 }
 
 menuitem radio:active:disabled,
@@ -33,31 +33,31 @@ menuitem radio:disabled:active,
 
 menuitem radio:checked:disabled,
 menuitem radio:disabled:checked {
-	-gtk-icon-source: url("assets/radio-menuitem-checked-insensitive.svg");
+    -gtk-icon-source: url("assets/radio-menuitem-checked-insensitive.svg");
 }
 
 menuitem radio:indeterminate {
-	-gtk-icon-source: url("assets/radio-menuitem-mixed.svg");
+    -gtk-icon-source: url("assets/radio-menuitem-mixed.svg");
 }
 
 menuitem radio:indeterminate:hover {
-	-gtk-icon-source: url("assets/radio-menuitem-mixed-prelight.svg");
+    -gtk-icon-source: url("assets/radio-menuitem-mixed-prelight.svg");
 }
 
 menuitem radio:indeterminate:disabled {
-	-gtk-icon-source: url("assets/radio-menuitem-mixed-insensitive.svg");
+    -gtk-icon-source: url("assets/radio-menuitem-mixed-insensitive.svg");
 }
 
 menuitem check:active,
 
 menuitem check:checked {
-	-gtk-icon-source: url("assets/checkbox-menuitem-checked.svg");
+    -gtk-icon-source: url("assets/checkbox-menuitem-checked.svg");
 }
 
 menuitem check:active:hover,
 
 menuitem check:checked:hover {
-	-gtk-icon-source: url("assets/checkbox-menuitem-checked-prelight.svg");
+    -gtk-icon-source: url("assets/checkbox-menuitem-checked-prelight.svg");
 }
 
 menuitem check:active:disabled,
@@ -65,19 +65,19 @@ menuitem check:disabled:active,
 
 menuitem check:checked:disabled,
 menuitem check:disabled:checked {
-	-gtk-icon-source: url("assets/checkbox-menuitem-checked-insensitive.svg");
+    -gtk-icon-source: url("assets/checkbox-menuitem-checked-insensitive.svg");
 }
 
 menuitem check:indeterminate {
-	-gtk-icon-source: url("assets/checkbox-menuitem-mixed.svg");
+    -gtk-icon-source: url("assets/checkbox-menuitem-mixed.svg");
 }
 
 menuitem check:indeterminate:hover {
-	-gtk-icon-source: url("assets/checkbox-menuitem-mixed-prelight.svg");
+    -gtk-icon-source: url("assets/checkbox-menuitem-mixed-prelight.svg");
 }
 
 menuitem check:indeterminate:disabled {
-	-gtk-icon-source: url("assets/checkbox-menuitem-mixed-insensitive.svg");
+    -gtk-icon-source: url("assets/checkbox-menuitem-mixed-insensitive.svg");
 }
 
 /* Now draw regular check and radio items */
@@ -91,7 +91,7 @@ check:indeterminate.button.flat,
 check:indeterminate:hover.button.flat,
 check row:selected:indeterminate.button.flat,
 check row:selected:focus:indeterminate.button.flat {
-	-gtk-icon-source: url("assets/checkbox-mixed-dark.svg");
+    -gtk-icon-source: url("assets/checkbox-mixed-dark.svg");
 }
 
 check:indeterminate:disabled,
@@ -101,7 +101,7 @@ check row:selected:focus:indeterminate:disabled,
 check:indeterminate:disabled.button.flat,
 check row:selected:indeterminate:disabled.button.flat,
 check row:selected:focus:indeterminate:disabled.button.flat {
-	-gtk-icon-source: url("assets/checkbox-mixed-insensitive-dark.svg");
+    -gtk-icon-source: url("assets/checkbox-mixed-insensitive-dark.svg");
 }
 
 check,
@@ -113,7 +113,7 @@ check.button.flat,
 check:hover.button.flat,
 check row:selected.button.flat,
 check row:selected:focus.button.flat {
-	-gtk-icon-source: url("assets/checkbox-unchecked-dark.svg");
+    -gtk-icon-source: url("assets/checkbox-unchecked-dark.svg");
 }
 
 check:disabled,
@@ -123,7 +123,7 @@ check row:selected:focus:disabled,
 check:disabled.button.flat,
 check row:selected:disabled.button.flat,
 check row:selected:focus:disabled.button.flat {
-	-gtk-icon-source: url("assets/checkbox-unchecked-insensitive-dark.svg");
+    -gtk-icon-source: url("assets/checkbox-unchecked-insensitive-dark.svg");
 }
 
 check:active,
@@ -142,7 +142,7 @@ check row:selected:focus:checked,
 check:checked.button.flat,
 check:checked:hover.button.flat,
 check row:selected:focus:checked.button.flat {
-	-gtk-icon-source: url("assets/checkbox-checked-dark.svg");
+    -gtk-icon-source: url("assets/checkbox-checked-dark.svg");
 }
 
 check:active:disabled,
@@ -160,7 +160,7 @@ check row:selected:focus:checked:disabled,
 check:checked:disabled.button.flat,
 check row:selected:checked:disabled.button.flat,
 check row:selected:focus:checked:disabled.button.flat {
-	-gtk-icon-source: url("assets/checkbox-checked-insensitive-dark.svg");
+    -gtk-icon-source: url("assets/checkbox-checked-insensitive-dark.svg");
 }
 
 radio:indeterminate,
@@ -172,7 +172,7 @@ radio:indeterminate.button.flat,
 radio:indeterminate:hover.button.flat,
 radio row:selected:indeterminate.button.flat,
 radio row:selected:focus:indeterminate.button.flat {
-	-gtk-icon-source: url("assets/radio-mixed-dark.svg");
+    -gtk-icon-source: url("assets/radio-mixed-dark.svg");
 }
 
 radio:indeterminate:disabled,
@@ -182,7 +182,7 @@ radio row:selected:focus:indeterminate:disabled,
 radio:indeterminate:disabled.button.flat,
 radio row:selected:indeterminate:disabled.button.flat,
 radio row:selected:focus:indeterminate:disabled.button.flat {
-	-gtk-icon-source: url("assets/radio-mixed-insensitive-dark.svg");
+    -gtk-icon-source: url("assets/radio-mixed-insensitive-dark.svg");
 }
 
 radio,
@@ -194,13 +194,13 @@ radio.button.flat,
 radio:hover.button.flat,
 radio row:selected.button.flat,
 radio row:selected:focus.button.flat {
-	-gtk-icon-source: url("assets/radio-unselected-dark.svg");
+    -gtk-icon-source: url("assets/radio-unselected-dark.svg");
 }
 
 radio:disabled,
 radio row:selected:disabled,
 radio row:selected:focus:disabled {
-	-gtk-icon-source: url("assets/radio-unselected-insensitive-dark.svg");
+    -gtk-icon-source: url("assets/radio-unselected-insensitive-dark.svg");
 }
 
 radio:active,
@@ -218,7 +218,7 @@ radio row:selected:focus:checked,
 radio:checked.button.flat,
 radio:checked:hover.button.flat,
 radio row:selected:focus:checked.button.flat {
-	-gtk-icon-source: url("assets/radio-selected-dark.svg");
+    -gtk-icon-source: url("assets/radio-selected-dark.svg");
 }
 
 radio:active:disabled,
@@ -236,7 +236,7 @@ radio row:selected:focus:checked:disabled,
 radio:checked:disabled.button.flat,
 radio row:selected:checked:disabled.button.flat,
 radio row:selected:focus:checked:disabled.button.flat {
-	-gtk-icon-source: url("assets/radio-selected-insensitive-dark.svg");
+    -gtk-icon-source: url("assets/radio-selected-insensitive-dark.svg");
 }
 
 .sidebar .radio:active,
@@ -246,11 +246,11 @@ radio row:selected:focus:checked:disabled.button.flat {
 .sidebar .radio:checked,
 .sidebar .radio:checked:focus,
 .sidebar .radio:checked:hover {
-	-gtk-icon-source: url("assets/sidebar-radio-checked-dark.svg");
+    -gtk-icon-source: url("assets/sidebar-radio-checked-dark.svg");
 }
 
 .sidebar .radio:hover {
-	-gtk-icon-source: url("assets/sidebar-radio-prelight.svg");
+    -gtk-icon-source: url("assets/sidebar-radio-prelight.svg");
 }
 
 .sidebar .radio:active:selected,
@@ -258,45 +258,45 @@ radio row:selected:focus:checked:disabled.button.flat {
 
 .sidebar .radio:checked:selected,
 .sidebar .radio:checked:selected:focus {
-	-gtk-icon-source: url("assets/sidebar-radio-selected-dark.svg");
+    -gtk-icon-source: url("assets/sidebar-radio-selected-dark.svg");
 }
 
 .sidebar .radio:selected:hover,
 .sidebar .radio:selected:focus {
-	-gtk-icon-source: url("assets/sidebar-radio-selected-prelight.svg");    
+    -gtk-icon-source: url("assets/sidebar-radio-selected-prelight.svg");    
 }
 
 /* Also draw toggle button check items (a redundant Gtk+ widget) */
 
 .button.check,
 .button.check:hover {
-	border-style: none;
-	border-image: none;
-	background-image: url("assets/checkbox-unchecked-dark.svg");
+    border-style: none;
+    border-image: none;
+    background-image: url("assets/checkbox-unchecked-dark.svg");
 }
 
 .button.check:disabled {
-	border-style: none;
-	border-image: none;
-	background-image: url("assets/checkbox-unchecked-insensitive-dark.svg");
+    border-style: none;
+    border-image: none;
+    background-image: url("assets/checkbox-unchecked-insensitive-dark.svg");
 }
 
 .button.check:active,
 .button.check:active:hover {
-	background-image: url("assets/checkbox-checked-dark.svg");
+    background-image: url("assets/checkbox-checked-dark.svg");
 }
 
 .button.check:active:disabled {
-	background-image: url("assets/checkbox-checked-insensitive-dark.svg");
+    background-image: url("assets/checkbox-checked-insensitive-dark.svg");
 }
 
 .button.check:indeterminate,
 .button.check:indeterminate:hover {
-	background-image: url("assets/checkbox-mixed-dark.svg");
+    background-image: url("assets/checkbox-mixed-dark.svg");
 }
 
 .button.check:indeterminate:disabled {
-	background-image: url("assets/checkbox-mixed-insensitive-dark.svg");
+    background-image: url("assets/checkbox-mixed-insensitive-dark.svg");
 }
 
 /***********
@@ -326,60 +326,60 @@ calendar.view {
 
 scale slider,
 scale.horizontal slider {
-	background-image: url("assets/knob_horizontal.png");
+    background-image: url("assets/knob_horizontal.png");
 }
 
 scale slider:disabled,
 scale.horizontal slider:disabled {
-	background-image: url("assets/scale-slider-horizontal-insensitive-dark.png");
+    background-image: url("assets/scale-slider-horizontal-insensitive-dark.png");
 }
 
 scale.vertical slider {
-	background-image: url("assets/knob_vertical.png");
+    background-image: url("assets/knob_vertical.png");
 }
 
 scale.vertical slider:disabled {
-	background-image: url("assets/scale-slider-vertical-insensitive-dark.png");
+    background-image: url("assets/scale-slider-vertical-insensitive-dark.png");
 }
 
 GtkScale.scale-has-marks-above.slider.horizontal {
-	background-image: url("assets/scale-slider-marks-above-horizontal-dark.svg");
+    background-image: url("assets/scale-slider-marks-above-horizontal-dark.svg");
 }
 
 GtkScale.scale-has-marks-above.slider.horizontal:disabled {
-	background-image: url("assets/scale-slider-marks-above-horizontal-insensitive-dark.svg");
+    background-image: url("assets/scale-slider-marks-above-horizontal-insensitive-dark.svg");
 }
 
 GtkScale.scale-has-marks-above.slider.vertical {
-	background-image: url("assets/scale-slider-marks-above-vertical-dark.svg");
+    background-image: url("assets/scale-slider-marks-above-vertical-dark.svg");
 }
 
 GtkScale.scale-has-marks-above.slider.vertical:disabled {
-	background-image: url("assets/scale-slider-marks-above-vertical-insensitive-dark.svg");
+    background-image: url("assets/scale-slider-marks-above-vertical-insensitive-dark.svg");
 }
 
 GtkScale.scale-has-marks-below.slider.horizontal {
-	background-image: url("assets/scale-slider-marks-below-horizontal-dark.svg");
+    background-image: url("assets/scale-slider-marks-below-horizontal-dark.svg");
 }
 
 GtkScale.scale-has-marks-below.slider.horizontal:disabled {
-	background-image: url("assets/scale-slider-marks-below-horizontal-insensitive-dark.svg");
+    background-image: url("assets/scale-slider-marks-below-horizontal-insensitive-dark.svg");
 }
 
 GtkScale.scale-has-marks-below.slider.vertical {
-	background-image: url("assets/scale-slider-marks-below-vertical-dark.svg");
+    background-image: url("assets/scale-slider-marks-below-vertical-dark.svg");
 }
 
 GtkScale.scale-has-marks-below.slider.vertical:disabled {
-	background-image: url("assets/scale-slider-marks-below-vertical-insensitive-dark.svg");
+    background-image: url("assets/scale-slider-marks-below-vertical-insensitive-dark.svg");
 }
 
 .cursor-handle.top {
-	background-image: url("assets/scale-slider-marks-above-horizontal-dark.svg");
+    background-image: url("assets/scale-slider-marks-above-horizontal-dark.svg");
 }
 
 .cursor-handle.bottom {
-	background-image: url("assets/scale-slider-marks-below-horizontal-dark.svg");
+    background-image: url("assets/scale-slider-marks-below-horizontal-dark.svg");
 }
 
 /***********
@@ -398,22 +398,22 @@ toolbar combobox button,
 .primary-toolbar.toolbar combobox button,
 switch slider,
 .titlebar .titlebutton:hover {
-  border: 1px solid;
-  border-radius: 1px;
-  transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  border-color: #505050;
-  border-bottom-color: #303030;
-  background-image: linear-gradient(to bottom, #3d3d3e, #505050 40%, #3d3d3e);
+    border: 1px solid;
+    border-radius: 1px;
+    transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border-color: #505050;
+    border-bottom-color: #303030;
+    background-image: linear-gradient(to bottom, #3d3d3e, #505050 40%, #3d3d3e);
 }
 
 switch slider:active {
-	border-image: url("assets/switch-border-active.svg") 3 / 3px stretch;
+    border-image: url("assets/switch-border-active.svg") 3 / 3px stretch;
 }
 
 column-header button,
 treeview button,
 calendar.header {
-	border-image: url("assets/column-header-border-dark.svg") 2 0 2 1 / 2px 0px 2px 1px stretch;
+    border-image: url("assets/column-header-border-dark.svg") 2 0 2 1 / 2px 0px 2px 1px stretch;
 }
 
 /*********************
@@ -425,23 +425,23 @@ notebook > stack {
 }
 
 notebook > header tab {
-	border-image: url("assets/tab-border.svg") 2 / 2px stretch;
+    border-image: url("assets/tab-border.svg") 2 / 2px stretch;
 }
 
 notebook > header tab:checked {
-	border-image: url("assets/tab-active-border.svg") 2 / 2px stretch;
+    border-image: url("assets/tab-active-border.svg") 2 / 2px stretch;
 }
 
 notebook > header tab.left:checked {
-	border-image: url("assets/tab-active-border-left.svg") 2 / 2px stretch;
+    border-image: url("assets/tab-active-border-left.svg") 2 / 2px stretch;
 }
 
 notebook > header tab.right:checked {
-	border-image: url("assets/tab-active-border-right.svg") 2 / 2px stretch;
+    border-image: url("assets/tab-active-border-right.svg") 2 / 2px stretch;
 }
 
 notebook > header tab.bottom:checked {
-	border-image: url("assets/tab-active-border-bottom.svg") 2 / 2px stretch;
+    border-image: url("assets/tab-active-border-bottom.svg") 2 / 2px stretch;
 }
 
 /**************
@@ -450,12 +450,12 @@ notebook > header tab.bottom:checked {
 
 treeview.view:selected,
 treeview.view:selected:focus {
-	border-image: url("assets/row-selected-dark.svg") 1 0 0 0 / 1px 0px 0px 0px stretch;
+    border-image: url("assets/row-selected-dark.svg") 1 0 0 0 / 1px 0px 0px 0px stretch;
 }
 
 treeview.view.trough:selected,
 treeview.view.trough:selected:focus {
-	border-image: none;
+    border-image: none;
 }
 
 /*********
@@ -465,7 +465,7 @@ treeview.view.trough:selected:focus {
 menu,
 menubar menu,
 menuitem menu {
-	border-image: url("assets/menu-border-dark.svg") 0 1 1 1 / 0px 1px 1px 1px stretch;
+    border-image: url("assets/menu-border-dark.svg") 0 1 1 1 / 0px 1px 1px 1px stretch;
 }
 
 
@@ -474,15 +474,15 @@ menuitem menu {
  ***************/
 
 scrollbar slider {
-	border-image: url("assets/scrollbar-slider-border-dark.svg") 2 / 2px stretch;
+    border-image: url("assets/scrollbar-slider-border-dark.svg") 2 / 2px stretch;
 }
 
 scrollbar.vertical slider {
-	border-image: url("assets/scrollbar-slider-border-vertical.svg") 2 / 2px stretch;
+    border-image: url("assets/scrollbar-slider-border-vertical.svg") 2 / 2px stretch;
 }
 
 scrolledwindow junction,
 .scrollbars-junction {
-	border-image: none;
-	border-width: 0px;
+    border-image: none;
+    border-width: 0px;
 }
