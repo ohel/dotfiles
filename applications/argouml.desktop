@@ -2,7 +2,7 @@
 Version=1.0
 Name=ArgoUML
 Exec=/opt/programs/argouml/argouml.sh
-Icon=.local/share/icons/argouml.png
+Icon=argouml
 Terminal=true
 Type=Application
 Categories=Application;Development;
