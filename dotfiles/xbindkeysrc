@@ -126,8 +126,8 @@ Mod5 + b
 Mod4 + BackSpace
 
 # Classically Alt+F4 closes a window whatever the window manager.
-# However, prevent closing the desktop window.
-"wmctrl -l | grep "0x0$(echo "obase=16; $(xdotool getactivewindow)" | bc).*Desktop$" || wmctrl -c :ACTIVE:"
+# However, prevent closing certain windows (usually the desktop or RDP class).
+"grep $(wmctrl -lx | grep -i "0x0$(echo "obase=16; $(xdotool getactivewindow)" | bc)" | tr -s ' ' | cut -f 3 -d ' ') ~/.config/no_close_window_classes 2>/dev/null || wmctrl -c :ACTIVE:"
 Mod1 + F4
 
 # Toggle window maximized.
