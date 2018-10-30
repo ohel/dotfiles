@@ -29,8 +29,6 @@ set pastetoggle=<f4> " Toggle paste mode (no auto indent).
 set showtabline=2 " Tab selector always visible.
 set textwidth=0 " Define text width if autowrapping: 0 disables autowrap, wraps to 80 on manual wrap (gq).
 set virtualedit=block " Allow selecting non-characters in visual block mode.
-set visualbell " Set visual bell instead of audible beep.
-set t_vb= " Disable visual flashing on bell.
 
 if version >= 800
     set termguicolors " Use truecolor if possible. Support came in version 7.4.1770.
@@ -589,6 +587,10 @@ function! OnVimEnter()
         vmap <silent><a-c> å
         imap <silent><a-c> <esc>åc^
     endif
+
+    " Need to set these last here, otherwise they don't always work.
+    set visualbell " Set visual bell instead of audible beep.
+    set t_vb= " Disable visual flashing on bell.
 
 endfunction
 
