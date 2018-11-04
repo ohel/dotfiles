@@ -93,7 +93,7 @@ else
 
     if !filereadable($VIMHOME . "/colors/minigun.vim")
         if !isdirectory($VIMHOME . "/colors")
-            silent call mkdir($VIMHOME . "/colors")
+            silent call mkdir($VIMHOME . "/colors", "p")
         endif
         echo("Downloading color scheme...")
         silent !curl -fLo $VIMHOME/colors/minigun.vim --create-dirs https://raw.githubusercontent.com/ohel/dotfiles/master/themes/minigun.vim
@@ -113,7 +113,7 @@ else
 
     " Plugins checking.
     if !isdirectory($VIMHOME . "/autoload")
-        silent call mkdir($VIMHOME . "/autoload")
+        silent call mkdir($VIMHOME . "/autoload", "p")
     endif
     if !filereadable($VIMHOME . "/autoload/plug.vim")
         echo("Downloading vim-plug...")
@@ -124,7 +124,7 @@ else
         silent !curl -fLo $VIMHOME/autoload/pathogen.vim https://tpo.pe/pathogen.vim
     endif
     if !isdirectory($VIMHOME . "/bundle")
-        silent call mkdir($VIMHOME . "/bundle")
+        silent call mkdir($VIMHOME . "/bundle", "p")
     endif
 
 endif

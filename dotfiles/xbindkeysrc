@@ -46,9 +46,6 @@ Mod4 + u
 "xkill"
 Control + Mod1 + Escape
 
-"~/.scripts/switch_wm.sh"
-Mod1 + Mod4 + Pause
-
 "~/.scripts/switch_background.sh"
 Mod4 + Pause
 
