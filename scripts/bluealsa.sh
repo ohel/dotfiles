@@ -35,6 +35,13 @@ tmp_bashrc=/dev/shm/bluealsabashrc
 
 scriptsdir=$(dirname "$(readlink -f "$0")")
 
+if [ ! "$(ps -e | grep "bluealsa$")" ]
+then
+    echo "BlueALSA is not running."
+    sleep 1
+    exit 1
+fi
+
 if ! $scriptsdir/bt_audio_connect.sh
 then
     echo "Bluetooth audio is not connected. Exiting."

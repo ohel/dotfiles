@@ -1,23 +1,17 @@
 #!/bin/bash
 # Connect to device with MAC address ALSA_BLUETOOTH_MAC (environment variable).
 # Prefer pcm.bluetooth device MAC if defined in ~/.asoundrc or /etc/asound.conf.
+# Override MAC may be given as $1.
 # Uses a helper script to connect.
-# Assumes BlueALSA is running.
 
 mac=$(cat .asoundrc 2>/dev/null | grep -A 20 "pcm\.bluetooth" | grep -o "\(..:\)\{5\}.." | grep -v "[0:]\{17\}")
 [ $mac ] || mac=$(cat /etc/asound.conf 2>/dev/null | grep -A 20 "pcm\.bluetooth" | grep -o "\(..:\)\{5\}.." | grep -v "[0:]\{17\}")
 [ $mac ] || mac=$ALSA_BLUETOOTH_MAC
+[ $1 ] && mac=$1
 
 if [ ! "$mac" ]
 then
     echo "Define the environment variable ALSA_BLUETOOTH_MAC first."
-    sleep 1
-    exit 1
-fi
-
-if [ ! "$(ps -e | grep "bluealsa$")" ]
-then
-    echo "BlueALSA is not running."
     sleep 1
     exit 1
 fi
@@ -31,7 +25,9 @@ checkconnection() {
 
 scriptsdir=$(dirname "$(readlink -f "$0")")
 
-# Despite waiting infinitely, the connection doesn't always succeed on first try.
+# Despite waiting infinitely, with certain audio devices
+# the connection doesn't always succeed on first try.
+# In that case simply trying again almost always works.
 retries=3
 while [ $retries -gt 0 ]
 do
