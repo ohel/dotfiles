@@ -41,14 +41,12 @@ else
     then
         for device in $devices
         do
-            if [ ! "$(sudo hdparm -C /dev/$device | grep standby)" ]
-            then
-                if [ ! "$(mount | grep /dev/$device)" ]
+            if [ ! "$(sudo hdparm -C /dev/$device | grep standby)" ] && \
+               [ ! "$(mount | grep /dev/$device)" ]
                 then
-                    # The drive is not mounted but not sleeping either. Put it to sleep.
-                    sudo hdparm -Y /dev/$device &
-                    shouldmount=0
-                fi
+                # The drive is not mounted but not sleeping either. Put it to sleep.
+                sudo hdparm -Y /dev/$device &
+                shouldmount=0
             fi
         done
     fi
