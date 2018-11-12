@@ -85,9 +85,7 @@ if has('win32') || has ('win64')
         let $VIMHOME=$HOME . "/_vim"
     endif
 
-    set guifont=ProggyCleanTTSZ:h12:cANSI
-    let g:dfont="ProggyCleanTTSZ"
-    let g:daltfont="Consolas"
+    set guifont=Consolas:h12:cANSI
 
 else
 
@@ -101,9 +99,7 @@ else
 
     set clipboard=unnamedplus " Alias unnamed register to +.
 
-    set guifont=Monospace\ 12
-    let g:dfont="Monospace"
-    let g:daltfont="Monospace"
+    set guifont=Monospace\ 10
 
     " Create default ctags database with a command such as:
     " ctags -R -f ctagsdb --c++-kinds=+p --fields=+iaS --extra=+q /usr/lib64/gcc/x86_64-pc-linux-gnu/$(ls -t1 /usr/lib64/gcc/x86_64-pc-linux-gnu/)/include/
@@ -478,29 +474,37 @@ endfunction
 nnoremap <f8> :call SetFileFormat()<cr>
 
 " Font zooming.
-if exists("g:zoom_functions") && g:zoom_functions == "1"
+if has("gui_running") && exists("g:zoom_functions") && g:zoom_functions == 1
 
     if !exists("g:zoom_level")
         let g:zoom_level=0
     endif
 
-    function! GrowFont()
+    function ChangeFontSize(delta)
+
+        if exists("g:alt_font_toggle")
+            call ToggleAlternativeFont()
+        endif
+
         let fontsize = substitute(&guifont, '[^0-9]', '', 'g')
-        let fontname = substitute(&guifont, '[0-9 ]', '', 'g')
+        let fontname = substitute(&guifont, '[0-9]', '', 'g')
         let fontname = substitute(fontname, ':h:cANSI', '', 'g')
-        if g:zoom_level == 15
+
+        let g:zoom_level = g:zoom_level + a:delta
+        if g:zoom_level > 15
+            let g:zoom_level = 15
             return ''
         endif
-        let fontsize = fontsize + 2
-        let g:zoom_level = g:zoom_level + 1
-        if g:zoom_level == 1
-            let fontname = g:daltfont
-            let fontsize = 10
+        if g:zoom_level < 0
+            let g:zoom_level = 0
+            return ''
         endif
+
+        let fontsize = fontsize + a:delta + a:delta
         if has('win32') || has ('win64')
             let &guifont = fontname . ":h" . fontsize . ":cANSI"
         else
-            let &guifont = fontname . " " . fontsize
+            let &guifont = fontname . fontsize
         endif
         let &lines=g:dlines
         let &columns=g:dcols
@@ -508,40 +512,45 @@ if exists("g:zoom_functions") && g:zoom_functions == "1"
         return ''
     endfunction
 
-    function! ShrinkFont()
-        let fontsize = substitute(&guifont, '[^0-9]', '', 'g')
-        let fontname = substitute(&guifont, '[0-9 ]', '', 'g')
-        let fontname = substitute(fontname, ':h:cANSI', '', 'g')
-        if g:zoom_level == 0
-            return ''
+    nnoremap + :call ChangeFontSize(1)<cr>
+    nnoremap - :call ChangeFontSize(-1)<cr>
+    inoremap <c-kplus> <c-r>=ChangeFontSize(1)<cr>
+    nnoremap <c-kplus> :call ChangeFontSize(1)<cr>
+    inoremap <c-kminus> <c-r>=ChangeFontSize(-1)<cr>
+    nnoremap <c-kminus> :call ChangeFontSize(-1)<cr>
+    inoremap <c-mousedown> <c-r>=ChangeFontSize(1)<cr>
+    nnoremap <c-mousedown> :call ChangeFontSize(1)<cr>
+    inoremap <c-mouseup> <c-r>=ChangeFontSize(-1)<cr>
+    nnoremap <c-mouseup> :call ChangeFontSize(-1)<cr>
+endif
+
+if has("gui_running")
+
+    function ToggleAlternativeFont()
+
+        if !exists("g:alt_font")
+            if has('win32') || has ('win64')
+                let g:alt_font = "ProggyCleanTTSZ:h12:cANSI"
+            else
+                let g:alt_font = "ProggyCleanTTSZ 12"
+            endif
         endif
-        let fontsize = fontsize - 2
-        let g:zoom_level = g:zoom_level - 1
-        if g:zoom_level == 0
-            let fontname = g:dfont
-            let fontsize = 12
-        endif
-        if has('win32') || has ('win64')
-            let &guifont = fontname . ":h" . fontsize . ":cANSI"
+
+        if exists("g:alt_font_toggle")
+            let &guifont = g:alt_font_toggle
+            unlet g:alt_font_toggle
         else
-            let &guifont = fontname . " " . fontsize
+            let g:alt_font_toggle = &guifont
+            let &guifont = g:alt_font
         endif
         let &lines=g:dlines
         let &columns=g:dcols
-        echo "Font set to: " &guifont
+        echo "Alternative font in use: " &guifont
         return ''
-    endfunction
 
-    nnoremap + :call GrowFont()<cr>
-    nnoremap - :call ShrinkFont()<cr>
-    inoremap <c-kplus> <c-r>=GrowFont()<cr>
-    nnoremap <c-kplus> :call GrowFont()<cr>
-    inoremap <c-kminus> <c-r>=ShrinkFont()<cr>
-    nnoremap <c-kminus> :call ShrinkFont()<cr>
-    inoremap <c-mousedown> <c-r>=GrowFont()<cr>
-    nnoremap <c-mousedown> :call GrowFont()<cr>
-    inoremap <c-mouseup> <c-r>=ShrinkFont()<cr>
-    nnoremap <c-mouseup> :call ShrinkFont()<cr>
+    endfunction
+    nnoremap ¨ :call ToggleAlternativeFont()<cr>
+
 endif
 
 function! OnVimEnter()
@@ -615,18 +624,6 @@ nnoremap <silent><leader>n :call ToggleNetrw()<cr>
 
 
 " Host specific stuff.
-if hostname() == "minigun"
-    set guifont=ProggyCleanTTSZ\ 12
-    let g:dfont="ProggyCleanTTSZ"
-elseif hostname() == "gainasus"
-    let g:dfont="ProggyCleanTTSZ"
-    let g:zoom_level=2
-elseif hostname() == "lenoohel"
-    autocmd GUIEnter * set lines=35 columns=130
-    set guifont=Monospace\ 10
-    let g:dfont="ProggyCleanTTSZ"
-    let g:dlines=35
-    let g:dcols=130
-    let g:zoom_level=1
-    silent call SetTabWidth(2)
+if filereadable(expand('~/.vimrc_extra'))
+    source ~/.vimrc_extra
 endif
