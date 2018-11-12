@@ -483,7 +483,7 @@ if has("gui_running") && exists("g:zoom_functions") && g:zoom_functions == 1
     function ChangeFontSize(delta)
 
         if exists("g:alt_font_toggle")
-            call ToggleAlternativeFont()
+            silent call ToggleAlternativeFont()
         endif
 
         let fontsize = substitute(&guifont, '[^0-9]', '', 'g')
@@ -539,13 +539,14 @@ if has("gui_running")
         if exists("g:alt_font_toggle")
             let &guifont = g:alt_font_toggle
             unlet g:alt_font_toggle
+            echo "Normal font in use: " &guifont
         else
             let g:alt_font_toggle = &guifont
             let &guifont = g:alt_font
+            echo "Alternative font in use: " &guifont
         endif
         let &lines=g:dlines
         let &columns=g:dcols
-        echo "Alternative font in use: " &guifont
         return ''
 
     endfunction
