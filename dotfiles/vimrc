@@ -266,6 +266,17 @@ if isdirectory($VIMHOME . "/plugged/unite.vim")
          \ ], '\|'))
 endif
 
+if isdirectory($VIMHOME . "/plugged/vim-airline")
+    if !filereadable($VIMHOME . "/autoload/airline/themes/minigun.vim")
+        if !isdirectory($VIMHOME . "/autoload/airline/themes")
+            silent call mkdir($VIMHOME . "/autoload/airline/themes", "p")
+        endif
+        echo("Downloading airline color scheme...")
+        silent !curl -fLo $VIMHOME/autoload/airline/themes/minigun.vim --create-dirs https://raw.githubusercontent.com/ohel/dotfiles/master/themes/minigun-airline.vim
+    endif
+    let g:airline_theme = 'minigun'
+endif
+
 
 
 " Uppercase commands to counteract common typos.
