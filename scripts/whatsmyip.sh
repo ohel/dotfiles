@@ -43,7 +43,7 @@ then
         responsepage=$(wget http://$routerip/RgSetup.asp -q -O -)
     fi
     wanipv4=$(echo $responsepage | grep -o "id=\"wanipaddr[^<]*" | cut -f 2 -d '>')
-    ipv6_prefix=$(echo $responsepage | grep -o "IPv6 Prefix:[^0-9]\{1,\}>[^/]\{1,\}" | grep -o ">[0-9a-f:].*" | grep -o "[^>].*[0-9a-f]")
+    ipv6_prefix=$(echo $responsepage | grep -o "IPv6 Prefix:[^0-9]\{1,\}>[^/]\{1,\}" | grep -o ">[0-9a-f:].*" | tr -d '>')
 fi
 
 echo
