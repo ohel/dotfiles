@@ -43,10 +43,12 @@ then
         responsepage=$(wget http://$routerip/RgSetup.asp -q -O -)
     fi
     wanipv4=$(echo $responsepage | grep -o "id=\"wanipaddr[^<]*" | cut -f 2 -d '>')
+    ipv6_prefix=$(echo $responsepage | grep -o "IPv6 Prefix:[^0-9]\{1,\}>[^/]\{1,\}" | grep -o ">[0-9a-f:].*" | grep -o "[^>].*[0-9a-f]")
 fi
 
 echo
 echo WAN IPv4: $wanipv4
+echo IPv6 prefix: $ipv6_prefix
 echo
 
 if ! [ "$wanipv4" ]
@@ -55,13 +57,13 @@ then
     exit 1
 fi
 
-# Use a secret script to upload contents of $ip variable somewhere publicly available.
+# Use a secret script to upload IP info somewhere publicly available.
 if [ -e ~/.scripts_extra/publish_ip.sh ]
 then
-    echo -n "Press return to publish WAN IPv4."
+    echo -n "Press return to publish WAN IPv4 and IPv6 prefix."
     read tmp
 
-    sh ~/.scripts_extra/publish_ip.sh $wanipv4 2>/dev/null
+    sh ~/.scripts_extra/publish_ip.sh $wanipv4 $ipv6_prefix 2>/dev/null
 
     echo "Done."
 fi
