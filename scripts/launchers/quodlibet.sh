@@ -11,7 +11,10 @@
 #   audio <device> [<gst pipeline file>]
 # where <device> is an ALSA device.
 
-qlexe=/opt/programs/quodlibet/quodlibet.py
+qlexe=$(ps -ef | grep -o "[^ ]\{1,\}quodlibet.py$")
+[ ! $qlexe ] && qlexe=$(which quodlibet.py)
+[ ! $qlexe ] && qlexe=/opt/programs/quodlibet/quodlibet.py
+
 logfile=~/.cache/qllog.txt
 
 if [ "$#" = 0 ]

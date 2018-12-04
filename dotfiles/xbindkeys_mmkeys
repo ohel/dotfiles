@@ -22,22 +22,22 @@ Mod4 + XF86Favorites
 "~/.scripts/screensaver.sh standby"
 Mod1 + Mod4 + XF86Favorites
 
-"~/.scripts/launchers/quodlibet.sh play-pause"
+"~/.scripts/audio_player.sh play-pause"
 XF86AudioPlay
 
-"/opt/programs/quodlibet/quodlibet.py --random=album"
+"~/.scripts/audio_player.sh random-album"
 Mod4 + XF86AudioPlay
 
-"~/.scripts/launchers/quodlibet.sh toggle-window"
+"~/.scripts/audio_player.sh toggle-window"
 XF86Favorites
 
 # For toggling between two soundcards.
 "xfce4-terminal --hide-borders --geometry 50x10 -x ~/.scripts/toggle_julia_digital.sh autoclose monitor &"
 XF86AudioMute
 
-"~/.scripts/ql_change_song.sh previous"
+"~/.scripts/audio_player.sh previous"
 Mod4 + XF86AudioLowerVolume
-"~/.scripts/ql_change_song.sh"
+"~/.scripts/audio_player.sh next"
 Mod4 + XF86AudioRaiseVolume
 
 # This is for hidden thumb buttons found in some Logitech mice, e.g. MX Master.
