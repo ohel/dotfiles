@@ -1,6 +1,8 @@
 #!/bin/sh
 # A common shutdown script I use.
 
+which zenity 2>/dev/null && ! zenity --question --text="Shut down?" && exit
+
 scriptsdir=$(dirname "$(readlink -f "$0")")
 
 # Check if OK to shut down.
