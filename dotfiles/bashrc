@@ -41,7 +41,7 @@ esac
 alias cp='cp -a'
 alias f='find ./ | grep -i --colour'
 alias g='grep -iR --colour'
-alias ls='ls --color=auto -hG --group-directories-first'
+alias ls='ls --color=auto -h --group-directories-first'
 alias rmemptydirs='find . -depth -empty -type d -exec rmdir {} \;'
 alias x='exit'
 
