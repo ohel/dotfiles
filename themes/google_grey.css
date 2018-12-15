@@ -1,8 +1,8 @@
 /* For a custom CSS browser extension.
  * Low contrast greyish theme for Google.
  * */
-@-moz-document regexp("https?://.*\\.google\\..*") {
 
+@-moz-document regexp("https?://(?!translate).*\\.google\\.[^/]+(?:(?!/maps/).)") {
 * {
 	background: #303030 !important;
 	color: #c0c0c0 !important;
