@@ -11,7 +11,6 @@ vm_mem_mb=8192
 vm_num_cores=2
 vm_threads_per_core=1
 
-windows_guest=1
 audio=0 # Note: on modern Windows guests the audio emulation bugs so that there are cracks and pops all the time.
 auto_network=1
 auto_vnc=0
@@ -30,13 +29,10 @@ then
     vncviewer="vncviewer :$net_id"
 fi
 
-if [ "$bridged_network" = 1 ]
+if [ "$bridged_network" = 1 ] && [ "$(brctl show $net_bridge 2>&1 | grep No)" ]
 then
-    if [ "$(brctl show $net_bridge 2>&1 | grep No)" ]
-    then
-        echo "Set up the bridged network manually first."
-        exit 1
-    fi
+    echo "Set up the bridged network manually first."
+    exit 1
 fi
 
 if [ "$(brctl show $vm_bridge 2>&1 | grep No)" ]
@@ -88,25 +84,27 @@ then
 fi
 
 bootstring="c"
-if [ "$boot_from_cd" = 1 ]
-then
-    bootstring="d -cdrom $cdrom_image"
-fi
+[ "$boot_from_cd" = 1 ] && bootstring="d -cdrom $cdrom_image"
 
-vga=std
+videohw="-vga std"
 if [ ! "$(echo quit | qemu-system-x86_64 -vga qxl -machine none -nographic 2>&1 | grep QXL)" ]
 then
-    vga=qxl
+    port=$net_id
+    [ "$net_id" -lt 10 ] && port="0"$port
+    videohw="-vga qxl \
+        -device virtio-serial-pci \
+        -device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 \
+        -chardev spicevmc,id=spicechannel0,name=vdagent \
+        -spice port=600$port,addr=127.0.0.1,disable-ticketing"
 fi
 
 bridged_net_devices=""
-if [ "$bridged_network" = 1 ]
-then
-    bridged_net_devices="-device virtio-net-pci,netdev=net"$net_id"_1 -netdev tap,id=net"$net_id"_1,br=$net_bridge,script=kvm_tap_netbridge.sh"
-fi
+[ "$bridged_network" = 1 ] && bridged_net_devices=\
+    "-device virtio-net-pci,netdev=net"$net_id"_1 -netdev tap,id=net"$net_id"_1,br=$net_bridge,script=kvm_tap_netbridge.sh"
 
 echo "Starting the virtual machine..."
 env $sound_params qemu-system-x86_64 \
+-vnc localhost:$net_id \
 -daemonize \
 -enable-kvm \
 -name "$vm_name" \
@@ -120,15 +118,15 @@ env $sound_params qemu-system-x86_64 \
 -vga $vga \
 -device virtio-net-pci,netdev=net"$net_id"_0 -netdev tap,id=net"$net_id"_0,br=$vm_bridge,script=kvm_tap_vmbridge.sh \
 -drive file="$img_name",if=virtio,format=raw \
+$bridged_net_devices \
+$soundhw \
+$videohw \
 -device ich9-usb-uhci1 \
 -device ich9-usb-uhci2 \
 -device ich9-usb-uhci3 \
 -device ich9-usb-ehci1 \
 -device usb-tablet \
 -device nec-usb-xhci \
-$bridged_net_devices \
-$soundhw \
--vnc :$net_id
 
 # Common workarounds and tweaks:
 # * Fixes most problems and some BSODs in Windows, especially during setup:
