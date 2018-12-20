@@ -51,7 +51,7 @@ which gvim &>/dev/null && alias gvim='gvim -p'
 which rsync &>/dev/null && alias rcp='rsync -ah --progress' && alias rs='rsync -avzu --delete'
 
 [ -e "$HOME/.scripts/grepedit.sh" ] && alias ge='~/.scripts/grepedit.sh'
-[ -e "$HOME/.scripts/findedit.sh" ] && alias fe='~/.scripts/grepfind.sh'
+[ -e "$HOME/.scripts/findedit.sh" ] && alias fe='~/.scripts/findedit.sh'
 [ -e "$HOME/.scripts/launchers/media_player.sh" ] && alias mplay='~/.scripts/launchers/media_player.sh'
 [ -e "$HOME/.scripts/launchers/media_player_dvd.sh" ] && alias playdvd='~/.scripts/launchers/media_player_dvd.sh'
 [ -e "$HOME/.scripts/alsadevice.sh" ] && alias alsadevice='source ~/.scripts/alsadevice.sh'
