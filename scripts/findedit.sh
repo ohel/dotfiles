@@ -1,7 +1,10 @@
 #!/bin/bash
-# Search stuff using find, then open specified search result if more than one is found.
+# List files using find grepping $1 from their names, then select a search result to edit.
+# If just one result is found, it is opened automatically.
 
-editor=gvim
+[ "$(which gedit 2>/dev/null)" ] && editor=gedit
+[ "$(which vim 2>/dev/null)" ] && editor=vim
+[ "$(which gvim 2>/dev/null)" ] && editor=gvim
 
 [ "$#" -eq 0 ] && echo "Give the search term as a parameter." && exit 1
 
