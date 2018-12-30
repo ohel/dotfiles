@@ -12,7 +12,7 @@ let &softtabstop=&tabstop " Set indent width in insert mode using tab.
 set autoread " Automatically update file if changed from the outside.
 set backspace=indent,eol,start " Make backspace clear other than new text also.
 set encoding=utf-8
-set expandtab " Expand tab to spaces, use c-q<tab> for real tab.
+set expandtab " Expand tab to spaces, use <c-q><tab> for real tab.
 set go-=m " Hide menu.
 set go-=r " Disable right scroll bar.
 set go-=t " Disable tear-off menus.
@@ -218,6 +218,8 @@ if isdirectory($VIMHOME . "/plugged/vim-arpeggio")
     " Insert mode toggles, grave moves to ^ (editing mark).
     call arpeggio#map('i', '', 0, 'fj', '<esc>`^')
     call arpeggio#map('n', '', 0, 'fj', 'i<c-r>=col(".") == col("$")-1 ? "\<lt>right>" : ""<cr>')
+    " No highlight.
+    call arpeggio#map('n', '', 0, 'nh', ':noh<cr>')
 endif
 
 if isdirectory($VIMHOME . "/plugged/unite.vim")
@@ -329,8 +331,11 @@ inoremap <c-insert> <esc>`^bve
 " Common insert hotkeys.
 nnoremap <s-insert> "+P
 inoremap <s-insert> <c-r>=col('.') == col('$') ? "\<lt>esc>`^\"+pa" : "\<lt>esc>`^\"+Pa"<cr>
+" At some point <s-insert> in command mode stopped working in GUI vim. Use
+" <c-q> in GUI mode to insert control characters.
+cnoremap <c-v> <c-r>+
 inoremap <c-v> <c-r>=col('.') == col('$') ? "\<lt>esc>`^\"+pa" : "\<lt>esc>`^\"+Pa"<cr>
-cnoremap <c-b> <c-r>"
+
 " Replace contents.
 vnoremap <silent> <expr> <s-insert> mode() ==# "V" ? "\"+P" : ":<esc>`>:execute col('.') == col('$')-1 ? \"normal! gv\\\"_x\\\"+p\" : \"normal! gv\\\"_x\\\"+Pl\"<cr>"
 vnoremap <silent> <expr> <c-v> mode() ==# "V" ? "\"+P" : ":<esc>`>:execute col('.') == col('$')-1 ? \"normal! gv\\\"_x\\\"+p\" : \"normal! gv\\\"_x\\\"+Pl\"<cr>"
