@@ -37,15 +37,16 @@ systembackupdir2="${mountables[1]}/backups/system/"
 
 # Escape asterisks, otherwise shell expansion is made.
 systembackupexcludelist=(
-    "/sys/\*"
-    "/proc/\*"
     "/dev/shm/\*"
-    "/tmp/\*"
-    "/var/tmp/\*"
-    "/mnt/\*/\*"
     "/home/\*"
-    "/usr/portage/distfiles/\*"
+    "/mnt/\*/\*"
+    "/opt/games/\*"
     "/opt/virtualmachines/\*"
+    "/proc/\*"
+    "/sys/\*"
+    "/tmp/\*"
+    "/usr/portage/distfiles/\*"
+    "/var/tmp/\*"
 )
 
 # Home backup will backup /home/* excluding these.
