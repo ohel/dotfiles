@@ -4,7 +4,7 @@
 # Backup drives.
 mountables=(
     "/mnt/raidstorage"
-    "/mnt/xfsmedia"
+    "/mnt/backupmedia"
 )
 
 # Source directories for misc backup.
@@ -13,9 +13,8 @@ backup_source_dirs=(
     "/home/panther/docs"
     "/home/panther/media/pictures"
     "/home/panther/media/pictures"
-    "/mnt/ssdstorage/music"
-    "/mnt/ssdstorage/music"
     "/mnt/raidstorage/media/audio"
+    "/mnt/raidstorage/media/disc_images"
     "/mnt/raidstorage/media/video"
     "/mnt/raidstorage/backups/misc"
 )
@@ -26,9 +25,8 @@ backup_dest_dirs=(
     "${mountables[1]}/backups/docs"
     "${mountables[0]}/backups/media/pictures"
     "${mountables[1]}/backups/media/pictures"
-    "${mountables[0]}/backups/media/music"
-    "${mountables[1]}/backups/media/music"
     "${mountables[1]}/backups/media/audio"
+    "${mountables[1]}/backups/media/disc_images"
     "${mountables[1]}/backups/media/video"
     "${mountables[1]}/backups/misc"
 )
