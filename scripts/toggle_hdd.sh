@@ -9,7 +9,7 @@ mountloc="$1"
 uuid=$(cat /etc/fstab | grep $mountloc | tr -d [:space:] | tr '\t' ' ' | cut -f 1 -d '/' | cut -f 2 -d '=' | tr -d '"')
 device=$(ls -l /dev/disk/by-uuid/$uuid | cut -f 2 -d '>' | cut -f 3 -d '/')
 
-[ ! "$device" ] && echo "Device not found." && exit 1
+[ ! "$device" ] || [ ! "$uuid" ] && echo "Device not found." && exit 1
 
 mountloc=$(cat /etc/fstab | grep $uuid | tr -s [:space:] | tr '\t' ' ' | cut -f 2 -d ' ')
 mounted=0

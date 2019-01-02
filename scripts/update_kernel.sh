@@ -130,5 +130,8 @@ cd "$cwd"
 
 cleanup $new_version "$rt_grep_opts" $prefix
 
+# Copy to real boot location if it is symlinked.
+[ -e /boot/boot ] && [ "$(readlink /boot/boot)" != "." ] && cp -a /boot/* /boot/boot
+
 echo All done.
 read
