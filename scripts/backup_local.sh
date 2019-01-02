@@ -1,39 +1,14 @@
 #!/bin/bash
 # Backup script for full system, home, and misc backup. Backup process is logged.
 
-# Backup drives.
-mountables=(
-    "/mnt/raidstorage"
-    "/mnt/backupmedia"
-)
-
-# Source directories for misc backup.
-backup_source_dirs=(
-    "/home/panther/docs"
-    "/home/panther/docs"
-    "/home/panther/media/pictures"
-    "/home/panther/media/pictures"
-    "/mnt/raidstorage/media/audio"
-    "/mnt/raidstorage/media/disc_images"
-    "/mnt/raidstorage/media/video"
-    "/mnt/raidstorage/backups/misc"
-)
-
-# Destination directories for misc backup. Should correspond to source directories.
-backup_dest_dirs=(
-    "${mountables[0]}/backups/docs"
-    "${mountables[1]}/backups/docs"
-    "${mountables[0]}/backups/media/pictures"
-    "${mountables[1]}/backups/media/pictures"
-    "${mountables[1]}/backups/media/audio"
-    "${mountables[1]}/backups/media/disc_images"
-    "${mountables[1]}/backups/media/video"
-    "${mountables[1]}/backups/misc"
-)
-
-# Locations where to put full system backups. The first one is echoed with deletes to the other.
-systembackupdir="${mountables[0]}/backups/system/"
-systembackupdir2="${mountables[1]}/backups/system/"
+backup_config=/opt/backup_config
+[ ! -e $backup_config ] && echo "Error: missing backup config $backup_config" && exit 1
+source /opt/backup_config
+[ ! "$mountables" ] && echo "Error: missing definition for mountables" && exit 1
+[ ! "$backup_source_dirs" ] && echo "Error: missing definition for backup_source_dirs" && exit 1
+[ ! "$backup_dest_dirs" ] && echo "Error: missing definition for backup_dest_dirs" && exit 1
+[ ! "$systembackupdir" ] && echo "Error: missing definition for systembackupdir" && exit 1
+[ ! "$systembackupdir2" ] && echo "Warning: missing definition for systembackupdir2"
 
 # Escape asterisks, otherwise shell expansion is made.
 systembackupexcludelist=(
@@ -49,14 +24,15 @@ systembackupexcludelist=(
     "/var/tmp/\*"
 )
 
-# Home backup will backup /home/* excluding these.
-homebackupexcludelist=(
-    "/home/panther/downloads/\*"
-    "/home/panther/docs/\*"
-    "/home/panther/media/\*"
-)
-
 logdir="/var/log/backup/"
+
+do_sync=1
+do_misc_backup=1
+do_system_backup=1
+do_home_backup=1
+wait_at_end=1
+[ "$1" == "misconly" ] && do_system_backup=0 && do_home_backup=0 && do_sync=0 && wait_at_end=0
+[ "$1" == "synconly" ] && do_system_backup=0 && do_home_backup=0 && do_misc_backup=0
 
 if [ "$(echo $HOME)" != "/root" ]
 then
@@ -87,56 +63,52 @@ parallel=0
 [ $(which pigz 2>/dev/null) ] && parallel=1
 
 datestring=$(date +%F)
-echo
-echo "*******************************************************************************"
-echo "Synchronising misc backup directories..."
-num_of_misc=${#backup_source_dirs[@]}
-if [ $num_of_misc -ne ${#backup_dest_dirs[@]} ]
+
+if [ "$do_misc_backup" = 1 ]
 then
-    echo "The number of misc backup source and destination directories does not match!"
-    echo "Aborting..."
-    exit 1
-fi
-index=0
-while [ $index -lt $num_of_misc ]
-do
-    sourcedir="${backup_source_dirs[$index]}/"
-    destdir="${backup_dest_dirs[$index]}/"
-    if [ ! -e $destdir ]
+    echo
+    echo "*******************************************************************************"
+    echo "Synchronising misc backup directories..."
+    num_of_misc=${#backup_source_dirs[@]}
+    if [ $num_of_misc -ne ${#backup_dest_dirs[@]} ]
     then
-        echo "Destination directory $destdir does not exist, skipping..."
-    else
-        echo
-        echo "*******************************************************************************"
-        echo "Synchronising $sourcedir with $destdir..."
-        rsync -ah --progress --delete --log-file "$logdir""$datestring""_rsync_""$index"".log" $sourcedir $destdir
+        echo "The number of misc backup source and destination directories does not match!"
+        echo "Aborting..."
+        exit 1
     fi
-    index=$(expr $index + 1)
-done
-
-[ "$1" == "misconly" ] && exit 0
-
-if [ ! -e $systembackupdir ]
-then
-    echo "System backup directory $systembackupdir does not exist."
-    echo "Aborting system backup..."
-    exit 1
+    index=0
+    while [ $index -lt $num_of_misc ]
+    do
+        sourcedir="${backup_source_dirs[$index]}/"
+        destdir="${backup_dest_dirs[$index]}/"
+        if [ ! -e $destdir ]
+        then
+            echo "Destination directory $destdir does not exist, skipping..."
+        else
+            echo
+            echo "*******************************************************************************"
+            echo "Synchronising $sourcedir with $destdir..."
+            rsync -ah --progress --delete --log-file "$logdir""$datestring""_rsync_""$index"".log" $sourcedir $destdir
+        fi
+        index=$(expr $index + 1)
+    done
 fi
 
-if [ "$1" != "synconly" ]
+if [ "$do_system_backup" = 1 ]
 then
+    if [ ! -e $systembackupdir ]
+    then
+        echo "Backup directory $systembackupdir does not exist."
+        echo "Aborting system backup..."
+        exit 1
+    fi
+
     echo
     echo "*******************************************************************************"
     echo "Beginning system backup..."
     echo "To restore: tar -C /[home] -xvpzf archive.tgz"
 
-    mbrbackupfile="$systembackupdir/$HOSTNAME-MBR-backup-$datestring.bak"
     systembackupfile="$systembackupdir/$HOSTNAME-system-backup-$datestring.tgz"
-    homebackupfile="$systembackupdir/$HOSTNAME-home-backup-$datestring.tgz"
-
-    dd if=/dev/sda of=$mbrbackupfile bs=512 count=1
-    echo
-    echo "MBR backup created."
 
     excludelist=""
     for excludeitem in ${systembackupexcludelist[@]}
@@ -155,17 +127,38 @@ then
     fi
     echo "Moving log file to $logdir..."
     mv /dev/shm/backup.out $logdir
+fi
 
-    excludelist=""
-    for excludeitem in ${homebackupexcludelist[@]}
-    do
-        # Prefix every item with . so that we may use relative paths with tar.
-        excludelist="$excludelist --exclude=.$excludeitem"
-    done
-    excludelist=$(echo $excludelist | sed "s/\\\\\*/*/g")
+if [ "$do_home_backup" = 1 ]
+then
+    if [ ! -e $systembackupdir ]
+    then
+        echo "Backup directory $systembackupdir does not exist."
+        echo "Aborting home backup..."
+        exit 1
+    fi
+
     echo
     echo "*******************************************************************************"
     echo "Backing up home directories..."
+    homebackupfile="$systembackupdir/$HOSTNAME-home-backup-$datestring.tgz"
+
+    excludelist=""
+    for user in $(ls -d /home/* | sed "s/.*\///g")
+    do
+        excludesfile=/home/$user/.config/backup_exclude
+        if [ -e $excludesfile ]
+        then
+            while read -r excludeitem
+            do
+                # If excluded item is a directory, include the empty directory.
+                [ -d "/home/$user/$excludeitem" ] && excludeitem="$excludeitem/*"
+                # Prefix every item with . so that relative paths may be used with tar.
+                excludelist="$excludelist --exclude=./home/$user/$excludeitem"
+            done < $excludesfile
+        fi
+    done
+
     if [ $parallel -eq 1 ]
     then
         tar -C / --one-file-system -cpf - $excludelist ./home | pigz -c > $homebackupfile
@@ -174,7 +167,7 @@ then
     fi
 fi
 
-if [ "$systembackupdir2" ]
+if [ "$do_sync" = 1 ] && [ "$systembackupdir2" ]
 then
     echo
     echo "*******************************************************************************"
@@ -191,4 +184,4 @@ echo
 echo "*******************************************************************************"
 echo "Backup complete. Remember to backup virtual machines separately."
 echo
-read
+[ "$wait_at_end" = 1 ] && read
