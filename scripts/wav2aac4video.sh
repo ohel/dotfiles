@@ -21,6 +21,7 @@ then
     echo "Define a .avi file."
     exit 1
 fi
+
 if [ "$(basename -s .avi $input)" = "$input" ]
 then
     echo "Input video must have a .avi suffix."

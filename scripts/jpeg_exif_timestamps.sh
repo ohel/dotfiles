@@ -1,4 +1,6 @@
 #!/bin/sh
+# Change exif dates of .jpg files in current directory + or - given hours, minutes and seconds.
+
 echo "Change exif dates of .jpg files in current directory."
 echo "Usage: jpeg_exif_timestamps.sh +|- h m s"
 echo "Press return to continue, CTRL-C to cancel."

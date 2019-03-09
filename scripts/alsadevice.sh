@@ -1,6 +1,8 @@
 #!/bin/sh
 # Source this file to quickly set default ALSA device.
-if [ "$#" = 0 ]; then
+
+if [ "$#" = 0 ]
+then
     echo "Usage: source alsadevice.sh <device>"
     echo ""
     echo "Example devices:"
@@ -14,18 +16,10 @@ if [ "$#" = 0 ]; then
     echo ""
 else
     pcm="$1"
-    if [ "$pcm" = "hdmi" ]; then
-        pcm="hdmi_out"
-        ctl="hdmi_hw"
-    elif [ "$pcm" = "hifi" ]; then
-        ctl="hifi"
-    elif [ "$pcm" = "loop" ]; then
-        pcm="loop_playback_in_mix"
-        ctl="loop"
-    fi
+    [ "$1" = "hdmi" ] && pcm="hdmi_out" && ctl="hdmi_hw"
+    [ "$1" = "hifi" ] && ctl="hifi"
+    [ "$1" = "loop" ] && pcm="loop_playback_in_mix" && ctl="loop"
  
     export ALSA_OVERRIDE_PCM=$pcm
-    if [ "X$ctl" != "X" ]; then
-        export ALSA_OVERRIDE_CTL=$ctl
-    fi
+    [ "$ctl" ] && export ALSA_OVERRIDE_CTL=$ctl
 fi
