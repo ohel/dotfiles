@@ -1,5 +1,7 @@
 #!/bin/sh
 
+[ -f ~/.Xresources ] && xrdb -merge -I$HOME ~/.Xresources
+
 # E.g. for Japanese input, just export USE_SCIM=true before this script.
 if [ "$(echo $USE_SCIM)" = "true" ]
 then
@@ -17,22 +19,6 @@ export MAGICK_THREAD_LIMIT=4
 export GDK_USE_XFT=1
 export QT_XFT=1
 
-# Qt5.7 no longer supports GTK styles so to get something reasonable (i.e. dark color scheme)
-# one must use qt5ct to change the look of Qt5 applications.
-export QT_QPA_PLATFORMTHEME=qt5ct
-
-[ -f ~/.Xresources ] && xrdb -merge -I$HOME ~/.Xresources
-
-# Sometimes I link .thumbnails and .cache to directories under .commoncache
-# and .commoncache itself somewhere under /dev/shm.
-mkdir -p $(readlink ~/.commoncache) 2>/dev/null
-mkdir -p $(readlink ~/.thumbnails) 2>/dev/null
-mkdir -p $(readlink ~/.cache) 2>/dev/null
-which mpv 2>/dev/null && [ -d ~/.commoncache ] && mkfifo ~/.commoncache/mpvfifo
-
-# This temporary directory is needed if using mhwaveedit.
-which mhwaveedit 2>/dev/null && mkdir -p /tmp/mhwaveedit
-
 # Set default standby, suspend, off timeouts for DPMS.
 xset dpms 900 0 0
 # Disable DPMS, disable screensaver. If using a television, DPMS is not supported anyway.
@@ -41,12 +27,33 @@ xset -dpms; xset s off
 [ -f ~/.asound.state ] && /usr/sbin/alsactl restore -f ~/.asound.state
 [ -d ~/.sessions ] && ln -sf ~/.sessions ~/.cache/sessions
 
+
+
+# Qt5.7 no longer supports GTK styles so to get something reasonable (i.e. dark color scheme)
+# one must use qt5ct to change the look of Qt5 applications.
+export QT_QPA_PLATFORMTHEME=qt5ct
+
+# This temporary directory is needed if using mhwaveedit.
+which mhwaveedit 2>/dev/null && mkdir -p /tmp/mhwaveedit
+
+
+
+# Sometimes I link .thumbnails and .cache to directories under .commoncache
+# and .commoncache itself somewhere under a tmpfs, for example $XDG_RUNTIME_DIR.
+[ ! -e ~/.commoncache ] && ln -s $XDG_RUNTIME_DIR ~/.commoncache
+mkdir -p $(readlink ~/.commoncache) 2>/dev/null
+mkdir -p $(readlink ~/.thumbnails) 2>/dev/null
+mkdir -p $(readlink ~/.cache) 2>/dev/null
+which mpv 2>/dev/null && [ -d ~/.commoncache ] && mkfifo ~/.commoncache/mpvfifo
+
+
+
 # This application does absolutely nothing, it just waits to be killed, keeping X alive.
 # It is as stable as it gets, even if the real session manager might be unstable.
 # The code consists of a single pause() call.
 lastone=$(ls /opt/programs/pause/pause 2>/dev/null)
 
-# To use this as Xsession, simply do this:
+# To use this file as an Xsession file, simply do this:
 # ln -s ~/.xinitrc ~/.xsession && chmod +x ~/.xinitrc
 if [ $(basename "$0") = ".xsession" ] || [ ! "$lastone" ]
 then
