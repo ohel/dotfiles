@@ -1,0 +1,10 @@
+/* For a custom CSS browser extension.
+ * Fixed 720p video player size for Netflix for windowed pixel perfect quality.
+ * */
+
+@-moz-document domain("www.netflix.com") {
+    #appMountPoint div.VideoContainer div:first-child {
+        width: 1280px !important;
+        height: 720px !important;
+    }
+}
