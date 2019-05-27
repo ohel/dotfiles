@@ -18,7 +18,7 @@ HISTSIZE=4096
 PROMPT_COMMAND='if [ "$COMMON_HISTORY" = "1" ]; then history -a; history -c; history -r; fi; echo -ne "\e]0;Terminal: ${PWD}\007"'
 
 prompt_prefix="\u@\h:"
-[ -e ~/.config/prompt_prefix ] && prompt_prefix=$(cat ~/.config/prompt_prefix)
+[ ! "$SSH_CLIENT" ] && [ ! "$SSH_TTY" ] && [ -e ~/.config/local_prompt_prefix ] && prompt_prefix=$(cat ~/.config/local_prompt_prefix)
 
 prompt_git=""
 # https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
