@@ -420,10 +420,6 @@ calendar.header {
  * Notebook and Tabs *
  *********************/
 
-notebook > stack {
-    border-image: url("assets/notebook-border-dark.svg") 0 1 1 1 / 0px 1px 1px 1px stretch;
-}
-
 notebook > header tab {
     border-image: url("assets/tab-border.svg") 2 / 2px stretch;
 }

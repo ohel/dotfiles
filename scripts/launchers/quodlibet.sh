@@ -12,7 +12,7 @@
 # where <device> is an ALSA device.
 
 qlexe=$(ps -ef | grep -o "[^ ]\{1,\}quodlibet.py$")
-[ ! $qlexe ] && qlexe=$(which quodlibet.py)
+[ ! $qlexe ] && qlexe=$(which quodlibet.py 2>/dev/null)
 [ ! $qlexe ] && qlexe=/opt/programs/quodlibet/quodlibet.py
 
 logfile=~/.cache/qllog.txt
