@@ -1,5 +1,6 @@
 /* For a custom CSS browser extension.
  * Low contrast grey theme for Wikipedia.
+ * Also hides the preview popups for better keyboard navigation.
  * */
 @-moz-document domain("wikipedia.org") {
 
@@ -10,6 +11,10 @@
 
 a {
     color: #ffffff !important;
+}
+
+div.mwe-popups {
+    display: none !important;
 }
 
 }
