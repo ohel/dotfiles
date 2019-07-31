@@ -45,7 +45,7 @@ backup() {
 
         if test "$(whoami)" = "root"
         then
-            dircmd="ls -d /home/*"
+            dircmd="find /home/ -maxdepth 1 -mindepth 1 -type d"
         else
             dircmd="ls -d /home/$(whoami)"
         fi
