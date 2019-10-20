@@ -49,8 +49,7 @@ Control + Mod1 + Escape
 "~/.scripts/switch_background.sh"
 Mod4 + Pause
 
-# Screen locking.
-"i3lock -t -e -i ~/.themes/lockscreen.png"
+"~/.scripts/screenlocker.sh"
 Control + Mod1 + Delete
 
 # External display.
