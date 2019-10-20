@@ -10,6 +10,14 @@ export LC_TELEPHONE='fi_FI.utf8'
 export LC_MEASUREMENT='fi_FI.utf8'
 which vim &>/dev/null && export EDITOR="$(which vim)"
 
+export LESS_TERMCAP_mb=$'\e[1;36m' # blink start
+export LESS_TERMCAP_md=$'\e[1;34m' # bold start
+export LESS_TERMCAP_me=$'\e[0m' # bold, blink, underline end
+export LESS_TERMCAP_so=$'\e[0;7;29m' # standout start (reverse video)
+export LESS_TERMCAP_se=$'\e[0m' # standout end
+export LESS_TERMCAP_us=$'\e[1;4;35m' # underline start
+export LESS_TERMCAP_ue=$'\e[0m' # underline end
+
 HISTFILESIZE=4096
 HISTSIZE=4096
 
