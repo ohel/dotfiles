@@ -97,7 +97,7 @@ else
         silent !curl -fLo $VIMHOME/colors/minigun.vim --create-dirs https://raw.githubusercontent.com/ohel/dotfiles/master/themes/minigun.vim
     endif
 
-    set clipboard=unnamedplus " Alias unnamed register to +.
+    set clipboard=unnamedplus " Alias unnamed register to + (X11 clipboard).
 
     set guifont=Monospace\ 10
 
@@ -322,9 +322,9 @@ inoremap <silent> <s-home> <left><c-o>v<home>
 inoremap <silent> <s-end> <c-o>v<end><left>
 
 " Common copy hotkeys.
-nnoremap <c-insert> V"+y<esc>:echo "Line copied."<cr>
-vnoremap <c-insert> "+y<esc>:echo "Copied."<cr>
-vnoremap <c-c> "+y<esc>:echo "Copied."<cr>
+nnoremap <c-insert> V"+y<esc>:let @*=@+<cr>:echo "Line copied."<cr>
+vnoremap <c-insert> "+y<esc>:let @*=@+<cr>:echo "Copied."<cr>
+vnoremap <c-c> "+y<esc>:let @*=@+<cr>:echo "Copied."<cr>
 " Go to visual mode for copying word under cursor.
 inoremap <c-insert> <esc>`^bve
 
