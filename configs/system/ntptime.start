@@ -1,6 +1,6 @@
 # Set system time using NTP.
-if [ -e /usr/bin/ntpclient ]
+if [ "$(which ntpclient 2>/dev/null)" ]
 then
-    ntpclient -s -h pool.ntp.org &
+    ntpclient -s pool.ntp.org &
     einfo "System time set using NTP."
 fi

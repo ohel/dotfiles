@@ -1,13 +1,17 @@
-# Set NOOP schedulers for SSDs to save CPU resources as a scheduler isn't really needed with SSDs.
+# Set NOOP schedulers (if available) for SSDs to save CPU resources as a scheduler isn't really needed with SSDs.
+# Also Kyber scheduler seemed to lose LVM physical volumes and hang the computer on hdparm -Y.
 ssd_id_ends=(
     "CVMP2453044C240DGN"
     "CVMP2454000L240DGN"
+    "CVPO007501UV080BGN"
+    "1831E14BF911"
+    "1831E14C07B6"
 )
 
 for ssd in ${ssd_id_ends[@]}
 do
     schedulerfile=/sys/block/$(ls -la /dev/disk/by-id/*$ssd | cut -f 2 -d '>' | cut -f 3 -d '/')/queue/scheduler
-    if [ -e $schedulerfile ]
+    if [ -e $schedulerfile ] && [ $(grep noop $schedulerfile) ]
     then
         echo noop > $schedulerfile
         einfo "Set NOOP scheduler for $ssd."

@@ -1,8 +1,16 @@
-# Put all storage devices to sleep.
+# Put selected storage devices to sleep.
+
+hdd_id_ends=(
+    "SAMSUNG_HD103SJ_S246J9BZA24881"
+)
+
 if [ "$(grep nohddsleep /proc/cmdline)" ]
 then
     einfo "Disk drives not shut down as per kernel parameter."
 else
     einfo "Shutting down disk drives."
-    hdparm -Y /dev/sd? &>/dev/null
+    for hdd in ${hdd_id_ends[@]}
+    do
+        hdparm -Y $(realpath /dev/disk/by-id/*$hdd) &>/dev/null
+    done
 fi
