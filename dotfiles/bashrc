@@ -40,7 +40,10 @@ shopt -s cdspell # cd directry -> cd directory
 
 case "$TERM" in
 xterm*|rxvt*)
+    # complete on tab and shift-tab
     bind '"\t":menu-complete'
+    bind '"\e[Z":menu-complete-backward'
+    # search history with up/down
     bind '"\e[A":history-search-backward'
     bind '"\e[B":history-search-forward'
     ;;

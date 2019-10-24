@@ -7,5 +7,6 @@ set mark-symlinked-directories on
 set match-hidden-files off
 set show-all-if-ambiguous on
 set show-mode-in-prompt on
+# search history with page up/down
 "\e[5~": history-search-backward
 "\e[6~": history-search-forward
