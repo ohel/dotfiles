@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<drumkit_info xmlns="http://www.hydrogen-music.org/drumkit" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<drumkit_info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.hydrogen-music.org/drumkit">
  <name>Alesis Turbo (Ride)</name>
  <author>Olli Helin</author>
  <info>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
@@ -26,7 +26,7 @@ p, li { white-space: pre-wrap; }
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
    <randomPitchFactor>0.05</randomPitchFactor>
-   <gain>0.6</gain>
+   <gain>0.8</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
@@ -272,7 +272,7 @@ p, li { white-space: pre-wrap; }
    <pan_L>1</pan_L>
    <pan_R>0.48</pan_R>
    <randomPitchFactor>0</randomPitchFactor>
-   <gain>5</gain>
+   <gain>3</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
@@ -823,7 +823,7 @@ p, li { white-space: pre-wrap; }
    <pan_L>0.56</pan_L>
    <pan_R>1</pan_R>
    <randomPitchFactor>0.05</randomPitchFactor>
-   <gain>5</gain>
+   <gain>4</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>

@@ -33,7 +33,7 @@
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
-   <gain>0.6</gain>
+   <gain>0.8</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
@@ -345,7 +345,7 @@
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
    <pan_R>0.48</pan_R>
-   <gain>5</gain>
+   <gain>3</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
@@ -1255,7 +1255,7 @@
    <isMuted>false</isMuted>
    <pan_L>0.56</pan_L>
    <pan_R>1</pan_R>
-   <gain>5</gain>
+   <gain>4</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
