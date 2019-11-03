@@ -9,9 +9,6 @@ then
     export GTK_IM_MODULE=scim
 fi
 
-# Ignore EOF once.
-export IGNOREEOF=1
-
 # Thread limit for ImageMagick
 export MAGICK_THREAD_LIMIT=4
 
@@ -53,7 +50,7 @@ which mpv 2>/dev/null && [ -d ~/.commoncache ] && mkfifo ~/.commoncache/mpvfifo
 # The code consists of a single pause() call.
 lastone=$(ls /opt/programs/pause/pause 2>/dev/null)
 
-# To use this file as an Xsession file, simply do this:
+# To use this file as an Xsession file, create a link:
 # ln -s ~/.xinitrc ~/.xsession && chmod +x ~/.xinitrc
 if [ $(basename "$0") = ".xsession" ] || [ ! "$lastone" ]
 then

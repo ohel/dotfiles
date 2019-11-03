@@ -217,6 +217,8 @@ pcm.binaural {
 }
 
 # Software volume control.
+# Without using the device first, sometimes it is not visible to applications, e.g. volumeicon.
+# To fix this, you can play a dummy wav first in a script: aplay -q -D softvol dummy.wav
 pcm.softvol {
     @args [ CARD ]
     type softvol
