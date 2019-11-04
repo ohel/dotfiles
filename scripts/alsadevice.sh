@@ -3,7 +3,7 @@
 
 if [ "$#" = 0 ]
 then
-    echo "Usage: source alsadevice.sh <device>"
+    echo "Usage: . alsadevice.sh <device>"
     echo ""
     echo "Example devices:"
     echo "eq"

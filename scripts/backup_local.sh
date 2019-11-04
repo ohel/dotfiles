@@ -3,7 +3,7 @@
 
 backup_config=/opt/backup_config
 [ ! -e $backup_config ] && echo "Error: missing backup config $backup_config" && exit 1
-source /opt/backup_config
+. /opt/backup_config
 [ ! "$mountables" ] && echo "Error: missing definition for mountables" && exit 1
 [ ! "$backup_source_dirs" ] && echo "Error: missing definition for backup_source_dirs" && exit 1
 [ ! "$backup_dest_dirs" ] && echo "Error: missing definition for backup_dest_dirs" && exit 1
