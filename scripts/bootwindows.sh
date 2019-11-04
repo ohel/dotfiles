@@ -1,7 +1,14 @@
 #!/bin/sh
 # Boot to first Windows selection using legacy GRUB.
 
-which zenity 2>/dev/null && ! zenity --question --text="Boot to Windows?" && exit
+if [ "$(which zenity 2>/dev/null)" ] && [ "$DISPLAY" ]
+then
+    ! zenity --question --text="Boot to Windows?" && exit
+else
+    echo Boot to Windows?
+    echo Press return to continue, CTRL-C to abort.
+    read tmp
+fi
 
 grubdefault=/boot/grub/default
 if [ ! -r $grubdefault ] || [ ! -w $grubdefault ]

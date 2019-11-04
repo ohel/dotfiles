@@ -1,7 +1,15 @@
 #!/bin/sh
 # A common shutdown script I use.
 
-which zenity 2>/dev/null && ! zenity --question --text="Shut down?" && exit
+if [ "$(which zenity 2>/dev/null)" ] && [ "$DISPLAY" ]
+then
+    ! zenity --question --text="Shut down?" && exit
+else
+    echo Shut down?
+    echo Press return to continue, CTRL-C to abort.
+    read tmp
+fi
+exit
 
 scriptsdir=$(dirname "$(readlink -f "$0")")
 

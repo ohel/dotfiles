@@ -1,7 +1,14 @@
 #!/bin/sh
 # Safely restart computer.
 
-which zenity 2>/dev/null && ! zenity --question --text="Restart?" && exit
+if [ "$(which zenity 2>/dev/null)" ] && [ "$DISPLAY" ]
+then
+    ! zenity --question --text="Restart?" && exit
+else
+    echo Restart?
+    echo Press return to continue, CTRL-C to abort.
+    read tmp
+fi
 
 scriptsdir=$(dirname "$(readlink -f "$0")")
 
