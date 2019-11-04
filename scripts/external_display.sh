@@ -8,7 +8,9 @@
 # An operating mode for the script may be given as parameter $1:
 # switch = switch the display between primary and secondary (default mode if parameter not given)
 # extend = extend to the other display (xrandr position may be given in $3, defaults to "right-of")
-# mirror = mirror the display (in primary display resolution)
+# mirror = mirror the display (using highest common resolution)
+
+# If a secondary display is not found, the primary display is reset to its best resolution.
 
 script_mode=${1:-"switch"}
 primary_background=~/.themes/background
@@ -23,6 +25,7 @@ p_width=$(echo $primary_mode | cut -f 1 -d 'x')
 secondary_display=$(xrandr | grep " connected" | cut -f 1 -d ' ' | grep -v $primary_display | head -n 1)
 if [ "$secondary_display" ]
 then
+    echo "Found secondary display $secondary_display."
     secondary_mode=$(xrandr | grep -A 1 $secondary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
     s_width=$(echo $secondary_mode | cut -f 1 -d 'x')
 fi
@@ -34,8 +37,11 @@ then
         --output $secondary_display --off
     secondary_background=""
     rm $testfile
-elif [ "$secondary_mode" ]
+elif [ ! "$secondary_mode" ]
 then
+    echo No secondary display found, resetting primary display.
+    xrandr --output $primary_display --mode $primary_mode --primary
+else
     if [ "$script_mode" = "switch" ]
     then
         echo "Switching to external display $secondary_display."
@@ -55,12 +61,35 @@ then
     elif [ "$script_mode" = "mirror" ]
     then
         echo "Mirroring to external display $secondary_display."
-        p_height=$(echo $primary_mode | cut -f 2 -d 'x')
-        s_height=$(echo $secondary_mode | cut -f 2 -d 'x')
-        mirror_width=$p_width
-        mirror_height=$p_height
-        [ $s_width -lt $p_width ] && mirror_width=$s_width
-        [ $s_height -lt $p_height ] && mirror_height=$s_height
+
+        primary_modes=$(xrandr | grep -z -o "$primary_display.*[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n +2 | tr -s ' ' | cut -f 2 -d ' ')
+        secondary_modes=$(xrandr | grep -z -o "$secondary_display.*[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n +2 | tr -s ' ' | cut -f 2 -d ' ')
+
+        selected_mode=""
+        for modeline in $primary_modes
+        do
+            if [ ! "$selected_mode" ]
+            then
+                for match in $secondary_modes
+                do
+                    if [ "$modeline" = "$match" ]
+                    then
+                        echo "Found common resolution $match."
+                        selected_mode=$match
+                        break
+                    fi
+                done
+            fi
+        done
+
+        if [ ! "$selected_mode" ]
+        then
+            echo No common resolution found.
+            exit 1
+        fi
+
+        mirror_width=$(echo $selected_mode | cut -f 1 -d 'x')
+        mirror_height=$(echo $selected_mode | cut -f 2 -d 'x')
         mirror_mode=$mirror_width"x"$mirror_height
         xrandr --output $primary_display --mode $mirror_mode --noprimary \
             --output $secondary_display --mode $mirror_mode
@@ -78,7 +107,7 @@ then
     p_dpi_calc=$(echo "scale=2; $p_width / $p_phys_width * 25.4" | bc | cut -f 1 -d '.')
     p_dpi_set=96
     [ $p_dpi_calc -gt 100 ] && p_dpi_set=112
-    [ $p_dpi_calc -gt 140 ] && p_dpi_set=144
+    [ $p_dpi_calc -gt 140 ] && [ $p_phys_width -gt 300 ] && p_dpi_set=144
     common_dpi=$p_dpi_set
 fi
 
@@ -89,7 +118,7 @@ then
     s_dpi_calc=$(echo "scale=2; $s_width / $s_phys_width * 25.4" | bc | cut -f 1 -d '.')
     s_dpi_set=96
     [ $s_dpi_calc -gt 100 ] && s_dpi_set=112
-    [ $s_dpi_calc -gt 140 ] && s_dpi_set=144
+    [ $s_dpi_calc -gt 140 ] && [ $s_phys_width -gt 300 ] && s_dpi_set=144
     (! [ "$common_dpi" ] || [ $s_dpi_set -lt $p_dpi_set ]) && common_dpi=$s_dpi_set
 fi
 
