@@ -9,7 +9,6 @@ else
     echo Press return to continue, CTRL-C to abort.
     read tmp
 fi
-exit
 
 scriptsdir=$(dirname "$(readlink -f "$0")")
 
