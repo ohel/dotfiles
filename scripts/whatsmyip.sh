@@ -47,23 +47,23 @@ then
 fi
 
 echo
-echo WAN IPv4: $wanipv4
-echo IPv6 prefix: $ipv6_prefix
+echo "WAN IPv4: $wanipv4"
+echo "IPv6 prefix: $ipv6_prefix"
 echo
 
 if ! [ "$wanipv4" ]
 then
-    echo "Error retrieving IPv4."
+    echo Error retrieving IPv4.
     exit 1
 fi
 
 # Use a secret script to upload IP info somewhere publicly available.
 if [ -e ~/.scripts_extra/publish_ip.sh ]
 then
-    echo -n "Press return to publish WAN IPv4 and IPv6 prefix."
+    echo Press return to publish WAN IPv4 and IPv6 prefix.
     read tmp
 
     sh ~/.scripts_extra/publish_ip.sh $wanipv4 $ipv6_prefix 2>/dev/null
 
-    echo "Done."
+    echo Done.
 fi
