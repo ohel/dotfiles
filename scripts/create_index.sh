@@ -35,7 +35,9 @@ for filename in $(find ./ -maxdepth 1 -type f | sort); do
         then
            echo "</br><img src=\"thumb_${item%.*}.jpg\" alt=\"img\">" >> $index
         fi
-        echo "</a>($size)</li><hr>" >> $index
+        echo "</a>($size)" >> $index
+        [ "${item##*.}" = "mp4" ] && echo " (VIDEO)" >> $index
+        echo "</li><hr>" >> $index
     fi
 done
 echo "</ol><ul>" >> $index

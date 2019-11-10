@@ -1,5 +1,6 @@
 #!/bin/bash
 # Create thumbnails of given size ($1) of given pictures. For use in Markdown documents (blogs) etc.
+# MP4 video thumbnails are also supported using ffmpeg.
 
 if [[ "$#" -lt 1 ]] || ! [[ $1 =~ ^[0-9]+$ ]]
 then
@@ -33,7 +34,18 @@ do
         continue
     fi
 
-    convert "$1" -resize "$size"x"$size" -strip -quality 75 "$filename_thumb"
+    inputfile="$1"
+    videotempfile=""
+    extension="${1##*.}"
+    if [ "$extension" == "mp4" ] && [ "$(which ffmpeg 2>/dev/null)" ]
+    then
+        videotempfile=$(mktemp --suffix=.png)
+        ffmpeg -i "$1" -vf thumbnail -frames:v 1 -y $videotempfile &> /dev/null
+        inputfile=$videotempfile
+    fi
+    convert "$inputfile" -resize "$size"x"$size" -strip -quality 75 "$filename_thumb"
+
+    [ "$videotempfile" ] && [ -e "$videotempfile" ] && rm "$videotempfile"
 
     echo "Created thumbnail $filename_thumb"
     echo "Copy-paste for a Markdown blog post:"
