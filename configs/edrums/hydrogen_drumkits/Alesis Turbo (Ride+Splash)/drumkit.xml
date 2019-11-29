@@ -817,7 +817,7 @@ p, li { white-space: pre-wrap; }
   </instrument>
   <instrument>
    <id>20</id>
-   <name>Ride / Splash</name>
+   <name>Ride+Splash</name>
    <volume>0.633621</volume>
    <isMuted>false</isMuted>
    <pan_L>0.56</pan_L>

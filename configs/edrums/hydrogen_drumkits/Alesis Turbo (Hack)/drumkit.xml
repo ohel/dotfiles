@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <drumkit_info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.hydrogen-music.org/drumkit">
- <name>Alesis Turbo (Ride)</name>
+ <name>Alesis Turbo (Hack)</name>
  <author>Olli Helin</author>
  <info>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
 &lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Samples from Hydrogen's GMRockKit, TR808EmulationKit + some kick.&lt;/p>&lt;/body>&lt;/html></info>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Samples from Hydrogen's GMRockKit, TR808EmulationKit + some kick. Splash cymbal with ride using mididings hack.&lt;/p>&lt;/body>&lt;/html></info>
  <license>GPL</license>
  <image></image>
  <imageLicense>undefined license</imageLicense>
@@ -61,7 +61,7 @@ p, li { white-space: pre-wrap; }
   </instrument>
   <instrument>
    <id>2</id>
-   <name>-</name>
+   <name>- (Stick)</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
@@ -78,7 +78,7 @@ p, li { white-space: pre-wrap; }
    <Release>1000</Release>
    <muteGroup>-1</muteGroup>
    <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>38</midiOutNote>
+   <midiOutNote>37</midiOutNote>
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <isHihat>-1</isHihat>
@@ -164,7 +164,41 @@ p, li { white-space: pre-wrap; }
   </instrument>
   <instrument>
    <id>4</id>
-   <name>-</name>
+   <name>- (Hand Clap)</name>
+   <volume>1</volume>
+   <isMuted>false</isMuted>
+   <pan_L>1</pan_L>
+   <pan_R>1</pan_R>
+   <randomPitchFactor>0</randomPitchFactor>
+   <gain>1</gain>
+   <applyVelocity>true</applyVelocity>
+   <filterActive>false</filterActive>
+   <filterCutoff>1</filterCutoff>
+   <filterResonance>0</filterResonance>
+   <Attack>0</Attack>
+   <Decay>0</Decay>
+   <Sustain>1</Sustain>
+   <Release>1000</Release>
+   <muteGroup>-1</muteGroup>
+   <midiOutChannel>-1</midiOutChannel>
+   <midiOutNote>39</midiOutNote>
+   <isStopNote>false</isStopNote>
+   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
+   <isHihat>-1</isHihat>
+   <lower_cc>0</lower_cc>
+   <higher_cc>127</higher_cc>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
+  </instrument>
+  <instrument>
+   <id>5</id>
+   <name>- (Snare Rimshot)</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
@@ -197,8 +231,8 @@ p, li { white-space: pre-wrap; }
    </instrumentComponent>
   </instrument>
   <instrument>
-   <id>5</id>
-   <name>-</name>
+   <id>6</id>
+   <name>- (Low Floor Tom)</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
@@ -216,40 +250,6 @@ p, li { white-space: pre-wrap; }
    <muteGroup>-1</muteGroup>
    <midiOutChannel>-1</midiOutChannel>
    <midiOutNote>41</midiOutNote>
-   <isStopNote>false</isStopNote>
-   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
-   <isHihat>-1</isHihat>
-   <lower_cc>0</lower_cc>
-   <higher_cc>127</higher_cc>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
-   <instrumentComponent>
-    <component_id>0</component_id>
-    <gain>1</gain>
-   </instrumentComponent>
-  </instrument>
-  <instrument>
-   <id>6</id>
-   <name>-</name>
-   <volume>1</volume>
-   <isMuted>false</isMuted>
-   <pan_L>1</pan_L>
-   <pan_R>1</pan_R>
-   <randomPitchFactor>0</randomPitchFactor>
-   <gain>1</gain>
-   <applyVelocity>true</applyVelocity>
-   <filterActive>false</filterActive>
-   <filterCutoff>1</filterCutoff>
-   <filterResonance>0</filterResonance>
-   <Attack>0</Attack>
-   <Decay>0</Decay>
-   <Sustain>1</Sustain>
-   <Release>1000</Release>
-   <muteGroup>-1</muteGroup>
-   <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>42</midiOutNote>
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <isHihat>-1</isHihat>
@@ -352,7 +352,7 @@ p, li { white-space: pre-wrap; }
    <Release>1000</Release>
    <muteGroup>-1</muteGroup>
    <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>41</midiOutNote>
+   <midiOutNote>43</midiOutNote>
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <isHihat>-1</isHihat>
@@ -473,7 +473,7 @@ p, li { white-space: pre-wrap; }
   </instrument>
   <instrument>
    <id>10</id>
-   <name>Tom 2</name>
+   <name>Low Tom</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>0.76</pan_L>
@@ -490,7 +490,7 @@ p, li { white-space: pre-wrap; }
    <Release>1000</Release>
    <muteGroup>-1</muteGroup>
    <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>43</midiOutNote>
+   <midiOutNote>45</midiOutNote>
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <isHihat>-1</isHihat>
@@ -611,7 +611,7 @@ p, li { white-space: pre-wrap; }
   </instrument>
   <instrument>
    <id>12</id>
-   <name>-</name>
+   <name>- (Low-Mid Tom)</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
@@ -628,7 +628,7 @@ p, li { white-space: pre-wrap; }
    <Release>1000</Release>
    <muteGroup>-1</muteGroup>
    <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>48</midiOutNote>
+   <midiOutNote>47</midiOutNote>
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <isHihat>-1</isHihat>
@@ -645,7 +645,7 @@ p, li { white-space: pre-wrap; }
   </instrument>
   <instrument>
    <id>13</id>
-   <name>Tom 1</name>
+   <name>High-Mid Tom</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
@@ -662,7 +662,7 @@ p, li { white-space: pre-wrap; }
    <Release>1000</Release>
    <muteGroup>-1</muteGroup>
    <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>45</midiOutNote>
+   <midiOutNote>48</midiOutNote>
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <isHihat>-1</isHihat>
@@ -783,7 +783,7 @@ p, li { white-space: pre-wrap; }
   </instrument>
   <instrument>
    <id>15</id>
-   <name>-</name>
+   <name>- (High Tom)</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
@@ -800,7 +800,7 @@ p, li { white-space: pre-wrap; }
    <Release>1000</Release>
    <muteGroup>-1</muteGroup>
    <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>51</midiOutNote>
+   <midiOutNote>50</midiOutNote>
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <isHihat>-1</isHihat>
@@ -816,8 +816,8 @@ p, li { white-space: pre-wrap; }
    </instrumentComponent>
   </instrument>
   <instrument>
-   <id>20</id>
-   <name>Ride</name>
+   <id>28</id>
+   <name>Ride (Soft Hit)</name>
    <volume>0.633621</volume>
    <isMuted>false</isMuted>
    <pan_L>0.56</pan_L>
@@ -885,14 +885,14 @@ p, li { white-space: pre-wrap; }
    </instrumentComponent>
   </instrument>
   <instrument>
-   <id>7</id>
-   <name>-</name>
-   <volume>1</volume>
+   <id>27</id>
+   <name>Splash (Hard Hit)</name>
+   <volume>0.543103</volume>
    <isMuted>false</isMuted>
-   <pan_L>1</pan_L>
+   <pan_L>0.98</pan_L>
    <pan_R>1</pan_R>
    <randomPitchFactor>0</randomPitchFactor>
-   <gain>1</gain>
+   <gain>1.75</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
@@ -903,7 +903,7 @@ p, li { white-space: pre-wrap; }
    <Release>1000</Release>
    <muteGroup>-1</muteGroup>
    <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>43</midiOutNote>
+   <midiOutNote>52</midiOutNote>
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <isHihat>-1</isHihat>
@@ -916,6 +916,41 @@ p, li { white-space: pre-wrap; }
    <instrumentComponent>
     <component_id>0</component_id>
     <gain>1</gain>
+    <layer>
+     <filename>Splash-Softest.wav</filename>
+     <min>0</min>
+     <max>0.195652</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+    </layer>
+    <layer>
+     <filename>Splash-Soft.wav</filename>
+     <min>0.195652</min>
+     <max>0.362319</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+    </layer>
+    <layer>
+     <filename>Splash-Med.wav</filename>
+     <min>0.362319</min>
+     <max>0.565217</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+    </layer>
+    <layer>
+     <filename>Splash-Hard.wav</filename>
+     <min>0.568841</min>
+     <max>0.753623</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+    </layer>
+    <layer>
+     <filename>Splash-Hardest.wav</filename>
+     <min>0.75</min>
+     <max>1</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+    </layer>
    </instrumentComponent>
   </instrument>
   <instrument>

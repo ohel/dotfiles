@@ -28,7 +28,7 @@
   <instrument>
    <id>1</id>
    <name>Kick</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
@@ -79,8 +79,8 @@
   </instrument>
   <instrument>
    <id>2</id>
-   <name>-</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
+   <name>- (Stick)</name>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
@@ -103,7 +103,7 @@
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>38</midiOutNote>
+   <midiOutNote>37</midiOutNote>
    <isHihat>-1</isHihat>
    <lower_cc>0</lower_cc>
    <higher_cc>127</higher_cc>
@@ -115,7 +115,7 @@
   <instrument>
    <id>3</id>
    <name>Snare</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>1.02155</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
@@ -234,8 +234,43 @@
   </instrument>
   <instrument>
    <id>4</id>
-   <name>-</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
+   <name>- (Hand Clap)</name>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
+   <volume>1</volume>
+   <isMuted>false</isMuted>
+   <pan_L>1</pan_L>
+   <pan_R>1</pan_R>
+   <gain>1</gain>
+   <applyVelocity>true</applyVelocity>
+   <filterActive>false</filterActive>
+   <filterCutoff>1</filterCutoff>
+   <filterResonance>0</filterResonance>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
+   <Attack>0</Attack>
+   <Decay>0</Decay>
+   <Sustain>1</Sustain>
+   <Release>1000</Release>
+   <randomPitchFactor>0</randomPitchFactor>
+   <muteGroup>-1</muteGroup>
+   <isStopNote>false</isStopNote>
+   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
+   <midiOutChannel>-1</midiOutChannel>
+   <midiOutNote>39</midiOutNote>
+   <isHihat>-1</isHihat>
+   <lower_cc>0</lower_cc>
+   <higher_cc>127</higher_cc>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
+  </instrument>
+  <instrument>
+   <id>5</id>
+   <name>- (Snare Rimshot)</name>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
@@ -268,9 +303,9 @@
    </instrumentComponent>
   </instrument>
   <instrument>
-   <id>5</id>
-   <name>-</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
+   <id>6</id>
+   <name>- (Low Floor Tom)</name>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
@@ -303,44 +338,9 @@
    </instrumentComponent>
   </instrument>
   <instrument>
-   <id>6</id>
-   <name>-</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
-   <volume>1</volume>
-   <isMuted>false</isMuted>
-   <pan_L>1</pan_L>
-   <pan_R>1</pan_R>
-   <gain>1</gain>
-   <applyVelocity>true</applyVelocity>
-   <filterActive>false</filterActive>
-   <filterCutoff>1</filterCutoff>
-   <filterResonance>0</filterResonance>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
-   <Attack>0</Attack>
-   <Decay>0</Decay>
-   <Sustain>1</Sustain>
-   <Release>1000</Release>
-   <randomPitchFactor>0</randomPitchFactor>
-   <muteGroup>-1</muteGroup>
-   <isStopNote>false</isStopNote>
-   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
-   <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>42</midiOutNote>
-   <isHihat>-1</isHihat>
-   <lower_cc>0</lower_cc>
-   <higher_cc>127</higher_cc>
-   <instrumentComponent>
-    <component_id>0</component_id>
-    <gain>1</gain>
-   </instrumentComponent>
-  </instrument>
-  <instrument>
    <id>11</id>
    <name>Hat Closed</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>0.685345</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
@@ -460,7 +460,7 @@
   <instrument>
    <id>8</id>
    <name>Floor Tom</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>1.04741</volume>
    <isMuted>false</isMuted>
    <pan_L>0.44</pan_L>
@@ -483,7 +483,7 @@
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>41</midiOutNote>
+   <midiOutNote>43</midiOutNote>
    <isHihat>-1</isHihat>
    <lower_cc>0</lower_cc>
    <higher_cc>127</higher_cc>
@@ -580,7 +580,7 @@
   <instrument>
    <id>19</id>
    <name>Hat Pedal</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>0.685345</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
@@ -699,8 +699,8 @@
   </instrument>
   <instrument>
    <id>10</id>
-   <name>Tom 2</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
+   <name>Low Tom</name>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>0.76</pan_L>
@@ -723,7 +723,7 @@
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>43</midiOutNote>
+   <midiOutNote>45</midiOutNote>
    <isHihat>-1</isHihat>
    <lower_cc>0</lower_cc>
    <higher_cc>127</higher_cc>
@@ -820,7 +820,7 @@
   <instrument>
    <id>21</id>
    <name>Hat Open</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>0.698276</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
@@ -939,8 +939,8 @@
   </instrument>
   <instrument>
    <id>12</id>
-   <name>-</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
+   <name>- (Low-Mid Tom)</name>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
@@ -963,7 +963,7 @@
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>48</midiOutNote>
+   <midiOutNote>47</midiOutNote>
    <isHihat>-1</isHihat>
    <lower_cc>0</lower_cc>
    <higher_cc>127</higher_cc>
@@ -974,8 +974,8 @@
   </instrument>
   <instrument>
    <id>13</id>
-   <name>Tom 1</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
+   <name>High-Mid Tom</name>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
@@ -998,7 +998,7 @@
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>45</midiOutNote>
+   <midiOutNote>48</midiOutNote>
    <isHihat>-1</isHihat>
    <lower_cc>0</lower_cc>
    <higher_cc>127</higher_cc>
@@ -1095,7 +1095,7 @@
   <instrument>
    <id>26</id>
    <name>Crash</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>0.517241</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
@@ -1214,8 +1214,8 @@
   </instrument>
   <instrument>
    <id>15</id>
-   <name>-</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
+   <name>- (High Tom)</name>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
@@ -1238,7 +1238,7 @@
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>51</midiOutNote>
+   <midiOutNote>50</midiOutNote>
    <isHihat>-1</isHihat>
    <lower_cc>0</lower_cc>
    <higher_cc>127</higher_cc>
@@ -1248,9 +1248,9 @@
    </instrumentComponent>
   </instrument>
   <instrument>
-   <id>20</id>
-   <name>Ride+Splash</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
+   <id>28</id>
+   <name>Ride (Soft Hit)</name>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>0.633621</volume>
    <isMuted>false</isMuted>
    <pan_L>0.56</pan_L>
@@ -1332,7 +1332,7 @@
      <pitch>0</pitch>
     </layer>
     <layer>
-     <filename>Splash-Hard.wav</filename>
+     <filename>Ride-Hard.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -1345,11 +1345,11 @@
      <rubberPitch>1</rubberPitch>
      <min>0.572464</min>
      <max>0.775362</max>
-     <gain>0.4</gain>
+     <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
-     <filename>Splash-Hardest.wav</filename>
+     <filename>Ride-Hardest.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -1362,20 +1362,20 @@
      <rubberPitch>1</rubberPitch>
      <min>0.782609</min>
      <max>1</max>
-     <gain>0.4</gain>
+     <gain>1</gain>
      <pitch>0</pitch>
     </layer>
    </instrumentComponent>
   </instrument>
   <instrument>
-   <id>7</id>
-   <name>-</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
-   <volume>1</volume>
+   <id>27</id>
+   <name>Splash (Hard Hit)</name>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
+   <volume>0.543103</volume>
    <isMuted>false</isMuted>
-   <pan_L>1</pan_L>
+   <pan_L>0.98</pan_L>
    <pan_R>1</pan_R>
-   <gain>1</gain>
+   <gain>1.75</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
@@ -1393,19 +1393,104 @@
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>43</midiOutNote>
+   <midiOutNote>52</midiOutNote>
    <isHihat>-1</isHihat>
    <lower_cc>0</lower_cc>
    <higher_cc>127</higher_cc>
    <instrumentComponent>
     <component_id>0</component_id>
     <gain>1</gain>
+    <layer>
+     <filename>Splash-Softest.wav</filename>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+     <min>0</min>
+     <max>0.195652</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+    </layer>
+    <layer>
+     <filename>Splash-Soft.wav</filename>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+     <min>0.195652</min>
+     <max>0.362319</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+    </layer>
+    <layer>
+     <filename>Splash-Med.wav</filename>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+     <min>0.362319</min>
+     <max>0.565217</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+    </layer>
+    <layer>
+     <filename>Splash-Hard.wav</filename>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+     <min>0.568841</min>
+     <max>0.753623</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+    </layer>
+    <layer>
+     <filename>Splash-Hardest.wav</filename>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+     <min>0.75</min>
+     <max>1</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+    </layer>
    </instrumentComponent>
   </instrument>
   <instrument>
    <id>22</id>
    <name>Clave</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>0.84</volume>
    <isMuted>false</isMuted>
    <pan_L>0.96</pan_L>
@@ -1457,7 +1542,7 @@
   <instrument>
    <id>25</id>
    <name>Conga</name>
-   <drumkit>Alesis Turbo (Ride+Splash)</drumkit>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>0.88</volume>
    <isMuted>false</isMuted>
    <pan_L>0.9</pan_L>

@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 # A mididings script.
-# Translates MIDI messages coming from Alesis Turbo Mesh Kit edrums
-# so that the hihat openness is taken into account.
+# Translates MIDI messages coming from Alesis Turbo Mesh Kit edrums so that:
+#   * the hihat openness is taken into account
+#   * a hard ride hit is translated into a different cymbal
+# To debug MIDI messages
+#   1. run: amidi -p virtual -d
+#   2. connect the edrum MIDI device to the virtual RawMIDI port
 
 from mididings import *
 
@@ -21,15 +25,25 @@ def apply_hihat_openness(ev):
     ev.note = 42
     return ev
 
+def translate_hard_ride_hit(ev):
+    # The velocity level 72 comes from Hydrogen drum machine's default 4th volume layer for the ride.
+    if ev.velocity > 72:
+        ev.note = 52
+    return ev
+
 run(
     scenes = {
         1:  Scene("hihat open",
-                Pass()
+                [
+                    KeyFilter(notes=[51]) >> Process(translate_hard_ride_hit),
+                    ~KeyFilter(notes=[51])
+                ]
             ),
         2:  Scene("hihat closed",
                 [
                     KeyFilter(notes=[46]) >> Process(apply_hihat_openness),
-                    ~KeyFilter(notes=[46])
+                    KeyFilter(notes=[51]) >> Process(translate_hard_ride_hit),
+                    ~KeyFilter(notes=[46,51])
                 ]
             )
     },
