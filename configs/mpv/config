@@ -26,7 +26,7 @@ profile-desc="common settings for movie profiles"
 # verbose options; disable audio errors, print simple file info
 msg-level=ao=debug:af=debug:identify=info
 
-profile=opengl-hq
+profile=gpu-hq
 scaler-resizes-only=yes
 
 # languages
@@ -53,7 +53,7 @@ profile-desc="surround sound profile for movies"
 
 ao=alsa
 audio-device=alsa/movie
-audio-channels=6
+audio-channels=5.1(alsa)
 alsa-ignore-chmap
 ad-lavc-downmix=no
 profile=common-movie
@@ -66,7 +66,7 @@ profile-desc="another surround sound profile for movies"
 
 ao=alsa
 audio-device=alsa/movie_balanced_matrix
-audio-channels=6
+audio-channels=5.1(alsa)
 alsa-ignore-chmap
 ad-lavc-downmix=no
 profile=common-movie
@@ -79,7 +79,7 @@ profile-desc="openal profile for movies"
 
 # "hrtf = true" in ~/.alsoftrc enables HRTF with OpenAL
 ao=openal
-audio-channels=6
+audio-channels=5.1(alsa)
 alsa-ignore-chmap
 ad-lavc-downmix=no
 profile=common-movie
@@ -92,7 +92,7 @@ profile-desc="stereo sound profile for movies"
 
 ao=alsa
 audio-device=alsa/hifi
-audio-channels=2
+audio-channels=stereo
 alsa-ignore-chmap
 profile=common-movie
 
@@ -111,7 +111,7 @@ no-sub-auto
 really-quiet
 
 # video
-vo=opengl
+vo=gpu
 opengl-swapinterval=1
 
 
