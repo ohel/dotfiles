@@ -12,6 +12,7 @@ ln -sf $(readlink -f ./inputrc) ~/.inputrc
 ln -sf $(readlink -f ./vimrc) ~/.vimrc
 ln -sf $(readlink -f ./xbindkeysrc) ~/.xbindkeysrc
 ln -sf $(readlink -f ./zathurarc) ~/.config/zathura/zathurarc
+ln -sf $(readlink -f ./Xresources) ~/.Xresources
 ln -sf $(readlink -f ./xinitrc) ~/.xinitrc
 
 # This is for display managers to read common environment variables.

@@ -1,11 +1,10 @@
-# Multimedia keys xbindkeys config.
-# These are mainly for Microsoft Natural Ergonomic 4000 keyboard and alike.
+# An extra xbindkeys config for keyboards with multimedia keys.
 # Mod1 = Alt
 # Mod4 = Windows
 # Mod5 = Alt gr
 
 # The quick launch buttons are sometimes mapped with weird indices.
-# These correspond to quicklaunch 1-5 on the Natural Ergonomic 4000.
+# These correspond to quicklaunch 1-5 on the Microsoft Natural Ergonomic 4000.
 "gvim -c 'e .'"
 XF86Launch5
 "filezilla"
@@ -31,8 +30,8 @@ Mod4 + XF86AudioPlay
 "~/.scripts/audio_player.sh toggle-window"
 XF86Favorites
 
-# For toggling between two soundcards.
-"xfce4-terminal --hide-borders --geometry 50x10 -x ~/.scripts/toggle_julia_digital.sh autoclose monitor &"
+# For toggling between audio sources or muting etc.
+"~/.scripts_extra/toggle_audio.sh"
 XF86AudioMute
 
 "~/.scripts/audio_player.sh previous"

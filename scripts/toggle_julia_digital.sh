@@ -2,6 +2,7 @@
 # Toggles ESI Juli@ digital out playback source (with monitor, if monitor parameter given). May be used with analog out because of the monitor.
 # For best results, run with:
 # /usr/bin/terminal --hide-borders --geometry 50x10 -x toggle_digital_source.sh autoclose [monitor]
+# Put in ~/.scripts_extra/toggle_audio.sh for xbindkeys_mmkeys compatibility.
 
 autoclose=0 # If run in a terminal, will close it.
 monitor=0

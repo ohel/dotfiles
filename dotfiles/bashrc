@@ -2,8 +2,6 @@ umask 0007
 
 [ -e ~/.profile.env ] && source ~/.profile.env
 
-which vim &>/dev/null && export EDITOR="$(which vim)"
-
 export HISTFILESIZE=4096
 export HISTSIZE=4096
 
