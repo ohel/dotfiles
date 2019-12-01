@@ -1,11 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Application
-Name=Devilspie2
-Comment=Perform scripted actions to new windows
-Exec=/usr/bin/devilspie2
+Name=feh (Set background)
+Exec=feh --no-fehbg --bg-fill .themes/background
 OnlyShowIn=XFCE;
 StartupNotify=false
 Terminal=false
 Hidden=false
-

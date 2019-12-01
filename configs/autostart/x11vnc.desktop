@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=VNC server
-Comment=Start VNC server
-Exec=/usr/bin/x11vnc -noxdamage -forever -passwdfile .config/vnc_password
-Icon=network-server
-Terminal=false
-Type=Application
-Categories=System;Utility
-Hidden=false

@@ -2,9 +2,9 @@
 Encoding=UTF-8
 Type=Application
 Name=Init keyboard
-Comment=Set speed, language and bindings
+Comment=Initialize keyboard and set bindings
 Exec=.scripts/initkeyboard.sh
 OnlyShowIn=XFCE;
 StartupNotify=false
 Terminal=false
-Hidden=true
+Hidden=false

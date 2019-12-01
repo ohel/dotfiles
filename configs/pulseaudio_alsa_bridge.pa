@@ -1,7 +1,8 @@
 #!/usr/bin/pulseaudio -nF
 
-# Replace /etc/pulse/default.pa with this to make pa an ALSA bridge.
-# Setting autospawn in client.conf might be needed also.
+# Replace /etc/pulse/default.pa with this to make PulseAudio an ALSA bridge,
+# or link daemon.conf to a new alsapipe.conf, where you set this as default-script-file.
+# Setting "autospawn = no" in client.conf might be needed also.
 
 .fail
     # Set tsched=0 here if you experience glitchy playback. This will

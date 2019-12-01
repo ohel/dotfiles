@@ -1,3 +1,4 @@
+#!/bin/bash
 # Put selected storage devices to sleep.
 
 hdd_id_ends=(
