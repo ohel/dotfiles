@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<drumkit_info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.hydrogen-music.org/drumkit">
+<drumkit_info xmlns="http://www.hydrogen-music.org/drumkit" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
  <name>Alesis Turbo (Splash)</name>
  <author>Olli Helin</author>
  <info>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
@@ -124,34 +124,34 @@ p, li { white-space: pre-wrap; }
     <layer>
      <filename>Snare-Softest.wav</filename>
      <min>0</min>
-     <max>0.206522</max>
+     <max>0.2</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>Snare-Soft.wav</filename>
-     <min>0.202899</min>
-     <max>0.380435</max>
+     <min>0.2</min>
+     <max>0.4</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>Snare-Med.wav</filename>
-     <min>0.376812</min>
-     <max>0.572464</max>
+     <min>0.4</min>
+     <max>0.6</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>Snare-Hard.wav</filename>
-     <min>0.568841</min>
-     <max>0.782609</max>
+     <min>0.6</min>
+     <max>0.8</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>Snare-Hardest.wav</filename>
-     <min>0.782609</min>
+     <min>0.8</min>
      <max>1</max>
      <gain>1</gain>
      <pitch>0</pitch>
@@ -283,34 +283,34 @@ p, li { white-space: pre-wrap; }
     <layer>
      <filename>HatClosed-Softest.wav</filename>
      <min>0</min>
-     <max>0.173913</max>
+     <max>0.2</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>HatClosed-Soft.wav</filename>
-     <min>0.173913</min>
-     <max>0.376812</max>
+     <min>0.2</min>
+     <max>0.4</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>HatClosed-Med.wav</filename>
-     <min>0.373188</min>
-     <max>0.572464</max>
+     <min>0.4</min>
+     <max>0.6</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>HatClosed-Hard.wav</filename>
-     <min>0.576087</min>
-     <max>0.786232</max>
+     <min>0.6</min>
+     <max>0.8</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>HatClosed-Hardest.wav</filename>
-     <min>0.786232</min>
+     <min>0.8</min>
      <max>1</max>
      <gain>1</gain>
      <pitch>0</pitch>
@@ -352,34 +352,34 @@ p, li { white-space: pre-wrap; }
     <layer>
      <filename>TomFloor-Softest.wav</filename>
      <min>0</min>
-     <max>0.199275</max>
+     <max>0.2</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>TomFloor-Soft.wav</filename>
-     <min>0.199275</min>
-     <max>0.391304</max>
+     <min>0.2</min>
+     <max>0.4</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>TomFloor-Med.wav</filename>
-     <min>0.394928</min>
-     <max>0.608696</max>
+     <min>0.4</min>
+     <max>0.6</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>TomFloor-Hard.wav</filename>
-     <min>0.608696</min>
-     <max>0.786232</max>
+     <min>0.6</min>
+     <max>0.8</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>TomFloor-Hardest.wav</filename>
-     <min>0.786232</min>
+     <min>0.8</min>
      <max>1</max>
      <gain>1</gain>
      <pitch>0</pitch>
@@ -490,28 +490,28 @@ p, li { white-space: pre-wrap; }
     <layer>
      <filename>Tom2-Softest.wav</filename>
      <min>0</min>
-     <max>0.177536</max>
+     <max>0.2</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>Tom2-Soft.wav</filename>
-     <min>0.177536</min>
-     <max>0.376812</max>
+     <min>0.2</min>
+     <max>0.4</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>Tom2-Med.wav</filename>
-     <min>0.373188</min>
-     <max>0.572464</max>
+     <min>0.4</min>
+     <max>0.6</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>Tom2-Hard.wav</filename>
-     <min>0.576087</min>
-     <max>0.786232</max>
+     <min>0.6</min>
+     <max>0.8</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
@@ -559,34 +559,34 @@ p, li { white-space: pre-wrap; }
     <layer>
      <filename>HatOpen-Softest.wav</filename>
      <min>0</min>
-     <max>0.202899</max>
+     <max>0.2</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>HatOpen-Soft.wav</filename>
-     <min>0.202899</min>
-     <max>0.394928</max>
+     <min>0.2</min>
+     <max>0.4</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>HatOpen-Med.wav</filename>
-     <min>0.398551</min>
-     <max>0.601449</max>
+     <min>0.4</min>
+     <max>0.6</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>HatOpen-Hard.wav</filename>
-     <min>0.605072</min>
-     <max>0.793478</max>
+     <min>0.6</min>
+     <max>0.8</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>HatOpen-Hardest.wav</filename>
-     <min>0.797101</min>
+     <min>0.8</min>
      <max>1</max>
      <gain>1</gain>
      <pitch>0</pitch>
@@ -658,28 +658,28 @@ p, li { white-space: pre-wrap; }
     <layer>
      <filename>Tom1-Softest.wav</filename>
      <min>0</min>
-     <max>0.202899</max>
+     <max>0.2</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>Tom1-Soft.wav</filename>
-     <min>0.202899</min>
-     <max>0.398551</max>
+     <min>0.2</min>
+     <max>0.4</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>Tom1-Med.wav</filename>
-     <min>0.394928</min>
-     <max>0.601449</max>
+     <min>0.4</min>
+     <max>0.6</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>Tom1-Hard.wav</filename>
-     <min>0.605072</min>
-     <max>0.789855</max>
+     <min>0.6</min>
+     <max>0.8</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
@@ -727,34 +727,34 @@ p, li { white-space: pre-wrap; }
     <layer>
      <filename>Crash-Softest.wav</filename>
      <min>0</min>
-     <max>0.195652</max>
+     <max>0.2</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>Crash-Soft.wav</filename>
-     <min>0.199275</min>
-     <max>0.380435</max>
+     <min>0.2</min>
+     <max>0.4</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>Crash-Med.wav</filename>
-     <min>0.384058</min>
-     <max>0.586957</max>
+     <min>0.4</min>
+     <max>0.6</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>Crash-Hard.wav</filename>
-     <min>0.59058</min>
-     <max>0.782609</max>
+     <min>0.6</min>
+     <max>0.8</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>Crash-Hardest.wav</filename>
-     <min>0.789855</min>
+     <min>0.8</min>
      <max>1</max>
      <gain>1</gain>
      <pitch>0</pitch>
@@ -832,28 +832,28 @@ p, li { white-space: pre-wrap; }
     </layer>
     <layer>
      <filename>Splash-Soft.wav</filename>
-     <min>0.195652</min>
-     <max>0.362319</max>
+     <min>0.2</min>
+     <max>0.4</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>Splash-Med.wav</filename>
-     <min>0.362319</min>
-     <max>0.565217</max>
+     <min>0.4</min>
+     <max>0.6</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>Splash-Hard.wav</filename>
-     <min>0.568841</min>
-     <max>0.753623</max>
+     <min>0.6</min>
+     <max>0.8</max>
      <gain>1</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>Splash-Hardest.wav</filename>
-     <min>0.75</min>
+     <min>0.8</min>
      <max>1</max>
      <gain>1</gain>
      <pitch>0</pitch>

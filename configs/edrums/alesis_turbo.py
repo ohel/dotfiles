@@ -26,8 +26,8 @@ def apply_hihat_openness(ev):
     return ev
 
 def translate_hard_ride_hit(ev):
-    # The velocity level 72 comes from Hydrogen drum machine's default 4th volume layer for the ride.
-    if ev.velocity > 72:
+    # The velocity level 70 is arbitrary, approximately the last 2/5 layers of usual Hydrogen instruments.
+    if ev.velocity > 70:
         ev.note = 52
     return ev
 
