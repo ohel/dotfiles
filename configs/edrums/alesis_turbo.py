@@ -26,8 +26,8 @@ def apply_hihat_openness(ev):
     return ev
 
 def translate_hard_ride_hit(ev):
-    # The velocity level 70 is arbitrary, approximately the last 2/5 layers of usual Hydrogen instruments.
-    if ev.velocity > 70:
+    # The velocity level is arbitrary, determined by experimenting.
+    if ev.velocity > 60:
         ev.note = 52
     return ev
 
