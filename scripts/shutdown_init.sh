@@ -11,7 +11,7 @@ fi
 
 if [ -e /proc/mdstat ]
 then
-    numraidtotal=$(cat /proc/mdstat | grep "active raid" | wc -l)
+    numraidtotal=$(cat /proc/mdstat | grep "active raid1" | wc -l)
     numraidok=$(cat /proc/mdstat | grep "\[\([0-9]\)\/\1\]"| wc -l)
     if ! [ $numraidtotal -eq $numraidok ]
     then
