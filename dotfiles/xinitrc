@@ -21,8 +21,8 @@ xset dpms 900 0 0
 # Disable DPMS, disable screensaver. If using a television, DPMS is not supported anyway.
 xset -dpms; xset s off
 
+# Restore ALSA state (volumes etc.) if saved.
 [ -f ~/.asound.state ] && /usr/sbin/alsactl restore -f ~/.asound.state
-[ -d ~/.sessions ] && ln -sf ~/.sessions ~/.cache/sessions
 
 
 
@@ -42,6 +42,7 @@ mkdir -p $(readlink ~/.commoncache) 2>/dev/null
 mkdir -p $(readlink ~/.thumbnails) 2>/dev/null
 mkdir -p $(readlink ~/.cache) 2>/dev/null
 which mpv 2>/dev/null && [ -d ~/.commoncache ] && mkfifo ~/.commoncache/mpvfifo
+[ -d ~/.sessions ] && ln -sf ~/.sessions ~/.cache/sessions
 
 
 

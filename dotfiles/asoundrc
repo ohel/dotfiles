@@ -10,7 +10,7 @@
 #
 # All are optional.
 # OVERRIDE overrides DEFAULT if set.
-# HIFI uses DEFAULT if not set.
+# HIFI should use the better sounding audio interface, if many exist. Defaults to DEFAULT if not set in environment.
 # DEFAULT uses asound_default below if not set.
 # BLUETOOTH_MAC is used for BlueALSA device.
 #
@@ -24,32 +24,20 @@
 #
 # This enables pipelining certain devices without reference loops.
 # The point of the environmental variables is to support multiple audio devices, some of which might not use a mixer.
-# One may define a HIFI device for use with certain media players for example, skipping resampling.
+# One may define a HIFI device for use with certain media players for example, completely skipping resampling and basically achieving bit-perfect audio.
 #
 # Control devices corresponding to PCM devices are defined for program compatibility.
+#
+# Write system specific (real) devices to /opt/system_alsa_devices.conf.
+# In the file, define at least these two like this:
+# pcm.system_default = "my_dmix_device"
+# ctl.system_default = "my_dmix_ctl"
 
-pcm.asound_default {
-    @func refer
-    name { @func concat
-        strings [ "pcm."
-            { @func getenv
-                vars [ ALSA_DEFAULT_PCM ]
-                default "combo"
-            }
-        ]
-    }
-}
-ctl.asound_default {
-    @func refer
-    name { @func concat
-        strings [ "ctl."
-            { @func getenv
-                vars [ ALSA_DEFAULT_CTL ]
-                default "hda_hw"
-            }
-        ]
-    }
-}
+</opt/system_alsa_devices.conf>
+
+##################################
+########## ABSTRACTIONS ##########
+##################################
 
 # Default device. Generic abstraction, does not point to any real device.
 pcm.!default {
@@ -75,18 +63,26 @@ ctl.!default {
     }
 }
 
-#############################
-########## SPECIAL ##########
-#############################
-
-# Asymmetric device for HDA audio with Juli@ input.
-pcm.combo {
-    type asym
-    playback.pcm "hda_out_mix_44100"
-    capture.pcm "julia_ain_mix_44100"
-    hint {
-        show on
-        description "HDA out / Juli@ analog in"
+pcm.asound_default {
+    @func refer
+    name { @func concat
+        strings [ "pcm."
+            { @func getenv
+                vars [ ALSA_DEFAULT_PCM ]
+                default system_default
+            }
+        ]
+    }
+}
+ctl.asound_default {
+    @func refer
+    name { @func concat
+        strings [ "ctl."
+            { @func getenv
+                vars [ ALSA_DEFAULT_CTL ]
+                default system_default
+            }
+        ]
     }
 }
 
@@ -102,7 +98,7 @@ pcm.hifi {
         strings [ "pcm."
             { @func getenv
                 vars [ ALSA_HIFI_PCM ]
-                default "asound_default"
+                default "default"
             }
         ]
     }
@@ -117,7 +113,7 @@ ctl.hifi {
         strings [ "ctl."
             { @func getenv
                 vars [ ALSA_HIFI_CTL ]
-                default "asound_default"
+                default "default"
             }
         ]
     }
@@ -412,291 +408,5 @@ pcm.loop_vm_adc_out {
     hint {
         show on
         description "Loop: VM ADC out (use in guest)"
-    }
-}
-
-###########################################
-########## HDA INTEGRATED AUDIO ###########
-###########################################
-
-# HDA hardware digital out and analog in/out.
-pcm.hda_hw {
-    type hw
-    card PCH
-    device 0
-    subdevice 0
-}
-ctl.hda_hw {
-    type hw
-    card PCH
-}
-
-# HDA hardware digital out.
-pcm.hda_digital_hw {
-    type hw
-    card PCH
-    device 1
-    subdevice 0
-}
-ctl.hda_digital_hw {
-    type hw
-    card PCH
-}
-
-# Asymmetric device @ 44.1 kHz.
-pcm.hda {
-    type asym
-    playback.pcm "hda_out_mix_44100"
-    capture.pcm "hda_in_mix_44100"
-    hint {
-        show on
-        description "HDA asymmetric @ 44.1 kHz"
-    }
-}
-
-# Mixing output device.
-pcm.hda_out_mix_44100 {
-    type plug
-    slave.pcm {
-        type dmix
-        ipc_key 20000
-        slave {
-            pcm "hda_hw"
-            format S16_LE
-            periods 8
-            period_size 1024
-            rate 44100
-        }
-    }
-    hint {
-        show on
-        description "HDA mix out"
-    }
-}
-
-# Mixing input device.
-pcm.hda_in_mix_44100 {
-    type dsnoop
-    ipc_key 30000
-    slave {
-        pcm "hda_hw"
-        format S16_LE
-        rate 44100
-    }
-    hint {
-        show on
-        description "HDA mix in"
-    }
-}
-
-###########################
-########## HDMI ###########
-###########################
-
-# HDMI hardware.
-pcm.hdmi_hw {
-    type hw
-    card HDMI
-    device 3
-    subdevice 0
-}
-ctl.hdmi_hw {
-    type hw
-    card HDMI
-}
-
-# HDMI out. The name cannot be the card name, hdmi.
-pcm.hdmi_out {
-    type plug
-    slave {
-        format S16_LE
-        pcm "hdmi_hw"
-    }
-    hint {
-        show on
-        description "HDMI out"
-    }
-}
-
-###############################
-########## ESI JULI@ ##########
-###############################
-
-# Juli@ hardware analog in/out.
-pcm.julia_analog_hw {
-    type hw
-    card Juli
-    device 0
-    subdevice 0
-}
-ctl.julia_analog_hw {
-    type hw
-    card Juli
-}
-
-# Juli@ hardware digital in.
-pcm.julia_digital_hw {
-    type hw
-    card Juli
-    device 1
-    subdevice 0
-}
-ctl.julia_digital_hw {
-    type hw
-    card Juli
-}
-
-# Analog out.
-pcm.julia_aout {
-    type plug
-    slave {
-        format S32_LE
-        pcm "julia_analog_hw"
-    }
-    hint {
-        show on
-        description "Juli@ analog out"
-    }
-}
-
-# Analog in.
-pcm.julia_ain {
-    type plug
-    slave {
-        format S32_LE
-        pcm "julia_analog_hw"
-    }
-    hint {
-        show on
-        description "Juli@ analog in"
-    }
-}
-
-# Digital out.
-pcm.julia_dout {
-    type plug
-    slave {
-        format S32_LE
-        pcm "julia_digital_hw"
-    }
-    hint {
-        show on
-        description "Juli@ digital out"
-    }
-}
-
-# Both analog and digital out, channels separate (quad).
-pcm.julia_qout {
-    type plug
-    slave {
-        format S32_LE
-        pcm {
-            type multi
-            slaves.dout.pcm "julia_dout"
-            slaves.dout.channels 2
-            slaves.aout.pcm "julia_aout"
-            slaves.aout.channels 2
-            bindings.0.slave aout
-            bindings.0.channel 0
-            bindings.1.slave aout
-            bindings.1.channel 1
-            bindings.2.slave dout
-            bindings.2.channel 0
-            bindings.3.slave dout
-            bindings.3.channel 1
-        }
-    }
-    route_policy duplicate
-    ttable {
-        0.0 1
-        1.1 1
-        2.2 1
-        3.3 1
-    }
-    hint {
-        show on
-        description "Juli@ analog/digital out, quad"
-    }
-}
-
-# Both analog and digital out, channels duplicated.
-pcm.julia_bout {
-    type plug
-    slave {
-        format S32_LE
-        pcm {
-            type multi
-            slaves.dout.pcm "julia_dout"
-            slaves.dout.channels 2
-            slaves.aout.pcm "julia_aout"
-            slaves.aout.channels 2
-            bindings.0.slave aout
-            bindings.0.channel 0
-            bindings.1.slave aout
-            bindings.1.channel 1
-            bindings.2.slave dout
-            bindings.2.channel 0
-            bindings.3.slave dout
-            bindings.3.channel 1
-        }
-    }
-    route_policy duplicate
-    ttable {
-        0.0 1
-        1.1 1
-        0.2 1
-        1.3 1
-    }
-    hint {
-        show on
-        description "Juli@ analog/digital out, stereo"
-    }
-}
-
-# Asymmetric analog device @ 44.1 kHz.
-pcm.julia {
-    type asym
-    playback.pcm "julia_aout_mix_44100"
-    capture.pcm "julia_ain_mix_44100"
-    hint {
-        show on
-        description "Juli@ analog asymmetric @ 44.1 kHz"
-    }
-}
-
-# Mixing analog output device.
-pcm.julia_aout_mix_44100 {
-    type plug
-    slave.pcm {
-        type dmix
-        ipc_key 40000
-        slave {
-            pcm "julia_analog_hw"
-            format S32_LE
-            periods 8
-            period_size 1024
-            rate 44100
-        }
-    }
-    hint {
-        show on
-        description "Juli@ analog out mix @ 44.1 kHz"
-    }
-}
-
-# Mixing analog input device.
-pcm.julia_ain_mix_44100 {
-    type plug
-    slave.pcm {
-        type dsnoop
-        ipc_key 50000
-        slave {
-            pcm "julia_analog_hw"
-            rate 44100
-        }
-    }
-    hint {
-        show on
-        description "Juli@ mix analog in 44.1 kHz"
     }
 }

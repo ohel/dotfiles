@@ -1,7 +1,7 @@
 #!/bin/sh
 # Start and connect basic stuff to begin practicing with Alesis Turbo edrums.
 
-QJACK_PRESET=Julia_44100Hz_stereo
+QJACK_PRESET=${1:-edrums}
 
 scriptdir=$(dirname "$(readlink -f "$0")")
 
@@ -13,8 +13,10 @@ hydrogen -s $scriptdir/drum_practice.h2song &
 pid_hydrogen=$!
 sleep 1
 
+md_exe=mididings
 # mididings_script is originally named mididings, but there's a directory by the same name for Python code if installing like I did, i.e. manually to an arbitrary location
-/opt/programs/mididings/mididings_script -f $scriptdir/alesis_turbo.py &
+[ -e /opt/programs/mididings/mididings_script ] && md_exe=/opt/programs/mididings/mididings_script
+$md_exe -f $scriptdir/alesis_turbo.py &
 pid_mididings=$!
 sleep 1
 

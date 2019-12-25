@@ -1,10 +1,10 @@
 #!/bin/bash
 # Set NOOP schedulers (if available) for SSDs to save CPU resources as a scheduler isn't really needed with SSDs.
-# Also Kyber scheduler seemed to lose LVM physical volumes and hang the computer on hdparm -Y.
+# Also Kyber scheduler might lose LVM physical volumes and hang the computer on hdparm -Y.
 ssd_id_ends=(
-    "CVMP2453044C240DGN"
-    "CVMP2454000L240DGN"
-    "CVPO007501UV080BGN"
+    "2J3920085984"
+    "2J4520110868"
+    "2J4520111845"
     "1831E14BF911"
     "1831E14C07B6"
 )

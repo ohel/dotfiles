@@ -22,6 +22,7 @@ systembackupexcludelist=(
     "/tmp/\*"
     "/usr/portage/distfiles/\*"
     "/var/tmp/\*"
+    "/swapfile"
 )
 
 logdir="/var/log/backup/"
