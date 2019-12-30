@@ -5,10 +5,9 @@ backup_config=/opt/backup_config
 [ ! -e $backup_config ] && echo "Error: missing backup config $backup_config" && exit 1
 . /opt/backup_config
 [ ! "$mountables" ] && echo "Error: missing definition for mountables" && exit 1
+[ ! "$systembackupdir" ] && echo "Error: missing definition for systembackupdir" && exit 1
 [ ! "$backup_source_dirs" ] && echo "Error: missing definition for backup_source_dirs" && exit 1
 [ ! "$backup_dest_dirs" ] && echo "Error: missing definition for backup_dest_dirs" && exit 1
-[ ! "$systembackupdir" ] && echo "Error: missing definition for systembackupdir" && exit 1
-[ ! "$systembackupdir2" ] && echo "Warning: missing definition for systembackupdir2"
 
 # Escape asterisks, otherwise shell expansion is made.
 systembackupexcludelist=(
@@ -27,13 +26,11 @@ systembackupexcludelist=(
 
 logdir="/var/log/backup/"
 
-do_sync=1
 do_misc_backup=1
 do_system_backup=1
 do_home_backup=1
 wait_at_end=1
-[ "$1" == "misconly" ] && do_system_backup=0 && do_home_backup=0 && do_sync=0 && wait_at_end=0
-[ "$1" == "synconly" ] && do_system_backup=0 && do_home_backup=0 && do_misc_backup=0
+[ "$1" == "misconly" ] && do_system_backup=0 && do_home_backup=0 && wait_at_end=0
 
 if [ "$(echo $HOME)" != "/root" ]
 then
@@ -65,37 +62,7 @@ parallel=0
 
 datestring=$(date +%F)
 
-if [ "$do_misc_backup" = 1 ]
-then
-    echo
-    echo "*******************************************************************************"
-    echo "Synchronising misc backup directories..."
-    num_of_misc=${#backup_source_dirs[@]}
-    if [ $num_of_misc -ne ${#backup_dest_dirs[@]} ]
-    then
-        echo "The number of misc backup source and destination directories does not match!"
-        echo "Aborting..."
-        exit 1
-    fi
-    index=0
-    while [ $index -lt $num_of_misc ]
-    do
-        sourcedir="${backup_source_dirs[$index]}/"
-        destdir="${backup_dest_dirs[$index]}/"
-        if [ ! -e $destdir ]
-        then
-            echo "Destination directory $destdir does not exist, skipping..."
-        else
-            echo
-            echo "*******************************************************************************"
-            echo "Synchronising $sourcedir with $destdir..."
-            rsync -ah --progress --delete --log-file "$logdir""$datestring""_rsync_""$index"".log" $sourcedir $destdir
-        fi
-        index=$(expr $index + 1)
-    done
-fi
-
-if [ "$do_system_backup" = 1 ]
+if [ "$do_system_backup" == 1 ]
 then
     if [ ! -e $systembackupdir ]
     then
@@ -130,7 +97,7 @@ then
     mv /dev/shm/backup.out $logdir
 fi
 
-if [ "$do_home_backup" = 1 ]
+if [ "$do_home_backup" == 1 ]
 then
     if [ ! -e $systembackupdir ]
     then
@@ -168,21 +135,38 @@ then
     fi
 fi
 
-if [ "$do_sync" = 1 ] && [ "$systembackupdir2" ]
+if [ "$do_misc_backup" == 1 ]
 then
     echo
     echo "*******************************************************************************"
-    echo "Synchronizing $systembackupdir with $systembackupdir2..."
-    if [ ! -e $systembackupdir2 ]
+    echo "Synchronising misc backup directories..."
+    num_of_misc=${#backup_source_dirs[@]}
+    if [ $num_of_misc -ne ${#backup_dest_dirs[@]} ]
     then
-        echo "Destination directory $systembackupdir2 does not exist, skipping..."
-    else
-        rsync -avh --progress --delete $systembackupdir $systembackupdir2
+        echo "The number of misc backup source and destination directories does not match!"
+        echo "Aborting..."
+        exit 1
     fi
+    index=0
+    while [ $index -lt $num_of_misc ]
+    do
+        sourcedir="${backup_source_dirs[$index]}/"
+        destdir="${backup_dest_dirs[$index]}/"
+        if [ ! -e $destdir ]
+        then
+            echo "Destination directory $destdir does not exist, skipping..."
+        else
+            echo
+            echo "*******************************************************************************"
+            echo "Synchronising $sourcedir with $destdir..."
+            rsync -ah --progress --delete --log-file "$logdir""$datestring""_rsync_""$index"".log" $sourcedir $destdir
+        fi
+        index=$(expr $index + 1)
+    done
 fi
 
 echo
 echo "*******************************************************************************"
-echo "Backup complete. Remember to backup virtual machines separately."
+echo "Backup complete. Backup virtual machines separately."
 echo
-[ "$wait_at_end" = 1 ] && read
+[ "$wait_at_end" == 1 ] && read

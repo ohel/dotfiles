@@ -4,7 +4,7 @@
 # Partition is assumed to be in /etc/fstab and mount point in /mnt/name.
 
 name="$1" # Name of mountpoint and LUKS mapping.
-md_uuid="$2" # UUID of the md device.
+dev_uuid="$2" # UUID of the block device (e.g. /dev/sda or /dev/md1)
 vg_name="$3" # Optional name of LVM volume group.
 
 if [ "$(mount | grep $name)" ] || [ "$(dmsetup ls | grep $name)" ];
@@ -15,7 +15,13 @@ then
     exit
 fi
 
-dev=$(blkid /dev/md/* | grep $md_uuid | cut -f 1 -d ':')
+# Search MD devices.
+dev=$(blkid /dev/md/* | grep $dev_uuid | cut -f 1 -d ':')
+# Search NVMe devices.
+[ ! "$dev" ] && dev=$(blkid /dev/nvme* | grep $dev_uuid | cut -f 1 -d ':')
+# Search SCSI devices.
+[ ! "$dev" ] && dev=$(blkid /dev/sd* | grep $dev_uuid | cut -f 1 -d ':')
+
 [ ! "$dev" ] && echo "Device not found." && exit 1
 
 keyopts=""
