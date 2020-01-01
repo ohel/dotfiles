@@ -5,6 +5,7 @@
 # Creates image thumbnail links if they exist (thumb_*.jpg).
 
 root=${1:-$(basename $(pwd))}
+title=${2:-$root}
 index="index.html"
 
 echo "Creating index for /$root"
@@ -12,14 +13,27 @@ echo "Creating index for /$root"
 cat > $index << EOF
 <html lang="en"><head><meta charset="utf-8">
 <style>
-    body { background-color: #303030; padding: 3em; }
+    body { background-color: #303030; color:darkgray; padding: 3em; }
     html { font-family: sans-serif; }
     a { color: white; text-decoration: none; }
-    img { margin-top: 0.5em; }
-    hr { border-color: gray; border-style: outset; border-width: 2px; margin-bottom: 3em; }
-    ol { color: darkgray; }
+    img { margin-top: 0.5em; margin-bottom: 2em; }
+    li { float: left; margin-right: 3em; margin-bottom: 1em; }
+    hr { margin-bottom: 3em; }
+    .centered { position: absolute; left: 50%; transform: translateX(-50%); }
+    ol.centered li { float: none; }
 </style>
-</head><body><ol>
+</head><body>
+<script>
+    function toggleSingleColumn() {
+      const list = document.getElementById("mainlist");
+      list.classList.toggle("centered");
+    }
+</script>
+<h1>$title</h1>
+<input type="checkbox" onclick="toggleSingleColumn()" id="toggle">
+<label for="toggle">Single column</label>
+<hr>
+<ol id="mainlist">
 EOF
 
 # Files in base directory, with thumbnails.
@@ -31,14 +45,13 @@ do
         [ "$item" != ".htaccess" ] &&
         [ ! "$(echo $item | grep thumb_.*\.jpg)" ]
     then
-        echo "<li><a href=\"/$root/$item\">$item" >> $index
+        echo "<li><a href=\"/$root/$item\">$item</a> ($size)" >> $index
+        [ "${item##*.}" = "mp4" ] && echo " [VIDEO]" >> $index
         if [ "$(ls thumb_${item%.*}.jpg 2>/dev/null)" ]
         then
-           echo "</br><img src=\"thumb_${item%.*}.jpg\" alt=\"img\">" >> $index
+           echo "<a href=\"/$root/$item\"></br><img src=\"thumb_${item%.*}.jpg\" alt=\"img\"></a>" >> $index
         fi
-        echo "</a>($size)" >> $index
-        [ "${item##*.}" = "mp4" ] && echo " (VIDEO)" >> $index
-        echo "</li><hr>" >> $index
+        echo "</li>" >> $index
     fi
 done
 echo "</ol><ul>" >> $index
@@ -61,7 +74,9 @@ done
 echo "</ul></body></html>" >> $index
 
 cat > .htaccess << EOF
-RewriteEngine off
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 DirectoryIndex $index
 EOF
 chmod a+r .htaccess $index
