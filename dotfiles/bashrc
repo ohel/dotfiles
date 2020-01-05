@@ -1,4 +1,4 @@
-umask 0007
+umask 0077
 
 [ -e ~/.profile.env ] && source ~/.profile.env
 
@@ -37,6 +37,7 @@ alias cp='cp -a'
 alias f='find ./ | grep -i --colour'
 alias g='grep -iR --colour'
 alias ls='ls --color=auto -h --group-directories-first'
+alias lso='ls -lG'
 alias rmemptydirs='find . -depth -empty -type d -exec rmdir {} \;'
 alias x='exit'
 
