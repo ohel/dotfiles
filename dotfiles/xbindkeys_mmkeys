@@ -2,6 +2,7 @@
 # Mod1 = Alt
 # Mod4 = Windows
 # Mod5 = Alt gr
+# xbindkeys -f xbindkeys_mouseemu
 
 # The quick launch buttons are sometimes mapped with weird indices.
 # These correspond to quicklaunch 1-5 on the Microsoft Natural Ergonomic 4000.
@@ -38,8 +39,3 @@ XF86AudioMute
 Mod4 + XF86AudioLowerVolume
 "~/.scripts/audio_player.sh next"
 Mod4 + XF86AudioRaiseVolume
-
-# This is for hidden thumb buttons found in some Logitech mice, e.g. MX Master.
-# It sends a Control_L + Alt_L + Tab combo - this makes it a back button.
-"xdotool keyup Tab && xdotool keyup ctrl && xdotool key alt+Left"
-Control + Mod1 + Tab

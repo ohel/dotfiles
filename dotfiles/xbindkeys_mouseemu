@@ -1,15 +1,16 @@
+# Emulate mouse with Vim-like keybindings.
 # Mod1 = Alt
 # Mod4 = Windows
 # Mod5 = Alt gr
-# xbindkeys -f xbindkeysmouseemu
+# xbindkeys -f xbindkeys_mouseemu
 
 # Mouse emulation
 "sleep 0.1 && xdotool click --clearmodifiers 1"
-Mod5 + h                        
+Mod5 + h
 "sleep 0.1 && xdotool click --clearmodifiers 3"
-Mod5 + l                        
+Mod5 + l
 "xdotool click --clearmodifiers 4"
-Mod5 + k                        
+Mod5 + k
 "xdotool click --clearmodifiers 5"
 Mod5 + j
 "xdotool mousemove_relative -- -50 0"
@@ -28,51 +29,3 @@ Shift + Control + Mod1 + j
 Shift + Control + Mod1 + k
 "xdotool mousemove_relative 15 0"
 Shift + Control + Mod1 + l
-
-# Mouse wheel left
-# "xdotool key Left"
-# m:0x0 + b:11
-# "xdotool key Left"
-# Mod1 + m:0x0 + b:11
-# "xdotool key Left"
-# Mod4 + m:0x0 + b:11
-# "xdotool key Left"
-# Control + m:0x0 + b:11
-# "xdotool key Left"
-# Shift + m:0x0 + b:11
-
-# Mouse wheel right
-# "xdotool key Right"
-# m:0x0 + b:12
-# "xdotool key Right"
-# Mod1 + m:0x0 + b:12
-# "xdotool key Right"
-# Mod4 + m:0x0 + b:12
-# "xdotool key Right"
-# Control + m:0x0 + b:12
-# "xdotool key Right"
-# Shift + m:0x0 + b:12
-
-# Mouse back thumb
-# "xdotool key Return"
-# m:0x0 + b:9
-# "xdotool key Return"
-# Mod1 + m:0x0 + b:9
-# "xdotool key Return"
-# Mod4 + m:0x0 + b:9
-# "xdotool key Return"
-# Control + m:0x0 + b:9
-# "xdotool key Return"
-# Shift + m:0x0 + b:9
-
-# Mouse forward thumb
-# Have to put with and without Control modifier, otherwise won't work as intended.
-# For some reason mouse click events are not registered while this is on so it's useless.
-#"xdotool keydown Control"
-#m:0x0 + b:10
-#"xdotool keydown Control"
-#m:0x4 + b:10
-#"xdotool keyup Control"
-#Release + m:0x0 + b:10
-#"xdotool keyup Control"
-#Release + m:0x4 + b:10
