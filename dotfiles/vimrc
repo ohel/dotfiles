@@ -151,6 +151,30 @@ autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd BufNewFile,BufRead *.xaml set filetype=xml
 
+" Pathogen plugins.
+" *****************
+
+if !isdirectory($VIMHOME . "/bundle/tsuquyomi")
+    echo("Downloading tsuquyomi...")
+    silent !git clone https://github.com/Quramy/tsuquyomi.git $VIMHOME/bundle/tsuquyomi
+endif
+
+if !isdirectory($VIMHOME . "/bundle/vim-pug")
+    echo("Downloading vim-pug...")
+    silent !git clone https://github.com/digitaltoad/vim-pug.git $VIMHOME/bundle/vim-pug
+endif
+
+if filereadable($VIMHOME . "/autoload/pathogen.vim")
+    silent! execute pathogen#infect()
+endif
+
+if isdirectory($VIMHOME . "/bundle/tsuquyomi")
+    autocmd FileType typescript setlocal completeopt+=menu,preview
+endif
+
+" Plugged plugins.
+" ****************
+
 if filereadable($VIMHOME . "/autoload/plug.vim")
     silent! call plug#begin($VIMHOME . "/plugged")
 endif
@@ -174,27 +198,6 @@ if exists("*plug#begin")
     call plug#end()
 endif
 
-" https://github.com/tpope/vim-pathogen
-if filereadable($VIMHOME . "/autoload/pathogen.vim")
-    silent! execute pathogen#infect()
-endif
-
-" https://github.com/Quramy/tsuquyomi
-if isdirectory($VIMHOME . "/bundle/tsuquyomi")
-    autocmd FileType typescript setlocal completeopt+=menu,preview
-endif
-
-" http://vim-taglist.sourceforge.net/
-if filereadable($VIMHOME . "/plugin/taglist.vim")
-    nnoremap <f1> :TlistToggle<cr>
-    inoremap <f1> <c-o>:TlistToggle<cr>
-endif
-
-" https://github.com/rkulla/pydiction
-if filereadable($VIMHOME . "/after/ftplugin/python_pydiction.vim")
-    let g:pydiction_location = '$VIMHOME/pydiction/complete-dict'
-    let g:pydiction_menu_height = 15
-endif
 
 if isdirectory($VIMHOME . "/plugged/tcomment_vim")
     let g:tcomment_opleader1 = 'å'
@@ -277,6 +280,21 @@ if isdirectory($VIMHOME . "/plugged/vim-airline")
         silent !curl -fLo $VIMHOME/autoload/airline/themes/minigun.vim --create-dirs https://raw.githubusercontent.com/ohel/dotfiles/master/themes/minigun-airline.vim
     endif
     let g:airline_theme = 'minigun'
+endif
+
+" Other plugins.
+" **************
+
+" http://vim-taglist.sourceforge.net/
+if filereadable($VIMHOME . "/plugin/taglist.vim")
+    nnoremap <f1> :TlistToggle<cr>
+    inoremap <f1> <c-o>:TlistToggle<cr>
+endif
+
+" https://github.com/rkulla/pydiction
+if filereadable($VIMHOME . "/after/ftplugin/python_pydiction.vim")
+    let g:pydiction_location = '$VIMHOME/pydiction/complete-dict'
+    let g:pydiction_menu_height = 15
 endif
 
 
