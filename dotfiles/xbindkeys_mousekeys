@@ -24,6 +24,50 @@
 "xdotool keyup Tab && xdotool keyup ctrl && xdotool key alt+Left"
 Control + Mod1 + Tab
 
+# Mouse wheel left.
+"xdotool keydown Left"
+b:6
+"xdotool keydown Left"
+Mod1 + b:6
+"xdotool keydown Left"
+Mod4 + b:6
+"xdotool keydown Left"
+Shift + b:6
+"xdotool keydown Left"
+Control + b:6
+"xdotool keyup Left"
+Release + b:6
+"xdotool keyup Left"
+Release + Mod1 + b:6
+"xdotool keyup Left"
+Release + Mod4 + b:6
+"xdotool keyup Left"
+Release + Shift + b:6
+"xdotool keyup Left"
+Release + Control + b:6
+
+# Mouse wheel right.
+"xdotool keydown Right"
+b:7
+"xdotool keydown Right"
+Mod1 + b:7
+"xdotool keydown Right"
+Mod4 + b:7
+"xdotool keydown Right"
+Shift + b:7
+"xdotool keydown Right"
+Control + b:7
+"xdotool keyup Right"
+Release + b:7
+"xdotool keyup Right"
+Release + Mod1 + b:7
+"xdotool keyup Right"
+Release + Mod4 + b:7
+"xdotool keyup Right"
+Release + Shift + b:7
+"xdotool keyup Right"
+Release + Control + b:7
+
 # Mouse back thumb.
 "xdotool keydown Return"
 b:10
