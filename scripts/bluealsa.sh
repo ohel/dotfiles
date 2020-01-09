@@ -17,8 +17,8 @@
 # Finally a new bash shell is started, with the loopback device as
 # the default audio device. The shell is not started if $2 is given.
 
-# If $2 is given, killall $2 start it with the new ALSA environment variables.
-# A good candidate would be for example xfce4-panel, so that whatever one starts
+# If $2 is given, killall $2 and restart it with the new ALSA environment variables.
+# E.g. a good candidate for $2 would be xfce4-panel, so that whatever one starts
 # via the panel, they will default to using the Bluetooth audio device.
 
 mode=${1:-alsa}
