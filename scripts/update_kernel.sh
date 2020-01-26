@@ -1,14 +1,15 @@
 #!/bin/bash
-# Update a kernel by compiling a new kernel if it exists, using old config file as base.
-# Copies the necessary files to the boot partition.
+# Update a kernel by compiling a new kernel if it exists, using old config file as base. Old version is the one symlinked to /usr/src/linux.
+# The script copies the necessary files to the boot partition.
 # If dracut is found, a new initramfs image is created using it in hostonly mode.
 #
-# If $1 == rt or $2 == rt, realtime kernel is updated instead.
 # If $1 == grub or $2 == grub, grub.conf and /boot/boot is updated also.
+# If $1 or $2 is something else, it will be used as the kernel source directory instead. Nothing will be removed, just compiled and copied.
 #
 # By default, the script works by updating an <EFI system partition>/EFI which is assumed to be mounted to /boot/EFI.
 # Files are copied to /boot/EFI/linux, and config file /boot/EFI/BOOT/refind.conf is updated for new kernel versions.
 
+# Kernel source directory prefix for automatic version detection. Directories with other prefixes are skipped.
 prefix="linux"
 efi_dest_dir=/boot/EFI
 
@@ -17,9 +18,10 @@ boot_backup_script=/opt/boot_backup.sh
 
 cwd="$(pwd)"
 use_grub=""
-[ "$1" == "grub" ] || [ "$2" == "grub" ] && use_grub=1
-use_rt=""
-[ "$1" == "rt" ] || [ "$2" == "rt" ] && use_rt=1
+src_dir="$1"
+[ "$1" == "grub" ] && use_grub=1 && src_dir="$2"
+[ "$2" == "grub" ] && use_grub=1
+
 use_dracut=""
 $(which dracut > /dev/null 2>&1) && use_dracut=1
 
@@ -30,7 +32,14 @@ then
     exit 1
 fi
 
-if [ ! -e /usr/src/linux ]
+if [ "$src_dir" ] && [ ! -e $src_dir ]
+then
+    echo "Source dir $src_dir does not exist, aborting."
+    read
+    exit 1
+fi
+
+if [ ! "$src_dir" ] && [ ! -e /usr/src/linux ]
 then
     echo "The symbolic link /usr/src/linux does not exist, aborting."
     read
@@ -52,23 +61,11 @@ then
     fi
 fi
 
-cd /usr/src
-if [ "$use_rt" ]
-then
-    old_version=$(ls -v1 --file-type | grep '/' | cut -f 1 -d '/' | grep rt | tail -n 2 | head -n 1 | cut -f 2- -d '-')
-    rt_grep_opts="-s"
-else
-    old_version=$(readlink linux | cut -f 2 -d '-')
-    rt_grep_opts="-v -s"
-fi
-new_version=$(ls -v1 --file-type | grep '/' | cut -f 1 -d '/' | grep $rt_grep_opts rt | tail -n 1 | cut -f 2- -d '-')
-
 function cleanup {
     keep_version=$1
-    rt_grep_opts=$2
-    prefix=$3
-    efi_dest_dir=$4
-    old_versions=($(ls -d /usr/src/$prefix-* | grep $rt_grep_opts rt | grep -v $keep_version | xargs -I {} basename {} | cut -f 2- -d '-'))
+    prefix=$2
+    efi_dest_dir=$3
+    old_versions=($(ls -d /usr/src/$prefix-* | grep -v $keep_version | xargs -I {} basename {} | cut -f 2- -d '-'))
     if [ ${#old_versions[@]} -gt 0 ]
     then
         echo "Found old versions in /usr/src:"
@@ -84,11 +81,6 @@ function cleanup {
             do
                 rm -rf /usr/src/linux-$version
                 rm -rf /lib/modules/$version
-
-                # For some reason RT kernels in /lib/modules are named like
-                # <version>-rt-rt<revision>, not like <version>-rt<revision>.
-                rt_version=$(echo $version | grep rt | sed "s/-rt/-rt-rt/")
-                [ "$rt_version" ] && rm -rf /lib/modules/$rt_version
 
                 rm /boot/System.map-$version 2>/dev/null
                 rm /boot/kernel-$version 2>/dev/null
@@ -109,34 +101,47 @@ function cleanup {
     return 1
 }
 
-if [ "$old_version" == "$new_version" ]
+if [ "$src_dir" ]
 then
-    echo "New kernel was not found."
-    cd $cwd
-    cleanup $new_version "$rt_grep_opts" $prefix $efi_dest_dir
-    [ $? -eq 0 ] && [ -e $boot_backup_script ] && $boot_backup_script
+    cd $src_dir
+    make oldconfig
+    new_version=$(cat include/config/kernel.release)
+else
+    cd /usr/src
+    old_version=$(readlink linux | cut -f 2 -d '-')
+    new_version=$(ls -v1 --file-type | grep '/' | cut -f 1 -d '/' | grep "^$prefix" | tail -n 1 | cut -f 2- -d '-')
 
-    echo "All done."
+    if [ "$old_version" == "$new_version" ]
+    then
+        echo "New kernel was not found."
+        cd $cwd
+        cleanup $new_version $prefix $efi_dest_dir
+        [ $? -eq 0 ] && [ -e $boot_backup_script ] && $boot_backup_script
+
+        echo "All done."
+        read
+        exit 0
+    fi
+
+    if [ ! -e $prefix-$old_version/.config ]
+    then
+        echo "The config file for the old version could not be found, aborting."
+        read
+        exit 1
+    fi
+
+    echo "Updating from kernel $old_version to $new_version."
+    echo "Press any key to continue, Ctrl-C to abort."
     read
-    exit 0
+
+    cp $prefix-$old_version/.config $prefix-$new_version/
+
+    cd $prefix-$new_version
+    make oldconfig
 fi
 
-if [ ! -e $prefix-$old_version/.config ]
-then
-    echo "The config file for the old version could not be found, aborting."
-    read
-    exit 1
-fi
-
-echo "Updating from kernel $old_version to $new_version."
-echo "Press any key to continue, Ctrl-C to abort."
-read
-
-cp $prefix-$old_version/.config $prefix-$new_version/
-
-cd $prefix-$new_version
-make oldconfig
-make -j 12
+num_threads=$(echo 1.99+$(grep "processor.*:" /proc/cpuinfo | tail -n 1 | cut -f 2 -d ':')*0.75 | bc | cut -f 1 -d '.')
+make -j $num_threads
 
 if [ ! -e arch/x86_64/boot/bzImage ]
 then
@@ -148,6 +153,8 @@ fi
 echo "Compiled kernel."
 make modules_install
 echo "Installed modules."
+
+[ ! "$new_version" ] && echo "Error, new version not defined." && exit 1
 
 cp System.map /boot/System.map-$new_version
 echo "Copied System.map to /boot."
@@ -174,30 +181,28 @@ then
     echo "Copied initramfs image to ESP."
 fi
 
-if [ "$use_rt" ]
+if [ ! "$src_dir" ]
 then
-    echo "Using RT kernel, symlink is not updated."
-else
     cd ..
     rm linux
     ln -s $prefix-$new_version linux
     echo "Updated kernel symlink."
+
+    if [ "$use_grub" ]
+    then
+        sed -i "s/$old_version/$new_version/g" /boot/grub/grub.conf
+        echo "Updated grub config."
+    else
+        sed -i "s/$old_version/$new_version/g" $efi_dest_dir/BOOT/refind.conf
+        echo "Updated refind config."
+    fi
+    echo
+
+    cd "$cwd"
+
+    cleanup $new_version $prefix $efi_dest_dir
+    [ $? -eq 0 ] && [ -e $boot_backup_script ] && $boot_backup_script
 fi
-
-if [ "$use_grub" ]
-then
-    sed -i "s/$old_version/$new_version/g" /boot/grub/grub.conf
-    echo "Updated grub config."
-else
-    sed -i "s/$old_version/$new_version/g" $efi_dest_dir/BOOT/refind.conf
-    echo "Updated refind config."
-fi
-echo
-
-cd "$cwd"
-
-cleanup $new_version "$rt_grep_opts" $prefix $efi_dest_dir
-[ $? -eq 0 ] && [ -e $boot_backup_script ] && $boot_backup_script
 
 echo All done.
 read
