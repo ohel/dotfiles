@@ -7,6 +7,7 @@ scriptdir=$(dirname "$(readlink -f "$0")")
 
 qjackctl -p $QJACK_PRESET -s &
 pid_qjackctrl=$!
+sudo -n renice -n -15 $pid_qjackctrl
 sleep 1
 
 hydrogen -s $scriptdir/drum_practice.h2song &

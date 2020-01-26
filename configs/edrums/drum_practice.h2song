@@ -33,7 +33,7 @@
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
-   <gain>0.8</gain>
+   <gain>0.6</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
@@ -116,10 +116,10 @@
    <id>3</id>
    <name>Snare</name>
    <drumkit>Alesis Turbo (Hack)</drumkit>
-   <volume>1.02155</volume>
+   <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
-   <pan_R>0.7</pan_R>
+   <pan_R>0.8</pan_R>
    <gain>1</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
@@ -344,7 +344,7 @@
    <volume>0.685345</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
-   <pan_R>0.48</pan_R>
+   <pan_R>0.6</pan_R>
    <gain>3</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
@@ -461,11 +461,11 @@
    <id>8</id>
    <name>Floor Tom</name>
    <drumkit>Alesis Turbo (Hack)</drumkit>
-   <volume>1.04741</volume>
+   <volume>1</volume>
    <isMuted>false</isMuted>
-   <pan_L>0.44</pan_L>
+   <pan_L>0.7</pan_L>
    <pan_R>1</pan_R>
-   <gain>1</gain>
+   <gain>0.95</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
@@ -584,7 +584,7 @@
    <volume>0.685345</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
-   <pan_R>0.48</pan_R>
+   <pan_R>0.6</pan_R>
    <gain>1</gain>
    <applyVelocity>false</applyVelocity>
    <filterActive>false</filterActive>
@@ -703,7 +703,7 @@
    <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>1</volume>
    <isMuted>false</isMuted>
-   <pan_L>0.76</pan_L>
+   <pan_L>0.8</pan_L>
    <pan_R>1</pan_R>
    <gain>0.95</gain>
    <applyVelocity>true</applyVelocity>
@@ -824,7 +824,7 @@
    <volume>0.698276</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
-   <pan_R>0.48</pan_R>
+   <pan_R>0.6</pan_R>
    <gain>1.6</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
@@ -979,7 +979,7 @@
    <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
-   <pan_R>0.8</pan_R>
+   <pan_R>0.9</pan_R>
    <gain>0.8</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
@@ -1099,7 +1099,7 @@
    <volume>0.517241</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
-   <pan_R>0.74</pan_R>
+   <pan_R>0.9</pan_R>
    <gain>2</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
@@ -1253,7 +1253,7 @@
    <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>0.633621</volume>
    <isMuted>false</isMuted>
-   <pan_L>0.56</pan_L>
+   <pan_L>0.6</pan_L>
    <pan_R>1</pan_R>
    <gain>4</gain>
    <applyVelocity>true</applyVelocity>
@@ -1373,7 +1373,7 @@
    <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>0.543103</volume>
    <isMuted>false</isMuted>
-   <pan_L>0.98</pan_L>
+   <pan_L>0.9</pan_L>
    <pan_R>1</pan_R>
    <gain>1.75</gain>
    <applyVelocity>true</applyVelocity>
@@ -1493,7 +1493,7 @@
    <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>0.84</volume>
    <isMuted>false</isMuted>
-   <pan_L>0.96</pan_L>
+   <pan_L>1</pan_L>
    <pan_R>1</pan_R>
    <gain>1</gain>
    <applyVelocity>true</applyVelocity>
@@ -1545,7 +1545,7 @@
    <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>0.88</volume>
    <isMuted>false</isMuted>
-   <pan_L>0.9</pan_L>
+   <pan_L>1</pan_L>
    <pan_R>1</pan_R>
    <gain>0.5</gain>
    <applyVelocity>true</applyVelocity>
