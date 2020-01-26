@@ -105,7 +105,6 @@ if [ "$src_dir" ]
 then
     cd $src_dir
     make oldconfig
-    new_version=$(cat include/config/kernel.release)
 else
     cd /usr/src
     old_version=$(readlink linux | cut -f 2 -d '-')
@@ -131,7 +130,7 @@ else
     fi
 
     echo "Updating from kernel $old_version to $new_version."
-    echo "Press any key to continue, Ctrl-C to abort."
+    echo "Press return to continue, Ctrl-C to abort."
     read
 
     cp $prefix-$old_version/.config $prefix-$new_version/
@@ -154,6 +153,7 @@ echo "Compiled kernel."
 make modules_install
 echo "Installed modules."
 
+[ ! "$new_version" ] && new_version=$(cat include/config/kernel.release)
 [ ! "$new_version" ] && echo "Error, new version not defined." && exit 1
 
 cp System.map /boot/System.map-$new_version
