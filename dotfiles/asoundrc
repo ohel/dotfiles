@@ -1,7 +1,5 @@
 # The following environment variables are used in this config:
 #
-#    ALSA_OVERRIDE_PCM
-#    ALSA_OVERRIDE_CTL
 #    ALSA_DEFAULT_PCM
 #    ALSA_DEFAULT_CTL
 #    ALSA_HIFI_PCM
@@ -9,29 +7,25 @@
 #    ALSA_BLUETOOTH_MAC
 #
 # All are optional.
-# OVERRIDE overrides DEFAULT if set.
 # HIFI should use the better sounding audio interface, if many exist. Defaults to DEFAULT if not set in environment.
-# DEFAULT uses asound_default below if not set.
+# DEFAULT uses system_default if not set. See below for system_default description.
 # BLUETOOTH_MAC is used for BlueALSA device.
 #
-# There are two default devices, DEFAULT and OVERRIDE, to prevent reference loops such as:
-#
-#    ALSA_DEFAULT_PCM = eq, eq.slave = default, default.pcm = ALSA_DEFAULT_PCM
-#
-# Instead we will have:
-#
-#    ALSA_OVERRIDE_PCM = eq, eq.slave = asound_default, asound_default.pcm = ALSA_DEFAULT_PCM
-#
-# This enables pipelining certain devices without reference loops.
 # The point of the environmental variables is to support multiple audio devices, some of which might not use a mixer.
 # One may define a HIFI device for use with certain media players for example, completely skipping resampling and basically achieving bit-perfect audio.
 #
 # Control devices corresponding to PCM devices are defined for program compatibility.
 #
+# To prevent reference loops, default PCM can be overwritten from this file, but system_default should always point to a system specific device, not defined here. For example this chain works:
+#
+#    ALSA_DEFAULT_PCM = eq
+#    eq.slave.pcm = system_default
+#    pcm.system_default = "pcm.mydevice"
+#
 # Write system specific (real) devices to /opt/system_alsa_devices.conf.
-# In the file, define at least these two like this:
-# pcm.system_default = "my_dmix_device"
-# ctl.system_default = "my_dmix_ctl"
+# In the file, define at least these two devices so that they point to some device defined in the same file:
+# pcm.system_default = "pcm.my_device"
+# ctl.system_default = "ctl.my_ctl"
 
 </opt/system_alsa_devices.conf>
 
@@ -45,8 +39,8 @@ pcm.!default {
     name { @func concat
         strings [ "pcm."
             { @func getenv
-                vars [ ALSA_OVERRIDE_PCM ]
-                default "asound_default"
+                vars [ ALSA_DEFAULT_PCM ]
+                default "system_default"
             }
         ]
     }
@@ -56,31 +50,8 @@ ctl.!default {
     name { @func concat
         strings [ "ctl."
             { @func getenv
-                vars [ ALSA_OVERRIDE_CTL ]
-                default "asound_default"
-            }
-        ]
-    }
-}
-
-pcm.asound_default {
-    @func refer
-    name { @func concat
-        strings [ "pcm."
-            { @func getenv
-                vars [ ALSA_DEFAULT_PCM ]
-                default system_default
-            }
-        ]
-    }
-}
-ctl.asound_default {
-    @func refer
-    name { @func concat
-        strings [ "ctl."
-            { @func getenv
                 vars [ ALSA_DEFAULT_CTL ]
-                default system_default
+                default "system_default"
             }
         ]
     }
@@ -194,7 +165,7 @@ pcm.binaural {
         rate 44100
         pcm {
             type ladspa
-            slave.pcm "asound_default"
+            slave.pcm "system_default"
             path "/usr/lib/ladspa"
             plugins [ {
                 label bs2b # Bauer stereophonic-to-binaural DSP
@@ -219,7 +190,7 @@ pcm.softvol {
     @args [ CARD ]
     type softvol
     slave {
-        pcm "asound_default"
+        pcm "system_default"
     }
     control {
         name "Soft Master"
@@ -227,7 +198,7 @@ pcm.softvol {
             type string
             default {
                 @func refer
-                name 'asound_default.pcm.card'
+                name 'system_default.pcm.card'
             }
         }
     }
@@ -240,7 +211,7 @@ pcm.softvol {
 # WAV recording device.
 pcm.wav {
     type file
-    slave.pcm "asound_default"
+    slave.pcm "system_default"
     format "wav"
     file { @func concat
         strings [
@@ -261,7 +232,7 @@ pcm.eq {
     type plug
     slave.pcm {
         type equal
-        slave.pcm "asound_default"
+        slave.pcm "system_default"
     }
     hint {
         show on

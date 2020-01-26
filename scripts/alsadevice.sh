@@ -20,6 +20,6 @@ else
     [ "$1" = "hifi" ] && ctl="hifi"
     [ "$1" = "loop" ] && pcm="loop_playback_in_mix" && ctl="loop"
  
-    export ALSA_OVERRIDE_PCM=$pcm
-    [ "$ctl" ] && export ALSA_OVERRIDE_CTL=$ctl
+    export ALSA_DEFAULT_PCM=$pcm
+    [ "$ctl" ] && export ALSA_DEFAULT_CTL=$ctl
 fi
