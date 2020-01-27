@@ -1,5 +1,0 @@
-# Start RT IRQ if RT kernel.
-if [ "$(uname -r | grep rt)" ]
-	then /etc/init.d/rtirq start
-    einfo "Started RT IRQ service."
-fi

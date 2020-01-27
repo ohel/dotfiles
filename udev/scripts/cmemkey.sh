@@ -1,18 +1,20 @@
-#!/bin/bash
-# Connect CME M-Key MIDI keyboard to FluidSynth using JACK. Use GUI (qsynth).
-# Use realtime processing if possible.
+#!/bin/sh
+# Connect CME M-Key MIDI keyboard to FluidSynth using ALSA or JACK.
+# Give "jack" or "cli" as $1 or $2. Defaults to ALSA with GUI (qsynth).
+# In CLI, JACK is always used.
 
 export XAUTHORITY=$HOME/.Xauthority
 export DISPLAY=:0.0
-audiocard=julia_analog_hw
+audiocard=m4_hw
 
-if [ ! "$(ps -e | grep jackd)" ]
+use_cli=""
+use_jack=""
+[ "$1" = "cli" ] || [ "$2" = "cli" ] && use_cli=1
+[ "$1" = "jack" ] || [ "$2" = "jack" ] || [ "$use_cli" ] && use_jack=1
+
+if [ "$use_jack" ] && [ ! "$(ps -e | grep jackd)" ]
 then
-    if [ "$(uname -r | grep rt)" ]
-        then jackd -P 70 -R -T -t 1000 -dalsa -r44100 -p32 -n2 -P$audiocard -o2 &
-    else
-        jackd -R -T -t 1000 -dalsa -r44100 -p128 -n2 -P$audiocard -o2 &
-    fi
+    jackd -T -t 1000 -dalsa -r44100 -p128 -n2 -P$audiocard &
     counter=0
     while [ ! "$(ps -e | grep jackd)" ]
     do
@@ -21,10 +23,25 @@ then
         [ $counter -gt 5 ] && exit 1
     done
 fi
+sleep 0.5 || sleep 1
 
-if [ ! "$(ps -e | grep qsynth)" ]
+if [ "$use_cli" ] && [ ! "$(ps -e | grep fluidsynth)" ]
 then
-    setsid qsynth -a jack
+    xfce4-terminal -x fluidsynth -a jack -c 2 -C 0 -g 0.5 -G 1 -j -m alsa_seq -p FLUID -r 44100 -R 0 -z 128 -f $HOME/.config/fluidsynth_config &
+    counter=0
+    while [ ! "$(ps -e | grep fluidsynth)" ]
+    do
+        sleep 0.5 || sleep 1
+        counter=$(expr $counter + 1)
+        [ $counter -gt 5 ] && exit 1
+    done
+fi
+
+if [ ! "$use_cli" ] && [ ! "$(ps -e | grep qsynth)" ]
+then
+    qsynth_backend=alsa
+    [ "$use_jack" ] && qsynth_backend=jack
+    setsid qsynth -a $qsynth_backend
     counter=0
     while [ ! "$(ps -e | grep qsynth)" ]
     do
@@ -59,4 +76,5 @@ then
         [ $counter -gt 10 ] && exit 1
     done
 fi
+
 aconnect $input:0 $output:0
