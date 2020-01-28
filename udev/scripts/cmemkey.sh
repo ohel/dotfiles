@@ -1,7 +1,7 @@
 #!/bin/sh
 # Connect CME M-Key MIDI keyboard to FluidSynth using ALSA or JACK.
 # Give "jack" or "cli" as $1 or $2. Defaults to ALSA with GUI (qsynth).
-# In CLI, JACK is always used.
+# In CLI and if jackd is already running, JACK is always used.
 
 export XAUTHORITY=$HOME/.Xauthority
 export DISPLAY=:0.0
@@ -10,11 +10,13 @@ audiocard=m4_hw
 use_cli=""
 use_jack=""
 [ "$1" = "cli" ] || [ "$2" = "cli" ] && use_cli=1
-[ "$1" = "jack" ] || [ "$2" = "jack" ] || [ "$use_cli" ] && use_jack=1
+[ "$1" = "jack" ] || [ "$2" = "jack" ] && use_jack=1
+
+[ "$use_cli" ] || [ "$(ps -e | grep jackd)" ] && use_jack=1
 
 if [ "$use_jack" ] && [ ! "$(ps -e | grep jackd)" ]
 then
-    jackd -T -t 1000 -dalsa -r44100 -p128 -n2 -P$audiocard &
+    jackd -T -t 1000 -dalsa -r44100 -p32 -n4 -P$audiocard &
     counter=0
     while [ ! "$(ps -e | grep jackd)" ]
     do
@@ -41,7 +43,7 @@ if [ ! "$use_cli" ] && [ ! "$(ps -e | grep qsynth)" ]
 then
     qsynth_backend=alsa
     [ "$use_jack" ] && qsynth_backend=jack
-    setsid qsynth -a $qsynth_backend
+    setsid qsynth -a $qsynth_backend &
     counter=0
     while [ ! "$(ps -e | grep qsynth)" ]
     do
@@ -77,4 +79,5 @@ then
     done
 fi
 
+echo $input $output
 aconnect $input:0 $output:0
