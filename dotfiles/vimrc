@@ -210,6 +210,8 @@ if exists("*plug#begin")
     Plug 'tomtom/tcomment_vim' " Code commenting.
     Plug 'Valloric/YouCompleteMe', { 'on': [], 'do': 'cd $VIMHOME/plugged/YouCompleteMe && ./install.py' }
     Plug 'vim-airline/vim-airline' " Status/tabline.
+    Plug 'tpope/vim-fugitive' " Git wrapper.
+    Plug 'tommcdo/vim-fugitive-blame-ext' " Git blame status line.
     call plug#end()
 endif
 
@@ -237,6 +239,20 @@ if isdirectory($VIMHOME . "/plugged/vim-arpeggio")
     call arpeggio#map('n', '', 0, 'fj', 'i<c-r>=col(".") == col("$")-1 ? "\<lt>right>" : ""<cr>')
     " No highlight.
     call arpeggio#map('n', '', 0, 'nh', ':noh<cr>')
+
+    " Toggle Git blame window.
+    if isdirectory($VIMHOME . "/plugged/vim-fugitive")
+        function! ToggleGitBlame()
+            if @% =~# "fugitiveblame"
+                :exe "normal \<c-w>c"
+            else
+                :exe "normal :Gblame\<cr>"
+            endif
+        endfunction
+        call arpeggio#map('n', '', 0, 'gb', ':call ToggleGitBlame()<cr>')
+        call arpeggio#map('i', '', 0, 'gb', '<c-o>:call ToggleGitBlame()<cr>')
+    endif
+
 endif
 
 if isdirectory($VIMHOME . "/plugged/unite.vim")
