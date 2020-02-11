@@ -11,4 +11,4 @@ then
     lockscreen=$(ls -1 $lockscreensdir/*.png | head -n $index | tail -n 1)
 fi
 
-i3lock -t -e -i $lockscreen
+[ "$(ps -e | grep i3lock)" ] || i3lock -t -e -i $lockscreen
