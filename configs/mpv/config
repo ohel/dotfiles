@@ -2,9 +2,6 @@
 [common]
 profile-desc="common settings for all profiles"
 
-# cache, kB
-cache=65536
-
 # monitor aspect ratio
 monitoraspect=16:9
 
@@ -17,7 +14,7 @@ volume=100
 osd-color="#40FFFFFF"
 
 no-input-default-bindings
-input-file=~/.commoncache/mpvfifo
+input-ipc-server=~/.commoncache/mpvfifo
 
 ###############################################################################
 [common-movie]
