@@ -1,16 +1,17 @@
 #!/bin/sh
 # Download YouTube videos using youtube-dl in a well compressed, good-quality format.
+# $1 = url of the video
+# $2 = "hq" for high quality defaults, or audio format id
+# $3 = video format id
 
-audio_fid=171 # vorbis@128k
-video_fid=136 # avc1.4d401f, 720p, 30fps
+[ "$#" -eq 0 ] && echo "No URL given." && exit 1
+hq=0 && [ "$2" = "hq" ] && hq=1
+
+[ "$(echo "$2" | grep -o "^[0-9]*$")" ] && audio_fid=$2 || audio_fid=171 # vorbis@128k
+[ "$(echo "$3" | grep -o "^[0-9]*$")" ] && video_fid=$3 || video_fid=136 # avc1.4d401f, 720p, 30fps
 hq_audio_fid=251 # opus@160k
 hq_video_30_fid=137 # avc1.640028, 1080p, 30fps
 hq_video_60_fid=299 # avc1.64002a, 1080p, 60fps
-
-[ "$#" -eq 0 ] && echo "No URL given." && exit 1
-
-hq=0
-[ "$2" = "hq" ] && hq=1
 
 formats=$(youtube-dl -F "$1" | grep -o "^[0-9]\{1,3\}" | tr "\n" ",")
 
