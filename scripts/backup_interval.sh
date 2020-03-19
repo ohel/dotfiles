@@ -66,9 +66,9 @@ backup() {
             rsync -a $excludes --delete /home/$user/ $userbackupdir/
             date > $userbackupdir/last_backup_timestamp.txt
             chown $user:$user $userbackupdir $userbackupdir/last_backup_timestamp.txt
+            echo
         done
 
-        clear
         echo "Starting general backup."
         sudo $scriptsdir/backup_local.sh misconly
     fi

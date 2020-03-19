@@ -6,7 +6,7 @@
 &lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Samples from Hydrogen's GMRockKit, TR808EmulationKit + some kick.&lt;/p>&lt;/body>&lt;/html></info>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Samples from Hydrogen's GMRockKit, TR808EmulationKit + custom kick drum.&lt;/p>&lt;/body>&lt;/html></info>
  <license>GPL</license>
  <image></image>
  <imageLicense>undefined license</imageLicense>
@@ -51,7 +51,7 @@ p, li { white-space: pre-wrap; }
     <component_id>0</component_id>
     <gain>1</gain>
     <layer>
-     <filename>Dry-Kick.wav</filename>
+     <filename>Kick.wav</filename>
      <min>0</min>
      <max>1</max>
      <gain>1</gain>
@@ -92,7 +92,7 @@ p, li { white-space: pre-wrap; }
   <instrument>
    <id>3</id>
    <name>Snare</name>
-   <volume>1.02155</volume>
+   <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
    <pan_R>0.7</pan_R>
@@ -105,7 +105,7 @@ p, li { white-space: pre-wrap; }
    <Attack>0</Attack>
    <Decay>0</Decay>
    <Sustain>1</Sustain>
-   <Release>1000</Release>
+   <Release>256</Release>
    <muteGroup>-1</muteGroup>
    <midiOutChannel>-1</midiOutChannel>
    <midiOutNote>38</midiOutNote>
@@ -125,14 +125,14 @@ p, li { white-space: pre-wrap; }
      <filename>Snare-Softest.wav</filename>
      <min>0</min>
      <max>0.2</max>
-     <gain>1</gain>
+     <gain>0.6</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
      <filename>Snare-Soft.wav</filename>
      <min>0.2</min>
      <max>0.4</max>
-     <gain>1</gain>
+     <gain>0.8</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
@@ -320,7 +320,7 @@ p, li { white-space: pre-wrap; }
   <instrument>
    <id>8</id>
    <name>Floor Tom</name>
-   <volume>1.04741</volume>
+   <volume>1</volume>
    <isMuted>false</isMuted>
    <pan_L>0.44</pan_L>
    <pan_R>1</pan_R>

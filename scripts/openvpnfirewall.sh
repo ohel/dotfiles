@@ -17,7 +17,7 @@ do
     if [ "$ip" ]
     then
         IF=$physical_device
-        [ "$2" = "allowlan" ] && subnet=$(echo $ip | cut -f 1 -d '.')
+        [ "$2" = "allowlan" ] && lannet=$(echo $ip | cut -f 1 -d '.')
         break
     fi
 done
@@ -96,13 +96,13 @@ ip6tables -P INPUT DROP
 ip6tables -P OUTPUT DROP
 lanstate="blocked"
 
-if [ "$subnet" ]
+if [ "$lannet" ]
 then
-    lannet=0 # 10.0.x.x
-    [ "$subnet" = "192" ] && lannet=168 # 192.168.x.x
+    subnet=0 # 10.0.x.x
+    [ "$lannet" = "192" ] && subnet=168 # 192.168.x.x
     lanstate="allowed"
-    iptables -A INPUT -s $subnet.$lannet.0.0/16 -d $subnet.$lannet.0.0/16 -j ACCEPT
-    iptables -A OUTPUT -s $subnet.$lannet.0.0/16 -d $subnet.$lannet.0.0/16 -j ACCEPT
+    iptables -A INPUT -s $lannet.$subnet.0.0/16 -d $lannet.$subnet.0.0/16 -j ACCEPT
+    iptables -A OUTPUT -s $lannet.$subnet.0.0/16 -d $lannet.$subnet.0.0/16 -j ACCEPT
 fi
 
 iptables -A INPUT -i lo -j ACCEPT

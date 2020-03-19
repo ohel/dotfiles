@@ -33,7 +33,7 @@
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
-   <gain>0.6</gain>
+   <gain>1</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
@@ -59,7 +59,7 @@
     <component_id>0</component_id>
     <gain>1</gain>
     <layer>
-     <filename>Dry-Kick.wav</filename>
+     <filename>Kick.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -132,7 +132,7 @@
    <Attack>0</Attack>
    <Decay>0</Decay>
    <Sustain>1</Sustain>
-   <Release>1000</Release>
+   <Release>256</Release>
    <randomPitchFactor>0</randomPitchFactor>
    <muteGroup>-1</muteGroup>
    <isStopNote>false</isStopNote>
@@ -159,7 +159,7 @@
      <rubberPitch>1</rubberPitch>
      <min>0</min>
      <max>0.2</max>
-     <gain>1</gain>
+     <gain>0.6</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
@@ -176,7 +176,7 @@
      <rubberPitch>1</rubberPitch>
      <min>0.2</min>
      <max>0.4</max>
-     <gain>1</gain>
+     <gain>0.8</gain>
      <pitch>0</pitch>
     </layer>
     <layer>
