@@ -27,8 +27,13 @@ cat > $index << EOF
 </head><body>
 <script>
     function toggleSingleColumn() {
-      const list = document.getElementById("mainlist");
-      list.classList.toggle("centered");
+        const list = document.getElementById("mainlist");
+        list.classList.toggle("centered");
+        if (list.classList.contains("centered")) {
+            localStorage.setItem("columnMode", "single");
+        } else {
+            localStorage.removeItem("columnMode");
+        }
     }
 </script>
 <h1>$title</h1>
@@ -78,7 +83,20 @@ do
     done
     echo "</ol></li>" >> $index
 done
-echo "</ul></body></html>" >> $index
+
+cat >> $index << EOF
+</ul>
+<script>
+    const columnMode = localStorage.getItem("columnMode");
+    if (columnMode === "single") {
+        const toggle = document.getElementById("toggle");
+        toggle.checked = true;
+        const list = document.getElementById("mainlist");
+        list.classList.add("centered");
+    }
+</script>
+</body></html>
+EOF
 
 cat > .htaccess << EOF
 RewriteCond %{HTTP:X-Forwarded-Proto} !https
