@@ -1,4 +1,5 @@
 umask 0077
+stty -ixon # disable software flow control keys (^S, ^Q)
 
 [ -e ~/.profile.env ] && source ~/.profile.env
 
