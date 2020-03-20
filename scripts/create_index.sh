@@ -3,9 +3,11 @@
 # White spaces are not supported in file or directory names.
 # A dummy .htaccess file is written also.
 # Creates image thumbnail links if they exist (thumb_*.jpg).
+# If $3 is given and evaluates to boolean true, images are embedded even without thumbs.
 
 root=${1:-$(basename $(pwd))}
 title=${2:-$root}
+preview_all=${3:-""}
 index="index.html"
 
 echo "Creating index for /$root"
@@ -43,13 +45,18 @@ do
     size=$(du -h "$filename" | xargs echo | cut -f 1 -d ' ')
     if [ "$item" != "index.html" ] &&
         [ "$item" != ".htaccess" ] &&
-        [ ! "$(echo $item | grep thumb_.*\.jpg)" ]
+        [ ! "$(echo $item | grep "thumb_.*\.\(\(jpg\)\|\(png\)\)")" ]
     then
         echo "<li><a href=\"/$root/$item\">$item</a> ($size)" >> $index
         [ "${item##*.}" = "mp4" ] && echo " [VIDEO]" >> $index
-        if [ "$(ls thumb_${item%.*}.jpg 2>/dev/null)" ]
+        if [ -e thumb_${item%.*}.jpg ] || [ -e thumb_${item%.*}.png ]
         then
-           echo "<a href=\"/$root/$item\"></br><img src=\"thumb_${item%.*}.jpg\" alt=\"img\"></a>" >> $index
+            ext=jpg
+            [ -e thumb_${item%.*}.png ] && ext=png
+            echo "<a href=\"/$root/$item\"></br><img src=\"thumb_${item%.*}.$ext\" alt=\"img\"></a>" >> $index
+        elif [ "$preview_all" ] && $([ "${item##*.}" = "jpg" ] || [ "${item##*.}" = "png" ])
+        then
+            echo "<a href=\"/$root/$item\"></br><img src=\"$item\" alt=\"img\"></a>" >> $index
         fi
         echo "</li>" >> $index
     fi
