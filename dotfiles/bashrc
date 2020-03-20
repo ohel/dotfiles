@@ -1,5 +1,5 @@
 umask 0077
-stty -ixon # disable software flow control keys (^S, ^Q)
+[[ $- == *i* ]] && stty -ixon # disable software flow control keys (^S, ^Q) for interactive shells
 
 [ -e ~/.profile.env ] && source ~/.profile.env
 
