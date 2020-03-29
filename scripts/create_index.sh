@@ -4,6 +4,14 @@
 # A dummy .htaccess file is written also.
 # Creates image thumbnail links if they exist (thumb_*.jpg).
 # If $3 is given and evaluates to boolean true, images are embedded even without thumbs.
+# If there's a file named update.sh, it is omitted from the index.
+# For an image gallery, the update.sh contents could be something like this:
+    # #!/bin/sh
+    # create_thumbs.sh 600 *.jpg *.png
+    # create_index.sh root Root
+    # chmod o+r *
+    # chmod o+x .
+    # rsync -ah --progress --delete ./ server:~/public_html/root
 
 root=${1:-$(basename $(pwd))}
 title=${2:-$root}
@@ -18,6 +26,7 @@ cat > $index << EOF
     body { background-color: #303030; color:darkgray; padding: 3em; }
     html { font-family: sans-serif; }
     a { color: white; text-decoration: none; }
+    a.hash { color: #80d0ff; }
     img { margin-top: 0.5em; margin-bottom: 2em; }
     li { float: left; margin-right: 3em; margin-bottom: 1em; }
     hr { margin-bottom: 3em; }
@@ -26,33 +35,36 @@ cat > $index << EOF
 </style>
 </head><body>
 <script>
-    function toggleSingleColumn() {
+    function toggleMultiColumn() {
         const list = document.getElementById("mainlist");
         list.classList.toggle("centered");
         if (list.classList.contains("centered")) {
-            localStorage.setItem("columnMode", "single");
-        } else {
             localStorage.removeItem("columnMode");
+        } else {
+            localStorage.setItem("columnMode", "multi");
         }
     }
 </script>
 <h1>$title</h1>
-<input type="checkbox" onclick="toggleSingleColumn()" id="toggle">
-<label for="toggle">Single column</label>
+<input type="checkbox" onclick="toggleMultiColumn()" id="toggle">
+<label for="toggle">View in multiple columns</label>
 <hr>
-<ol id="mainlist">
+<ol id="mainlist" class="centered">
 EOF
 
-# Files in base directory, with thumbnails.
+li=1
+
+# Files in base directory, with thumbnails. This basically creates an image gallery.
 for filename in $(find ./ -maxdepth 1 -type f | sort)
 do
     item=$(basename "$filename")
     size=$(du -h "$filename" | xargs echo | cut -f 1 -d ' ')
     if [ "$item" != "index.html" ] &&
         [ "$item" != ".htaccess" ] &&
+        [ "$item" != "update.sh" ] &&
         [ ! "$(echo $item | grep "thumb_.*\.\(\(jpg\)\|\(png\)\)")" ]
     then
-        echo "<li><a href=\"/$root/$item\">$item</a> ($size)" >> $index
+        echo "<li id=li$li><a href=\"/$root/$item\">$item</a> <a href=\"#li$li\" class=\"hash\">⚓</a> ($size)" >> $index
         [ "${item##*.}" = "mp4" ] && echo " [VIDEO]" >> $index
         if [ -e thumb_${item%.*}.jpg ] || [ -e thumb_${item%.*}.png ]
         then
@@ -64,11 +76,12 @@ do
             echo "<a href=\"/$root/$item\"></br><img src=\"$item\" alt=\"img\"></a>" >> $index
         fi
         echo "</li>" >> $index
+        li=$(expr $li + 1)
     fi
 done
 echo "</ol><ul>" >> $index
 
-# Subdirectories.
+# Subdirectory listing.
 for filepath in $(find ./ -maxdepth 1 -mindepth 1 -type d | sort)
 do
     path=$(basename "$filepath")
@@ -84,15 +97,16 @@ do
     echo "</ol></li>" >> $index
 done
 
+# Store the column mode selection to local storage to ease browsing.
 cat >> $index << EOF
 </ul>
 <script>
     const columnMode = localStorage.getItem("columnMode");
-    if (columnMode === "single") {
+    if (columnMode === "multi") {
         const toggle = document.getElementById("toggle");
         toggle.checked = true;
         const list = document.getElementById("mainlist");
-        list.classList.add("centered");
+        list.classList.remove("centered");
     }
 </script>
 </body></html>
