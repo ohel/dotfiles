@@ -32,9 +32,16 @@ then
 elif [ "$1" = "toggle-window" ]
 then
     [ "$ql" ] && $ql --toggle-window
-    # Spotify changes its window title when playing a song, so this only works while paused.
-    [ "$spotify" ] && spotifywin=$(wmctrl -l | grep " Spotify$" | cut -f 1 -d ' ')
-    [ "$spotifywin" ] && wmctrl -i -R $spotifywin
+    [ "$spotify" ] && spotifywin=$(wmctrl -lx | grep -i "spotify.spotify" | cut -f 1 -d ' ')
+    if [ "$spotifywin" ]
+    then
+        if [ "$(xwininfo -id $spotifywin | grep IsUnMapped)" ]
+        then
+            xdotool windowmap $spotifywin
+        else
+            xdotool windowminimize $spotifywin
+        fi
+    fi
 elif [ "$1" = "random-album" ]
 then
     [ "$ql" ] && $ql --random=album
