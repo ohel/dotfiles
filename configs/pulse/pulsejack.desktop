@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=PulseAudio JACK pipe
+Exec=pulsejack.sh
+Icon=audio-card
+Terminal=true
+Type=Application
+Categories=Audio
