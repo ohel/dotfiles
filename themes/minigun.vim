@@ -32,7 +32,7 @@ hi MoreMsg      guifg=#eeeeee gui=none ctermfg=255
 hi Visual       guifg=#ffffff guibg=#585858 gui=none ctermfg=015 ctermbg=240
 hi VisualNOS    guifg=#ffffff guibg=#0000ff gui=none ctermfg=015 ctermbg=012
 hi IncSearch    guifg=#ff0000 guibg=#ffffff gui=none ctermfg=009 ctermbg=015
-hi Search       guifg=#ffffff guibg=#00ffff gui=none ctermfg=015 ctermbg=014
+hi Search       guifg=#000000 guibg=#00ffff gui=none ctermfg=015 ctermbg=014
 hi SpecialKey   guifg=#ffff00 gui=none ctermfg=011
 
 hi Title        guifg=#ff0000 gui=none ctermfg=009
