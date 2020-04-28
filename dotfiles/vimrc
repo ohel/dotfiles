@@ -663,6 +663,11 @@ function! OnVimEnter()
         imap <silent><a-c> <esc>åc^
     endif
 
+    " XML formatting using Python.
+    if executable('python3')
+        nnoremap <leader>x :%!python3 -c "import xml.dom.minidom, sys; print(xml.dom.minidom.parse(sys.stdin).toprettyxml())"<cr>
+    endif
+
     " Need to set these last here, otherwise they don't always work.
     set visualbell " Set visual bell instead of audible beep.
     set t_vb= " Disable visual flashing on bell.
