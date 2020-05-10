@@ -6,7 +6,7 @@
 # The encoding process is naively parallelized.
 
 destination=$(readlink -f ${1:-./})
-parallel_processes=3
+parallel_processes=7
 encoding="ogg"
 [ "$#" -gt 1 ] && [ "$2" = "mp3" ] && encoding="mp3"
 
@@ -15,7 +15,7 @@ encode() {
     encoding=$1
     dest_dir="$2"
     filein=$(echo $3 | sed s/\'$// | sed s/^\'// | sed s/\'\'\'/\'/g)
-    overridealbum=$(echo $4 | sed s/_/" "/g)
+    override_album=$(echo $4 | sed s/_/" "/g)
     fileid=$(mutagen-inspect "$filein" | head -n 2 | tail -n 1)
     typeflac=$(echo $fileid | grep FLAC)
     typeogg=$(echo $fileid | grep Vorbis)
@@ -99,10 +99,10 @@ export -f encode
 
 while [ 1 ]
 do
-	echo "Drag flac, ogg or mp3 files to the terminal window to start copying:"
-	read list
+    echo "Drag flac, ogg or mp3 files to the terminal window to start copying:"
+    read list
 
-	! [ "$list" ] && exit 0
+    ! [ "$list" ] && exit 0
 
     echo "Type in an album name or leave empty to read from tags:"
     read album
@@ -121,6 +121,6 @@ do
     echo $list | tr " " "\000" | xargs --null -I {} -n 1 -P $parallel_processes bash -c 'encode "$@"' _ $encoding "$destination" "{}" "$album"
 
     echo ""
-	echo "All done."
-	echo ""
+    echo "All done."
+    echo ""
 done
