@@ -5,9 +5,12 @@ QJACK_PRESET=${1:-edrums}
 
 scriptdir=$(dirname "$(readlink -f "$0")")
 
-qjackctl -p $QJACK_PRESET -s &
-pid_qjackctrl=$!
-sudo -n renice -n -10 $pid_qjackctrl
+# Use existing JACK server if running.
+jackd_pid=$(ps -e | grep jackd | cut -f 1 -d ' ')
+
+[ "$jackd_pid" ] || qjackctl -p $QJACK_PRESET -s &
+[ "$jackd_pid" ] || pid_qjackctrl=$!
+sudo -n renice -n -10 $jackd_pid $pid_qjackctrl
 sleep 1
 
 hydrogen -s $scriptdir/drum_practice.h2song &
@@ -15,7 +18,7 @@ pid_hydrogen=$!
 sleep 1
 
 md_exe=mididings
-# mididings_script is originally named mididings, but there's a directory by the same name for Python code if installing like I did, i.e. manually to an arbitrary location
+# The mididings_script is originally named mididings, but there's a directory by the same name for Python code if installing like I did, i.e. manually to an arbitrary location.
 [ -e /opt/programs/mididings/mididings_script ] && md_exe=/opt/programs/mididings/mididings_script
 $md_exe -f $scriptdir/alesis_turbo.py &
 pid_mididings=$!
@@ -39,5 +42,5 @@ read temp
 
 kill $pid_mididings
 kill $pid_hydrogen
-kill $pid_qjackctrl
-killall jackd
+[ "$pid_qjackctrl" ] && kill $pid_qjackctrl
+[ "$pid_qjackctrl" ] && killall jackd

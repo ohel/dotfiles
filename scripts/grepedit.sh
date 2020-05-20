@@ -5,7 +5,6 @@
 [ "$(which vim 2>/dev/null)" ] && editor="vim"
 [ "$(which gvim 2>/dev/null)" ] && editor="gvim -p"
 
-
 rg_exe=$(which rg 2>/dev/null)
 ag_exe=$(which ag 2>/dev/null)
 

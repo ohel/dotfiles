@@ -68,6 +68,10 @@ Print
 "~/.scripts/screenshot.sh 2"
 Mod4 + Print
 
+# Remap Caps Lock to Escape. Shift + Caps_Lock generates normal Caps_Lock. This is possible using xbindkeys and xdotool but apparently not using setxkbmap or xmodmap.
+"xdotool key --clearmodifiers Escape"
+Caps_Lock
+
 # Terminal buffer scrolling with Alt+J/K (caps), makes it ergonomic.
 "xdotool keyup j && xdotool key --clearmodifiers Shift+Page_Down"
 Shift + Mod1 + j
