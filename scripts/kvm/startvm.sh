@@ -29,13 +29,13 @@ then
     vncviewer="vncviewer :$net_id"
 fi
 
-if [ "$bridged_network" = 1 ] && [ "$(brctl show $net_bridge 2>&1 | grep No)" ]
+if [ "$bridged_network" = 1 ] && [ "$(brctl show $net_bridge 2>&1 | grep "\(No\)\|\(not \)")" ]
 then
     echo "Set up the bridged network manually first."
     exit 1
 fi
 
-if [ "$(brctl show $vm_bridge 2>&1 | grep No)" ]
+if [ "$(brctl show $vm_bridge 2>&1 | grep "\(No\)\|\(not \)")" ]
 then
     if [ "$auto_network" = 0 ]
     then
