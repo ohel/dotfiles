@@ -8,7 +8,7 @@ vm_name="${2:-"KVM"}"
 net_id=${3:-10} # Used as the last number of static IP address of the guest, MAC address and VNC display.
 
 vm_mem_mb=8192
-vm_num_cores=2
+vm_num_cores=4
 vm_threads_per_core=1
 
 audio=0 # Note: on modern Windows guests the audio emulation bugs so that there are cracks and pops all the time.
@@ -115,7 +115,6 @@ env $sound_params qemu-system-x86_64 \
 -m $vm_mem_mb \
 -k fi \
 -display none \
--vga $vga \
 -device virtio-net-pci,netdev=net"$net_id"_0 -netdev tap,id=net"$net_id"_0,br=$vm_bridge,script=kvm_tap_vmbridge.sh \
 -drive file="$img_name",if=virtio,format=raw \
 $bridged_net_devices \
