@@ -12,16 +12,16 @@
 DRUMS="Alesis Turbo"
 QJACK_PRESET=${1:-edrums}
 
-if [ ! "$(aconnect -i | grep "Alesis Turbo")" ]
+if [ ! "$(aconnect -i | grep "$DRUMS")" ]
 then
     echo "Drums not connected? Press return to try again."
     read tmp
 fi
-[ ! "$(aconnect -i | grep "Alesis Turbo")" ] && exit 1
+[ ! "$(aconnect -i | grep "$DRUMS")" ] && exit 1
 
 scriptdir=$(dirname "$(readlink -f "$0")")
 HYDROGEN_SONG="$scriptdir/drum_practice.h2song"
-MIDIDINGS_SCRIPT="$(echo "$DRUMS" | tr '[:upper:]' '[:lower:]' | sed "s/ /_/g").py"
+MIDIDINGS_SCRIPT="$scriptdir/$(echo "$DRUMS" | tr '[:upper:]' '[:lower:]' | sed "s/ /_/g").py"
 
 # Use existing JACK server if running.
 jackd_pid=$(ps -e | grep jackd | cut -f 1 -d ' ')
