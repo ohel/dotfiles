@@ -1,6 +1,6 @@
 #!/bin/bash
 # Given an input Markdown file, create a simple LaTeX file out of it.
-# (Sub)titles are converted to (sub)sections, quotes are converted and unordered lists are itemized.
+# (Sub)titles are converted to (sub)sections, quotes are converted and unordered lists are itemized. <hr> elements are converted to pagebreaks.
 # If $2 = pdf, a PDF is made from the result LaTeX file.
 
 [ ! "$1" ] && echo "Missing Markdown file argument." && exit 1
@@ -58,6 +58,7 @@ do
 done
 
 sed -i "s/^\* /    \\\\\item /" "$texfile"
+sed -i "s/<hr>/\\\pagebreak \[4\]/" "$texfile"
 
 if [ "$2" = "pdf" ]
 then
