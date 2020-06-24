@@ -1,12 +1,12 @@
 #!/bin/bash
 # Given an input Markdown file, create a simple LaTeX file out of it using these rules:
-# * (Sub)titles are converted to (sub)sections.
-# * Quotes are converted to LaTeX style.
-# * Unordered lists are itemized.
+# * Hash-prefixed (sub(sub))titles are converted to (sub(sub))sections.
+# * Double quotes are converted to LaTeX style.
+# * Unordered lists (by asterisks) are itemized.
 # * <hr> elements are converted to pagebreaks.
 # * **bold** text is converted to \textbf{bold}.
 # * _emphasis_ is converted to \emph{emphasis}.
-# If $2 = pdf, a PDF is made from the result LaTeX file.
+# If $2 = pdf, a PDF is made from the result LaTeX file and opened with xdg-open.
 
 [ ! "$1" ] && echo "Missing Markdown file argument." && exit 1
 
@@ -38,6 +38,7 @@ echo "\end{document}" >> "$texfile"
 
 sed -i "s/^# \(.*\)/\\\section{\1}/" "$texfile"
 sed -i "s/^## \(.*\)/\\\subsection{\1}/" "$texfile"
+sed -i "s/^### \(.*\)/\\\subsubsection{\1}/" "$texfile"
 sed -i "s/\"\([^\"]*\)\"/\`\`\1''/g" "$texfile"
 
 lines=""
@@ -72,4 +73,5 @@ then
     pdflatex "$texfile"
     rm "$basename.aux"
     rm "$basename.log"
+    which xdg-open 2>&1 >/dev/null && xdg-open "$basename.pdf"
 fi
