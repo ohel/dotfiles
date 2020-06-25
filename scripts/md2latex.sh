@@ -12,9 +12,10 @@
 
 basename=$(basename -s .md "$1")
 texfile="$basename.tex"
+doctitle=$(echo $basename | tr [a-z] [A-Z])
 
 cat > "$texfile" << EOF
-\def\doctitle{$basename}
+\def\doctitle{$doctitle}
 \def\docdate{$(date +%d.%m.%Y)}
 
 \RequirePackage{amsmath}
@@ -25,6 +26,8 @@ cat > "$texfile" << EOF
 \RequirePackage{float}
 \RequirePackage{graphicx}
 \documentclass[a4paper,12pt]{article}
+\setlength{\parindent}{0pt}
+\parskip = \baselineskip
 \begin{document}
 \begin{center}\section*{\doctitle\\\{\small\docdate}}\end{center}\vspace{1em}
 \renewcommand{\baselinestretch}{1.5}\normalsize
