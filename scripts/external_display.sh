@@ -16,9 +16,15 @@ script_mode=${1:-"switch"}
 primary_background=~/.themes/background
 secondary_background=~/.themes/background2
 testfile=/tmp/external_display
+HIDPI_WIDTH=3840
 
 primary_display=${2:-$(xrandr | grep " connected" | cut -f 1 -d ' ' | head -n 1)}
+
+# Sometimes the native resolution is not the first mode line, but the second. This might be the case with e.g. 4K televisions.
 primary_mode=$(xrandr | grep -A 1 $primary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
+primary_mode_candidate=$(xrandr | grep -A 2 $primary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
+[ $(echo $primary_mode | grep -o "^[0-9]\{3,4\}") -lt $(echo $primary_mode_candidate | grep -o "^[0-9]\{3,4\}") ] && primary_mode=$primary_mode_candidate
+
 echo "Primary display: $primary_display with mode $primary_mode."
 p_width=$(echo $primary_mode | cut -f 1 -d 'x')
 
@@ -100,7 +106,7 @@ else
 fi
 
 # Xrandr only shows the physical size if the display is connected, therefore we need to call xrandr again.
-# The DPI values are arbitrarily chosen and based on personal preference and commonly used hardware.
+# Sometimes the size does not actually match real world. In that case, one can export DPI per-system in e.g. ~/.profile.env_extra
 p_phys_width=$(xrandr | grep -A 1 $primary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
 if [ "$p_phys_width" ]
 then
@@ -108,8 +114,12 @@ then
     p_dpi_set=96
     [ $p_dpi_calc -gt 100 ] && p_dpi_set=112
     [ $p_dpi_calc -gt 140 ] && [ $p_phys_width -gt 300 ] && p_dpi_set=144
+    [ "$DPI" ] && p_dpi_set=$DPI
     common_dpi=$p_dpi_set
 fi
+
+scale=1
+[ $p_width -eq $HIDPI_WIDTH ] && scale=2
 
 [ "$secondary_display" ] && s_phys_width=$(xrandr | grep -A 1 $secondary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
 if [ "$s_phys_width" ]
@@ -117,10 +127,21 @@ then
     s_phys_width=$(xrandr | grep -A 1 $secondary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
     s_dpi_calc=$(echo "scale=2; $s_width / $s_phys_width * 25.4" | bc | cut -f 1 -d '.')
     s_dpi_set=96
-    [ $s_dpi_calc -gt 100 ] && s_dpi_set=112
+    [ $s_dpi_calc -gt 100 ] && s_dpi_set=106
     [ $s_dpi_calc -gt 140 ] && [ $s_phys_width -gt 300 ] && s_dpi_set=144
+    [ $s_width -eq $HIDPI_WIDTH ] && scale=2
     (! [ "$common_dpi" ] || [ $s_dpi_set -lt $p_dpi_set ]) && common_dpi=$s_dpi_set
 fi
 
-which xfconf-query >/dev/null 2>&1 && xfconf-query -c xsettings -p /Xft/DPI -s $common_dpi
+# HiDPI (4K) displays need some magic. Not all applications (e.g. GTK2) support scaling, so double the DPI is required for them to look "normal".
+# However, we only want this if GDK is set to scale down font sizes accordingly. Otherwise the window scaling factor should be used.
+[ "$(env | grep GDK_DPI_SCALE=0.5)" ] && common_dpi=$(expr 2 \* $common_dpi)
+echo Final DPI: $common_dpi
+
+if [ $(which xfconf-query >/dev/null 2>&1) ]
+then
+    xfconf-query -c xsettings -p /Xft/DPI -s $common_dpi
+    [ "$(env | grep GDK_SCALE=2)" ] || xfconf-query -c xsettings -p /Gdk/WindowScalingFactor -s $scale
+fi
+
 which feh >/dev/null 2>&1 && feh --bg-fill --no-fehbg $primary_background $secondary_background 2>/dev/null

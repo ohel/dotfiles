@@ -10,11 +10,18 @@ then
 fi
 
 # Thread limit for ImageMagick
-export MAGICK_THREAD_LIMIT=4
+export MAGICK_THREAD_LIMIT=16
 
 # Enable X fonts.
 export GDK_USE_XFT=1
 export QT_XFT=1
+
+# If 4K scaling is set in e.g. ~/.profile.env_extra
+if [ "$(env | grep SCALE_4K=1)" ]
+then
+    export GDK_SCALE=2
+    export GDK_DPI_SCALE=0.5
+fi
 
 # Set default standby, suspend, off timeouts for DPMS.
 xset dpms 900 0 0

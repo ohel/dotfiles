@@ -30,6 +30,7 @@ s0_next_all_key = Disabled
 s0_prev_all_key = Disabled
 s0_speed = 4.500000
 s0_timestep = 0.100000
+s0_size_multiplier = 2.000000
 s0_brightness = 100
 s0_opacity = 100
 s0_zoom = 0.000000

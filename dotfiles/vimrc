@@ -548,7 +548,7 @@ nnoremap <f8> :call SetFileFormat()<cr>
 if has("gui_running") && exists("g:zoom_functions") && g:zoom_functions == 1
 
     if !exists("g:zoom_level")
-        let g:zoom_level=0
+        let g:zoom_level=1
     endif
 
     function ChangeFontSize(delta)
@@ -562,8 +562,8 @@ if has("gui_running") && exists("g:zoom_functions") && g:zoom_functions == 1
         let fontname = substitute(fontname, ':h:cANSI', '', 'g')
 
         let g:zoom_level = g:zoom_level + a:delta
-        if g:zoom_level > 15
-            let g:zoom_level = 15
+        if g:zoom_level > 12
+            let g:zoom_level = 12
             return ''
         endif
         if g:zoom_level < 0
@@ -571,7 +571,7 @@ if has("gui_running") && exists("g:zoom_functions") && g:zoom_functions == 1
             return ''
         endif
 
-        let fontsize = fontsize + a:delta + a:delta
+        let fontsize = fontsize + 2 * a:delta
         if has('win32') || has ('win64')
             let &guifont = fontname . ":h" . fontsize . ":cANSI"
         else
@@ -600,11 +600,7 @@ if has("gui_running")
     function ToggleAlternativeFont()
 
         if !exists("g:alt_font")
-            if has('win32') || has ('win64')
-                let g:alt_font = "ProggyCleanTTSZ:h12:cANSI"
-            else
-                let g:alt_font = "ProggyCleanTTSZ 12"
-            endif
+            return ''
         endif
 
         if exists("g:alt_font_toggle")
@@ -678,6 +674,11 @@ function! OnVimEnter()
     " Need to set these last here, otherwise they don't always work.
     set visualbell " Set visual bell instead of audible beep.
     set t_vb= " Disable visual flashing on bell.
+
+    " Define g:alt_font to start with it.
+    if has("gui_running")
+        silent call ToggleAlternativeFont()
+    endif
 
 endfunction
 

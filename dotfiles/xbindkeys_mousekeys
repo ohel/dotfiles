@@ -1,3 +1,5 @@
+#!xbindkeys -f
+
 # Map extra mouse buttons to convenient keyboard strokes.
 # Mod1 = Alt
 # Mod4 = Windows
@@ -17,7 +19,7 @@
 #     Option "Device" "/dev/input/evdev-mouse"
 # EndSection
 
-# Mouse forward thumb mapping is defined in the guile file, as it needs advanced scripting to work as a zoom toggle.
+# Mouse forward thumb mapping is defined in the Guile script file xbindkeys_mousekeys.scm, as it needs advanced scripting to work as a zoom toggle. Run a separate xbindkeys instance for it.
 
 # This is for hidden thumb buttons found in some Logitech mice, e.g. MX Master.
 # The button sends a Control_L + Alt_L + Tab combo. This turns it into a back button.

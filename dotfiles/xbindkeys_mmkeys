@@ -1,3 +1,5 @@
+#!xbindkeys -f
+
 # An extra xbindkeys config for keyboards with multimedia keys.
 # Mod1 = Alt
 # Mod4 = Windows
