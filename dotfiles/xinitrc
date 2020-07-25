@@ -23,10 +23,10 @@ then
     export GDK_DPI_SCALE=0.5
 fi
 
-# Set default standby, suspend, off timeouts for DPMS.
+# Set default standby, suspend, off timeouts for DPMS. If using a television, DPMS is probably not supported but the signal is turned off so the TV power management may set standby.
 xset dpms 900 0 0
-# Disable DPMS, disable screensaver. If using a television, DPMS is not supported anyway.
-xset -dpms; xset s off
+# Disable screensaver.
+xset s off
 
 # Restore ALSA state (volumes etc.) if saved.
 [ -f ~/.asound.state ] && /usr/sbin/alsactl restore -f ~/.asound.state
