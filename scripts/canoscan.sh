@@ -10,6 +10,7 @@
 scanimagebin="/usr/bin/scanimage"
 scanner="genesys:libusb:"$(ls -l /dev/canoscan | cut -f 2 -d '>' | cut -f 3-4 -d '/' | sed "s/\//\:/")
 scandir=/tmp/scans
+log=scanlog.txt
 
 mkdir -p $scandir
 setsid thunar $scandir &>/dev/null
@@ -21,14 +22,15 @@ do
     errors=1
     while [ $errors -gt 0 ]
     do
-        $scanimagebin -d $scanner --mode Color --resolution 300 -p > $scandir/scan$num.png 2>$scandir/scanlog.txt
-        errors=$(cat $scandir/scanlog.txt | wc -l)
+        $scanimagebin -d $scanner --format=png --mode Color --resolution 300 -p > $scandir/scan$num.png 2>$scandir/$log
+        sed -i "s/Progress:[^\r]*%\r//g" $scandir/$log
+        errors=$(cat $scandir/$log | wc -l)
         if [ $errors -gt 0 ]
         then
-            rm $scandir/scanlog.txt
+            rm $scandir/$log
             echo -n "."
         else
-            rm $scandir/scanlog.txt
+            rm $scandir/$log
             echo
             echo "Press return to scan again, Ctrl-C to quit."
             read
