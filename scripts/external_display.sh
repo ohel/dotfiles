@@ -29,22 +29,24 @@ else
     primary_display=$2
 fi
 
-primary_display=${primary_display:-$(xrandr | grep " connected" | cut -f 1 -d ' ' | head -n 1)}
-primary_mode=$(xrandr | grep -A 1 $primary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
+xrandrout="$(xrandr)"
+
+primary_display=${primary_display:-$(echo "$xrandrout" | grep " connected" | cut -f 1 -d ' ' | head -n 1)}
+primary_mode=$(echo "$xrandrout" | grep -A 1 $primary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
 p_width=$(echo $primary_mode | cut -f 1 -d 'x')
 
 # Sometimes the native resolution is not the first mode line, but the second. This might be the case with e.g. 4K televisions.
-mode_candidate=$(xrandr | grep -A 2 $primary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
+mode_candidate=$(echo "$xrandrout" | grep -A 2 $primary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
 mc_width=$(echo $mode_candidate | grep -o "^[0-9]\{3,4\}")
 ([ $p_width -gt $HIDPI_WIDTH ] || ([ $mc_width -le $HIDPI_WIDTH ] && [ $(echo $primary_mode | grep -o "^[0-9]\{3,4\}") -lt $mc_width ])) && primary_mode=$mode_candidate
 
 echo "Primary display: $primary_display, mode: $primary_mode"
 
-secondary_display=$(xrandr | grep " connected" | cut -f 1 -d ' ' | grep -v $primary_display | head -n 1)
+secondary_display=$(echo "$xrandrout" | grep " connected" | cut -f 1 -d ' ' | grep -v $primary_display | head -n 1)
 if [ "$secondary_display" ]
 then
-    secondary_mode=$(xrandr | grep -A 1 $secondary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
-    mode_candidate=$(xrandr | grep -A 2 $secondary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
+    secondary_mode=$(echo "$xrandrout" | grep -A 1 $secondary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
+    mode_candidate=$(echo "$xrandrout" | grep -A 2 $secondary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
     mc_width=$(echo $mode_candidate | grep -o "^[0-9]\{3,4\}")
     s_width=$(echo $secondary_mode | cut -f 1 -d 'x')
     ([ $s_width -gt $HIDPI_WIDTH ] || ([ $mc_width -le $HIDPI_WIDTH ] && [ $(echo $secondary_mode | grep -o "^[0-9]\{3,4\}") -lt $mc_width ])) && secondary_mode=$mode_candidate
@@ -90,8 +92,8 @@ else
     then
         echo "Mirroring to external display $secondary_display."
 
-        primary_modes=$(xrandr | grep -z -o "$primary_display.*[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n +2 | tr -s ' ' | cut -f 2 -d ' ')
-        secondary_modes=$(xrandr | grep -z -o "$secondary_display.*[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n +2 | tr -s ' ' | cut -f 2 -d ' ')
+        primary_modes=$(echo "$xrandrout" | grep -z -o "$primary_display.*[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n +2 | tr -s ' ' | cut -f 2 -d ' ')
+        secondary_modes=$(echo "$xrandrout" | grep -z -o "$secondary_display.*[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n +2 | tr -s ' ' | cut -f 2 -d ' ')
 
         selected_mode=""
         for modeline in $primary_modes
@@ -131,7 +133,8 @@ fi
 
 # Xrandr only shows the physical size if the display is connected, therefore we need to call xrandr again.
 # Sometimes the size does not actually match real world. In that case, one can export DPI per-system in e.g. ~/.profile.env_extra
-p_phys_width=$(xrandr | grep -A 1 $primary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
+xrandrout="$(xrandr)"
+p_phys_width=$(echo "$xrandrout" | grep -A 1 $primary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
 if [ "$p_phys_width" ]
 then
     p_dpi_calc=$(echo "scale=2; $p_width / $p_phys_width * 25.4" | bc | cut -f 1 -d '.')
@@ -145,10 +148,10 @@ fi
 scale=1
 [ $p_width -eq $HIDPI_WIDTH ] && scale=2
 
-[ "$secondary_display" ] && s_phys_width=$(xrandr | grep -A 1 $secondary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
+[ "$secondary_display" ] && s_phys_width=$(echo "$xrandrout" | grep -A 1 $secondary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
 if [ "$s_phys_width" ]
 then
-    s_phys_width=$(xrandr | grep -A 1 $secondary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
+    s_phys_width=$(echo "$xrandrout" | grep -A 1 $secondary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
     s_dpi_calc=$(echo "scale=2; $s_width / $s_phys_width * 25.4" | bc | cut -f 1 -d '.')
     s_dpi_set=96
     [ $s_dpi_calc -gt 100 ] && s_dpi_set=112
