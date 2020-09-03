@@ -3,10 +3,7 @@
 # Or, just use the default values, in which case $1 may be "win[dows]" too.
 
 sound_params=""
-if [ ! "$(ps -e | grep pulseaudio)" ]
-then
-    sound_params=":sys:alsa"
-fi
+[ ! "$(ps -e | grep pulseaudio)" ] && sound_params=":sys:alsa"
 
 cliparams_win="+fonts +window-drag /cert-ignore /kbd:Finnish /sec:nla /bpp:32 /sound$sound_params /microphone$sound_params"
 cliparams_other="/bpp:24"
@@ -19,13 +16,10 @@ then
 else
     ip=${1:-$default_ip}
 fi
-user=${2:-panther}
-pass=${3:-panther}
+user=${2:-$(whoami)}
+pass=${3:-$user}
 
-if [ "$4" = "win" || "$4" = "windows" ]
-then
-    os="windows"
-fi
+[ "$4" = "win" || "$4" = "windows" ] && os="windows"
 
 if [ "$os" = "windows" ]
 then
