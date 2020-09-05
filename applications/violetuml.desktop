@@ -1,8 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Name=Violet UML Editor
-Exec=/opt/bin/java_bin/java -jar /opt/programs/violetuml/com.horstmann.violet-0.21.1.jar 2>&1 &
-Icon=violetuml
-Terminal=false
-Type=Application
-Categories=Application;Development;

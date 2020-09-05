@@ -7,7 +7,7 @@
 # If $1 or $2 is something else, it will be used as the kernel source directory instead. Nothing will be removed, just compiled and copied.
 #
 # By default, the script works by updating an <EFI system partition>/EFI which is assumed to be mounted to /boot/EFI.
-# Files are copied to /boot/EFI/linux, and config file /boot/EFI/BOOT/refind.conf is updated for new kernel releases.
+# Files are copied to /boot/EFI/linux, and all config files named "refind.conf" under /boot/EFI/ are updated for new kernel releases.
 
 # Kernel source directory prefix for automatic release detection. Directories with other prefixes are skipped.
 prefix="linux"
@@ -199,8 +199,9 @@ then
         sed -i "s/$old_release/$new_release/g" /boot/grub/grub.conf
         echo "Updated grub config."
     else
-        sed -i "s/$old_release/$new_release/g" $efi_dest_dir/BOOT/refind.conf
-        echo "Updated refind config."
+        find $efi_dest_dir/ -name refind.conf | xargs -I {} sed -i "s/$old_release/$new_release/g" {}
+        echo "Updated rEFInd config files:"
+        find $efi_dest_dir/ -name refind.conf
     fi
     echo
 

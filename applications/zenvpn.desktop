@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=ZenVPN OpenVPN connection
-Exec=sudo .scripts/openvpnfirewall.sh .config/zenvpn.ovpn allowlan
-Terminal=true
-Type=Application
-Icon=firewall
-Categories=System;Utility;Network

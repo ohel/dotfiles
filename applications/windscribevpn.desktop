@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=Windscribe OpenVPN connection (Finland)
-Exec=sudo ../.scripts/openvpnfirewall.sh Windscribe-Finland.ovpn allowlan
-Path=.config
-Terminal=true
-Type=Application
-Icon=firewall
-Categories=System;Utility;Network
