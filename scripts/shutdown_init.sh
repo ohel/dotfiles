@@ -26,7 +26,7 @@ then
         echo "RAID devices resyncing:"
         cat "/proc/mdstat"
         echo
-        echo "Press CTRL-C to cancel shutdown, return to continue."
+        echo "Press Ctrl-C to cancel shutdown, return to continue."
         read tmp
     fi
 fi

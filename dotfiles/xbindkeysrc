@@ -111,13 +111,6 @@ Mod5 + t
 "~/.scripts/toggle_bluetooth.sh"
 Mod5 + b
 
-# Software volume control.
-# Disabled, as most mixers support these natively: "volumeicon" is a good one.
-#"~/.scripts/softvol.sh -"
-#XF86AudioLowerVolume
-#"~/.scripts/softvol.sh +"
-#XF86AudioRaiseVolume
-
 # Window manipulation
 ######################
 

@@ -41,3 +41,10 @@ XF86AudioMute
 Mod4 + XF86AudioLowerVolume
 "~/.scripts/audio_player.sh next"
 Mod4 + XF86AudioRaiseVolume
+
+# Software volume control.
+# Disabled, as most mixers support these natively: "volumeicon" is a good one.
+#"~/.scripts/softvol.sh -"
+#XF86AudioLowerVolume
+#"~/.scripts/softvol.sh +"
+#XF86AudioRaiseVolume

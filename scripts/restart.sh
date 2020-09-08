@@ -6,7 +6,7 @@ then
     ! zenity --question --text="Restart?" && exit
 else
     echo Restart?
-    echo Press return to continue, CTRL-C to abort.
+    echo Press return to continue, Ctrl-C to abort.
     read tmp
 fi
 
