@@ -58,10 +58,17 @@ which rsync &>/dev/null && alias rcp='rsync -ah --progress' && alias rs='rsync -
 [ -d "/opt/bin" ] && export PATH="$PATH:/opt/bin"
 export PATH=".:$PATH"
 
-if [ -d "$HOME/.nvm" ]; then
+if [ -d "$HOME/.nvm" ]
+then
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+fi
+
+if [ -e "/opt/current_jdk" ]
+then
+    export JAVA_HOME="/opt/current_jdk"
+    export PATH="$PATH:$JAVA_HOME/bin"
 fi
 
 # System specific stuff.
