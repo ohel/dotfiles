@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Scan documents using script
-Exec=.scripts/canoscan.sh
+Exec=.scripts/scan_batch.sh
 Terminal=true
 Type=Application
 Icon=scanner
