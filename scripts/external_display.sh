@@ -165,7 +165,7 @@ fi
 [ "$(env | grep GDK_DPI_SCALE=0.5)" ] && common_dpi=$(expr 2 \* $common_dpi)
 echo Final DPI: $common_dpi
 
-if [ $(which xfconf-query >/dev/null 2>&1) ]
+if [ "$(which xfconf-query 2>/dev/null)" ]
 then
     xfconf-query -c xsettings -p /Xft/DPI -s $common_dpi
     [ "$(env | grep GDK_SCALE=2)" ] || xfconf-query -c xsettings -p /Gdk/WindowScalingFactor -s $scale
