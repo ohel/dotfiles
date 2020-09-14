@@ -132,26 +132,26 @@ else
 fi
 
 # Xrandr only shows the physical size if the display is connected, therefore we need to call xrandr again.
-# Sometimes the size does not actually match real world. In that case, one can export DPI per-system in e.g. ~/.profile.env_extra
+# Sometimes the size does not actually match real world; one can export primary display override env var DPI per-system.
 xrandrout="$(xrandr)"
 p_phys_width=$(echo "$xrandrout" | grep -A 1 $primary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
-if [ "$p_phys_width" ]
+if [ "$p_phys_width" ] && [ $p_phys_width -gt 0 ]
 then
     p_dpi_calc=$(echo "scale=2; $p_width / $p_phys_width * 25.4" | bc | cut -f 1 -d '.')
     p_dpi_set=96
     [ $p_dpi_calc -gt 100 ] && p_dpi_set=112
     [ $p_dpi_calc -gt 140 ] && [ $p_phys_width -gt 300 ] && p_dpi_set=144
     [ "$DPI" ] && p_dpi_set=$DPI
-    common_dpi=$p_dpi_set
 fi
+[ "$DPI" ] && p_dpi_set=$DPI
+common_dpi=$p_dpi_set # Note: var may be empty.
 
 scale=1
 [ $p_width -eq $HIDPI_WIDTH ] && scale=2
 
 [ "$secondary_display" ] && s_phys_width=$(echo "$xrandrout" | grep -A 1 $secondary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
-if [ "$s_phys_width" ]
+if [ "$s_phys_width" ] && [ $s_phys_width -gt 0 ]
 then
-    s_phys_width=$(echo "$xrandrout" | grep -A 1 $secondary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
     s_dpi_calc=$(echo "scale=2; $s_width / $s_phys_width * 25.4" | bc | cut -f 1 -d '.')
     s_dpi_set=96
     [ $s_dpi_calc -gt 100 ] && s_dpi_set=112
@@ -162,8 +162,9 @@ fi
 
 # HiDPI (4K) displays need some magic. Not all applications (e.g. GTK2) support scaling, so double the DPI is required for them to look "normal".
 # However, we only want this if GDK is set to scale down font sizes accordingly. Otherwise the window scaling factor xsetting should be used.
-[ "$(env | grep GDK_DPI_SCALE=0.5)" ] && common_dpi=$(expr 2 \* $common_dpi)
+[ ! "$common_dpi" ] && common_dpi=96
 echo Final DPI: $common_dpi
+[ "$(env | grep GDK_DPI_SCALE=0.5)" ] && common_dpi=$(expr 2 \* $common_dpi)
 
 if [ "$(which xfconf-query 2>/dev/null)" ]
 then
