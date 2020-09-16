@@ -91,20 +91,20 @@ else
     elif [ "$script_mode" = "mirror" ]
     then
         echo "Mirroring to external display $secondary_display."
-
+        # With this regex primary_modes will contain all modes from all displays, but also some non-mode lines to distinguish the displays.
         primary_modes=$(echo "$xrandrout" | grep -z -o "$primary_display.*[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n +2 | tr -s ' ' | cut -f 2 -d ' ')
         secondary_modes=$(echo "$xrandrout" | grep -z -o "$secondary_display.*[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n +2 | tr -s ' ' | cut -f 2 -d ' ')
 
         selected_mode=""
         for modeline in $primary_modes
         do
-            # Check that we're still comparing resolutions from primary display.
+            # Check that we're still comparing resolutions from primary display, i.e. the line is a modeline.
             [ ! "$(echo $modeline | grep "[0-9]\{3,4\}x[0-9]\{3,4\}")" ] && break
             if [ ! "$selected_mode" ]
             then
                 for match in $secondary_modes
                 do
-                    # Check that we're still comparing resolutions to secondary display.
+                    # Check that we're still comparing resolutions to secondary display, i.e. the line is a modeline.
                     [ ! "$(echo $match | grep "[0-9]\{3,4\}x[0-9]\{3,4\}")" ] && break
                     if [ "$modeline" = "$match" ]
                     then

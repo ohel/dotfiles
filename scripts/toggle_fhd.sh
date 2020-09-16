@@ -1,7 +1,6 @@
 #!/bin/sh
-# Toggles between best resolution and FullHD for all connected displays.
+# Toggles between best resolution and FullHD for all displays showing a picture.
 # UI scaling is set also. Unfortunately setting GDK_SCALE won't work on the fly since it's an environment variable.
-# A display is considered connected even if it's not showing any picture.
 
 primary_background=~/.themes/background
 secondary_background=~/.themes/background2
@@ -35,6 +34,10 @@ then
     echo "Secondary display: $secondary_display, mode: $secondary_mode"
 fi
 
+# An active mode is marked with * in xrandr output. Each display is either _c_onnected or dis_c_onnected. By deleting all other characters, we know if the display is actually showing a picture.
+has_primary=$(echo "$xrandrout" | grep -z -o "$primary_display.*[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n +2 | tr -c -d [*c] | cut -f 1 -d 'c')
+has_secondary=$(echo "$xrandrout" | grep -z -o "$secondary_display.*[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n +2 | tr -c -d [*c] | cut -f 1 -d 'c')
+
 [ "$set_fhd" ] && primary_mode=$FULLHD && secondary_mode=$FULLHD && echo "Setting FullHD."
 if [ ! "$secondary_display" ]
 then
@@ -42,17 +45,20 @@ then
     xrandr --output $primary_display --mode $primary_mode --primary
 else
     [ "$(echo "$xrandrout" | grep "primary")" ] || noprimary="--noprimary"
-    xrandr --output $primary_display --mode $primary_mode $noprimary \
-        --output $secondary_display --mode $secondary_mode
+    primary_output=""
+    secondary_output=""
+    [ "$has_primary" ] && primary_output="--output $primary_display --mode $primary_mode $noprimary"
+    [ "$has_secondary" ] && secondary_output="--output $secondary_display --mode $secondary_mode"
+    xrandr $primary_output $secondary_output
     secondary_background=""
-    echo "Set modes $primary_mode, $secondary_mode."
+    echo "Set modes $primary_mode$has_primary, $secondary_mode$has_secondary."
 fi
 
 # Xrandr only shows the physical size if the display is connected, therefore we need to call xrandr again.
 # Sometimes the size does not actually match real world; one can export primary display override env var DPI per-system.
 xrandrout="$(xrandr)"
 p_phys_width=$(echo "$xrandrout" | grep -A 1 $primary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
-if [ "$p_phys_width" ] && [ $p_phys_width -gt 0 ]
+if [ "$p_phys_width" ] && [ $p_phys_width -gt 0 ] && [ "$has_primary" ]
 then
     p_dpi_calc=$(echo "scale=2; $p_width / $p_phys_width * 25.4" | bc | cut -f 1 -d '.')
     p_dpi_set=96
@@ -66,7 +72,7 @@ scale=1
 [ $p_width -eq $HIDPI_WIDTH ] && scale=2
 
 [ "$secondary_display" ] && s_phys_width=$(echo "$xrandrout" | grep -A 1 $secondary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
-if [ "$s_phys_width" ] && [ $s_phys_width -gt 0 ]
+if [ "$s_phys_width" ] && [ $s_phys_width -gt 0 ] && [ "$has_secondary" ]
 then
     s_dpi_calc=$(echo "scale=2; $s_width / $s_phys_width * 25.4" | bc | cut -f 1 -d '.')
     s_dpi_set=96
