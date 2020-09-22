@@ -207,24 +207,25 @@ if filereadable($VIMHOME . "/autoload/plug.vim")
     silent! call plug#begin($VIMHOME . "/plugged")
 endif
 if exists("*plug#begin")
-    Plug 'ap/vim-css-color'
-    Plug 'jreybert/vimagit'
-    Plug 'justinmk/vim-gtfo'
-    Plug 'kana/vim-arpeggio'
-    Plug 'leafgarland/typescript-vim'
+    Plug 'ap/vim-css-color' " Display color codes in color.
+    Plug 'jreybert/vimagit' " git integration.
+    Plug 'justinmk/vim-gtfo' " Open terminal or file manager.
+    Plug 'kana/vim-arpeggio' " Do stuff with configurable key combinations.
+    Plug 'leafgarland/typescript-vim' " TypeScript support.
     Plug 'maksimr/vim-jsbeautify', { 'do': 'cd $VIMHOME/plugged/vim-jsbeautify && git submodule update --init --recursive' }
     " Default trigger for prettier is: <leader>p
     Plug 'prettier/vim-prettier', {
       \ 'do': 'which yarn && yarn install && ! which yarn && which npm && npm install',
       \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown'] }
     Plug 'Shougo/unite-outline' " Unite source providing outline view of current buffer.
-    Plug 'Shougo/unite.vim'
+    Plug 'Shougo/unite.vim' " Search and display information from various sources.
     Plug 'Shougo/vimproc.vim', { 'do': 'cd $VIMHOME/plugged/vimproc.vim && make -f make_unix.mak' } " Allows async operations.
     Plug 'tomtom/tcomment_vim' " Code commenting.
     Plug 'Valloric/YouCompleteMe', { 'on': [], 'do': 'cd $VIMHOME/plugged/YouCompleteMe && ./install.py' }
     Plug 'vim-airline/vim-airline' " Status/tabline.
     Plug 'tpope/vim-fugitive' " Git wrapper.
     Plug 'tommcdo/vim-fugitive-blame-ext' " Git blame status line.
+    Plug 'pprovost/vim-ps1' " PowerShell support.
     call plug#end()
 endif
 
