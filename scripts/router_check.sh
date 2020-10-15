@@ -9,9 +9,11 @@ autoparam=$2
 routerip=$(ip route | grep default | grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}")
 
 echo "Pinging router to check if reboot required..."
-[ "$(ping -c 10 $routerip | grep ' 0% packet loss')" != "" ] && echo "Router seems OK." && exit
+loss=$(ping -c 10 $routerip | grep '% packet loss')
+[ "$(echo $loss | grep ' 0%')" != "" ] && echo "Router seems OK." && exit
+[ "$(echo $loss | grep '100%')" != "" ] && echo "100% packet loss, is the router connected at all?" && exit
 
 echo "Packet loss detected. Going to reboot router."
 
 scriptsdir=$(dirname "$(readlink -f "$0")")
-setsid xfce4-terminal -e "bash -c '$scriptsdir/rebootrouter.sh $routermodel $autoparam'"
+setsid xfce4-terminal -e "bash -c '$scriptsdir/router_reboot.sh $routermodel $autoparam'"
