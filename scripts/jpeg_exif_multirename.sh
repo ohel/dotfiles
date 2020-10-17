@@ -25,8 +25,9 @@ do
 
     if [ ! "$originalname" ]
     then
-        echo "JPEG file not found."
+        echo "JPEG file not found: $originalname"
         [ "$use_desc_sep" ] && exit 1
+        echo "File probably already renamed, continuing batch."
         continue
     fi
 
@@ -36,8 +37,15 @@ do
     timestamp=$(exiftool -CreateDate -d %Y-%m-%d_%H.%M.%S "$originalname" | cut -f 2 -d ':' | tr -d ' ')
     newbasename="$timestamp$use_desc_sep$desc"
 
-    mv "$originalname" "$newbasename.jpg"
-    [ -e "$basename.RW2" ] && mv "$basename.RW2" "$newbasename.RW2"
-    [ -e "$basename.RW2.xmp" ] && sed -i -s "s/$basename.RW2/$newbasename.RW2/" "$basename.RW2.xmp"
-    [ -e "$basename.RW2.xmp" ] && mv "$basename.RW2.xmp" "$newbasename.RW2.xmp"
+    postfix=""
+    if [ -e "$newbasename.jpg" ]
+    then
+        index=$(ls -1 "$newbasename"*.jpg | wc -l)
+        postfix="_$index"
+    fi
+
+    mv "$originalname" "$newbasename$postfix.jpg"
+    [ -e "$basename.RW2" ] && mv "$basename.RW2" "$newbasename$postfix.RW2"
+    [ -e "$basename.RW2.xmp" ] && sed -i -s "s/$basename.RW2/$newbasename$postfix.RW2/" "$basename.RW2.xmp"
+    [ -e "$basename.RW2.xmp" ] && mv "$basename.RW2.xmp" "$newbasename$postfix.RW2.xmp"
 done
