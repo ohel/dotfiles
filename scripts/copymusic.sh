@@ -52,10 +52,10 @@ encode() {
     echo -n "*"
     if [ "$typeflac" ]
     then
-        tmpfile=$(tempfile -d $tempdir/ --suffix=".ogg")
+        tmpfile=$(mktemp -p $tempdir/ --suffix=".ogg")
         if [ "$encoding" == "mp3" ]
         then
-            tmpfile=$(tempfile -d $tempdir/ --suffix=".mp3")
+            tmpfile=$(mktemp -p $tempdir/ --suffix=".mp3")
             flac -c -s -d "$filein" 2>/dev/null | lame --silent --preset extreme --noreplaygain --id3v2-only --tt "$meta_title" --ta "$meta_artist" --tl "$meta_album" --tn "$meta_track" - $tmpfile
         elif [ "$encoding" == "ogg" ]
         then
@@ -65,10 +65,10 @@ encode() {
 
     elif [ "$typeogg" ]
     then
-        tmpfile=$(tempfile -d $tempdir/ --suffix=".ogg")
+        tmpfile=$(mktemp -p $tempdir/ --suffix=".ogg")
         if [ "$encoding" == "mp3" ]
         then
-            tmpwav=$(tempfile -d $tempdir/ --suffix=".wav")
+            tmpwav=$(mktemp -p $tempdir/ --suffix=".wav")
             oggdec -Q -o $tmpwav "$filein"
             lame --silent --preset extreme --noreplaygain --id3v2-only --tt "$meta_title" --ta "$meta_artist" --tl "$meta_album" --tn "$meta_track" $tmpwav $tmpfile
             rm $tmpwav
@@ -80,7 +80,7 @@ encode() {
 
     elif [ "$typemp3" ]
     then
-        tmpfile=$(tempfile -d $tempdir/ --suffix=".mp3")
+        tmpfile=$(mktemp -p $tempdir/ --suffix=".mp3")
         source="$filein"
     fi
     echo -n "*"

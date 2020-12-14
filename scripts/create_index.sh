@@ -3,7 +3,12 @@
 # White spaces are not supported in file or directory names.
 # A dummy .htaccess file is written also.
 # Creates image thumbnail links if they exist (thumb_*.jpg).
-# If $3 is given and evaluates to boolean true, images are embedded even without thumbs.
+#
+# Parameters:
+# $1: name of the root directory (for hyperlinks); defaults to current directory basename
+# $2: title for the index page; defaults to $1
+# $3: if given and evaluates to boolean true, images are embedded even without thumbs.
+#
 # If there's a file named update.sh, it is omitted from the index.
 # For an image gallery, the update.sh contents could be something like this:
     # #!/bin/sh

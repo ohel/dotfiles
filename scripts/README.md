@@ -9,4 +9,4 @@ Some picks from the scripts:
 * matrix_orbital: Matrix Orbital LK202 LCD display control scripts.
 * openvpnfirewall.sh: A generic "kill switch" for OpenVPN connections.
 
-Also contains various other scripts. Every script should have some comment about what it does.
+Also contains various other scripts. Every script has some comment about what it does.
