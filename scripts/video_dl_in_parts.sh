@@ -1,31 +1,46 @@
 #!/bin/bash
 # Download videos in parts and concatenate parts to a single continuous video.
-# Edit the download URLs and max_index to match the cURL copied from a web browser.
+# Copy the URL from a web browser's network tab; any segment is fine.
+# When downloaded segment contains just plain text, it's taken as the last segment.
+#
+# Parameters:
+# $1: URL (use double quotes)
+# $2: segment cue, defaults to "seg-"; a growing segment index should follow
+# $3: max index, if not automatically detected; defaults to 500
+# $4: extension; defaults to "mp4"
 
-url_part_1=''
-url_part_2=''
-max_index=500
+seg_cue=${2:-seg-}
+url_part_1=$(echo "$1" | sed "s/\(.*\)$seg_cue[0-9]*\(.*\)/\1$seg_cue/")
+url_part_2=$(echo "$1" | sed "s/\(.*\)$seg_cue[0-9]*\(.*\)/\2/")
+max_index=${3:-500}
+extension=${4:-mp4}
 
-extension=mp4
+tmp_dir=$(mktemp -d)
+
 current_index=1
 while [ $current_index -le $max_index ];
 do
     if [ $current_index -lt 10 ]
     then
-        filename="frag_00$current_index.$extension"
+        filename="seg_00$current_index.$extension"
     elif [ $current_index -lt 100 ]
     then
-        filename="frag_0$current_index.$extension"
+        filename="seg_0$current_index.$extension"
     else
-        filename="frag_$current_index.$extension"
+        filename="seg_$current_index.$extension"
     fi
 
-    echo "Downloading fragment $current_index/$max_index..."
-    curl $url_part_1$current_index$url_part_2 > $filename
+    echo "Downloading segment $current_index..."
+    curl $url_part_1$current_index$url_part_2 > $tmp_dir/$filename
     current_index=$(expr $current_index + 1)
+    if [ "$(file $tmp_dir/$filename | grep "ASCII text")" ]
+    then
+        rm $tmp_dir/$filename
+        break
+    fi
 done
 
-echo Concatenating fragments...
-ls frag_*.$extension | while read line; do echo file \'$line\'; done | ffmpeg -loglevel warning -protocol_whitelist file,pipe -f concat -i - -c copy complete.$extension
+echo Concatenating segments...
+ls $tmp_dir/seg_*.$extension | while read line; do echo file \'$line\'; done | ffmpeg -loglevel warning -protocol_whitelist file,pipe -f concat -safe 0 -i - -c copy complete.$extension
 
-rm frag_*.$extension
+rm $tmp_dir/seg_*.$extension
