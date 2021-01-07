@@ -7,15 +7,16 @@
 
 tempfile=~/.cache/redshift_temp
 max=6500
-min=3500
+min=4000
 [ "$1" = "r" ] && redshift -x && exit 0
 set_brightness=""
 [ "$1" = "b" ] && set_brightness=1
 [ "$2" = "b" ] && set_brightness=1
 
+[ ! -e $tempfile ] && echo $max > $tempfile
+
 if [ "$#" -gt 0 ] && [ "$(echo "$1" | grep "^[-+0-9]*$")" ]
 then
-    [ ! -e $tempfile ] && echo $max > $tempfile
     current=$(cat $tempfile);
     [ ! "$current" ] && current=$max
 
@@ -28,26 +29,25 @@ then
     then
         new=$min
     fi
-    echo $new > $tempfile
     notify_time=300
 else
-    # Make it so that from 8pm to 2am the brightness drops from 1.0 to 0.5.
+    # Make it so that the brightness drops from 8pm to 2am.
     # Compensate for winter months making the shift earlier.
     month=$(date +%m)
     compensation=0
     [ $month -gt 10 ] && compensation=3
     [ $month -gt 11 ] && compensation=4
-    [ $month -lt 2 ] && compensation=4
     [ $month -lt 3 ] && compensation=3
+    [ $month -lt 2 ] && compensation=4
     hourval=$(expr $(date +%H) + $compensation)
     [ $hourval -lt 8 ] && hourval=26
     [ $hourval -gt 26 ] && hourval=26
     hourval=$(expr $hourval - 20)
     [ $hourval -lt 0 ] && hourval=0
-    hourval=$(expr 12 - $hourval)
+    hourval=$(expr 6 - $hourval)
     set_brightness=1
     delta=$(expr $max - $min)
-    new=$(echo "scale=2; $min + $hourval / 12 * $delta" | bc | cut -f 1 -d '.')
+    new=$(echo "scale=2; $min + $hourval / 6 * $delta" | bc | cut -f 1 -d '.')
     notify_time=3000
 
     # Don't do anything automatically if new value would be the maximum.
@@ -64,8 +64,10 @@ then
     scriptsdir=$(dirname "$(readlink -f "$0")")
     brightness=$(echo "scale=2; $new / $max" | bc)
     # Script will succeed if hardware backlight can be used, will fail otherwise.
-    $scriptsdir/backlight.sh $brightness || b="-b $brightness"
+    # Use a bit dimmer value for hardware backlights.
+    $scriptsdir/backlight.sh $(echo "scale=2; $brightness * 0.75" | bc) || b="-b $brightness"
 fi
 
+echo $new > $tempfile
 redshift $resetparam -O $new $b 2>&1 > /dev/null
 [ "$(which notify-send 2>/dev/null)" ] && notify-send -h int:transient:1 "New redshift value: $new" -t $notify_time
