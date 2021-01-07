@@ -126,4 +126,5 @@ EOF
 chmod a+r .htaccess $index
 
 echo "Created $index and .htaccess files."
-echo "Remember to chmod -R a+r the linked files and directories."
+echo "Remember to chmod -R a+r the linked files and directories, e.g. in root:"
+echo "chmod -R a+r * .htaccess && chmod a+x ."

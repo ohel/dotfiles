@@ -1,0 +1,10 @@
+[Desktop Entry]
+Categories=Graphics;Photography;GTK;
+Exec=env GDK_DPI_SCALE=0.85 GDK_SCALE=1 /usr/bin/darktable %U
+Icon=darktable
+Keywords=graphics;photography;raw;
+MimeType=application/x-darktable;image/x-dcraw;image/jpeg;image/jpg;image/jp2;image/png;image/tiff;image/x-portable-pixmap;image/x-portable-floatmap;image/x-exr;
+Name=Darktable (custom scale)
+StartupNotify=true
+Terminal=false
+Type=Application

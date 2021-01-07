@@ -1,6 +1,6 @@
 #!/bin/sh
 # Sometimes at least the Microsoft Natural Ergonomic 4000 keyboard acts weirdly or hangs up.
-# Reconnecting it physically works, but I have to set everything anew. This script solves that.
+# Reconnecting it physically works, but one has to set everything anew. This script solves that.
 
 secs=0
 for pid in $(ps -ef | grep "xbindkeys$" | tr -s ' ' | cut -f 2 -d ' ')

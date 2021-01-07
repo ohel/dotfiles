@@ -1,5 +1,5 @@
 #!/bin/sh
-# Toggles bluetooth radio. If $1 == power, toggle power instead of rfkill (block toggle).
+# Toggles bluetooth radio. If $1 = power, toggle power instead of rfkill (block toggle).
 
 if [ "$1" = "power" ]
 then

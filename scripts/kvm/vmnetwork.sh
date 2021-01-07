@@ -1,7 +1,7 @@
 #!/bin/sh
 # Set up networking for KVM virtual machines:
 # - SNAT to first PCI NIC, or $1 if given.
-# - Optionally ($2 == "bridge") set up network bridge where bridged VM tap devices should be added.
+# - Optionally ($2 = "bridge") set up network bridge where bridged VM tap devices should be added.
 # - Set up virtual machine bridge where routed VM tap devices should be added.
 # - Set up virtual localhost for consistent host access.
 # Source $reset_script to undo everything.

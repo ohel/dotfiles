@@ -84,16 +84,16 @@ Mod4 + Home
 "~/.scripts/backlight.sh 25"
 Mod4 + End
 
-# Quick night mode using redshift.
-"redshift -P -o -l 0:0 -b 0.4 -t 4500:4500"
-Mod1 + Mod4 + Home
-"redshift -x"
-Mod1 + Mod4 + End
+# Quick color temperature/brightness adjustment + reset.
+"~/.scripts/redshift.sh"
+Mod1 + Mod4 + Next # Page down
+"~/.scripts/redshift.sh r"
+Mod1 + Mod4 + Prior # Page up
 
-# Color temperature adjustment.
-"~/.scripts/redshift.sh -500"
+# Color temperature/brightness adjustment.
+"~/.scripts/redshift.sh -500 b"
 Mod4 + Next # Page down
-"~/.scripts/redshift.sh 500"
+"~/.scripts/redshift.sh 500 b"
 Mod4 + Prior # Page up
 
 # Toggle keyboard layout between Finnish and English (US).
