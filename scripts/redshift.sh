@@ -5,21 +5,30 @@
 # If $2 = b, also change brightness. This is done using the backlight script (if backlight is module present), otherwise using redshift.
 # If no parameters are given, uses a simple custom algorithm to automatically guess good values.
 
-tempfile=~/.cache/redshift_temp
+cachedir=~/.cache
+tempfile=$cachedir/redshift_temp
 max=6500
 min=4000
-[ "$1" = "r" ] && redshift -x && exit 0
 set_brightness=""
 [ "$1" = "b" ] && set_brightness=1
 [ "$2" = "b" ] && set_brightness=1
 
+[ ! -d $cachedir ] || [ ! "$(xhost 2>/dev/null)" ] && exit 1
+
 [ ! -e $tempfile ] && echo $max > $tempfile 2>/dev/null
+current=$(cat $tempfile)
+[ ! "$current" ] && current=$max
+
+if [ "$1" = "r" ]
+then
+    [ "$(which notify-send 2>/dev/null)" ] && notify-send -h int:transient:1 "Reset redshift" -t 1000
+    redshift -x
+    [ -e $tempfile ] && echo $max > $tempfile
+    exit 0
+fi
 
 if [ "$#" -gt 0 ] && [ "$(echo "$1" | grep "^[-+0-9]*$")" ]
 then
-    current=$(cat $tempfile)
-    [ ! "$current" ] && current=$max
-
     delta=$(echo "$1" | tr -d '+')
     new=$(echo $current + $delta | bc)
     if [ $new -gt $max ]
@@ -49,10 +58,11 @@ else
     delta=$(expr $max - $min)
     new=$(echo "scale=2; $min + $hourval / 6 * $delta" | bc | cut -f 1 -d '.')
     notify_time=3000
-
-    # Don't do anything automatically if new value would be the maximum.
-    [ $new -eq $max ] && exit 0
 fi
+
+[ -e $tempfile ] && echo $new > $tempfile
+# Don't do anything if new value would be the same as old one.
+[ $new -eq $current ] && exit 0
 
 # The -P reset parameter was introduced in redshift 1.12.
 version=$(redshift -V | cut -f 2 -d ' ' | tr -d '.')
@@ -68,6 +78,5 @@ then
     $scriptsdir/backlight.sh $(echo "scale=2; $brightness * $brightness * $brightness * 0.75" | bc) || b="-b $brightness"
 fi
 
-[ -e $tempfile ] && echo $new > $tempfile
 redshift $resetparam -O $new $b 2>&1 > /dev/null
 [ "$(which notify-send 2>/dev/null)" ] && notify-send -h int:transient:1 "New redshift value: $new" -t $notify_time
