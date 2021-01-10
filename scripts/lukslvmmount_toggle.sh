@@ -7,7 +7,7 @@ name="$1" # Name of mountpoint and LUKS mapping.
 dev_uuid="$2" # UUID of the block device (e.g. /dev/sda or /dev/md1)
 vg_name="$3" # Optional name of LVM volume group.
 
-if [ "$(mount | grep $name)" ] || [ "$(dmsetup ls | grep $name)" ];
+if [ "$(mount | grep $name)" ] || [ "$(dmsetup ls | grep $name)" ]
 then
     umount /mnt/$name 2>/dev/null || echo Nothing to unmount.
     [ ! "$vg_name" ] || vgchange -an $vg_name 2>/dev/null || echo Volume group $vg_name not found, nothing to deactivate.

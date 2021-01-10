@@ -18,7 +18,7 @@ extension=${4:-mp4}
 tmp_dir=$(mktemp -d)
 
 current_index=1
-while [ $current_index -le $max_index ];
+while [ $current_index -le $max_index ]
 do
     if [ $current_index -lt 10 ]
     then

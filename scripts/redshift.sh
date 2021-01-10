@@ -13,11 +13,11 @@ set_brightness=""
 [ "$1" = "b" ] && set_brightness=1
 [ "$2" = "b" ] && set_brightness=1
 
-[ ! -e $tempfile ] && echo $max > $tempfile
+[ ! -e $tempfile ] && echo $max > $tempfile 2>/dev/null
 
 if [ "$#" -gt 0 ] && [ "$(echo "$1" | grep "^[-+0-9]*$")" ]
 then
-    current=$(cat $tempfile);
+    current=$(cat $tempfile)
     [ ! "$current" ] && current=$max
 
     delta=$(echo "$1" | tr -d '+')
@@ -64,10 +64,10 @@ then
     scriptsdir=$(dirname "$(readlink -f "$0")")
     brightness=$(echo "scale=2; $new / $max" | bc)
     # Script will succeed if hardware backlight can be used, will fail otherwise.
-    # Use a bit dimmer value for hardware backlights.
-    $scriptsdir/backlight.sh $(echo "scale=2; $brightness * 0.75" | bc) || b="-b $brightness"
+    # Use a much dimmer value for hardware backlights.
+    $scriptsdir/backlight.sh $(echo "scale=2; $brightness * $brightness * $brightness * 0.75" | bc) || b="-b $brightness"
 fi
 
-echo $new > $tempfile
+[ -e $tempfile ] && echo $new > $tempfile
 redshift $resetparam -O $new $b 2>&1 > /dev/null
 [ "$(which notify-send 2>/dev/null)" ] && notify-send -h int:transient:1 "New redshift value: $new" -t $notify_time

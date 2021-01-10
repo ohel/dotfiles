@@ -8,8 +8,8 @@ backlight=/sys/class/backlight/intel_backlight
 [ ! -e $backlight ] && exit 1
 [ "$#" -eq 0 ] && exit 1
 
-max=$(cat $backlight/max_brightness);
-current=$(cat $backlight/brightness);
+max=$(cat $backlight/max_brightness)
+current=$(cat $backlight/brightness)
 
 if [ "$(echo "$1" | grep \\.)" ]
 then
