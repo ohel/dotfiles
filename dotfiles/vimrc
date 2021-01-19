@@ -215,7 +215,7 @@ if exists("*plug#begin")
     Plug 'maksimr/vim-jsbeautify', { 'do': 'cd $VIMHOME/plugged/vim-jsbeautify && git submodule update --init --recursive' }
     " Default trigger for prettier is: <leader>p
     Plug 'prettier/vim-prettier', {
-      \ 'do': 'which yarn && yarn install && ! which yarn && which npm && npm install',
+      \ 'do': 'which yarn && yarn install \|\| ! which yarn && which npm && npm install',
       \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown'] }
     Plug 'Shougo/unite-outline' " Unite source providing outline view of current buffer.
     Plug 'Shougo/unite.vim' " Search and display information from various sources.

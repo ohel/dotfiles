@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Chromium incognito
+Exec=chromium-browser --incognito
+Icon=chromium-browser
+Terminal=false
+Categories=Network
