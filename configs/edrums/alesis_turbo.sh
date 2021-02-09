@@ -24,27 +24,40 @@ HYDROGEN_SONG="$scriptdir/drum_practice.h2song"
 MIDIDINGS_SCRIPT="$scriptdir/$(echo "$DRUMS" | tr '[:upper:]' '[:lower:]' | sed "s/ /_/g").py"
 
 # Use existing JACK server if running.
-jackd_pid=$(ps -e | grep jackd | cut -f 1 -d ' ')
+jackd_pid=$(ps -e | grep jackd | grep -o "^[ 0-9]*" | tr -d ' ')
 
-[ "$jackd_pid" ] || qjackctl -p $QJACK_PRESET -s &
-[ "$jackd_pid" ] || pid_qjackctrl=$!
+if [ ! "$jackd_pid" ]
+then
+    qjackctl -p $QJACK_PRESET -s &
+    pid_qjackctrl=$!
+    sleep 1
+fi
 sudo -n renice -n -10 $jackd_pid $pid_qjackctrl
-sleep 1
 
-hydrogen -s $HYDROGEN_SONG &
-pid_hydrogen=$!
-sleep 1
+if [ ! "$(ps -e | grep hydrogen)" ]
+then
+    hydrogen -s $HYDROGEN_SONG &
+    pid_hydrogen=$!
+    sleep 1
+fi
 
 md_exe=mididings
 # The mididings_script is originally named mididings, but there's a directory by the same name for Python code if installing like I did, i.e. manually to an arbitrary location.
 [ -e /opt/programs/mididings/mididings_script ] && md_exe=/opt/programs/mididings/mididings_script
-$md_exe -f $MIDIDINGS_SCRIPT &
-pid_mididings=$!
-sleep 1
+if [ ! "$(ps -ef | grep $md_exe | grep -v grep)" ]
+then
+    $md_exe -f $MIDIDINGS_SCRIPT &
+    pid_mididings=$!
+    sleep 1
+fi
 
 echo "Connecting MIDI"
-aconnect "$DRUMS" mididings
-aconnect mididings:1 Hydrogen
+aconnect "$DRUMS" mididings 2>/dev/null
+aconnect mididings:1 Hydrogen 2>/dev/null
+
+# Nothing was started, so this must've been just a MIDI reconnect after automatic power off.
+[ "$pid_qjackctrl$pid_hydrogen$pid_mididings" = "" ] && exit 0
+
 echo "Connecting ALSA/JACK bridge"
 alsa_in -j "ALSA output" -d loop_playback_out &
 alsa_out -j "ALSA input" -d loop_record_in &
