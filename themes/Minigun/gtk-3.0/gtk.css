@@ -1,7 +1,7 @@
 /* Minigun by Panther. Based on E17gtk theme. */
 
-@define-color base_color #3d3d3e;
-@define-color bg_color #3d3d3e;
+@define-color base_color #3d3d3d;
+@define-color bg_color #3d3d3d;
 @define-color text_color #eeeeee;
 @define-color fg_color #eeeeee;
 @define-color selected_bg_color #141414;
@@ -62,8 +62,8 @@
 
 @define-color focus_border alpha(@theme_fg_color, 0.30);
 
-@define-color trough_bg_color_a #2F2F30;
-@define-color trough_bg_color_b #414243;
+@define-color trough_bg_color_a #2F2F2F;
+@define-color trough_bg_color_b #424242;
 
 @define-color active_switch_bg_color #A0A0A0;
 
@@ -78,7 +78,7 @@
 
 @define-color osd_highlight #eeeeee;
 @define-color osd_lowlight #525252;
-@define-color osd_base #212526;
+@define-color osd_base #242424;
 @define-color osd_fg #ededed;
 @define-color osd_bg alpha(@osd_base, 0.80);
 @define-color osd_text_shadow alpha(black, 0.75);

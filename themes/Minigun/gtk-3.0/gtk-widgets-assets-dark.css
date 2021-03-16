@@ -263,7 +263,7 @@ radio row:selected:focus:checked:disabled.button.flat {
 
 .sidebar .radio:selected:hover,
 .sidebar .radio:selected:focus {
-    -gtk-icon-source: url("assets/sidebar-radio-selected-prelight.svg");    
+    -gtk-icon-source: url("assets/sidebar-radio-selected-prelight.svg");
 }
 
 /* Also draw toggle button check items (a redundant Gtk+ widget) */

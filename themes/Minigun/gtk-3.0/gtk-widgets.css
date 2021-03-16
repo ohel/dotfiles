@@ -20,7 +20,7 @@
     /*border-radius: 1px;*/
 
     -GtkWindow-resize-grip-width: 10;
-    -GtkWindow-resize-grip-height: 10; 
+    -GtkWindow-resize-grip-height: 10;
 
     outline-color: @focus_border;
     outline-style: dashed;
@@ -324,7 +324,7 @@ entry progress:focus {
     border-image: none;
     border-style: none;
     background-color: transparent;
-    background-image: linear-gradient(to top, 
+    background-image: linear-gradient(to top,
                                       transparent 2px,
                                       white 2px,
                                       white 3px,
@@ -337,7 +337,7 @@ entry progress:focus {
 
 /*entry progress.pulse,
 entry progress.pulse:focus {
-    background-image: linear-gradient(to top, 
+    background-image: linear-gradient(to top,
                                       transparent 2px,
                                       white 2px,
                                       white 3px,
@@ -636,7 +636,7 @@ notebook {
 }
 
 /* gtk-3.12 */
-notebook, 
+notebook,
 notebook > header {
     background-image: none;
     background-color: transparent;
@@ -2037,7 +2037,7 @@ progressbar.osd progress {
     background-image: linear-gradient(to bottom,
                                       @progressbar_background_a,
                                       @progressbar_background_b);
-    border-radius: 0;    
+    border-radius: 0;
 }
 
 /****************************
@@ -2308,15 +2308,15 @@ GtkCheckButton,
 GtkRadioButton,
 radio,
 check,
-radio:selected, 
+radio:selected,
 check:selected,
-radio:selected:focus, 
+radio:selected:focus,
 check:selected:focus,
 cell.radio,
 cell.check,
-cell.radio:selected, 
+cell.radio:selected,
 cell.check:selected,
-cell.radio:selected:focus, 
+cell.radio:selected:focus,
 cell.check:selected:focus {
     background-color: transparent;
     border-width: 0px;
@@ -2572,21 +2572,9 @@ label {
 
 .window-frame,
 decoration {
-    border-radius: 0px;
-    border-width: 0px;
-    /* h, v, blur, spread, color */
-    box-shadow: 0 -1px 0 0 #B3B3B3,
-                0 3px 8px 3px black;
-
     /* resize cursor area */
-    margin: 5px;
-}
-
-.window-frame.solid-csd,
-.solid-csd decoration {
-    /* resize cursor area */
-    margin: 5px;
-    box-shadow: none;
+    margin: 3px;
+    background-color: @base_color;
 }
 
 .titlebar .titlebutton {
