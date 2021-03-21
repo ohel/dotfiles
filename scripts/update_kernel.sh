@@ -76,7 +76,7 @@ function cleanup {
     echo "Found old releases in /usr/src:"
     echo ${old_releases[@]}
     echo
-    echo "Press y to remove them, any other key to skip."
+    echo "Remove old releases? Press y to remove, any other key to skip."
     echo "Files of those releases in /boot and /lib/modules will also be removed."
     current_release=$(uname -r)
     if [ "$keep_release" != "$current_release" ]
