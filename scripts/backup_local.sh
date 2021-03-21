@@ -19,7 +19,7 @@ systembackupexcludelist=(
     "/proc/\*"
     "/sys/\*"
     "/tmp/\*"
-    "/usr/portage/distfiles/\*"
+    "/var/cache/distfiles/\*"
     "/var/tmp/\*"
     "/swapfile"
 )
