@@ -387,14 +387,14 @@ inoremap <c-insert> <esc>`^bve
 " Common insert hotkeys.
 nnoremap <s-insert> "+P
 inoremap <s-insert> <c-r>=col('.') == col('$') ? "\<lt>esc>`^\"+pa" : "\<lt>esc>`^\"+Pa"<cr>
-" At some point <s-insert> in command mode stopped working in GUI vim. Use
-" <c-q> in GUI mode to insert control characters.
+" At some point <s-insert> in command mode stopped working in GUI vim.
+" Use <c-q> in GUI mode to insert control characters.
 cnoremap <c-v> <c-r>+
 inoremap <c-v> <c-r>=col('.') == col('$') ? "\<lt>esc>`^\"+pa" : "\<lt>esc>`^\"+Pa"<cr>
 
-" Replace contents.
-vnoremap <silent> <expr> <s-insert> mode() ==# "V" ? "\"+P" : ":<esc>`>:execute col('.') == col('$')-1 ? \"normal! gv\\\"_x\\\"+p\" : \"normal! gv\\\"_x\\\"+Pl\"<cr>"
-vnoremap <silent> <expr> <c-v> mode() ==# "V" ? "\"+P" : ":<esc>`>:execute col('.') == col('$')-1 ? \"normal! gv\\\"_x\\\"+p\" : \"normal! gv\\\"_x\\\"+Pl\"<cr>"
+" Replace contents, but delete the old selection to black hole register first so as not to replace insert buffer.
+vnoremap <silent> <expr> <s-insert> mode() ==# "V" ? "\"_x\"+P" : ":<esc>`>:execute col('.') == col('$')-1 ? \"normal! gv\\\"_x\\\"+p\" : \"normal! gv\\\"_x\\\"+Pl\"<cr>"
+vnoremap <silent> <expr> <c-v> mode() ==# "V" ? "\"_x\"+P" : ":<esc>`>:execute col('.') == col('$')-1 ? \"normal! gv\\\"_x\\\"+p\" : \"normal! gv\\\"_x\\\"+Pl\"<cr>"
 
 " Common search hotkey.
 inoremap <c-f> <esc>`^/
