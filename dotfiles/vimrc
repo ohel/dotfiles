@@ -296,21 +296,21 @@ if isdirectory($VIMHOME . "/plugged/unite.vim")
     call unite#custom_source('outline', 'matchers', ['matcher_fuzzy'])
     call unite#custom_source('history/yank', 'matchers', ['matcher_fuzzy'])
     call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep', 'ignore_pattern', join([
-         \ '.a$',
-         \ '.aux$',
-         \ '.bak$',
+         \ '\.a$',
+         \ '\.aux$',
+         \ '\.bak$',
          \ 'bower_components/',
          \ '\.git/',
-         \ '.jar$',
-         \ '.lib$',
+         \ '\.jar$',
+         \ '\.lib$',
          \ 'node_modules/',
-         \ '.o$',
-         \ '.obj$',
-         \ '.out$',
-         \ '.sass-cache',
-         \ '.so$',
+         \ '\.o$',
+         \ '\.obj$',
+         \ '\.out$',
+         \ '\.sass-cache',
+         \ '\.so$',
          \ 'tmp/',
-         \ '.toc$',
+         \ '\.toc$',
          \ '\.tscache/'
          \ ], '\|'))
 endif
@@ -382,7 +382,7 @@ nnoremap <c-insert> V"+y<esc>:let @*=@+<cr>:echo "Line copied."<cr>
 vnoremap <c-insert> "+y<esc>:let @*=@+<cr>:echo "Copied."<cr>
 vnoremap <c-c> "+y<esc>:let @*=@+<cr>:echo "Copied."<cr>
 " Go to visual mode for copying word under cursor.
-inoremap <c-insert> <esc>`^bve
+inoremap <c-insert> <esc>`^viw
 
 " Common insert hotkeys.
 nnoremap <s-insert> "+P
@@ -641,8 +641,10 @@ function! OnVimEnter()
         nnoremap <leader>g :Unite grep:.:<cr>
         " Search selected text.
         vnoremap <leader>g :Unite grep:.::<c-r>*<cr>
-        " Search current filename.
-        nnoremap <leader>gf :Unite grep:.::<c-r>=expand('%:t')<cr><cr>
+        " Search word under cursor.
+        nnoremap <leader>gw viw:Unite grep:.::<c-r>*<cr>
+        " Search current filename, extension removed.
+        nnoremap <leader>gf :Unite grep:.::<c-r>=expand('%:t:r')<cr><cr>
         " Search Angular.js keywords.
         nnoremap <leader>ga :Unite -start-insert grep:.::\\.(filter\|provider\|controller\|directive\|factory\|service)\\(\\'.+\\'<cr>
     endif
