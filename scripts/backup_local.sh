@@ -41,12 +41,12 @@ fi
 echo "Mounting partitions if not already mounted..."
 for mountable in ${mountables[@]}
 do
-    [ ! "$(cat /etc/mtab | grep $mountable)" ] && mount $mountable 2>/dev/null &
+    [ ! "$(grep $mountable /etc/mtab)" ] && mount $mountable 2>/dev/null &
 done
 wait
 for mountable in ${mountables[@]}
 do
-    [ ! "$(cat /etc/mtab | grep $mountable)" ] && echo "Mounting $mountable failed." && sleep 1
+    [ ! "$(grep $mountable /etc/mtab)" ] && echo "Mounting $mountable failed." && sleep 1
 done
 
 echo "Starting backup in three seconds..."

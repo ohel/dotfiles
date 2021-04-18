@@ -9,7 +9,7 @@ then
     echo "Quod Libet is not playing any song."
     exit 1
 fi
-filename=$(cat ~/.quodlibet/current | grep ~filename | cut -f 2 -d '=')
+filename=$(grep ~filename ~/.quodlibet/current | cut -f 2 -d '=')
 $ql --next
 mkdir -p /tmp/qlremoved
 mv "$filename" /tmp/qlremoved

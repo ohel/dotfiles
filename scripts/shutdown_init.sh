@@ -11,8 +11,8 @@ fi
 
 if [ -e /proc/mdstat ]
 then
-    numraidtotal=$(cat /proc/mdstat | grep "active raid1" | wc -l)
-    numraidok=$(cat /proc/mdstat | grep "\[\([0-9]\)\/\1\]"| wc -l)
+    numraidtotal=$(grep "active raid1" /proc/mdstat | wc -l)
+    numraidok=$(grep "\[\([0-9]\)\/\1\]" /proc/mdstat | wc -l)
     if ! [ $numraidtotal -eq $numraidok ]
     then
         echo "RAID device note:"
@@ -21,7 +21,7 @@ then
         exit 1
     fi
 
-    if [ "$(cat /proc/mdstat | grep resync)" ]
+    if [ "$(grep resync /proc/mdstat)" ]
     then
         echo "RAID devices resyncing:"
         cat "/proc/mdstat"

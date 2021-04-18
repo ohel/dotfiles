@@ -6,12 +6,12 @@
 [ "$#" -eq 0 ] && echo "Usage: toggle_hdd.sh <mount location> [sleep|mount]" && exit 1
 
 mountloc="$1"
-uuid=$(cat /etc/fstab | grep $mountloc | tr -d [:space:] | tr '\t' ' ' | cut -f 1 -d '/' | cut -f 2 -d '=' | tr -d '"')
+uuid=$(grep $mountloc /etc/fstab | tr -d [:space:] | tr '\t' ' ' | cut -f 1 -d '/' | cut -f 2 -d '=' | tr -d '"')
 device=$(ls -l /dev/disk/by-uuid/$uuid | cut -f 2 -d '>' | cut -f 3 -d '/')
 
 [ ! "$device" ] || [ ! "$uuid" ] && echo "Device not found." && exit 1
 
-mountloc=$(cat /etc/fstab | grep $uuid | tr -s [:space:] | tr '\t' ' ' | cut -f 2 -d ' ')
+mountloc=$(grep $uuid /etc/fstab | tr -s [:space:] | tr '\t' ' ' | cut -f 2 -d ' ')
 mounted=0
 if [ "$(mount | grep $mountloc)" ] && [ "$2" != "mount" ]
 then
@@ -22,7 +22,7 @@ fi
 
 if [ "$(echo $device | grep md)" ]
 then
-    devices=$(cat /proc/mdstat | grep $device | sed "s/.*\(sd.\).*\(sd.\).*/\1 \2/g")
+    devices=$(grep $device /proc/mdstat | sed "s/.*\(sd.\).*\(sd.\).*/\1 \2/g")
 else
     devices=$(echo $device | tr -d "[:digit:]")
 fi

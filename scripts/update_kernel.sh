@@ -49,7 +49,7 @@ fi
 if [ ! "$use_grub" ]
 then
     # Mounts all fstab entries with /efi/ in them.
-    for efi_mount_point in $(cat /etc/fstab | grep "\/efi\(\/\S*\)\?\s" | grep -o "\/\S*")
+    for efi_mount_point in $(grep "\/efi\(\/\S*\)\?\s" /etc/fstab | grep -o "\/\S*")
     do
         [ "$(mount | grep " $efi_mount_point ")" ] || mount $efi_mount_point
     done
@@ -86,6 +86,7 @@ function cleanup {
     fi
     read -n1 remove
     echo
+    echo
 
     [ "$remove" != "y" ] && return 1
 
@@ -104,6 +105,7 @@ function cleanup {
         fi
         echo "Removed kernel release $release files."
     done
+    echo
     return 0
 }
 
@@ -118,7 +120,7 @@ else
 
     if [ "$old_release" == "$new_release" ]
     then
-        echo "New kernel was not found."
+        echo "No new kernel releases found."
         cd $cwd
         cleanup $new_release $prefix $efi_dest_dir
         [ $? -eq 0 ] && [ -e $boot_backup_script ] && $boot_backup_script

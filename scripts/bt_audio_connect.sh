@@ -4,8 +4,8 @@
 # Override MAC may be given as $1.
 # Uses a helper script to connect.
 
-mac=$(cat .asoundrc 2>/dev/null | grep -A 20 "pcm\.bluetooth" | grep -o "\(..:\)\{5\}.." | grep -v "[0:]\{17\}")
-[ $mac ] || mac=$(cat /etc/asound.conf 2>/dev/null | grep -A 20 "pcm\.bluetooth" | grep -o "\(..:\)\{5\}.." | grep -v "[0:]\{17\}")
+mac=$(grep -A 20 "pcm\.bluetooth" .asoundrc 2>/dev/null | grep -o "\(..:\)\{5\}.." | grep -v "[0:]\{17\}")
+[ $mac ] || mac=$(grep -A 20 "pcm\.bluetooth" /etc/asound.conf 2>/dev/null | grep -o "\(..:\)\{5\}.." | grep -v "[0:]\{17\}")
 [ $mac ] || mac=$ALSA_BLUETOOTH_MAC
 [ $1 ] && mac=$1
 

@@ -19,7 +19,7 @@ then
         exit 1
     fi
 
-    firstwintitle=$(cat /boot/grub/grub.conf | grep title | grep -n . | grep -i windows | head -n 1)
+    firstwintitle=$(grep title /boot/grub/grub.conf | grep -n . | grep -i windows | head -n 1)
     titlenum=$(expr $(echo $firstwintitle | cut -f 1 -d ':') - 1)
     sed "s/^[0-9]/$titlenum/" $grubdefault > /dev/shm/grub_default
     cp /dev/shm/grub_default $grubdefault

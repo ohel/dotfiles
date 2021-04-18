@@ -4,6 +4,8 @@
 # If $1 = r, reset adjustments.
 # If $2 = b, also change brightness. This is done using the backlight script (if backlight is module present), otherwise using redshift.
 # If no parameters are given, uses a simple custom algorithm to automatically guess good values.
+# Use this in a user's crontab (crontab -e -u user) for example like this:
+# 5 * * * * DISPLAY=:0.0 /home/user/.scripts/redshift.sh
 
 cachedir=~/.cache
 tempfile=$cachedir/redshift_temp
