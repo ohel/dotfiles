@@ -311,7 +311,8 @@ if isdirectory($VIMHOME . "/plugged/unite.vim")
          \ '\.so$',
          \ 'tmp/',
          \ '\.toc$',
-         \ '\.tscache/'
+         \ '\.tscache/',
+         \ '.*main-es.*\.js$'
          \ ], '\|'))
 endif
 
