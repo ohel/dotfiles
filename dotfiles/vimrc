@@ -150,6 +150,7 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd BufNewFile,BufRead *.xaml set filetype=xml
+autocmd BufNewFile,BufRead *.jsonl set filetype=json
 
 
 

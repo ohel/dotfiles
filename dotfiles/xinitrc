@@ -2,11 +2,13 @@
 
 [ -f ~/.Xresources ] && xrdb -merge -I$HOME ~/.Xresources
 
-# E.g. for Japanese input, just export USE_SCIM=true before this script.
-if [ "$(echo $USE_SCIM)" = "true" ]
+# E.g. for Japanese input, export USE_SCIM=1 before this script.
+# SCIM should be started automatically when logging in but if it isn't: scim -d
+if [ "$USE_SCIM" = 1 ]
 then
-    export XMODIFIERS=@im=scim
+    export XMODIFIERS=@im=SCIM
     export GTK_IM_MODULE=scim
+    export QT_IM_MODULE=scim
 fi
 
 # Thread limit for ImageMagick
@@ -16,8 +18,12 @@ export MAGICK_THREAD_LIMIT=16
 export GDK_USE_XFT=1
 export QT_XFT=1
 
+# Qt5.7 no longer supports GTK styles so to get something reasonable (i.e. dark color scheme)
+# one must use qt5ct to change the look of Qt5 applications.
+export QT_QPA_PLATFORMTHEME=qt5ct
+
 # If 4K scaling is set in e.g. ~/.profile.env_extra
-if [ "$(env | grep SCALE_4K=1)" ]
+if [ "$SCALE_4K" = 1 ]
 then
     export GDK_SCALE=2
     export GDK_DPI_SCALE=0.5
@@ -31,27 +37,17 @@ xset s off
 # Restore ALSA state (volumes etc.) if saved.
 [ -f ~/.asound.state ] && /usr/sbin/alsactl restore -f ~/.asound.state
 
-
-
-# Qt5.7 no longer supports GTK styles so to get something reasonable (i.e. dark color scheme)
-# one must use qt5ct to change the look of Qt5 applications.
-export QT_QPA_PLATFORMTHEME=qt5ct
-
-# This temporary directory is needed if using mhwaveedit.
-which mhwaveedit 2>/dev/null && mkdir -p /tmp/mhwaveedit
-
-
-
 # Sometimes I link .thumbnails and .cache to directories under .commoncache
 # and .commoncache itself somewhere under a tmpfs, for example $XDG_RUNTIME_DIR.
-[ ! -e ~/.commoncache ] && ln -s $XDG_RUNTIME_DIR ~/.commoncache
+[ "$XDG_RUNTIME_DIR" ] && [ ! -e ~/.commoncache ] && ln -s $XDG_RUNTIME_DIR ~/.commoncache
 mkdir -p $(readlink ~/.commoncache) 2>/dev/null
 mkdir -p $(readlink ~/.thumbnails) 2>/dev/null
 mkdir -p $(readlink ~/.cache) 2>/dev/null
 which mpv 2>/dev/null && [ -d ~/.commoncache ] && mkfifo ~/.commoncache/mpvfifo
 [ -d ~/.sessions ] && ln -sf ~/.sessions ~/.cache/sessions
 
-
+# This temporary directory is needed if using mhwaveedit.
+which mhwaveedit 2>/dev/null && mkdir -p /tmp/mhwaveedit
 
 # This application does absolutely nothing, it just waits to be killed, keeping X alive.
 # It is as stable as it gets, even if the real session manager might be unstable.

@@ -36,14 +36,19 @@ esac
 
 alias cp='cp -a'
 alias f='find ./ | grep -i --colour'
-alias g='grep -iR --colour'
 alias ls='ls --color=auto -h --group-directories-first'
 alias lso='ls -lG'
 alias rmemptydirs='find . -depth -empty -type d -exec rmdir {} \;'
 alias x='exit'
 
+# The universal g alias. Prefer ripgrep, then The Silver Searcher and finally the plain old grep.
+grep_ignore_file="" && [ -e ~/.config/grep_ignore ] && grep_ignore_file=~/.config/grep_ignore
+grep_ignore="" && [ "$grep_ignore_file" ] && grep_ignore="--exclude-from=$grep_ignore_file"
+alias g="grep -iR --colour $grep_ignore"
 which ag &>/dev/null && alias g='ag'
-which rg &>/dev/null && alias g='rg -S -uu'
+grep_ignore="" && [ "$grep_ignore_file" ] && grep_ignore="--ignore-file $grep_ignore_file"
+which rg &>/dev/null && alias g="rg -S -uu $grep_ignore"
+
 which gvim &>/dev/null && alias gvim='gvim -p'
 which rsync &>/dev/null && alias rcp='rsync -ah --progress' && alias rs='rsync -avzu --delete'
 
