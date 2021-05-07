@@ -38,7 +38,7 @@ endif
 map <space> <leader>
 
 " Last command.
-nnoremap <silent><leader>c :<up><cr>
+nnoremap <silent><leader>l :<up><cr>
 
 " Sort.
 if executable('sort')
@@ -244,8 +244,9 @@ endif
 if isdirectory($VIMHOME . "/plugged/YouCompleteMe")
     function! LoadYCM()
         call plug#load('YouCompleteMe') | call youcompleteme#Enable() | YcmCompleter
+        nnoremap <leader>gd :YcmCompleter GoToDefinitionElseDeclaration<CR>
     endfunction
-    nnoremap <a-t> :call LoadYCM()<cr>:echo "YouCompleteMe loaded."<cr>
+    nnoremap <leader>y :call LoadYCM()<cr>:echo "YouCompleteMe loaded."<cr>
 endif
 
 if isdirectory($VIMHOME . "/plugged/vim-arpeggio")
@@ -426,11 +427,11 @@ inoremap <down> <c-o>gj
 
 
 " Switch to alternate file (usually previously edited buffer).
-inoremap <a-s> <c-o>:b#<cr>
-nnoremap <a-s> :b#<cr>
+inoremap <leader>s <c-o>:b#<cr>
+nnoremap <leader>s :b#<cr>
 
 " Uppercase word under cursor.
-nnoremap <a-u> gUiw
+nnoremap <leader>U gUiw
 
 " Toggle menubar.
 nnoremap <f5> :if &go=~#'m'<bar>set go-=m<bar>else<bar>set go+=m<bar>endif<cr>
@@ -453,9 +454,8 @@ cnoremap <c-n> <cr>:noh<cr>/<up>
 cnoremap <a-n> <cr>NN:noh<cr>/<up>
 
 " Close window.
-nnoremap <a-w> <c-w>c
-vnoremap <a-w> <c-w>c
-inoremap <a-w> <esc><c-w>c
+nnoremap <c-w><c-w> <c-w>c
+vnoremap <c-w><c-w> <c-w>c
 nnoremap <c-f4> <c-w>c
 vnoremap <c-f4> <c-w>c
 inoremap <c-f4> <esc><c-w>c
@@ -666,9 +666,9 @@ function! OnVimEnter()
         " Toggle comment for the current/selected line(s).
         " For some reason this does not work here:
         " :execute "normal! " . eval(string(g:tcomment_opleader1)) . "c"<cr>
-        nmap <silent><a-c> åc
-        vmap <silent><a-c> å
-        imap <silent><a-c> <esc>åc^
+        nmap <silent><leader>c åc
+        vmap <silent><leader>c å
+        imap <silent><leader>c <esc>åc^
     endif
 
     " XML formatting using Python.
