@@ -6,13 +6,13 @@
 # Parameters:
 # $1: URL (use double quotes)
 # $2: segment cue, defaults to "seg-"; a growing segment index should follow
-# $3: max index, if not automatically detected; defaults to 500
+# $3: max index, if not automatically detected; defaults to 1000
 # $4: extension; defaults to "mp4"
 
 seg_cue=${2:-seg-}
 url_part_1=$(echo "$1" | sed "s/\(.*\)$seg_cue[0-9]*\(.*\)/\1$seg_cue/")
 url_part_2=$(echo "$1" | sed "s/\(.*\)$seg_cue[0-9]*\(.*\)/\2/")
-max_index=${3:-500}
+max_index=${3:-1000}
 extension=${4:-mp4}
 
 tmp_dir=$(mktemp -d)
@@ -42,5 +42,11 @@ done
 
 echo Concatenating segments...
 ls $tmp_dir/seg_*.$extension | while read line; do echo file \'$line\'; done | ffmpeg -loglevel warning -protocol_whitelist file,pipe -f concat -safe 0 -i - -c copy complete.$extension
+
+if [ ! -e complete.$extension ]
+then
+    echo Error concatenating files using ffmpeg, using cat instead.
+    cat $tmp_dir/seg_*.$extension >> complete.$extension
+fi
 
 rm $tmp_dir/seg_*.$extension
