@@ -12,6 +12,7 @@ set statusbar-bg "#303030"
 set statusbar-fg "#a0a0a0"
 set window-icon "~/.local/share/icons/zathura_pdf.png"
 set zoom-step 20
+set sandbox none
 map f recolor
 map <C-+> zoom in
 map <C--> zoom out
