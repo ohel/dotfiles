@@ -5,6 +5,9 @@
 # - open a speed dial page to new tab if no URL given
 # - open the given URL or a new Chromium window with newwindow parameter
 
+# Since version 91 the scale is computed automatically.
+scale="env GDK_DPI_SCALE=1 GDK_SCALE=1"
+
 # Chromium executable name varies between systems.
 [ "$(which chromium-browser 2>/dev/null)" ] && executable="chromium-browser"
 [ ! "$executable" ] && [ "$(which chromium 2>/dev/null)" ] && executable="chromium"
@@ -18,14 +21,14 @@ fi
 
 if [ "$1" = "newwindow" ]
 then
-    $executable
+    $scale $executable
     exit
 elif [ "$#" -eq 1 ]
 then
-    $executable "$1"
+    $scale $executable "$1"
 elif [ ! "$(ps -ef | grep chromium-browser | grep -v grep)" ]
 then
-    $executable
+    $scale $executable
 else
     # To open a blank page: $executable about:blank
     # Instead of opening a blank page, use Ctrl+t new tab shortcut to open speed dial page.
