@@ -13,7 +13,7 @@
 prefix="linux"
 efi_dest_dir=/boot/EFI
 
-# A system specific boot backup script, such as an ESP backup or copying via boot symlink, if cleanup was OK.
+# An optional system specific boot backup script such as an ESP backup.
 boot_backup_script=/opt/boot_backup.sh
 
 cwd="$(pwd)"
@@ -69,27 +69,33 @@ function cleanup {
     if [ ${#old_releases[@]} -eq 0 ]
     then
         echo "Found nothing to clean up."
+        echo "Run backup scripts? Press y to run, any other key to skip."
+        read -n1 runbackup
         echo
-        return 1
+        [ "$runbackup" != "y" ] && return 1
+        return 0
     fi
 
+    current_release=$(uname -r)
     echo "Found old releases in /usr/src:"
     echo ${old_releases[@]}
     echo
-    echo "Remove old releases? Press y to remove, any other key to skip."
-    echo "Files of those releases in /boot and /lib/modules will also be removed."
-    current_release=$(uname -r)
     if [ "$keep_release" != "$current_release" ]
     then
+        echo "Old releases can be removed by this script by booting the newest kernel."
+        echo "Press return to continue."
         echo
-        echo "WARNING: currently running release ($current_release) is not the newest."
+        read
+    else
+        echo "Remove old releases? Press y to remove, any other key to skip."
+        echo "Files of those releases in /boot and /lib/modules will also be removed."
+        read -n1 remove
+        echo
     fi
-    read -n1 remove
-    echo
-    echo
 
     [ "$remove" != "y" ] && return 1
 
+    echo
     for release in ${old_releases[@]}
     do
         rm -rf /usr/src/linux-$release

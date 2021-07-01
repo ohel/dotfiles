@@ -1,7 +1,14 @@
 #!/bin/bash
 # Backup script for full system, home, and misc backup. Backup process is logged.
 
+# The backup_config should have these four variables (three of them bash arrays) defined:
+# mountables: Mount points needed in backup.
+# systembackupdir: Location where to put full system backups.
+# backup_source_dirs: Source directories for misc backup.
+# backup_dest_dirs: Destination directories for misc backup. Should correspond to source directories.
+# Optionally also: systembackupexcludelist: Things to exclude from backup.
 backup_config=/opt/backup_config
+
 [ ! -e $backup_config ] && echo "Error: missing backup config $backup_config" && exit 1
 . /opt/backup_config
 [ ! "$mountables" ] && echo "Error: missing definition for mountables" && exit 1
@@ -10,18 +17,14 @@ backup_config=/opt/backup_config
 [ ! "$backup_dest_dirs" ] && echo "Error: missing definition for backup_dest_dirs" && exit 1
 
 # Escape asterisks, otherwise shell expansion is made.
-systembackupexcludelist=(
+[ ! "$systembackupexcludelist" ] && systembackupexcludelist=(
     "/dev/shm/\*"
     "/home/\*"
     "/mnt/\*/\*"
-    "/opt/games/\*"
-    "/opt/virtualmachines/\*"
     "/proc/\*"
     "/sys/\*"
     "/tmp/\*"
-    "/var/cache/distfiles/\*"
     "/var/tmp/\*"
-    "/swapfile"
 )
 
 logdir="/var/log/backup/"
@@ -85,13 +88,14 @@ then
         excludelist="$excludelist --exclude=.$excludeitem"
     done
     excludelist=$(echo $excludelist | sed "s/\\\\\*/*/g")
+
     echo
     echo "Creating system backup, see /dev/shm/backup.out for progress."
     if [ $parallel -eq 1 ]
     then
-        tar -C / --index-file /dev/shm/backup.out $excludelist -cvpf - ./ | pigz -c > $systembackupfile
+        tar -C / --warning=no-file-ignored --index-file /dev/shm/backup.out $excludelist -cvpf - ./ | pigz -c > $systembackupfile
     else
-        tar -C / --index-file /dev/shm/backup.out $excludelist -cvpzf $systembackupfile ./
+        tar -C / --warning=no-file-ignored --index-file /dev/shm/backup.out $excludelist -cvpzf $systembackupfile ./
     fi
     echo "Moving log file to $logdir..."
     mv /dev/shm/backup.out $logdir
@@ -129,9 +133,9 @@ then
 
     if [ $parallel -eq 1 ]
     then
-        tar -C / --one-file-system -cpf - $excludelist ./home | pigz -c > $homebackupfile
+        tar -C / --warning=no-file-ignored --one-file-system -cpf - $excludelist ./home | pigz -c > $homebackupfile
     else
-        tar -C / --one-file-system -cpzf $homebackupfile $excludelist ./home
+        tar -C / --warning=no-file-ignored --one-file-system -cpzf $homebackupfile $excludelist ./home
     fi
 fi
 
