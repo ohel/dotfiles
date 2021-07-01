@@ -62,8 +62,22 @@ echo "Connecting ALSA/JACK bridge"
 alsa_in -j "ALSA output" -d loop_playback_out &
 alsa_out -j "ALSA input" -d loop_record_in &
 sleep 1
-jack_connect "ALSA output:capture_1" system:playback_1
-jack_connect "ALSA output:capture_2" system:playback_2
+jack_connect "ALSA output:capture_1" "system:playback_1"
+jack_connect "ALSA output:capture_2" "system:playback_2"
+
+if [ "$(which jack-rack 2>/dev/null)" ] && [ -e /opt/jackrack/reverb_drums ]
+then
+    echo "Connecting JACK Rack"
+    jack-rack /opt/jackrack/reverb_drums &
+    pid_jackrack=$!
+    sleep 2
+    jack_disconnect "Hydrogen:out_L" "system:playback_1"
+    jack_disconnect "Hydrogen:out_R" "system:playback_2"
+    jack_connect "Hydrogen:out_L" "jack_rack:in_1"
+    jack_connect "Hydrogen:out_R" "jack_rack:in_2"
+    jack_connect "jack_rack:out_1" "system:playback_1"
+    jack_connect "jack_rack:out_2" "system:playback_2"
+fi
 
 echo
 echo Press return twice to quit.
@@ -71,7 +85,8 @@ read temp
 echo Press return once to quit.
 read temp
 
-kill $pid_mididings
-kill $pid_hydrogen
+[ "$pid_mididings" ] && kill $pid_mididings
+[ "$pid_jackrack" ] && kill $pid_jackrack
+[ "$pid_hydrogen" ] && kill $pid_hydrogen
 [ "$pid_qjackctrl" ] && kill $pid_qjackctrl
 [ "$pid_qjackctrl" ] && killall jackd
