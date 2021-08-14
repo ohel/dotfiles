@@ -8,10 +8,10 @@ conky.config = {
     draw_outline = true,
     draw_shades = false,
     font = 'LucidaConsole:size=8',
-    gap_x = 100,
-    gap_y = 400,
-    maximum_width = 800,
-    minimum_width = 800,
+    gap_x = 50,
+    gap_y = 200,
+    maximum_width = 400,
+    minimum_width = 400,
     net_avg_samples = 2,
     no_buffers = true,
     out_to_console = false,
@@ -32,7 +32,7 @@ conky.config = {
 };
 
 conky.text = [[
-${color e06060}CPU ${color a06060}${cpubar 18,400}${alignr}${color e06060}RAM ${color a06060}${membar 18,240}
+${color e06060}CPU ${color a06060}${cpubar 9,200}${alignr}${color e06060}RAM ${color a06060}${membar 9,120}
 
 ${color e06060}Process${alignr}PID   CPU%   MEM%
 ${color a06060}${top name 1}${alignr}${top pid 1} ${top cpu 1} ${top mem 1}
