@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Toggle FullHD
+Icon=xfce-display-external
+Exec=.scripts/toggle_mode.sh 1920x1080
+Terminal=false
+Categories=Settings

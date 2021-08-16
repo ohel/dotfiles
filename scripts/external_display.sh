@@ -169,6 +169,7 @@ echo Final DPI: $common_dpi
 if [ "$(which xfconf-query 2>/dev/null)" ]
 then
     xfconf-query -c xsettings -p /Xft/DPI -s $common_dpi
+    xfconf-query -c xsettings -p /Gdk/WindowScalingFactor -s 1
     [ "$(env | grep GDK_SCALE=2)" ] || xfconf-query -c xsettings -p /Gdk/WindowScalingFactor -s $scale
     xfconf-query -c xsettings -p /Gtk/CursorThemeSize -s $(expr $scale \* 20 + 1)
 fi

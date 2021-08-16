@@ -1,16 +1,19 @@
 #!/bin/sh
-# Toggles between best resolution and FullHD for all displays showing a picture.
-# UI scaling is set also. Unfortunately setting GDK_SCALE won't work on the fly since it's an environment variable.
+# Toggles between best resolution and given mode $1 (FullHD, i.e. 1920x1080 by default) for all displays showing a picture.
+# UI scaling is set also if HiDPI resolutions are being set.
+# Unfortunately setting GDK_SCALE won't work on the fly since it's an environment variable.
 
 primary_background=~/.themes/background
 secondary_background=~/.themes/background2
 HIDPI_WIDTH=3840
-FULLHD="1920x1080"
+target_mode=${1:-"1920x1080"}
+target_is_hdpi="yes"
+[ "$(echo $target_mode | cut -f 1 -d 'x')" -lt $HIDPI_WIDTH ] && target_is_hdpi=""
 
 xrandrout="$(xrandr)"
 
 current_mode=$(echo "$xrandrout" | grep \* | head -n 1 | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}")
-[ "$current_mode" != $FULLHD ] && set_fhd=1
+[ "$current_mode" != $target_mode ] && set_target_mode="yes"
 
 primary_display=${primary_display:-$(echo "$xrandrout" | grep " connected" | cut -f 1 -d ' ' | head -n 1)}
 primary_mode=$(echo "$xrandrout" | grep -A 1 $primary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
@@ -40,7 +43,7 @@ fi
 has_primary=$(echo "$xrandrout" | grep -z -o "$primary_display.*[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n +2 | tr -c -d [*c] | cut -f 1 -d 'c')
 has_secondary=$(echo "$xrandrout" | grep -z -o "$secondary_display.*[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n +2 | tr -c -d [*c] | cut -f 1 -d 'c')
 
-[ "$set_fhd" ] && primary_mode=$FULLHD && secondary_mode=$FULLHD && echo "Setting FullHD."
+[ "$set_target_mode" ] && primary_mode=$target_mode && secondary_mode=$target_mode && echo "Setting mode $target_mode"
 if [ ! "$secondary_display" ]
 then
     echo No secondary display found.
@@ -66,7 +69,7 @@ then
     p_dpi_set=96
     [ $p_dpi_calc -gt 100 ] && p_dpi_set=112
     [ $p_dpi_calc -gt 140 ] && [ $p_phys_width -gt 300 ] && p_dpi_set=144
-    if [ "$set_fhd" ]
+    if [ "$set_target_mode" ]
     then
         p_mode_width=$(echo $primary_mode | cut -f 1 -d 'x')
         p_native_width=$(echo $primary_native | cut -f 1 -d 'x')
@@ -80,6 +83,7 @@ fi
 
 scale=1
 [ $p_width -eq $HIDPI_WIDTH ] && scale=2
+[ "$set_target_mode" ] && [ ! "$target_is_hdpi" ] && scale=1
 
 [ "$secondary_display" ] && s_phys_width=$(echo "$xrandrout" | grep -A 1 $secondary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
 if [ "$s_phys_width" ] && [ $s_phys_width -gt 0 ] && [ "$has_secondary" ]
@@ -89,7 +93,8 @@ then
     [ $s_dpi_calc -gt 100 ] && s_dpi_set=112
     [ $s_dpi_calc -gt 140 ] && [ $s_phys_width -gt 300 ] && s_dpi_set=144
     [ $s_width -eq $HIDPI_WIDTH ] && scale=2
-    if [ "$set_fhd" ]
+    [ "$set_target_mode" ] && [ ! "$target_is_hdpi" ] && scale=1
+    if [ "$set_target_mode" ]
     then
         s_mode_width=$(echo $secondary_mode | cut -f 1 -d 'x')
         s_native_width=$(echo $secondary_native | cut -f 1 -d 'x')
@@ -103,12 +108,13 @@ fi
 # However, we only want this if GDK is set to scale down font sizes accordingly. Otherwise the window scaling factor xsetting should be used.
 [ ! "$common_dpi" ] && common_dpi=96
 echo Final DPI: $common_dpi
-[ ! "$set_fhd" ] && [ "$(env | grep GDK_DPI_SCALE=0.5)" ] && common_dpi=$(expr 2 \* $common_dpi)
+[ ! "$set_target_mode" ] && [ "$(env | grep GDK_DPI_SCALE=0.5)" ] && common_dpi=$(expr 2 \* $common_dpi)
 
 if [ "$(which xfconf-query 2>/dev/null)" ]
 then
     xfconf-query -c xsettings -p /Xft/DPI -s $common_dpi
-    ([ ! "$(env | grep GDK_SCALE=2)" ] || [ "$set_fhd" ]) && xfconf-query -c xsettings -p /Gdk/WindowScalingFactor -s $scale
+    xfconf-query -c xsettings -p /Gdk/WindowScalingFactor -s 1
+    ([ ! "$(env | grep GDK_SCALE=2)" ] || [ "$set_target_mode" ]) && xfconf-query -c xsettings -p /Gdk/WindowScalingFactor -s $scale
     xfconf-query -c xsettings -p /Gtk/CursorThemeSize -s $(expr $scale \* 20 + 1)
 fi
 
