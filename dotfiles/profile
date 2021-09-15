@@ -1,1 +1,2 @@
+[ -e ~/.profile.env ] && . ~/.profile.env
 [ -n "$BASH_VERSION" ] && [ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"
