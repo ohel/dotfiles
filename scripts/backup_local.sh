@@ -61,7 +61,7 @@ sleep 1
 
 parallel=0
 # If pigz is found, use threaded compression.
-[ $(which pigz 2>/dev/null) ] && parallel=1
+[ "$(which pigz 2>/dev/null)" ] && parallel=1
 
 datestring=$(date +%F)
 

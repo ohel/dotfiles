@@ -1,7 +1,7 @@
 #!/bin/sh
 # Prevent all network connections except those to LAN. IP forwarding is also disabled.
 
-if ! [ "$(which iptables 2>/dev/null)" ]
+if [ ! "$(which iptables 2>/dev/null)" ]
 then
     echo "Executable iptables not in path. Do you have (root) access?"
     exit 1

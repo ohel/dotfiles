@@ -4,6 +4,8 @@
 echo "Warning! Original files will be overwritten. Press a key to continue."
 read tmp
 
+[ ! "$(which readlink)" ] && echo "Needs readlink to work." && exit 1
+
 ln -sf $(readlink -f ./profile) ~/.profile
 ln -sf $(readlink -f ./profile.env) ~/.profile.env
 ln -sf $(readlink -f ./bashrc) ~/.bashrc

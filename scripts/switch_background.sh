@@ -9,7 +9,7 @@ then
     if [ -e $conkytrigger ]
     then
         rm $conkytrigger
-        which conky 2>/dev/null && conky -d
+        which conky >/dev/null 2>&1 && conky -d
     fi
 else
     ln -sf ~/.themes/background_alt.png ~/.themes/background
@@ -20,5 +20,5 @@ else
     fi
 fi
 
-which feh 2>/dev/null && feh --no-fehbg --bg-fill ~/.themes/background
-which xfdesktop 2>/dev/null && setsid xfdesktop --reload && exit 0
+which feh >/dev/null 2>&1 && feh --no-fehbg --bg-fill ~/.themes/background
+which xfdesktop >/dev/null 2>&1 && setsid xfdesktop --reload && exit 0
