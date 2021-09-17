@@ -53,6 +53,8 @@ then
     echo "Secondary display: $secondary_display, mode: $secondary_mode"
 fi
 
+# If using a secondary display, ignore scaling factor based on primary display.
+ignore_primary_scale=0
 if [ -f $testfile ]
 then
     if [ "$secondary_display" ]
@@ -75,6 +77,7 @@ else
     if [ "$script_mode" = "switch" ]
     then
         echo "Switching to external display $secondary_display."
+        ignore_primary_scale=1
         xrandr --output $secondary_display --mode $secondary_mode --primary \
             --output $primary_display --off
         secondary_background=""
@@ -91,6 +94,8 @@ else
     elif [ "$script_mode" = "mirror" ]
     then
         echo "Mirroring to external display $secondary_display."
+        ignore_primary_scale=1
+
         # With this regex primary_modes will contain all modes from all displays, but also some non-mode lines to distinguish the displays.
         primary_modes=$(echo "$xrandrout" | grep -z -o "$primary_display.*[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n +2 | tr -s ' ' | cut -f 2 -d ' ')
         secondary_modes=$(echo "$xrandrout" | grep -z -o "$secondary_display.*[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n +2 | tr -s ' ' | cut -f 2 -d ' ')
@@ -147,7 +152,7 @@ fi
 common_dpi=$p_dpi_set # Note: var may be empty.
 
 scale=1
-[ $p_width -eq $HIDPI_WIDTH ] && scale=2
+[ $p_width -eq $HIDPI_WIDTH ] && [ $ignore_primary_scale -eq 0 ] && scale=2
 
 [ "$secondary_display" ] && s_phys_width=$(echo "$xrandrout" | grep -A 1 $secondary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
 if [ "$s_phys_width" ] && [ $s_phys_width -gt 0 ]
@@ -163,8 +168,9 @@ fi
 # HiDPI (4K) displays need some magic. Not all applications (e.g. GTK2) support scaling, so double the DPI is required for them to look "normal".
 # However, we only want this if GDK is set to scale down font sizes accordingly. Otherwise the window scaling factor xsetting should be used.
 [ ! "$common_dpi" ] && common_dpi=96
-echo Final DPI: $common_dpi
 [ "$(env | grep GDK_DPI_SCALE=0.5)" ] && common_dpi=$(expr 2 \* $common_dpi)
+echo Final DPI: $common_dpi
+echo Scaling factor: $scale
 
 if [ "$(which xfconf-query 2>/dev/null)" ]
 then
@@ -175,3 +181,6 @@ then
 fi
 
 which feh >/dev/null 2>&1 && feh --bg-fill --no-fehbg $primary_background $secondary_background 2>/dev/null
+
+# Reloads icons so that they scale correctly.
+ps -ef | grep xfce4-panel$ > /dev/null && xfce4-panel -r

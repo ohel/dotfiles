@@ -7,8 +7,8 @@ primary_background=~/.themes/background
 secondary_background=~/.themes/background2
 HIDPI_WIDTH=3840
 target_mode=${1:-"1920x1080"}
-target_is_hdpi="yes"
-[ "$(echo $target_mode | cut -f 1 -d 'x')" -lt $HIDPI_WIDTH ] && target_is_hdpi=""
+target_is_hidpi="yes"
+[ "$(echo $target_mode | cut -f 1 -d 'x')" -lt $HIDPI_WIDTH ] && target_is_hidpi=""
 
 xrandrout="$(xrandr)"
 
@@ -82,8 +82,8 @@ then
 fi
 
 scale=1
-[ $p_width -eq $HIDPI_WIDTH ] && scale=2
-[ "$set_target_mode" ] && [ ! "$target_is_hdpi" ] && scale=1
+[ $p_width -eq $HIDPI_WIDTH ] && [ "$has_primary" ] && scale=2
+[ "$set_target_mode" ] && [ ! "$target_is_hidpi" ] && scale=1
 
 [ "$secondary_display" ] && s_phys_width=$(echo "$xrandrout" | grep -A 1 $secondary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
 if [ "$s_phys_width" ] && [ $s_phys_width -gt 0 ] && [ "$has_secondary" ]
@@ -93,7 +93,7 @@ then
     [ $s_dpi_calc -gt 100 ] && s_dpi_set=112
     [ $s_dpi_calc -gt 140 ] && [ $s_phys_width -gt 300 ] && s_dpi_set=144
     [ $s_width -eq $HIDPI_WIDTH ] && scale=2
-    [ "$set_target_mode" ] && [ ! "$target_is_hdpi" ] && scale=1
+    [ "$set_target_mode" ] && [ ! "$target_is_hidpi" ] && scale=1
     if [ "$set_target_mode" ]
     then
         s_mode_width=$(echo $secondary_mode | cut -f 1 -d 'x')
@@ -119,3 +119,6 @@ then
 fi
 
 which feh >/dev/null 2>&1 && feh --bg-fill --no-fehbg $primary_background $secondary_background 2>/dev/null
+
+# Reloads icons so that they scale correctly.
+ps -ef | grep xfce4-panel$ > /dev/null && xfce4-panel -r
