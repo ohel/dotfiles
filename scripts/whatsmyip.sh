@@ -4,10 +4,9 @@
 #    tw: Telewell TW-LTE/4G/3G router, WiFI AC
 #    fast: Sagemcom FAST3686 (DNA Valokuitu Plus)
 
-routermodel=${1:-fast}
-
+routermodel=${1:-tw}
+username=${2:-admin}
 routerip=$(ip route | grep default | grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}")
-username=$(whoami)
 
 readpw() {
     if [ -e ~/.config/router_password ]
@@ -34,7 +33,6 @@ then
     responsepage=$(wget http://$routerip/RgSetup.asp -q -O -)
     if [ "$(echo $responsepage | grep loginUsername)" ]
     then
-        username=admin
         readpw
         echo "Logging in..."
         skey=$(echo $responsepage | grep -o "SessionKey = [0-9]*;" | tr -dc "[:digit:]")
@@ -46,16 +44,11 @@ then
     ipv6_prefix=$(echo $responsepage | grep -o "IPv6 Prefix:[^0-9]\{1,\}>[^/]\{1,\}" | grep -o ">[0-9a-f:].*" | tr -d '>')
 fi
 
-echo
 echo "WAN IPv4: $wanipv4"
 echo "IPv6 prefix: $ipv6_prefix"
 echo
 
-if ! [ "$wanipv4" ]
-then
-    echo Error retrieving IPv4.
-    exit 1
-fi
+[ ! "$wanipv4" ] && echo "Error retrieving IPv4." && exit 1
 
 # Use a secret script to upload IP info somewhere publicly available.
 if [ -e ~/.scripts_extra/publish_ip.sh ]

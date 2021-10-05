@@ -1,10 +1,11 @@
 #!/bin/sh
-# Reboot a router. This comes in handy with unstable consumer devices.
+# Reboot a router with model $1, username $3. This comes in handy with unstable consumer devices.
 # If $2 equals "auto", no user input is asked (unless a password is required).
-# Supports the following router models (pass as $1):
+# Supports the following router models (pass as $2):
 #    fast: Sagemcom FAST3686 (DNA Valokuitu Plus)
 
 routermodel=${1:-fast}
+username=${3:-admin}
 internetpingaddress="8.8.8.8"
 
 routerip=$(ip route | grep default | grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}")
@@ -35,7 +36,6 @@ then
     responsepage=$(wget http://$routerip/RgSetup.asp -q -O -)
     if [ "$(echo $responsepage | grep loginUsername)" ]
     then
-        username=admin
         readpw
         echo Logging in...
         skey=$(echo $responsepage | grep -o "SessionKey = [0-9]*;" | tr -dc "[:digit:]")

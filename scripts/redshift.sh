@@ -1,13 +1,14 @@
 #!/bin/sh
 # Change screen color temperature using the redshift tool.
 # Give a temperature delta in $1, e.g. -500.
-# If $1 = r, reset adjustments.
-# If $2 = b, also change brightness. This is done using the backlight script (if backlight is module present), otherwise using redshift.
+# If $1 or $2 = r, reset adjustments.
+# If $1 or $2 = b, also change brightness. This is done using the backlight script (if backlight is module present), otherwise using redshift.
 # If no parameters are given, uses a simple custom algorithm to automatically guess good values.
 # Use this in a user's crontab (crontab -e -u user) for example like this:
 # 5 * * * * DISPLAY=:0.0 /home/user/.scripts/redshift.sh
 
 cachedir=~/.cache
+scriptsdir=$(dirname "$(readlink -f "$0")")
 tempfile=$cachedir/redshift_temp
 max=6500
 min=4000
@@ -21,10 +22,11 @@ set_brightness=""
 current=$(cat $tempfile)
 [ ! "$current" ] && current=$max
 
-if [ "$1" = "r" ]
+if [ "$1" = "r" ] || [ "$2" = "r" ]
 then
     [ "$(which notify-send 2>/dev/null)" ] && notify-send -h int:transient:1 "Reset redshift" -t 1000
     redshift -x
+    ([ "$1" = "b" ] || [ "$2" = "b" ]) && $scriptsdir/backlight.sh 0.50
     [ -e $tempfile ] && echo $max > $tempfile
     exit 0
 fi
@@ -73,7 +75,6 @@ version=$(redshift -V | cut -f 2 -d ' ' | tr -d '.')
 b=""
 if [ "$set_brightness" ]
 then
-    scriptsdir=$(dirname "$(readlink -f "$0")")
     brightness=$(echo "scale=2; $new / $max" | bc)
     # Script will succeed if hardware backlight can be used, will fail otherwise.
     # Use a much dimmer value for hardware backlights.

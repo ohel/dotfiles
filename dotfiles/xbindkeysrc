@@ -87,7 +87,7 @@ Mod4 + End
 # Quick color temperature/brightness adjustment + reset.
 "~/.scripts/redshift.sh"
 Mod1 + Mod4 + Next # Page down
-"~/.scripts/redshift.sh r"
+"~/.scripts/redshift.sh r b"
 Mod1 + Mod4 + Prior # Page up
 
 # Color temperature/brightness adjustment.

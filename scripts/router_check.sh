@@ -1,10 +1,11 @@
 #!/bin/sh
 # When using an unstable consumer class router that likes to break down
 # every now and then, detect when it's behaving badly and reboot it
-# by calling a script with router model parameter.
+# by calling a script with certain parameters.
 
-routermodel=${1:-fast}
+routermodel=$1
 autoparam=$2
+username=$3
 
 routerip=$(ip route | grep default | grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}")
 
@@ -16,4 +17,4 @@ loss=$(ping -c 10 $routerip | grep '% packet loss')
 echo "Packet loss detected. Going to reboot router."
 
 scriptsdir=$(dirname "$(readlink -f "$0")")
-setsid xfce4-terminal -e "bash -c '$scriptsdir/router_reboot.sh $routermodel $autoparam'"
+setsid xfce4-terminal -e "bash -c '$scriptsdir/router_reboot.sh $routermodel $autoparam $username'"
