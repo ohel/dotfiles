@@ -99,8 +99,8 @@ then
 fi
 
 bridged_net_devices=""
-[ "$bridged_network" = 1 ] && bridged_net_devices=\
-    "-device virtio-net-pci,netdev=net"$net_id"_1 -netdev tap,id=net"$net_id"_1,br=$net_bridge,script=kvm_tap_netbridge.sh"
+[ "$bridged_network" = 1 ] && bridged_net_devices="\
+-device virtio-net-pci,netdev=net"$net_id"_1 -netdev tap,id=net"$net_id"_1,br=$net_bridge,script=kvm_tap_netbridge.sh"
 
 echo "Starting the virtual machine..."
 env $sound_params qemu-system-x86_64 \

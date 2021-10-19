@@ -1,7 +1,7 @@
 #!/bin/sh
 # Set up networking for KVM virtual machines:
-# - SNAT to first PCI NIC, or $1 if given.
-# - Optionally ($2 = "bridge") set up network bridge where bridged VM tap devices should be added.
+# - SNAT to first PCI NIC, or $1 if given. $1 may be also a filename, with file contents being the NIC.
+# - Optionally ($2 = "bridge" or "b") set up network bridge where bridged VM tap devices should be added.
 # - Set up virtual machine bridge where routed VM tap devices should be added.
 # - Set up virtual localhost for consistent host access.
 # Source $reset_script to undo everything.
@@ -25,10 +25,8 @@ then
     done
 else
     nic=$1
-    if [ -f $1 ]
-    then
-        nic=$(cat $1)
-    fi
+    [ -f $1 ] && nic=$(cat $1)
+
     if [ "$(ls -l /sys/class/net | grep devices\/pci | grep -o "\-> [^ ]*" | grep -o $nic)" != "$nic" ]
     then
         echo "Network device not found: $nic"
@@ -44,7 +42,7 @@ sysctl -q -e -w net.ipv4.conf.$nic.forwarding=1
 echo "sudo sysctl -q -e -w net.ipv4.conf.$nic.forwarding=$forward" >> $reset_script
 
 # Network bridge. Note: not all interfaces support bridging.
-if [ "$2" = "bridge" ]
+if [ "$2" = "bridge" ] || [ "$2" = "b" ]
 then
   if brctl show | cut -f 1 | grep netbridge\$ >/dev/null
   then
