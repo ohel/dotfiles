@@ -23,8 +23,10 @@ p, li { white-space: pre-wrap; }
    <name>Kick</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0.05</randomPitchFactor>
    <gain>1</gain>
    <applyVelocity>true</applyVelocity>
@@ -64,8 +66,10 @@ p, li { white-space: pre-wrap; }
    <name>- (Stick)</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0</randomPitchFactor>
    <gain>1</gain>
    <applyVelocity>true</applyVelocity>
@@ -98,8 +102,10 @@ p, li { white-space: pre-wrap; }
    <name>Snare</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>0.8</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0</randomPitchFactor>
    <gain>1</gain>
    <applyVelocity>true</applyVelocity>
@@ -167,8 +173,10 @@ p, li { white-space: pre-wrap; }
    <name>- (Hand Clap)</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0</randomPitchFactor>
    <gain>1</gain>
    <applyVelocity>true</applyVelocity>
@@ -201,8 +209,10 @@ p, li { white-space: pre-wrap; }
    <name>- (Snare Rimshot)</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0</randomPitchFactor>
    <gain>1</gain>
    <applyVelocity>true</applyVelocity>
@@ -235,8 +245,10 @@ p, li { white-space: pre-wrap; }
    <name>- (Low Floor Tom)</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0</randomPitchFactor>
    <gain>1</gain>
    <applyVelocity>true</applyVelocity>
@@ -269,8 +281,10 @@ p, li { white-space: pre-wrap; }
    <name>Hat Closed</name>
    <volume>0.685345</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>0.6</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0</randomPitchFactor>
    <gain>3</gain>
    <applyVelocity>true</applyVelocity>
@@ -338,8 +352,10 @@ p, li { white-space: pre-wrap; }
    <name>Floor Tom</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>0.7</pan_L>
    <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0.05</randomPitchFactor>
    <gain>0.95</gain>
    <applyVelocity>true</applyVelocity>
@@ -407,8 +423,10 @@ p, li { white-space: pre-wrap; }
    <name>Hat Pedal</name>
    <volume>0.685345</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>0.6</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0</randomPitchFactor>
    <gain>1</gain>
    <applyVelocity>false</applyVelocity>
@@ -476,8 +494,10 @@ p, li { white-space: pre-wrap; }
    <name>Low Tom</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>0.8</pan_L>
    <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0.05</randomPitchFactor>
    <gain>0.95</gain>
    <applyVelocity>true</applyVelocity>
@@ -545,8 +565,10 @@ p, li { white-space: pre-wrap; }
    <name>Hat Open</name>
    <volume>0.698276</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>0.6</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0</randomPitchFactor>
    <gain>1.6</gain>
    <applyVelocity>true</applyVelocity>
@@ -614,8 +636,10 @@ p, li { white-space: pre-wrap; }
    <name>- (Low-Mid Tom)</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0</randomPitchFactor>
    <gain>1</gain>
    <applyVelocity>true</applyVelocity>
@@ -648,8 +672,10 @@ p, li { white-space: pre-wrap; }
    <name>High-Mid Tom</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>0.9</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0.05</randomPitchFactor>
    <gain>0.8</gain>
    <applyVelocity>true</applyVelocity>
@@ -717,8 +743,10 @@ p, li { white-space: pre-wrap; }
    <name>Crash</name>
    <volume>0.517241</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>0.9</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0</randomPitchFactor>
    <gain>2</gain>
    <applyVelocity>true</applyVelocity>
@@ -786,8 +814,10 @@ p, li { white-space: pre-wrap; }
    <name>- (High Tom)</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0</randomPitchFactor>
    <gain>1</gain>
    <applyVelocity>true</applyVelocity>
@@ -820,8 +850,10 @@ p, li { white-space: pre-wrap; }
    <name>Ride (Soft Hit)</name>
    <volume>0.633621</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>0.6</pan_L>
    <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0.05</randomPitchFactor>
    <gain>4</gain>
    <applyVelocity>true</applyVelocity>
@@ -889,8 +921,10 @@ p, li { white-space: pre-wrap; }
    <name>Splash (Hard Hit)</name>
    <volume>0.543103</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>0.9</pan_L>
    <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0</randomPitchFactor>
    <gain>1.75</gain>
    <applyVelocity>true</applyVelocity>
@@ -958,8 +992,10 @@ p, li { white-space: pre-wrap; }
    <name>Clave</name>
    <volume>0.84</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0</randomPitchFactor>
    <gain>1</gain>
    <applyVelocity>true</applyVelocity>
@@ -999,8 +1035,10 @@ p, li { white-space: pre-wrap; }
    <name>Conga</name>
    <volume>0.88</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
    <randomPitchFactor>0</randomPitchFactor>
    <gain>0.5</gain>
    <applyVelocity>true</applyVelocity>
