@@ -22,7 +22,21 @@
     remotedelete = !test X$1 != X && git branch -D $1 && git push origin --delete $1
     remotedeletethis = !branchtodelete=$(git rev-parse --abbrev-ref HEAD) && echo "Deleting branch: $branchtodelete" && git checkout master && git branch -D $branchtodelete && git push origin --delete $branchtodelete && unset branchtodelete
     remotepush = !git push -u origin $(git rev-parse --abbrev-ref HEAD)
-    review = diff --cached
     sterilize = !git reflog expire --expire-unreachable=all --all && git gc --prune=all
-    unstage = reset HEAD --
+    unstage = restore --staged
     visualize = log --graph --oneline --decorate --all
+    diffc = diff --cached
+[color]
+    ui = auto
+[diff]
+    tool = meld
+[difftool]
+    prompt = false
+[difftool "meld"]
+    cmd = meld "$LOCAL" "$REMOTE"
+[merge]
+    tool = meld
+[mergetool "meld"]
+    cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
+[gitreview]
+    remote = origin
