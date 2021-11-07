@@ -1,29 +1,41 @@
 #!/bin/bash
-# Update a kernel by compiling a new kernel if it exists, using old config file as base. Old release is the one symlinked to /usr/src/linux.
-# The script copies the necessary files to the boot partition.
+# Update a kernel by compiling a new kernel if it exists, using old config file from currently running kernel as base.
 # If dracut is found, a new initramfs image is created using it in hostonly mode.
+# The script copies the necessary files to the boot partition.
 #
-# If $1 == grub or $2 == grub, grub.conf and /boot/boot is updated also.
-# If $1 or $2 is something else, it will be used as the kernel source directory instead. Nothing will be removed, just compiled and copied.
+# By default, in rEFInd mode, the script works by updating the directory <EFI system partition>/EFI which is assumed to be mounted to $EFI_DEST_DIR.
+# Boot files are copied to $EFI_DEST_DIR/linux, and all config files named "refind.conf" under $EFI_DEST_DIR are updated to point to the kernel release.
+# It is assumed there are only two versions in the config files: the current one, and a backup, identified with $BACKUP_MENUENTRY_IDENTIFIER in its menuentry.
+# The backup release will be made to point to the current running release.
+# The backup release menuentry disabled state will be toggled based on whether there is only a single kernel after cleanup.
 #
-# By default, the script works by updating an <EFI system partition>/EFI which is assumed to be mounted to /boot/EFI.
-# Files are copied to /boot/EFI/linux, and all config files named "refind.conf" under /boot/EFI/ are updated for new kernel releases.
+# In grub mode, instead of rEFInd configs and EFI directory, grub.conf and /boot/boot are updated.
+#
+# If $1 == "grub" or $2 == "grub", grub mode is used.
+# If $1 or $2 is something else, it will be used as the kernel source directory instead. Nothing will be removed, just compiled and copied. The config files (refind.conf and grub.conf) will not be updated, either. This may be used for example to recompile a currently running kernel version with an updated .config file.
 
 # Kernel source directory prefix for automatic release detection. Directories with other prefixes are skipped.
-prefix="linux"
-efi_dest_dir=/boot/EFI
+PREFIX="linux"
+
+# Mount point for <EFI system partition>/EFI directory.
+EFI_DEST_DIR=/boot/EFI
 
 # An optional system specific boot backup script such as an ESP backup.
-boot_backup_script=/opt/boot_backup.sh
+BOOT_BACKUP_SCRIPT=/opt/boot_backup.sh
+
+# For rEFInd config files, identify backup release menuentry with this string.
+BACKUP_MENUENTRY_IDENTIFIER="backup release"
 
 cwd="$(pwd)"
 use_grub=""
-src_dir="$1"
-[ "$1" == "grub" ] && use_grub=1 && src_dir="$2"
+user_given_src_dir="$1"
+[ "$1" == "grub" ] && use_grub=1 && user_given_src_dir="$2"
 [ "$2" == "grub" ] && use_grub=1
 
 use_dracut=""
 $(which dracut > /dev/null 2>&1) && use_dracut=1
+
+#### GENERAL CHECKS #####
 
 if [ "$(echo $HOME)" != "/root" ]
 then
@@ -32,16 +44,9 @@ then
     exit 1
 fi
 
-if [ "$src_dir" ] && [ ! -e $src_dir ]
+if [ "$user_given_src_dir" ] && [ ! -e $user_given_src_dir ]
 then
-    echo "Source dir $src_dir does not exist, aborting."
-    read
-    exit 1
-fi
-
-if [ ! "$src_dir" ] && [ ! -e /usr/src/linux ]
-then
-    echo "The symbolic link /usr/src/linux does not exist, aborting."
+    echo "Source dir $user_given_src_dir does not exist, aborting."
     read
     exit 1
 fi
@@ -53,20 +58,24 @@ then
     do
         [ "$(mount | grep " $efi_mount_point ")" ] || mount $efi_mount_point
     done
-    if [ ! -e $efi_dest_dir/linux ]
+    if [ ! -e $EFI_DEST_DIR/linux ]
     then
-        echo "$efi_dest_dir/linux does not exist, aborting."
+        echo "$EFI_DEST_DIR/linux does not exist, aborting."
         read
         exit 1
     fi
 fi
 
+#### CLEANUP FUNCTION #####
+
 function cleanup {
-    keep_release=$1
-    prefix=$2
-    efi_dest_dir=$3
-    old_releases=($(ls -d /usr/src/$prefix-* | grep -v $keep_release | xargs -I {} basename {} | cut -f 2- -d '-'))
-    if [ ${#old_releases[@]} -eq 0 ]
+    [ ! "$PREFIX" ] || [ ! "$EFI_DEST_DIR" ] || [ ! "$BACKUP_MENUENTRY_IDENTIFIER" ] && echo "Error: missing definitions." && return 1
+
+    current_release=$(uname -r)
+    keep_release=${1:-$current_release}
+
+    current_releases=($(ls -d /usr/src/$PREFIX-* | grep -v $keep_release | xargs -I {} basename {} | cut -f 2- -d '-'))
+    if [ ${#current_releases[@]} -eq 0 ]
     then
         echo "Found nothing to clean up."
         echo "Run backup scripts? Press y to run, any other key to skip."
@@ -76,9 +85,8 @@ function cleanup {
         return 0
     fi
 
-    current_release=$(uname -r)
     echo "Found old releases in /usr/src:"
-    echo ${old_releases[@]}
+    echo ${current_releases[@]}
     echo
     if [ "$keep_release" != "$current_release" ]
     then
@@ -96,7 +104,7 @@ function cleanup {
     [ "$remove" != "y" ] && return 1
 
     echo
-    for release in ${old_releases[@]}
+    for release in ${current_releases[@]}
     do
         rm -rf /usr/src/linux-$release
         rm -rf /lib/modules/$release
@@ -104,54 +112,78 @@ function cleanup {
         rm /boot/System.map-$release 2>/dev/null
         rm /boot/kernel-$release 2>/dev/null
         rm /boot/initramfs-$release.img 2>/dev/null
-        if [ "$efi_dest_dir" ]
-        then
-            rm $efi_dest_dir/linux/kernel-$release 2>/dev/null
-            rm $efi_dest_dir/linux/initramfs-$release.img 2>/dev/null
-        fi
+
+        rm $EFI_DEST_DIR/linux/kernel-$release 2>/dev/null
+        rm $EFI_DEST_DIR/linux/initramfs-$release.img 2>/dev/null
+
         echo "Removed kernel release $release files."
     done
     echo
+
+    for config_file in $(find $EFI_DEST_DIR/ -name refind.conf)
+    do
+        backup_begin=$(grep -n "$BACKUP_MENUENTRY_IDENTIFIER" $config_file | cut -f 1 -d ':')
+        backup_end=$(grep -n "menuentry" $config_file | grep -A 1 "^$backup_begin" | tail -n 1 | cut -f 1 -d ':')
+        [ ! $backup_end ] && backup_end=$(wc -l $config_file) # Backup entry is the last menuentry.
+        [ "$backup_begin" ] && sed -i "$backup_begin,$backup_end s/# *disabled/disabled/" $config_file
+    done
+
     return 0
 }
 
-if [ "$src_dir" ]
+#### USER-DEFINED RELEASE TO COMPILE #####
+
+if [ "$user_given_src_dir" ]
 then
-    cd $src_dir
+    cd $user_given_src_dir
     make oldconfig
 else
-    cd /usr/src
-    old_release=$(readlink linux | cut -f 2 -d '-')
-    new_release=$(ls -v1 --file-type | grep '/' | cut -f 1 -d '/' | grep "^$prefix" | tail -n 1 | cut -f 2- -d '-')
 
-    if [ "$old_release" == "$new_release" ]
+    #### AUTO-DETECT NEW RELEASE TO COMPILE #####
+
+    cd /usr/src
+    current_release=$(uname -r)
+    new_release=$(ls -v1 --file-type | grep '/' | cut -f 1 -d '/' | grep "^$PREFIX" | tail -n 1 | cut -f 2- -d '-')
+
+    if [ "$current_release" == "$new_release" ]
     then
         echo "No new kernel releases found."
         cd $cwd
-        cleanup $new_release $prefix $efi_dest_dir
-        [ $? -eq 0 ] && [ -e $boot_backup_script ] && $boot_backup_script
+        cleanup $current_release
+        [ $? -eq 0 ] && [ -e $BOOT_BACKUP_SCRIPT ] && $BOOT_BACKUP_SCRIPT
 
         echo "All done."
         read
         exit 0
     fi
 
-    if [ ! -e $prefix-$old_release/.config ]
+    if [ ! -e $PREFIX-$current_release/.config ]
     then
         echo "The config file for the old release could not be found, aborting."
         read
         exit 1
     fi
 
-    echo "Updating from kernel $old_release to $new_release."
+    echo "Updating from kernel $current_release to $new_release."
     echo "Press return to continue, Ctrl-C to abort."
     read
 
-    cp $prefix-$old_release/.config $prefix-$new_release/
+    copyconfig="yes"
+    if [ -e $PREFIX-$new_release/.config ]
+    then
+        echo "Overwrite $new_release/.config? Press y to overwrite, any other key to skip."
+        read -n1 overwrite
+        echo
+        [ "$overwrite" != "y" ] && copyconfig=""
+    fi
 
-    cd $prefix-$new_release
+    [ "$copyconfig" ] && cp $PREFIX-$current_release/.config $PREFIX-$new_release/
+
+    cd $PREFIX-$new_release
     make oldconfig
 fi
+
+#### COMPILE AND COPY KERNEL, INSTALL MODULES #####
 
 num_threads=$(echo 1.99+$(grep "processor.*:" /proc/cpuinfo | tail -n 1 | cut -f 2 -d ':')*0.75 | bc | cut -f 1 -d '.')
 make -j $num_threads
@@ -175,6 +207,8 @@ echo "Copied System.map to /boot."
 cp arch/x86_64/boot/bzImage /boot/kernel-$new_release
 echo "Copied kernel image to /boot."
 
+#### CREATE AND COPY INITRAMFS #####
+
 if [ "$use_dracut" ]
 then
     echo "Creating initramfs using dracut..."
@@ -189,34 +223,57 @@ fi
 
 if [ ! "$use_grub" ]
 then
-    cp /boot/kernel-$new_release $efi_dest_dir/linux
+    cp /boot/kernel-$new_release $EFI_DEST_DIR/linux
     echo "Copied kernel image to ESP."
-    cp /boot/initramfs-$new_release.img $efi_dest_dir/linux
+    cp /boot/initramfs-$new_release.img $EFI_DEST_DIR/linux
     echo "Copied initramfs image to ESP."
 fi
 
-if [ ! "$src_dir" ]
+#### UPDATE CONFIG FILES #####
+
+function update_refind_config {
+    [ ! "$1" ] || [ ! "$2" ] || [ ! "$BACKUP_MENUENTRY_IDENTIFIER" ] && echo "Error: missing definitions." && return 1
+
+    config_file=$1
+    new_release=$2
+    current_release=$(uname -r)
+    sed -i "s/\(\(kernel\)\|\(initramfs\)\)-[2-9]\.[0-9]*\.[0-9]*/\1-$new_release/g" $config_file
+
+    backup_begin=$(grep -n "$BACKUP_MENUENTRY_IDENTIFIER" $config_file | cut -f 1 -d ':')
+    backup_end=$(grep -n "menuentry" $config_file | grep -A 1 "^$backup_begin" | tail -n 1 | cut -f 1 -d ':')
+    [ ! $backup_end ] && backup_end=$(wc -l $config_file) # Backup entry is the last menuentry.
+    if [ "$backup_begin" ]
+    then
+        sed -i "$backup_begin,$backup_end s/\(\(kernel\)\|\(initramfs\)\)-[2-9]\.[0-9]*\.[0-9]*/\1-$current_release/g" $config_file
+        sed -i "$backup_begin,$backup_end s/\(^ *\)disabled/\1# disabled/" $config_file
+    fi
+}
+
+if [ ! "$user_given_src_dir" ]
 then
     cd ..
     rm linux
-    ln -s $prefix-$new_release linux
+    ln -s $PREFIX-$new_release linux
     echo "Updated kernel symlink."
 
     if [ "$use_grub" ]
     then
-        sed -i "s/$old_release/$new_release/g" /boot/grub/grub.conf
+        sed -i "s/$current_release/$new_release/g" /boot/grub/grub.conf
         echo "Updated grub config."
     else
-        find $efi_dest_dir/ -name refind.conf | xargs -I {} sed -i "s/$old_release/$new_release/g" {}
+        for config_file in $(find $EFI_DEST_DIR/ -name refind.conf)
+        do
+            update_refind_config $config_file $new_release
+        done
         echo "Updated rEFInd config files:"
-        find $efi_dest_dir/ -name refind.conf
+        find $EFI_DEST_DIR/ -name refind.conf
     fi
     echo
 
     cd "$cwd"
 
-    cleanup $new_release $prefix $efi_dest_dir
-    [ $? -eq 0 ] && [ -e $boot_backup_script ] && $boot_backup_script
+    cleanup $new_release
+    [ $? -eq 0 ] && [ -e $BOOT_BACKUP_SCRIPT ] && $BOOT_BACKUP_SCRIPT
 fi
 
 echo All done.
