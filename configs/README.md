@@ -9,5 +9,5 @@ Files in this directory are usually located in ~/.config, but not always.
 * quodlibet_gst_pipeline: Pipeline definitions for Quod Libet music player.
 * ranger: ranger file manager config files located in ~/.config/ranger.
 * renamepatterns.saved: Quod Libet rename pattern for music library.
-* scans.phatch: An action list to use with Phatch when scanning lots of A4 text documents.
+* scans.phatch: An action list to use with Phatch when scanning lots of A4 text documents. The app itself is deprecated, but the ImageMagick operations are still usable.
 * system: Various local system startup scripts which in Gentoo are run from /etc/local.d. On Ubuntu the contents are in a single file called /etc/rc.local.

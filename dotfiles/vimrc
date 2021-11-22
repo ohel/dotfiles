@@ -631,16 +631,20 @@ function! OnVimEnter()
         nnoremap <leader>b :Unite buffer<cr>
 
         if !(has('win32') || has('win64')) && (executable('rg') || executable('ag') || executable('find'))
-            nnoremap <leader>f :Unite -start-insert file_rec/async buffer<cr>
-            vnoremap <leader>f :Unite -start-insert file_rec/async buffer<cr><c-r>*
+            " Find files.
+            nnoremap <leader>ff :Unite -start-insert file_rec/async:. buffer:-<cr>
+            vnoremap <leader>ff :Unite -start-insert file_rec/async:. buffer:-<cr><c-r>*
+            " Find files named like current file, extension removed. Useful e.g. when dealing with .ts/.html/.css.
+            nnoremap <leader>fc :let @u="<c-r>=expand('%:t:r')<cr>"<cr>:Unite -start-insert file_rec/async:. buffer:-<cr><c-r>u
         elseif executable('git')
-            nnoremap <leader>f :Unite -start-insert file_rec/git buffer<cr>
-            vnoremap <leader>f :Unite -start-insert file_rec/git buffer<cr><c-r>*
+            nnoremap <leader>ff :Unite -start-insert file_rec/git:. buffer:-<cr>
+            vnoremap <leader>ff :Unite -start-insert file_rec/git:. buffer:-<cr><c-r>*
+            nnoremap <leader>fc :let @u="<c-r>=expand('%:t:r')<cr>"<cr>:Unite -start-insert file_rec/git:. buffer:-<cr><c-r>u
         endif
 
         nnoremap <leader>u :UniteResume<cr>
         nnoremap <leader>o :Unite outline<cr>
-        nnoremap <leader>g :Unite grep:.:<cr>
+        nnoremap <leader>g :Unite grep:.<cr>
         " Search selected text.
         vnoremap <leader>g :Unite grep:.::<c-r>*<cr>
         " Search word under cursor.

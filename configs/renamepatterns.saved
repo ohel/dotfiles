@@ -1,2 +1,4 @@
-~/media/music/<album><discnumber||<discid|_---_<discid>>>/<discnumber|disc<discnumber><discid|_---_<discid>>/><tracknumber|<tracknumber>_---_><artist|<artist>_---_><title>
+~/media/music/<album><discnumber||<discid|_---_<discid>>>/<discnumber|<discnumber><discid|_---_<discid>>/><tracknumber|<tracknumber>_---_><artist|<artist>_---_><title>
 Generic
+<album>_<tracknumber>_<title>
+album_track_title

@@ -34,7 +34,6 @@ fi
 
 amixer -c $card set "$dev",0 "$new_vol"% >/dev/null
 
-
 [ ! "$(which notify-send 2>/dev/null)" ] && exit 0
 
 # Close previous notifications so that new volume is displayed immediately.
