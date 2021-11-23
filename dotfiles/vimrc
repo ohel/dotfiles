@@ -48,11 +48,19 @@ endif
 " Change directory to that of the current file.
 nnoremap <leader>d :cd %:h<cr>:echo "wd is now" getcwd()<cr>
 
+let $grep_ignore = ""
+let s:grep_ignore_file = $HOME . "/.config/grep_ignore"
 if executable('rg')
-    set grepprg=rg\ --smart-case\ --vimgrep\ -uu\ $*
+    if filereadable(s:grep_ignore_file)
+        let $grep_ignore = "--ignore-file " . s:grep_ignore_file
+    endif
+    set grepprg=rg\ --smart-case\ --vimgrep\ -uu\ $grep_ignore\ $*
     set grepformat=%f:%l:%c:%m
 elseif executable('ag')
-    set grepprg=ag\ --smart-case\ --vimgrep\ $*
+    if filereadable(s:grep_ignore_file)
+        let $grep_ignore = "--exclude-from=" . s:grep_ignore_file
+    endif
+    set grepprg=ag\ --smart-case\ --vimgrep\ $grep_ignore\ $*
     set grepformat=%f:%l:%c:%m
 endif
 
@@ -274,12 +282,12 @@ endif
 if isdirectory($VIMHOME . "/plugged/unite.vim")
     if executable('rg')
         let g:unite_source_grep_command = 'rg'
-        let g:unite_source_grep_default_opts = '--vimgrep --smart-case -uu'
+        let g:unite_source_grep_default_opts = '--vimgrep --smart-case -uu ' . $grep_ignore
         let g:unite_source_grep_recursive_opt = ''
         let g:unite_source_rec_git_command= ['rg', '--color', 'never', '--follow', '--no-heading', '--with-filename', '--files', '-g', '']
     elseif executable('ag')
         let g:unite_source_grep_command = 'ag'
-        let g:unite_source_grep_default_opts = '--vimgrep --smart-case --silent'
+        let g:unite_source_grep_default_opts = '--vimgrep --smart-case --silent ' . $grep_ignore
         let g:unite_source_grep_recursive_opt = ''
         let g:unite_source_rec_git_command= ['ag', '--nocolor', '--follow', '--nogroup', '-g', '']
     endif
