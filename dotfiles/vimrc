@@ -350,8 +350,8 @@ endif
 " Other plugins.
 " **************
 
-" Old school source code browser plugin.
-if !isdirectory($VIMHOME . "/plugin/taglist")
+" Tag List - an old school source code browser plugin. Needs ctags to work.
+if !isdirectory($VIMHOME . "/plugin/taglist") && executable('ctags')
     echo("Downloading taglist...")
     silent !git clone https://github.com/yegappan/taglist $VIMHOME/plugin/taglist
     if !(has('win32') || has ('win64'))
