@@ -6,9 +6,6 @@ let g:dlines=31 " Also set default size into memory.
 let g:dcols=107
 let g:leave_my_textwidth_alone=1 " Don't autowrap lines while typing.
 
-let &shiftwidth=&tabstop " Set indent (using keys << or >>) width.
-let &softtabstop=&tabstop " Set indent width in insert mode using tab.
-
 set autoread " Automatically update file if changed from the outside.
 set backspace=indent,eol,start " Make backspace clear other than new text also.
 set encoding=utf-8
@@ -48,19 +45,19 @@ endif
 " Change directory to that of the current file.
 nnoremap <leader>d :cd %:h<cr>:echo "wd is now" getcwd()<cr>
 
-let $grep_ignore = ""
+let s:grep_ignore = ""
 let s:grep_ignore_file = $HOME . "/.config/grep_ignore"
 if executable('rg')
     if filereadable(s:grep_ignore_file)
-        let $grep_ignore = "--ignore-file " . s:grep_ignore_file
+        let s:grep_ignore = "--ignore-file " . s:grep_ignore_file
     endif
-    set grepprg=rg\ --smart-case\ --vimgrep\ -uu\ $grep_ignore\ $*
+    let &grepprg="rg --smart-case --vimgrep -uu " . s:grep_ignore . " $*"
     set grepformat=%f:%l:%c:%m
 elseif executable('ag')
     if filereadable(s:grep_ignore_file)
-        let $grep_ignore = "--exclude-from=" . s:grep_ignore_file
+        let s:grep_ignore = "--exclude-from=" . s:grep_ignore_file
     endif
-    set grepprg=ag\ --smart-case\ --vimgrep\ $grep_ignore\ $*
+    let &grepprg="ag --smart-case --vimgrep " . s:grep_ignore . " $*"
     set grepformat=%f:%l:%c:%m
 endif
 
@@ -160,34 +157,47 @@ autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd BufNewFile,BufRead *.xaml set filetype=xml
 autocmd BufNewFile,BufRead *.jsonl set filetype=json
 
+" The variable is for vim-json plugin.
+let g:vim_json_syntax_conceal = 0
+function! ToggleJsonSyntaxConceal()
+    if &l:conceallevel == 0
+        setlocal conceallevel=2
+        let g:vim_json_syntax_conceal = 1
+        e
+    else
+        setlocal conceallevel=0
+    endif
+endfunction
+nnoremap <leader>jc :call ToggleJsonSyntaxConceal()<cr>
+nnoremap <leader>js :set syntax=json<cr>
+
 
 
 " Pathogen plugins.
 " *****************
 
+function! InstallPathogenPlugin(bundlename, githuburl)
+    if !isdirectory($VIMHOME . "/bundle/" . a:bundlename)
+        echo("Downloading " . a:bundlename . "...")
+        let $pathogen_git_cmd = "git clone https://github.com/" . a:githuburl . ".git " . $VIMHOME . "/bundle/" . a:bundlename
+        silent !$pathogen_git_cmd
+    endif
+endfunction
+
 " TypeScript support.
-if !isdirectory($VIMHOME . "/bundle/tsuquyomi")
-    echo("Downloading tsuquyomi...")
-    silent !git clone https://github.com/Quramy/tsuquyomi.git $VIMHOME/bundle/tsuquyomi
-endif
+call InstallPathogenPlugin("tsuquyomi", "Quramy/tsuquyomi")
+
+" Better JSON(L) syntax highlighting.
+call InstallPathogenPlugin("vim-json", "elzr/vim-json")
 
 " Pug (Jade) syntax.
-if !isdirectory($VIMHOME . "/bundle/vim-pug")
-    echo("Downloading vim-pug...")
-    silent !git clone https://github.com/digitaltoad/vim-pug.git $VIMHOME/bundle/vim-pug
-endif
+call InstallPathogenPlugin("vim-pug", "digitaltoad/vim-pug")
 
 " Python autocompletion.
-if !isdirectory($VIMHOME . "/bundle/pydiction")
-    echo("Downloading pydiction...")
-    silent !git clone https://github.com/rkulla/pydiction.git $VIMHOME/bundle/pydiction
-endif
+call InstallPathogenPlugin("pydiction", "rkulla/pydiction")
 
 " Kotlin support.
-if !isdirectory($VIMHOME . "/bundle/kotlin-vim")
-    echo("Downloading kotlin-vim...")
-    silent !git clone https://github.com/udalov/kotlin-vim $VIMHOME/bundle/kotlin-vim
-endif
+call InstallPathogenPlugin("kotlin-vim", "udalov/kotlin-vim")
 
 " Load Pathogen plugins.
 if filereadable($VIMHOME . "/autoload/pathogen.vim")
@@ -282,12 +292,12 @@ endif
 if isdirectory($VIMHOME . "/plugged/unite.vim")
     if executable('rg')
         let g:unite_source_grep_command = 'rg'
-        let g:unite_source_grep_default_opts = '--vimgrep --smart-case -uu ' . $grep_ignore
+        let g:unite_source_grep_default_opts = '--vimgrep --smart-case -uu ' . s:grep_ignore
         let g:unite_source_grep_recursive_opt = ''
         let g:unite_source_rec_git_command= ['rg', '--color', 'never', '--follow', '--no-heading', '--with-filename', '--files', '-g', '']
     elseif executable('ag')
         let g:unite_source_grep_command = 'ag'
-        let g:unite_source_grep_default_opts = '--vimgrep --smart-case --silent ' . $grep_ignore
+        let g:unite_source_grep_default_opts = '--vimgrep --smart-case --silent ' . s:grep_ignore
         let g:unite_source_grep_recursive_opt = ''
         let g:unite_source_rec_git_command= ['ag', '--nocolor', '--follow', '--nogroup', '-g', '']
     endif
@@ -340,7 +350,15 @@ endif
 " Other plugins.
 " **************
 
-" http://vim-taglist.sourceforge.net/
+" Old school source code browser plugin.
+if !isdirectory($VIMHOME . "/plugin/taglist")
+    echo("Downloading taglist...")
+    silent !git clone https://github.com/yegappan/taglist $VIMHOME/plugin/taglist
+    if !(has('win32') || has ('win64'))
+        silent !cp $VIMHOME/plugin/taglist/plugin/taglist.vim $VIMHOME/plugin/taglist.vim
+        silent !cp $VIMHOME/plugin/taglist/autoload/taglist.vim $VIMHOME/autoload/taglist.vim
+    endif
+endif
 if filereadable($VIMHOME . "/plugin/taglist.vim")
     nnoremap <f1> :TlistToggle<cr>
     inoremap <f1> <c-o>:TlistToggle<cr>
@@ -472,8 +490,8 @@ inoremap <c-f4> <esc><c-w>c
 
 function! SetTabWidth(newwidth)
     let &tabstop=a:newwidth
-    let &shiftwidth=a:newwidth
-    let &softtabstop=a:newwidth
+    let &shiftwidth=a:newwidth " Set indent (using keys << or >>) width.
+    let &softtabstop=a:newwidth " Set indent width in insert mode using tab.
     echo "Tab width set to:" a:newwidth
 endfunction
 
@@ -658,14 +676,14 @@ function! OnVimEnter()
         " Search word under cursor.
         nnoremap <leader>gw viw:Unite grep:.::<c-r>*<cr>
         " Search current filename, extension removed.
-        nnoremap <leader>gf :Unite grep:.::<c-r>=expand('%:t:r')<cr><cr>
+        nnoremap <leader>gc :Unite grep:.::<c-r>=expand('%:t:r')<cr><cr>
         " Search Angular.js keywords.
         nnoremap <leader>ga :Unite -start-insert grep:.::\\.(filter\|provider\|controller\|directive\|factory\|service)\\(\\'.+\\'<cr>
     endif
 
     " jsbeautify
     if exists("*JsBeautify")
-        nnoremap <leader>j :call JsBeautify()<cr>:set syntax=json<cr>
+        nnoremap <leader>jb :call JsBeautify()<cr>
     endif
 
     " vimagit
@@ -676,8 +694,6 @@ function! OnVimEnter()
     " tcomment
     if exists("g:loaded_tcomment")
         " Toggle comment for the current/selected line(s).
-        " For some reason this does not work here:
-        " :execute "normal! " . eval(string(g:tcomment_opleader1)) . "c"<cr>
         nmap <silent><leader>c åc
         vmap <silent><leader>c å
         imap <silent><leader>c <esc>åc^
@@ -719,6 +735,6 @@ nnoremap <silent><leader>n :call ToggleNetrw()<cr>
 
 
 " Host specific stuff.
-if filereadable(expand('~/.vimrc_extra'))
-    source ~/.vimrc_extra
+if filereadable($HOME . "/.vimrc_extra")
+    source $HOME/.vimrc_extra
 endif
