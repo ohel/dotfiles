@@ -1,0 +1,77 @@
+<!DOCTYPE patchbay>
+<patchbay version="0.9.5" name="record">
+ <output-sockets>
+  <socket exclusive="off" name="QsynthJACK" type="jack-audio" client="QsynthJACK">
+   <plug>left</plug>
+   <plug>right</plug>
+  </socket>
+  <socket exclusive="off" name="Hydrogen" type="jack-audio" client="Hydrogen">
+   <plug>out_L</plug>
+   <plug>out_R</plug>
+  </socket>
+  <socket exclusive="off" name="ALSA output" type="jack-audio" client="ALSA\ output">
+   <plug>capture_1</plug>
+   <plug>capture_2</plug>
+  </socket>
+  <socket exclusive="off" name="jack_rack" type="jack-audio" client="jack_rack">
+   <plug>out_1</plug>
+   <plug>out_2</plug>
+  </socket>
+  <socket exclusive="off" name="mhwe" type="jack-audio" client="mhwe">
+   <plug>outL</plug>
+   <plug>outR</plug>
+  </socket>
+  <socket exclusive="off" name="system 2" type="jack-audio" client="system">
+   <plug>capture_3</plug>
+   <plug>capture_4</plug>
+  </socket>
+  <socket exclusive="off" name="Alesis Turbo" type="alsa-midi" client="Alesis\ Turbo">
+   <plug>Alesis\ Turbo\ MIDI\ 1</plug>
+  </socket>
+  <socket exclusive="off" name="mididings" type="alsa-midi" client="mididings">
+   <plug>midi_out</plug>
+  </socket>
+ </output-sockets>
+ <input-sockets>
+  <socket exclusive="off" name="system" type="jack-audio" client="system">
+   <plug>playback_1</plug>
+   <plug>playback_2</plug>
+  </socket>
+  <socket exclusive="off" name="jack_rack" type="jack-audio" client="jack_rack">
+   <plug>in_1</plug>
+   <plug>in_2</plug>
+  </socket>
+  <socket exclusive="off" name="mhwe" type="jack-audio" client="mhwe">
+   <plug>inL</plug>
+   <plug>inR</plug>
+  </socket>
+  <socket exclusive="off" name="mhwe 2" type="jack-audio" client="mhwe">
+   <plug>in3</plug>
+   <plug>in4</plug>
+  </socket>
+  <socket exclusive="off" name="mhwe 3" type="jack-audio" client="mhwe">
+   <plug>in5</plug>
+   <plug>in6</plug>
+  </socket>
+  <socket exclusive="off" name="Hydrogen" type="alsa-midi" client="Hydrogen">
+   <plug>Hydrogen\ Midi\-In</plug>
+  </socket>
+  <socket exclusive="off" name="mididings" type="alsa-midi" client="mididings">
+   <plug>midi_in</plug>
+  </socket>
+ </input-sockets>
+ <slots/>
+ <cables>
+  <cable type="jack-audio" output="Hydrogen" input="jack_rack"/>
+  <cable type="jack-audio" output="ALSA output" input="mhwe 3"/>
+  <cable type="jack-audio" output="ALSA output" input="system"/>
+  <cable type="jack-audio" output="jack_rack" input="system"/>
+  <cable type="jack-audio" output="jack_rack" input="mhwe"/>
+  <cable type="jack-audio" output="mhwe" input="system"/>
+  <cable type="jack-audio" output="system 2" input="mhwe 2"/>
+  <cable type="alsa-midi" output="Alesis Turbo" input="mididings"/>
+  <cable type="alsa-midi" output="mididings" input="Hydrogen"/>
+  <cable type="jack-audio" output="QsynthJACK" input="mhwe"/>
+ </cables>
+</patchbay>
+

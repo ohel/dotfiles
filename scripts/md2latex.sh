@@ -7,6 +7,7 @@
 # * <hr> elements are converted to pagebreaks.
 # * **bold** text is converted to \textbf{bold}.
 # * _emphasis_ is converted to \emph{emphasis}.
+# * % characters are escaped.
 # The conversion is not perfect by a long shot, but should work for simple short documents quite well.
 # If $2 = pdf, a PDF is made from the result LaTeX file and opened with xdg-open.
 
@@ -97,6 +98,7 @@ sed -i "s/^\([1-9]\.\) /    \\\\\item /" "$texfile"
 sed -i "s/<hr>/\\\pagebreak \[4\]/" "$texfile"
 sed -i "s/\*\*\([^*]*\)\*\*/\\\textbf\{\1\}/g" "$texfile"
 sed -i "s/_\([^_]*\)_/\\\emph\{\1\}/g" "$texfile"
+sed -i "s/%/\\\%/g" "$texfile"
 
 if [ "$2" = "pdf" ]
 then
