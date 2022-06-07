@@ -184,8 +184,11 @@ function! InstallPathogenPlugin(bundlename, githuburl)
     endif
 endfunction
 
-" TypeScript support.
+" TypeScript client for TSServer.
 call InstallPathogenPlugin("tsuquyomi", "Quramy/tsuquyomi")
+
+" JavaScript's Template Strings highlighting.
+call InstallPathogenPlugin("vim-js-pretty-template", "Quramy/vim-js-pretty-template")
 
 " Better JSON(L) syntax highlighting.
 call InstallPathogenPlugin("vim-json", "elzr/vim-json")
@@ -230,11 +233,13 @@ if exists("*plug#begin")
     Plug 'jreybert/vimagit' " git integration.
     Plug 'justinmk/vim-gtfo' " Open terminal or file manager.
     Plug 'kana/vim-arpeggio' " Do stuff with configurable key combinations.
+    Plug 'pangloss/vim-javascript' " Nicer JavaScript syntax highlighting etc.
     Plug 'leafgarland/typescript-vim' " TypeScript support.
+    Plug 'maxmellon/vim-jsx-pretty' " React syntax support.
     Plug 'maksimr/vim-jsbeautify', { 'do': 'cd $VIMHOME/plugged/vim-jsbeautify && git submodule update --init --recursive' }
     " Default trigger for prettier is: <leader>p
     Plug 'prettier/vim-prettier', {
-      \ 'do': 'which yarn && yarn install \|\| ! which yarn && which npm && npm install',
+      \ 'do': 'which npm && npm install',
       \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown'] }
     Plug 'Shougo/unite-outline' " Unite source providing outline view of current buffer.
     Plug 'Shougo/unite.vim' " Search and display information from various sources.
@@ -280,7 +285,7 @@ if isdirectory($VIMHOME . "/plugged/vim-arpeggio")
             if @% =~# "fugitiveblame"
                 :exe "normal \<c-w>c"
             else
-                :exe "normal :Gblame\<cr>"
+                :exe "normal :Git blame\<cr>"
             endif
         endfunction
         call arpeggio#map('n', '', 0, 'gb', ':call ToggleGitBlame()<cr>')
