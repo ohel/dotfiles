@@ -1,12 +1,12 @@
 #!/usr/bin/pulseaudio -nF
-# Make PulseAudio a simple JACK bridge.
+# Make PulseAudio a simple ALSA bridge.
 
 .fail
-    # Input/record.
-    load-module module-jack-source channels=2
+    # Input/record ALSA device.
+    load-module module-alsa-source device="loop" tsched=1
 
-    # Output/playback.
-    load-module module-jack-sink channels=2
+    # Output/playback ALSA device.
+    load-module module-alsa-sink device="loop" tsched=1
 
     # Required to accept clients. Don't remove.
     load-module module-native-protocol-unix

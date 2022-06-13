@@ -1,8 +1,5 @@
 #!/usr/bin/pulseaudio -nF
-
-# Replace /etc/pulse/default.pa with this to make PulseAudio an ALSA bridge,
-# or link daemon.conf to a new config (e.g alsapipe.conf) where you set this as default-script-file.
-# Setting "autospawn = no" in /etc/pulse/client.conf is also useful.
+# Make PulseAudio a simple ALSA bridge.
 
 .fail
     # Input/record ALSA device.
