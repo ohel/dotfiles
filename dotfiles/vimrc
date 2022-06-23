@@ -250,6 +250,7 @@ if exists("*plug#begin")
     Plug 'tpope/vim-fugitive' " Git wrapper.
     Plug 'tommcdo/vim-fugitive-blame-ext' " Git blame status line.
     Plug 'pprovost/vim-ps1' " PowerShell support.
+    Plug 'powerman/vim-plugin-AnsiEsc' " ANSI escape sequences, e.g. colored text.
     call plug#end()
 endif
 
@@ -703,6 +704,12 @@ function! OnVimEnter()
         vmap <silent><leader>c å
         imap <silent><leader>c <esc>åc^
     endif
+
+    " ANSI escape sequences
+    if exists(":AnsiEsc")
+        nnoremap <leader>e :AnsiEsc<cr>
+    endif
+
 
     " XML formatting using Python.
     if executable('python3')
