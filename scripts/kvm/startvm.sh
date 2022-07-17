@@ -11,7 +11,8 @@ vm_mem_mb=8192
 vm_num_cores=4
 vm_threads_per_core=1
 
-audio=0 # Note: on modern Windows guests the audio emulation bugs so that there are cracks and pops all the time.
+# Note: sounds might not work with new KVM/Qemu versions, especially on modern Windows guests. The audio emulation bugs so that there are cracks and pops all the time, if sounds even work at all.
+audio=0
 auto_network=1
 auto_vnc=0
 boot_from_cd=0
@@ -66,21 +67,19 @@ then
     read tmp
 fi
 
-dac=""
-adc=""
 soundhw=""
 if [ "$audio" = 1 ]
 then
+    soundhw="-device intel-hda -device hda-duplex,audiodev=snd0"
     if [ "$(ps -e | grep pulseaudio)" ]
     then
-        sound_params="QEMU_AUDIO_DRV=pa"
+        soundhw="$soundhw -audiodev pa,id=snd0"
     else
         modprobe snd-aloop
-        dac="hw:Loopback,0,4" # loop_vm_dac_in
-        adc="hw:Loopback,1,5" # loop_vm_adc_out
-        sound_params="QEMU_ALSA_DAC_DEV=$dac QEMU_ALSA_ADC_DEV=$adc"
+        dac="hw:Loopback,,0,,4" # loop_vm_dac_in
+        adc="hw:Loopback,,1,,5" # loop_vm_adc_out
+        soundhw="$soundhw -audiodev alsa,id=snd0,out.dev=$dac,in.dev=$adc"
     fi
-    soundhw="-soundhw hda"
 fi
 
 bootstring="c"
@@ -95,15 +94,15 @@ then
         -device virtio-serial-pci \
         -device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 \
         -chardev spicevmc,id=spicechannel0,name=vdagent \
-        -spice port=600$port,addr=127.0.0.1,disable-ticketing"
+        -spice port=600$port,addr=127.0.0.1,disable-ticketing=on"
 fi
 
 bridged_net_devices=""
-[ "$bridged_network" = 1 ] && bridged_net_devices="\
--device virtio-net-pci,netdev=net"$net_id"_1 -netdev tap,id=net"$net_id"_1,br=$net_bridge,script=kvm_tap_netbridge.sh"
+[ "$bridged_network" = 1 ] && bridged_net_devices=\
+    "-device virtio-net-pci,netdev=net"$net_id"_1 -netdev tap,id=net"$net_id"_1,br=$net_bridge,script=kvm_tap_netbridge.sh"
 
 echo "Starting the virtual machine..."
-env $sound_params qemu-system-x86_64 \
+qemu-system-x86_64 \
 -vnc localhost:$net_id \
 -daemonize \
 -enable-kvm \
