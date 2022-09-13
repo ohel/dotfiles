@@ -213,6 +213,12 @@ if isdirectory($VIMHOME . "/bundle/tsuquyomi")
         " If using nvm, use the latest version.
         let g:tsuquyomi_nodejs_path=system('ls -1v ' . $HOME . '/.nvm/versions/node/*/bin/node | tail -n 1 | tr -d "\n"')
         let g:tsuquyomi_tsserver_path=system('ls -1v ' . $HOME . '/.nvm/versions/node/*/lib/node_modules/typescript/lib/tsserver.js | tail -n 1 | tr -d "\n"')
+        if !filereadable(g:tsuquyomi_tsserver_path)
+          :echo "TypeScript is missing, installing it globally."
+          let s:npm_path=system('ls -1v ' . $HOME . '/.nvm/versions/node/*/bin/npm | tail -n 1 | tr -d "\n"')
+          let $install_ts_server_cmd = s:npm_path . " i -g typescript"
+          silent !$install_ts_server_cmd
+        endif
         let g:tsuquyomi_use_dev_node_module=2
     endif
 endif
