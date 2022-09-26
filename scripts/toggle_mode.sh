@@ -3,10 +3,13 @@
 # UI scaling is set also if HiDPI resolutions are being set.
 # Unfortunately setting GDK_SCALE won't work on the fly since it's an environment variable.
 
+[ ! "$DISPLAY" ] && echo "No \$DISPLAY" && exit 1
+
 primary_background=~/.themes/background
 secondary_background=~/.themes/background2
 HIDPI_WIDTH=3840
 target_mode=${1:-"1920x1080"}
+primary_display=$2
 target_is_hidpi="yes"
 [ "$(echo $target_mode | cut -f 1 -d 'x')" -lt $HIDPI_WIDTH ] && target_is_hidpi=""
 
@@ -16,6 +19,7 @@ current_mode=$(echo "$xrandrout" | grep \* | head -n 1 | grep -o "[0-9]\{3,4\}x[
 [ "$current_mode" != $target_mode ] && set_target_mode="yes"
 
 primary_display=${primary_display:-$(echo "$xrandrout" | grep " connected" | cut -f 1 -d ' ' | head -n 1)}
+[ ! "$primary_display" ] && echo "Primary display not found. Try giving it as \$2." && exit 1
 primary_mode=$(echo "$xrandrout" | grep -A 1 $primary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
 p_width=$(echo $primary_mode | cut -f 1 -d 'x')
 

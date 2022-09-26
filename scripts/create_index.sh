@@ -3,6 +3,7 @@
 # White spaces are not supported in file or directory names.
 # A dummy .htaccess file is written also.
 # Creates image thumbnail links if they exist (thumb_*.jpg).
+# If RAW images exist for corresponding jpgs, skip thumbs for them.
 #
 # Parameters:
 # $1: name of the root directory (for hyperlinks); defaults to current directory basename
@@ -22,6 +23,10 @@ root=${1:-$(basename $(pwd))}
 title=${2:-$root}
 preview_all=${3:-""}
 index="index.html"
+# Raw image file extensions separated by spaces. Case is ignored.
+raw_exts_space_separated=" rw2 raw "
+# Video file extensions separated by spaces. Case is ignored.
+video_exts_space_separated=" mp4 mov "
 
 echo "Creating index for /$root"
 
@@ -70,12 +75,23 @@ do
         [ ! "$(echo $item | grep "thumb_.*\.\(\(jpg\)\|\(png\)\)")" ]
     then
         echo "<li id=li$li><a href=\"/$root/$item\">$item</a> <a href=\"#li$li\" class=\"hash\">⚓</a> ($size)" >> $index
-        [ "${item##*.}" = "mp4" ] && echo " [VIDEO]" >> $index
+
+        # Videos.
+        [ "$(echo "$video_exts_space_separated" | grep -i "${item##*.}")" ] && echo " [VIDEO]" >> $index
+
+        # Raw images.
+        handle_raw=0
+        [ "$(echo "$raw_exts_space_separated" | grep -i "${item##*.}")" ] && handle_raw=1
+        [ $handle_raw -eq 1 ] && echo " [RAW]" >> $index
+
         if [ -e thumb_${item%.*}.jpg ] || [ -e thumb_${item%.*}.png ]
         then
             ext=jpg
             [ -e thumb_${item%.*}.png ] && ext=png
-            echo "<a href=\"/$root/$item\"></br><img src=\"thumb_${item%.*}.$ext\" alt=\"img\"></a>" >> $index
+
+            # Skip raw image if jpg exists.
+            [ ! -e "${item%.*}.jpg" ] && [ ! -e "${item%.*}.JPG" ] && handle_raw=0
+            [ $handle_raw -eq 0 ] && echo "<a href=\"/$root/$item\"></br><img src=\"thumb_${item%.*}.$ext\" alt=\"img\"></a>" >> $index
         elif [ "$preview_all" ] && $([ "${item##*.}" = "jpg" ] || [ "${item##*.}" = "png" ])
         then
             echo "<a href=\"/$root/$item\"></br><img src=\"$item\" alt=\"img\"></a>" >> $index

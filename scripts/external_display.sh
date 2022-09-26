@@ -12,6 +12,8 @@
 # extend = extend to the other display (xrandr position may be given in $3, defaults to "right-of")
 # mirror = mirror the display (using highest common resolution)
 
+[ ! "$DISPLAY" ] && echo "No \$DISPLAY" && exit 1
+
 testfile=/tmp/external_display
 primary_background=~/.themes/background
 secondary_background=~/.themes/background2
