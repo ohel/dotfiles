@@ -157,20 +157,6 @@ autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd BufNewFile,BufRead *.xaml set filetype=xml
 autocmd BufNewFile,BufRead *.jsonl set filetype=json
 
-" The variable is for vim-json plugin.
-let g:vim_json_syntax_conceal = 0
-function! ToggleJsonSyntaxConceal()
-    if &l:conceallevel == 0
-        setlocal conceallevel=2
-        let g:vim_json_syntax_conceal = 1
-        e
-    else
-        setlocal conceallevel=0
-    endif
-endfunction
-nnoremap <leader>jc :call ToggleJsonSyntaxConceal()<cr>
-nnoremap <leader>js :set syntax=json<cr>
-
 
 
 " Pathogen plugins.
@@ -184,14 +170,23 @@ function! InstallPathogenPlugin(bundlename, githuburl)
     endif
 endfunction
 
-" TypeScript client for TSServer.
-call InstallPathogenPlugin("tsuquyomi", "Quramy/tsuquyomi")
-
 " JavaScript's Template Strings highlighting.
 call InstallPathogenPlugin("vim-js-pretty-template", "Quramy/vim-js-pretty-template")
 
 " Better JSON(L) syntax highlighting.
+let g:vim_json_syntax_conceal = 0
+function! ToggleJsonSyntaxConceal()
+    if &l:conceallevel == 0
+        setlocal conceallevel=2
+        let g:vim_json_syntax_conceal = 1
+        e
+    else
+        setlocal conceallevel=0
+    endif
+endfunction
 call InstallPathogenPlugin("vim-json", "elzr/vim-json")
+nnoremap <leader>jc :call ToggleJsonSyntaxConceal()<cr>
+nnoremap <leader>js :set syntax=json<cr>
 
 " Pug (Jade) syntax.
 call InstallPathogenPlugin("vim-pug", "digitaltoad/vim-pug")
@@ -207,22 +202,6 @@ if filereadable($VIMHOME . "/autoload/pathogen.vim")
     silent! execute pathogen#infect()
 endif
 
-if isdirectory($VIMHOME . "/bundle/tsuquyomi")
-    autocmd FileType typescript setlocal completeopt+=menu,preview
-    if isdirectory($HOME . "/.nvm")
-        " If using nvm, use the latest version.
-        let g:tsuquyomi_nodejs_path=system('ls -1v ' . $HOME . '/.nvm/versions/node/*/bin/node | tail -n 1 | tr -d "\n"')
-        let g:tsuquyomi_tsserver_path=system('ls -1v ' . $HOME . '/.nvm/versions/node/*/lib/node_modules/typescript/lib/tsserver.js | tail -n 1 | tr -d "\n"')
-        if !filereadable(g:tsuquyomi_tsserver_path)
-          :echo "TypeScript is missing, installing it globally."
-          let s:npm_path=system('ls -1v ' . $HOME . '/.nvm/versions/node/*/bin/npm | tail -n 1 | tr -d "\n"')
-          let $install_ts_server_cmd = s:npm_path . " i -g typescript"
-          silent !$install_ts_server_cmd
-        endif
-        let g:tsuquyomi_use_dev_node_module=2
-    endif
-endif
-
 if filereadable($VIMHOME . "/bundle/pydiction/complete-dict")
     let g:pydiction_location = '$VIMHOME/pydiction/complete-dict'
     let g:pydiction_menu_height = 15
@@ -235,7 +214,7 @@ if filereadable($VIMHOME . "/autoload/plug.vim")
     silent! call plug#begin($VIMHOME . "/plugged")
 endif
 if exists("*plug#begin")
-    Plug 'ap/vim-css-color' " Display color codes in color.
+    Plug 'ap/vim-css-color' " Display color codes in corresponding color.
     Plug 'jreybert/vimagit' " git integration.
     Plug 'justinmk/vim-gtfo' " Open terminal or file manager.
     Plug 'kana/vim-arpeggio' " Do stuff with configurable key combinations.
@@ -243,7 +222,7 @@ if exists("*plug#begin")
     Plug 'leafgarland/typescript-vim' " TypeScript support.
     Plug 'maxmellon/vim-jsx-pretty' " React syntax support.
     Plug 'maksimr/vim-jsbeautify', { 'do': 'cd $VIMHOME/plugged/vim-jsbeautify && git submodule update --init --recursive' }
-    " Default trigger for prettier is: <leader>p
+    " Code styling. Default trigger for prettier is: <leader>p
     Plug 'prettier/vim-prettier', {
       \ 'do': 'which npm && npm install',
       \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown'] }
@@ -251,12 +230,31 @@ if exists("*plug#begin")
     Plug 'Shougo/unite.vim' " Search and display information from various sources.
     Plug 'Shougo/vimproc.vim', { 'do': 'cd $VIMHOME/plugged/vimproc.vim && make -f make_unix.mak' } " Allows async operations.
     Plug 'tomtom/tcomment_vim' " Code commenting.
-    Plug 'Valloric/YouCompleteMe', { 'on': [], 'do': 'cd $VIMHOME/plugged/YouCompleteMe && ./install.py' }
     Plug 'vim-airline/vim-airline' " Status/tabline.
     Plug 'tpope/vim-fugitive' " Git wrapper.
     Plug 'tommcdo/vim-fugitive-blame-ext' " Git blame status line.
     Plug 'pprovost/vim-ps1' " PowerShell support.
     Plug 'powerman/vim-plugin-AnsiEsc' " ANSI escape sequences, e.g. colored text.
+    Plug 'jparise/vim-graphql' " GraphQL support.
+
+    " Conquer of Completion: code completion.
+    let g:coc_global_extensions = [
+      \ 'coc-tsserver',
+      \ 'coc-json',
+      \ 'coc-css' ]
+    " If using nvm, use the latest version.
+    if isdirectory($HOME . "/.nvm")
+        let g:coc_node_path = system('ls -1v ' . $HOME . '/.nvm/versions/node/*/bin/node | tail -n 1 | tr -d "\n"')
+        let s:tsserver_path = system('ls -1v ' . $HOME . '/.nvm/versions/node/*/lib/node_modules/typescript/lib/tsserver.js | tail -n 1 | tr -d "\n"')
+        if !filereadable(s:tsserver_path)
+          :echo "TypeScript is missing, installing it globally."
+          let s:npm_path=system('ls -1v ' . $HOME . '/.nvm/versions/node/*/bin/npm | tail -n 1 | tr -d "\n"')
+          let $install_ts_server_cmd = s:npm_path . " i -g typescript"
+          silent !$install_ts_server_cmd
+        endif
+    endif
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
     call plug#end()
 endif
 
@@ -268,15 +266,6 @@ endif
 " supports '--dir=directory' style syntax, so we use a workaround function.
 if isdirectory($VIMHOME . "/plugged/vim-gtfo") && executable('xfce4-terminal')
     let g:gtfo#terminals = { 'unix' : 'gtfo() { xfce4-terminal --default-working-directory="$1"; } && gtfo' }
-endif
-
-" YCM may be a bit too intrusive so load it only on demand.
-if isdirectory($VIMHOME . "/plugged/YouCompleteMe")
-    function! LoadYCM()
-        call plug#load('YouCompleteMe') | call youcompleteme#Enable() | YcmCompleter
-        nnoremap <leader>gd :YcmCompleter GoToDefinitionElseDeclaration<CR>
-    endfunction
-    nnoremap <leader>y :call LoadYCM()<cr>:echo "YouCompleteMe loaded."<cr>
 endif
 
 if isdirectory($VIMHOME . "/plugged/vim-arpeggio")
@@ -358,6 +347,8 @@ if isdirectory($VIMHOME . "/plugged/vim-airline")
     endif
     let g:airline_theme = 'minigun'
 endif
+
+
 
 " Other plugins.
 " **************
@@ -449,18 +440,15 @@ vnoremap <c-h> :s/\v/g\|:silent noh<left><left><left><left><left><left><left><le
 
 
 " Select and scroll up/down for dropdown lists (c-j also works for selection).
-inoremap <a-k> <up>
-inoremap <a-j> <down>
-inoremap <a-h> <cr>
+imap <a-k> <up>
+imap <a-j> <down>
+imap <a-h> <cr>
 " Mainly for taglist plugin etc. to select ergonomically using home row.
 nmap <c-j> <cr>
 
-" Move screen lines.
+" Move screen lines, i.e. if text is wrapped, then move as you see the text flow, not as it actually is.
 inoremap <home> <c-o>g0
 inoremap <end> <c-o>g$
-" These disable functionality with menus, use mapped up/down instead from above.
-inoremap <up> <c-o>gk
-inoremap <down> <c-o>gj
 
 
 
@@ -706,9 +694,9 @@ function! OnVimEnter()
     " tcomment
     if exists("g:loaded_tcomment")
         " Toggle comment for the current/selected line(s).
-        nmap <silent><leader>c åc
-        vmap <silent><leader>c å
-        imap <silent><leader>c <esc>åc^
+        nmap <silent><leader>cc åc
+        vmap <silent><leader>cc å
+        imap <silent><leader>cc <esc>åc^
     endif
 
     " ANSI escape sequences
@@ -716,6 +704,17 @@ function! OnVimEnter()
         nnoremap <leader>e :AnsiEsc<cr>
     endif
 
+    " Code completion stuff
+    if exists(":CocInstall")
+        nmap <leader>ca <Plug>(coc-codeaction)
+        nmap <leader>cf <Plug>(coc-fix-current)
+        nmap <leader>cd <Plug>(coc-definition)
+        nmap <leader>ct <Plug>(coc-type-definition)
+        nmap <leader>ci <Plug>(coc-implementation)
+        nmap <leader>cr <Plug>(coc-references)
+        inoremap <silent><expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<c-g>u\<cr>\<c-r>=coc#on_enter()\<cr>"
+        inoremap <silent><expr> <c-j> coc#pum#visible() ? coc#pum#confirm() : "\<c-g>u\<cr>\<c-r>=coc#on_enter()\<cr>"
+    endif
 
     " XML formatting using Python.
     if executable('python3')
