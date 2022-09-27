@@ -37,12 +37,31 @@
 .background {
     color: @theme_fg_color;
     background-color: @theme_bg_color;
+    border-style: none;
+    border-width: 0px;
+    border-radius: 0px;
 }
 
 .background:hover {
     background-color: alpha(shade(@theme_bg_color, 1.1), 0.4);
     color: shade(@theme_selected_fg_color, 1.1);
 }
+
+.gtkstyle-fallback {
+  background-color: @theme_bg_color;
+  color: @theme_fg_color; }
+  .gtkstyle-fallback:hover {
+    background-color: @theme_bg_color;
+    color: @theme_fg_color; }
+  .gtkstyle-fallback:active {
+    background-color: @theme_bg_color;
+    color: @theme_fg_color; }
+  .gtkstyle-fallback:disabled {
+    background-color: @theme_bg_color;
+    color: alpha(@theme_fg_color, 0.4); }
+  .gtkstyle-fallback:selected {
+    background-color: @theme_selected_bg_color;
+    color: @theme_fg_color; }
 
 *:selected {
     background-color: @theme_selected_fg_color;
@@ -65,12 +84,6 @@
 
 *:active {
     background-color: shade(@theme_bg_color, 0.915);
-}
-
-.background {
-    border-style: none;
-    border-width: 0px;
-    border-radius: 0px;
 }
 
 tooltip {
@@ -182,13 +195,13 @@ entry selection:focus {
 textview.view,
 textview.view:disabled,
 GtkHTML { /* For Evolution (not enough; see entries section below) */
-    background-color: @view_color;
-    color: @theme_main_color;
+    background-color: @theme_bg_color;
+    color: @theme_fg_color;
 }
 
 /* This is for highlighting the current line in source views. */
 textview {
-    background-color: #D9D9D9; /* #dddddd; */
+    background-color: @theme_bg_color;
     color: @theme_main_color;
 }
 
