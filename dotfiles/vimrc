@@ -439,6 +439,8 @@ vnoremap <c-h> :s/\v/g\|:silent noh<left><left><left><left><left><left><left><le
 
 
 " Select and scroll up/down for lists (c-j also usually works for selection).
+imap <a-k> <up>
+imap <a-j> <down>
 map <a-k> <up>
 map <a-j> <down>
 " Mainly for taglist plugin etc. to select ergonomically using home row.
