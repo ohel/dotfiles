@@ -1,10 +1,10 @@
 autocmd VimEnter * call OnVimEnter()
 autocmd GUIEnter * set lines=31 columns=107 " Set window size when starting in GUI mode.
-autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif " Returns cursor to previous position when opening files.
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line('$') | exe 'normal! g`"' | endif " Returns cursor to previous position when opening files.
 
-let g:dlines=31 " Also set default size into memory.
-let g:dcols=107
-let g:leave_my_textwidth_alone=1 " Don't autowrap lines while typing.
+let g:dlines = 31 " Also set default size into memory.
+let g:dcols = 107
+let g:leave_my_textwidth_alone = 1 " Don't autowrap lines while typing.
 
 set autoread " Automatically update file if changed from the outside.
 set backspace=indent,eol,start " Make backspace clear other than new text also.
@@ -35,7 +35,7 @@ endif
 map <space> <leader>
 
 " Last command.
-nnoremap <silent><leader>l :<up><cr>
+nnoremap <silent> <leader>l :<up><cr>
 
 " Sort.
 if executable('sort')
@@ -45,24 +45,24 @@ endif
 " Change directory to that of the current file.
 nnoremap <leader>d :cd %:h<cr>:echo "wd is now" getcwd()<cr>
 
-let s:grep_ignore = ""
-let s:grep_ignore_file = $HOME . "/.config/grep_ignore"
+let s:grep_ignore = ''
+let s:grep_ignore_file = $HOME . '/.config/grep_ignore'
 if executable('rg')
     if filereadable(s:grep_ignore_file)
-        let s:grep_ignore = "--ignore-file " . s:grep_ignore_file
+        let s:grep_ignore = '--ignore-file ' . s:grep_ignore_file
     endif
-    let &grepprg="rg --smart-case --vimgrep -uu " . s:grep_ignore . " $*"
+    let &grepprg = 'rg --smart-case --vimgrep -uu ' . s:grep_ignore . ' $*'
     set grepformat=%f:%l:%c:%m
 elseif executable('ag')
     if filereadable(s:grep_ignore_file)
-        let s:grep_ignore = "--exclude-from=" . s:grep_ignore_file
+        let s:grep_ignore = '--exclude-from=' . s:grep_ignore_file
     endif
-    let &grepprg="ag --smart-case --vimgrep " . s:grep_ignore . " $*"
+    let &grepprg = 'ag --smart-case --vimgrep ' . s:grep_ignore . ' $*'
     set grepformat=%f:%l:%c:%m
 endif
 
 " Generic tab complete.
-function! TabOrComplete()
+function TabOrComplete()
     if col('.') > 1 && strpart( getline('.'), 0, col('.') ) =~ '.*/\S*$'
         return "\<c-x>\<c-f>"
     elseif col('.') > 1 && strpart( getline('.'), col('.')-2, 2 ) =~ '^\w'
@@ -81,24 +81,24 @@ inoremap <tab> <c-r>=TabOrComplete()<cr>
 inoremap <s-tab> <c-q><tab>
 
 let g:zoom_functions = 1
-let $VIMHOME=$HOME . "/.vim"
+let $VIMHOME = $HOME . '/.vim'
 
 if has('win32') || has ('win64')
 
     " Vim in MinGW always uses .vim.
-    if !isdirectory($HOME . "/.vim")
-        let $VIMHOME=$HOME . "/_vim"
+    if !isdirectory($HOME . '/.vim')
+        let $VIMHOME = $HOME . '/_vim'
     endif
 
     set guifont=Consolas:h12:cANSI
 
 else
 
-    if !filereadable($VIMHOME . "/colors/minigun.vim")
-        if !isdirectory($VIMHOME . "/colors")
-            silent call mkdir($VIMHOME . "/colors", "p")
+    if !filereadable($VIMHOME . '/colors/minigun.vim')
+        if !isdirectory($VIMHOME . '/colors')
+            silent call mkdir($VIMHOME . '/colors', 'p')
         endif
-        echo("Downloading color scheme...")
+        echo('Downloading color scheme...')
         silent !curl -fLo $VIMHOME/colors/minigun.vim --create-dirs https://raw.githubusercontent.com/ohel/dotfiles/master/themes/minigun.vim
     endif
 
@@ -113,19 +113,19 @@ else
     endif
 
     " Plugins checking.
-    if !isdirectory($VIMHOME . "/autoload")
-        silent call mkdir($VIMHOME . "/autoload", "p")
+    if !isdirectory($VIMHOME . '/autoload')
+        silent call mkdir($VIMHOME . '/autoload', 'p')
     endif
-    if !filereadable($VIMHOME . "/autoload/plug.vim")
-        echo("Downloading vim-plug...")
+    if !filereadable($VIMHOME . '/autoload/plug.vim')
+        echo('Downloading vim-plug...')
         silent !curl -fLo $VIMHOME/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     endif
-    if !filereadable($VIMHOME . "/autoload/pathogen.vim")
-        echo("Downloading pathogen...")
+    if !filereadable($VIMHOME . '/autoload/pathogen.vim')
+        echo('Downloading pathogen...')
         silent !curl -fLo $VIMHOME/autoload/pathogen.vim https://tpo.pe/pathogen.vim
     endif
-    if !isdirectory($VIMHOME . "/bundle")
-        silent call mkdir($VIMHOME . "/bundle", "p")
+    if !isdirectory($VIMHOME . '/bundle')
+        silent call mkdir($VIMHOME . '/bundle', 'p')
     endif
 
 endif
@@ -133,12 +133,12 @@ endif
 " Note: on Windows the colorscheme might not be found unless it is copied under
 " the global installation directory, e.g.
 " C:\Program Files (x86)\Vim\vimfiles\colors
-if filereadable($VIMHOME . "/colors/minigun.vim") || filereadable($VIMRUNTIME . "/colors/minigun.vim")
+if filereadable($VIMHOME . '/colors/minigun.vim') || filereadable($VIMRUNTIME . '/colors/minigun.vim')
     colorscheme minigun
 endif
 
-if !isdirectory($VIMHOME . "/undodir")
-    silent call mkdir ($VIMHOME . "/undodir", "p")
+if !isdirectory($VIMHOME . '/undodir')
+    silent call mkdir ($VIMHOME . '/undodir', 'p')
 endif
 set undodir=$VIMHOME/undodir
 set undofile
@@ -146,7 +146,7 @@ set undofile
 " Syntax and file type detection etc.
 syntax on
 filetype on
-autocmd FileType cpp set tags +=$VIMHOME/ctagsdb
+autocmd FileType cpp set tags+=$VIMHOME/ctagsdb
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
@@ -162,20 +162,20 @@ autocmd BufNewFile,BufRead *.jsonl set filetype=json
 " Pathogen plugins.
 " *****************
 
-function! InstallPathogenPlugin(bundlename, githuburl)
-    if !isdirectory($VIMHOME . "/bundle/" . a:bundlename)
-        echo("Downloading " . a:bundlename . "...")
-        let $pathogen_git_cmd = "git clone https://github.com/" . a:githuburl . ".git " . $VIMHOME . "/bundle/" . a:bundlename
+function InstallPathogenPlugin(bundlename, githuburl)
+    if !isdirectory($VIMHOME . '/bundle/' . a:bundlename)
+        echo('Downloading ' . a:bundlename . '...')
+        let $pathogen_git_cmd = 'git clone https://github.com/' . a:githuburl . '.git ' . $VIMHOME . '/bundle/' . a:bundlename
         silent !$pathogen_git_cmd
     endif
 endfunction
 
 " JavaScript's Template Strings highlighting.
-call InstallPathogenPlugin("vim-js-pretty-template", "Quramy/vim-js-pretty-template")
+call InstallPathogenPlugin('vim-js-pretty-template', 'Quramy/vim-js-pretty-template')
 
 " Better JSON(L) syntax highlighting.
 let g:vim_json_syntax_conceal = 0
-function! ToggleJsonSyntaxConceal()
+function ToggleJsonSyntaxConceal()
     if &l:conceallevel == 0
         setlocal conceallevel=2
         let g:vim_json_syntax_conceal = 1
@@ -184,25 +184,25 @@ function! ToggleJsonSyntaxConceal()
         setlocal conceallevel=0
     endif
 endfunction
-call InstallPathogenPlugin("vim-json", "elzr/vim-json")
+call InstallPathogenPlugin('vim-json', 'elzr/vim-json')
 nnoremap <leader>jc :call ToggleJsonSyntaxConceal()<cr>
 nnoremap <leader>js :set syntax=json<cr>
 
 " Pug (Jade) syntax.
-call InstallPathogenPlugin("vim-pug", "digitaltoad/vim-pug")
+call InstallPathogenPlugin('vim-pug', 'digitaltoad/vim-pug')
 
 " Python autocompletion.
-call InstallPathogenPlugin("pydiction", "rkulla/pydiction")
+call InstallPathogenPlugin('pydiction', 'rkulla/pydiction')
 
 " Kotlin support.
-call InstallPathogenPlugin("kotlin-vim", "udalov/kotlin-vim")
+call InstallPathogenPlugin('kotlin-vim', 'udalov/kotlin-vim')
 
 " Load Pathogen plugins.
-if filereadable($VIMHOME . "/autoload/pathogen.vim")
-    silent! execute pathogen#infect()
+if filereadable($VIMHOME . '/autoload/pathogen.vim')
+    silent! exe pathogen#infect()
 endif
 
-if filereadable($VIMHOME . "/bundle/pydiction/complete-dict")
+if filereadable($VIMHOME . '/bundle/pydiction/complete-dict')
     let g:pydiction_location = '$VIMHOME/pydiction/complete-dict'
     let g:pydiction_menu_height = 15
 endif
@@ -210,10 +210,10 @@ endif
 " Plugged plugins.
 " ****************
 
-if filereadable($VIMHOME . "/autoload/plug.vim")
-    silent! call plug#begin($VIMHOME . "/plugged")
+if filereadable($VIMHOME . '/autoload/plug.vim')
+    silent! call plug#begin($VIMHOME . '/plugged')
 endif
-if exists("*plug#begin")
+if exists('*plug#begin')
     Plug 'ap/vim-css-color' " Display color codes in corresponding color.
     Plug 'jreybert/vimagit' " Git integration.
     Plug 'justinmk/vim-gtfo' " Open terminal or file manager.
@@ -242,13 +242,13 @@ if exists("*plug#begin")
       \ 'coc-json',
       \ 'coc-css' ]
     let g:coc_start_at_startup = 0
-    if isdirectory($HOME . "/.nvm") " If using nvm, use the latest version.
+    if isdirectory($HOME . '/.nvm') " If using nvm, use the latest version.
         let g:coc_node_path = system('ls -1v ' . $HOME . '/.nvm/versions/node/*/bin/node | tail -n 1 | tr -d "\n"')
         let s:tsserver_path = system('ls -1v ' . $HOME . '/.nvm/versions/node/*/lib/node_modules/typescript/lib/tsserver.js | tail -n 1 | tr -d "\n"')
         if !filereadable(s:tsserver_path)
-          :echo "TypeScript is missing, installing it globally."
+          :echo 'TypeScript is missing, installing it globally.'
           let s:npm_path=system('ls -1v ' . $HOME . '/.nvm/versions/node/*/bin/npm | tail -n 1 | tr -d "\n"')
-          let $install_ts_server_cmd = s:npm_path . " i -g typescript"
+          let $install_ts_server_cmd = s:npm_path . ' i -g typescript'
           silent !$install_ts_server_cmd
         endif
     endif
@@ -257,17 +257,17 @@ if exists("*plug#begin")
     call plug#end()
 endif
 
-if isdirectory($VIMHOME . "/plugged/tcomment_vim")
+if isdirectory($VIMHOME . '/plugged/tcomment_vim')
     let g:tcomment_opleader1 = 'å'
 endif
 
 " A '-d directory' style syntax is assumed by vim-gtfo, but xfce4-terminal only
 " supports '--dir=directory' style syntax, so we use a workaround function.
-if isdirectory($VIMHOME . "/plugged/vim-gtfo") && executable('xfce4-terminal')
+if isdirectory($VIMHOME . '/plugged/vim-gtfo') && executable('xfce4-terminal')
     let g:gtfo#terminals = { 'unix' : 'gtfo() { xfce4-terminal --default-working-directory="$1"; } && gtfo' }
 endif
 
-if isdirectory($VIMHOME . "/plugged/vim-arpeggio")
+if isdirectory($VIMHOME . '/plugged/vim-arpeggio')
     " Insert mode toggles. (Grave moves cursor to ^, or the editing mark.)
     call arpeggio#map('i', '', 0, 'fj', '<esc>`^')
     call arpeggio#map('n', '', 0, 'fj', 'i<c-r>=col(".") == col("$")-1 ? "\<lt>right>" : ""<cr>')
@@ -275,9 +275,9 @@ if isdirectory($VIMHOME . "/plugged/vim-arpeggio")
     call arpeggio#map('n', '', 0, 'nh', ':noh<cr>')
 
     " Toggle Git blame window.
-    if isdirectory($VIMHOME . "/plugged/vim-fugitive")
-        function! ToggleGitBlame()
-            if @% =~# "fugitiveblame"
+    if isdirectory($VIMHOME . '/plugged/vim-fugitive')
+        function ToggleGitBlame()
+            if @% =~# 'fugitiveblame'
                 :exe "normal \<c-w>c"
             else
                 :exe "normal :Git blame\<cr>"
@@ -289,17 +289,17 @@ if isdirectory($VIMHOME . "/plugged/vim-arpeggio")
 
 endif
 
-if isdirectory($VIMHOME . "/plugged/unite.vim")
+if isdirectory($VIMHOME . '/plugged/unite.vim')
     if executable('rg')
         let g:unite_source_grep_command = 'rg'
         let g:unite_source_grep_default_opts = '--vimgrep --smart-case -uu ' . s:grep_ignore
         let g:unite_source_grep_recursive_opt = ''
-        let g:unite_source_rec_git_command= ['rg', '--color', 'never', '--follow', '--no-heading', '--with-filename', '--files', '-g', '']
+        let g:unite_source_rec_git_command = ['rg', '--color', 'never', '--follow', '--no-heading', '--with-filename', '--files', '-g', '']
     elseif executable('ag')
         let g:unite_source_grep_command = 'ag'
         let g:unite_source_grep_default_opts = '--vimgrep --smart-case --silent ' . s:grep_ignore
         let g:unite_source_grep_recursive_opt = ''
-        let g:unite_source_rec_git_command= ['ag', '--nocolor', '--follow', '--nogroup', '-g', '']
+        let g:unite_source_rec_git_command = ['ag', '--nocolor', '--follow', '--nogroup', '-g', '']
     endif
 
     let g:unite_source_rec_async_command = ['find', '-L']
@@ -336,12 +336,12 @@ if isdirectory($VIMHOME . "/plugged/unite.vim")
          \ ], '\|'))
 endif
 
-if isdirectory($VIMHOME . "/plugged/vim-airline")
-    if !filereadable($VIMHOME . "/autoload/airline/themes/minigun.vim")
-        if !isdirectory($VIMHOME . "/autoload/airline/themes")
-            silent call mkdir($VIMHOME . "/autoload/airline/themes", "p")
+if isdirectory($VIMHOME . '/plugged/vim-airline')
+    if !filereadable($VIMHOME . '/autoload/airline/themes/minigun.vim')
+        if !isdirectory($VIMHOME . '/autoload/airline/themes')
+            silent call mkdir($VIMHOME . '/autoload/airline/themes', 'p')
         endif
-        echo("Downloading airline color scheme...")
+        echo('Downloading airline color scheme...')
         silent !curl -fLo $VIMHOME/autoload/airline/themes/minigun.vim --create-dirs https://raw.githubusercontent.com/ohel/dotfiles/master/themes/minigun-airline.vim
     endif
     let g:airline_theme = 'minigun'
@@ -353,15 +353,15 @@ endif
 " **************
 
 " Tag List - an old school source code browser plugin. Needs ctags to work.
-if !isdirectory($VIMHOME . "/plugin/taglist") && executable('ctags')
-    echo("Downloading taglist...")
+if !isdirectory($VIMHOME . '/plugin/taglist') && executable('ctags')
+    echo('Downloading taglist...')
     silent !git clone https://github.com/yegappan/taglist $VIMHOME/plugin/taglist
     if !(has('win32') || has ('win64'))
         silent !cp $VIMHOME/plugin/taglist/plugin/taglist.vim $VIMHOME/plugin/taglist.vim
         silent !cp $VIMHOME/plugin/taglist/autoload/taglist.vim $VIMHOME/autoload/taglist.vim
     endif
 endif
-if filereadable($VIMHOME . "/plugin/taglist.vim")
+if filereadable($VIMHOME . '/plugin/taglist.vim')
     nnoremap <f1> :TlistToggle<cr>
     inoremap <f1> <c-o>:TlistToggle<cr>
 endif
@@ -424,8 +424,8 @@ cnoremap <c-v> <c-r>+
 inoremap <c-v> <c-r>=col('.') == col('$') ? "\<lt>esc>`^\"+pa" : "\<lt>esc>`^\"+Pa"<cr>
 
 " Replace contents, but delete the old selection to black hole register first so as not to replace insert buffer.
-vnoremap <silent> <expr> <s-insert> mode() ==# "V" ? "\"_x\"+P" : ":<esc>`>:execute col('.') == col('$')-1 ? \"normal! gv\\\"_x\\\"+p\" : \"normal! gv\\\"_x\\\"+Pl\"<cr>"
-vnoremap <silent> <expr> <c-v> mode() ==# "V" ? "\"_x\"+P" : ":<esc>`>:execute col('.') == col('$')-1 ? \"normal! gv\\\"_x\\\"+p\" : \"normal! gv\\\"_x\\\"+Pl\"<cr>"
+vnoremap <silent><expr> <s-insert> mode() ==# "V" ? "\"_x\"+P" : ":<esc>`>:exe col('.') == col('$')-1 ? \"normal! gv\\\"_x\\\"+p\" : \"normal! gv\\\"_x\\\"+Pl\"<cr>"
+vnoremap <silent><expr> <c-v> mode() ==# "V" ? "\"_x\"+P" : ":<esc>`>:exe col('.') == col('$')-1 ? \"normal! gv\\\"_x\\\"+p\" : \"normal! gv\\\"_x\\\"+Pl\"<cr>"
 
 " Common search hotkey.
 inoremap <c-f> <esc>`^/
@@ -438,12 +438,11 @@ vnoremap <c-h> :s/\v/g\|:silent noh<left><left><left><left><left><left><left><le
 
 
 
-" Select and scroll up/down for dropdown lists (c-j also works for selection).
-imap <a-k> <up>
-imap <a-j> <down>
-imap <a-h> <cr>
+" Select and scroll up/down for lists (c-j also usually works for selection).
+map <a-k> <up>
+map <a-j> <down>
 " Mainly for taglist plugin etc. to select ergonomically using home row.
-nmap <c-j> <cr>
+map <c-j> <cr>
 
 " Move screen lines, i.e. if text is wrapped, then move as you see the text flow, not as it actually is.
 inoremap <home> <c-o>g0
@@ -461,10 +460,6 @@ nnoremap <leader>U gUiw
 " Toggle menubar.
 nnoremap <f5> :if &go=~#'m'<bar>set go-=m<bar>else<bar>set go+=m<bar>endif<cr>
 inoremap <f5> <esc>:if &go=~#'m'<bar>set go-=m<bar>else<bar>set go+=m<bar>endif<cr>
-
-inoremap <c-space> <esc>`^
-nnoremap <c-space> i
-nnoremap <enter> i<c-r>=col('.') == col('$')-1 ? "\<lt>right>" : ""<cr>
 
 " Center search matches.
 nnoremap n nzz
@@ -487,16 +482,34 @@ inoremap <c-f4> <esc><c-w>c
 
 
 
-function! SetTabWidth(newwidth)
-    let &tabstop=a:newwidth
-    let &shiftwidth=a:newwidth " Set indent (using keys << or >>) width.
-    let &softtabstop=a:newwidth " Set indent width in insert mode using tab.
+" Netrw explorer config.
+let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+' " Hide dotfiles by default in Netrw Directory Listing.
+let g:netrw_liststyle = 3
+let g:netrw_banner = 0
+let g:netrw_browse_split = 4
+let g:netrw_winsize = 25
+function ToggleNetrw()
+    if &ft ==# 'netrw'
+        :exe "normal \<c-w>c"
+    else
+        :exe "normal :Vexplore .\<cr>"
+    endif
+endfunction
+nnoremap <silent> <leader>n :call ToggleNetrw()<cr>
+
+
+
+" Tab width configs.
+function SetTabWidth(newwidth)
+    let &tabstop = a:newwidth
+    let &shiftwidth = a:newwidth " Set indent (using keys << or >>) width.
+    let &softtabstop = a:newwidth " Set indent width in insert mode using tab.
     echo "Tab width set to:" a:newwidth
 endfunction
 
 silent call SetTabWidth(4) " Default tab width.
 
-function! WhitespaceToTabWidth()
+function WhitespaceToTabWidth()
     normal! ^
     let tabwidth = col('.') - 1
     if tabwidth > 0
@@ -507,15 +520,17 @@ endfunction
 " Set tab width to current line whitespace width.
 nnoremap <leader><tab> :call WhitespaceToTabWidth()<cr>
 
+
+
 " Relative line numbering came in Vim 7.3.
 if version >= 703
-    function! ToggleRelativeNumbering()
+    function ToggleRelativeNumbering()
         if &rnu
             set rnu!
-            echo "Absolute numbering set."
+            echo 'Absolute numbering set.'
         else
             set relativenumber
-            echo "Relative numbering set."
+            echo 'Relative numbering set.'
         endif
         return ''
     endfunction
@@ -523,13 +538,13 @@ if version >= 703
     nnoremap <silent> <f3> :call ToggleRelativeNumbering()<cr>
 endif
 
-function! ToggleWrap()
+function ToggleWrap()
     if &wrap
         set nowrap
-        echo "No wrap set."
+        echo 'No wrap set.'
     else
         set wrap
-        echo "Wrap set."
+        echo 'Wrap set.'
     endif
     return ''
 endfunction
@@ -537,17 +552,17 @@ inoremap <silent> <f2> <c-r>=ToggleWrap()<cr>
 nnoremap <silent> <f2> :call ToggleWrap()<cr>
 
 " Print file info: encoding and format.
-function! PrintFileInfo()
+function PrintFileInfo()
     redir => filename
     silent !echo %:p
     redir END
-    let filename = substitute(filename, '.*\n\(.*\n\)', '\1', '')
+    let filename = substitute(filename, ".*\n\(.*\n\)", "\1", "")
     let n = confirm(filename . "\n" . &fileencoding . "\n" . &ff, "", 1, "Info")
 endfunction
 nnoremap <f6> :call PrintFileInfo()<cr>
 
 " Set file encoding dialog.
-function! SetFileEncoding()
+function SetFileEncoding()
     let n = confirm("Select file encoding:\n(current: " . &fileencoding . ")", "&UTF-8\n&ISO-8859-1\n&Cancel", 3, "Question")
     if n == 1
         set fileencoding=utf-8
@@ -558,7 +573,7 @@ endfunction
 nnoremap <f7> :call SetFileEncoding()<cr>
 
 " Set file format dialog.
-function! SetFileFormat()
+function SetFileFormat()
 
     let n = confirm("Select format for writing the file:\n(current: " . &ff . ")", "&Unix\n&Dos\n&Mac\n&Cancel", 4, "Question")
     if n == 1
@@ -573,15 +588,15 @@ endfunction
 nnoremap <f8> :call SetFileFormat()<cr>
 
 " Font zooming.
-if has("gui_running") && exists("g:zoom_functions") && g:zoom_functions == 1
+if has('gui_running') && exists('g:zoom_functions') && g:zoom_functions == 1
 
-    if !exists("g:zoom_level")
-        let g:zoom_level=1
+    if !exists('g:zoom_level')
+        let g:zoom_level = 1
     endif
 
     function ChangeFontSize(delta)
 
-        if exists("g:alt_font_toggle")
+        if exists('g:alt_font_toggle')
             silent call ToggleAlternativeFont()
         endif
 
@@ -601,13 +616,13 @@ if has("gui_running") && exists("g:zoom_functions") && g:zoom_functions == 1
 
         let fontsize = fontsize + 2 * a:delta
         if has('win32') || has ('win64')
-            let &guifont = fontname . ":h" . fontsize . ":cANSI"
+            let &guifont = fontname . ':h' . fontsize . ':cANSI'
         else
             let &guifont = fontname . fontsize
         endif
-        let &lines=g:dlines
-        let &columns=g:dcols
-        echo "Font set to: " &guifont
+        let &lines = g:dlines
+        let &columns = g:dcols
+        echo 'Font set to: ' &guifont
         return ''
     endfunction
 
@@ -623,25 +638,25 @@ if has("gui_running") && exists("g:zoom_functions") && g:zoom_functions == 1
     nnoremap <c-mouseup> :call ChangeFontSize(-1)<cr>
 endif
 
-if has("gui_running")
+if has('gui_running')
 
     function ToggleAlternativeFont()
 
-        if !exists("g:alt_font")
+        if !exists('g:alt_font')
             return ''
         endif
 
-        if exists("g:alt_font_toggle")
+        if exists('g:alt_font_toggle')
             let &guifont = g:alt_font_toggle
             unlet g:alt_font_toggle
-            echo "Normal font in use: " &guifont
+            echo 'Normal font in use: ' &guifont
         else
             let g:alt_font_toggle = &guifont
             let &guifont = g:alt_font
-            echo "Alternative font in use: " &guifont
+            echo 'Alternative font in use: ' &guifont
         endif
-        let &lines=g:dlines
-        let &columns=g:dcols
+        let &lines = g:dlines
+        let &columns = g:dcols
         return ''
 
     endfunction
@@ -652,7 +667,7 @@ endif
 function! OnVimEnter()
 
     " Unite
-    if exists(":Unite")
+    if exists(':Unite')
         nnoremap <leader>b :Unite buffer<cr>
 
         if !(has('win32') || has('win64')) && (executable('rg') || executable('ag') || executable('find'))
@@ -681,30 +696,38 @@ function! OnVimEnter()
     endif
 
     " jsbeautify
-    if exists("*JsBeautify")
+    if exists('*JsBeautify')
         nnoremap <leader>jb :call JsBeautify()<cr>
     endif
 
     " vimagit
-    if exists(":Magit")
-        nnoremap <silent><leader>m :Magit<cr>
+    if exists(':Magit')
+        nnoremap <silent> <leader>m :Magit<cr>
     endif
 
     " tcomment
-    if exists("g:loaded_tcomment")
+    if exists('g:loaded_tcomment')
         " Toggle comment for the current/selected line(s).
-        nmap <silent><leader>cc åc
-        vmap <silent><leader>cc å
-        imap <silent><leader>cc <esc>åc^
+        nmap <silent> <leader>cc åc
+        vmap <silent> <leader>cc å
+        imap <silent> <leader>cc <esc>åc^
     endif
 
     " ANSI escape sequences
-    if exists(":AnsiEsc")
+    if exists(':AnsiEsc')
         nnoremap <leader>e :AnsiEsc<cr>
     endif
 
-    " Code completion stuff
-    if exists(":CocStart")
+    " Code completion stuff etc.
+    if exists(':CocStart')
+        function s:ShowDocumentation(hover_only)
+            if (a:hover_only != 1 && index(['vim','help'], &filetype) >= 0)
+                execute 'h '.expand('<cword>')
+            else
+                call CocAction('doHover')
+            endif
+        endfunction
+        nnoremap <silent> <leader>cs :call <SID>ShowDocumentation(0)<cr>
         nmap <leader>ca <Plug>(coc-codeaction)
         nmap <leader>cf <Plug>(coc-fix-current)
         nmap <leader>cd <Plug>(coc-definition)
@@ -714,14 +737,32 @@ function! OnVimEnter()
         inoremap <silent><expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<c-g>u\<cr>\<c-r>=coc#on_enter()\<cr>"
         inoremap <silent><expr> <c-j> coc#pum#visible() ? coc#pum#confirm() : "\<c-g>u\<cr>\<c-r>=coc#on_enter()\<cr>"
 
-        let s:coc_enabled = 0
-        function! CocOnOffToggle()
-            if s:coc_enabled == 0
-                let s:coc_enabled = 1
+        " Note: the hover help hides the diagnostics float by design,
+        " so it's better to have CursorHold autocommand off by default.
+        let s:coc_hh_enabled = 0
+        function CocHoverHelpOnOffToggle()
+            if s:coc_hh_enabled == 0
+                let s:coc_hh_enabled = 1
+                set updatetime=250
+                autocmd CursorHold * silent call <SID>ShowDocumentation(1)
+                echo 'Conquer of Completion hover help: ON'
+            else
+                let s:coc_hh_enabled = 0
+                set updatetime=4000
+                autocmd! CursorHold
+                echo 'Conquer of Completion hover help: OFF'
+            endif
+        endfunction
+        nnoremap <silent> <leader>ch :call CocHoverHelpOnOffToggle()<cr>
+
+        let g:coc_enabled = 0
+        function CocOnOffToggle()
+            if g:coc_enabled == 0
+                let g:coc_enabled = 1
                 CocStart
                 echo 'Conquer of Completion: ON'
             else
-                let s:coc_enabled = 0
+                let g:coc_enabled = 0
                 echo 'Conquer of Completion: OFF'
                 silent! call coc#rpc#stop()
                 echo 'Ignore the error.'
@@ -729,6 +770,9 @@ function! OnVimEnter()
         endfunction
         nnoremap <silent> <leader>co :call CocOnOffToggle()<cr>
     endif
+
+    nnoremap <silent> <c-space> :exe exists('g:coc_enabled') && g:coc_enabled == 1 ? ':call feedkeys("i\<lt>c-r>=coc#refresh()\<lt>cr>")' : 'startinsert'<cr>
+    inoremap <silent> <c-space> <c-r>=exists('g:coc_enabled') && g:coc_enabled == 1 ? "\<lt>c-r>=coc#refresh()\<lt>cr>" : "\<lt>esc>`^"<cr>
 
     " XML formatting using Python.
     if executable('python3')
@@ -740,7 +784,7 @@ function! OnVimEnter()
     set t_vb= " Disable visual flashing on bell.
 
     " Define g:alt_font to start with it.
-    if has("gui_running")
+    if has('gui_running')
         silent call ToggleAlternativeFont()
     endif
 
@@ -748,24 +792,7 @@ endfunction
 
 
 
-" Netrw explorer config.
-let g:netrw_list_hide='\(^\|\s\s\)\zs\.\S\+' " Hide dotfiles by default in Netrw Directory Listing.
-let g:netrw_liststyle = 3
-let g:netrw_banner = 0
-let g:netrw_browse_split = 4
-let g:netrw_winsize = 25
-function! ToggleNetrw()
-    if &ft ==# "netrw"
-        :exe "normal \<c-w>c"
-    else
-        :exe "normal :Vexplore .\<cr>"
-    endif
-endfunction
-nnoremap <silent><leader>n :call ToggleNetrw()<cr>
-
-
-
 " Host specific stuff.
-if filereadable($HOME . "/.vimrc_extra")
+if filereadable($HOME . '/.vimrc_extra')
     source $HOME/.vimrc_extra
 endif
