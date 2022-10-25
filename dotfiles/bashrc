@@ -1,5 +1,6 @@
 umask 0077
-[[ $- == *i* ]] && stty -ixon # disable software flow control keys (^S, ^Q) for interactive shells
+# Disable software flow control keys (^S, ^Q) for interactive shells.
+[[ $- == *i* ]] && stty -ixon
 
 [ -e ~/.profile.env ] && source ~/.profile.env
 
@@ -13,8 +14,8 @@ PROMPT_COMMAND='if [ "$COMMON_HISTORY" = "1" ]; then history -a; history -c; his
 prompt_prefix="\u@\h:"
 [ ! "$SSH_CLIENT" ] && [ ! "$SSH_TTY" ] && [ -e ~/.config/local_prompt_prefix ] && prompt_prefix=$(cat ~/.config/local_prompt_prefix)
 
+# Git prompt: https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
 prompt_git=""
-# https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
 [ -e ~/.config/git-prompt.sh ] && source ~/.config/git-prompt.sh && prompt_git='$(__git_ps1 "(%s) ")'
 PS1="\[\e[0;37m\]$prompt_prefix\w \[\e[0;96m\]$prompt_git\[\e[0;90m\]\$\[\e[m\] "
 
@@ -25,10 +26,10 @@ shopt -s cdspell # cd directry -> cd directory
 
 case "$TERM" in
 xterm*|rxvt*)
-    # complete on tab and shift-tab
+    # Complete on tab and shift-tab.
     bind '"\t":menu-complete'
     bind '"\e[Z":menu-complete-backward'
-    # search history with up/down
+    # Search history with up/down keys.
     bind '"\e[A":history-search-backward'
     bind '"\e[B":history-search-forward'
     ;;
@@ -63,6 +64,10 @@ which rsync &>/dev/null && alias rcp='rsync -ah --progress' && alias rs='rsync -
 [ -d "/opt/bin" ] && export PATH="$PATH:/opt/bin"
 export PATH=".:$PATH"
 
+# Various development related stuff
+###################################
+
+# Node Version Manager
 if [ -d "$HOME/.nvm" ]
 then
     export NVM_DIR="$HOME/.nvm"
@@ -70,11 +75,26 @@ then
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 fi
 
+# For pipx etc.
+if [ -d "$HOME/.local/bin" ]
+then
+    export PATH="$PATH:/home/panther/.local/bin"
+fi
+
+# AWS CLI tools
+if [ -d "$HOME/.ebcli-virtual-env/executables" ]
+then
+    export PATH="$HOME/.ebcli-virtual-env/executables:$PATH"
+fi
+
+# Java
 if [ -e "/opt/current_jdk" ]
 then
     export JAVA_HOME="/opt/current_jdk"
     export PATH="$PATH:$JAVA_HOME/bin"
 fi
 
-# System specific stuff.
+# System specific stuff
+#######################
+
 [ -e ~/.bashrc_extra ] && source ~/.bashrc_extra
