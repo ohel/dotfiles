@@ -274,28 +274,6 @@ if isdirectory($VIMHOME . '/plugged/vim-gtfo') && executable('xfce4-terminal')
     let g:gtfo#terminals = { 'unix' : 'gtfo() { xfce4-terminal --default-working-directory="$1"; } && gtfo' }
 endif
 
-if isdirectory($VIMHOME . '/plugged/vim-arpeggio')
-    " Insert mode toggles. (Grave moves cursor to ^, or the editing mark.)
-    call arpeggio#map('i', '', 0, 'fj', '<esc>`^')
-    call arpeggio#map('n', '', 0, 'fj', 'i<c-r>=col(".") == col("$")-1 ? "\<lt>right>" : ""<cr>')
-    " No highlight.
-    call arpeggio#map('n', '', 0, 'nh', ':noh<cr>')
-
-    " Toggle Git blame window.
-    if isdirectory($VIMHOME . '/plugged/vim-fugitive')
-        function ToggleGitBlame()
-            if @% =~# 'fugitiveblame'
-                :exe "normal \<c-w>c"
-            else
-                :exe "normal :Git blame\<cr>"
-            endif
-        endfunction
-        call arpeggio#map('n', '', 0, 'gb', ':call ToggleGitBlame()<cr>')
-        call arpeggio#map('i', '', 0, 'gb', '<c-o>:call ToggleGitBlame()<cr>')
-    endif
-
-endif
-
 if isdirectory($VIMHOME . '/plugged/unite.vim')
     if executable('rg')
         let g:unite_source_grep_command = 'rg'
@@ -704,14 +682,35 @@ function! OnVimEnter()
         nnoremap <leader>ga :Unite -start-insert grep:.::\\.(filter\|provider\|controller\|directive\|factory\|service)\\(\\'.+\\'<cr>
     endif
 
+    if exists(':Arpeggio')
+        " Insert mode toggles. (Grave moves cursor to ^, or the editing mark.)
+        call arpeggio#map('i', '', 0, 'fj', '<esc>`^')
+        call arpeggio#map('n', '', 0, 'fj', 'i<c-r>=col(".") == col("$")-1 ? "\<lt>right>" : ""<cr>')
+        " No highlight.
+        call arpeggio#map('n', '', 0, 'nh', ':noh<cr>')
+
+        " Toggle Git blame window and log for current file.
+        if exists(':Git')
+            function ToggleGitBlame()
+                if @% =~# 'fugitiveblame'
+                    :exe "normal \<c-w>c"
+                else
+                    :exe "normal :Git blame\<cr>"
+                endif
+            endfunction
+            call arpeggio#map('n', '', 0, 'gb', ':call ToggleGitBlame()<cr>')
+            call arpeggio#map('n', '', 0, 'gl', ':Git log -p %<cr>')
+        endif
+
+        " vimagit staging
+        if exists(':Magit')
+            call arpeggio#map('n', '', 0, 'gs', ':Magit<cr>')
+        endif
+    endif
+
     " jsbeautify
     if exists('*JsBeautify')
         nnoremap <leader>jb :call JsBeautify()<cr>
-    endif
-
-    " vimagit
-    if exists(':Magit')
-        nnoremap <silent> <leader>m :Magit<cr>
     endif
 
     " tcomment
