@@ -2,6 +2,7 @@
 # Given filenames ending in .jpg, .JPG, .RW2 or .RW2.xmp, rename a matching JPEG file as:
 # YYYY-mm-dd_HH.MM.SS_<input>.jpg, where <input> is an optional zenity input. Exiftool is used for reading metadata.
 # If a similarly named .RW2 or .RW2.xmp file exists, they are renamed too, and the file name updated to .RW2.xmp.
+# If no description (in file name after timestamp) is given for a single file but a previous one exists, the old one is used.
 # If multiple filenames are given, the _<input> is omitted from the end of the file name.
 
 [ ! "$1" ] && echo "Missing arguments." && exit 1
@@ -32,7 +33,8 @@ do
     fi
 
     desc=""
-    [ "$use_desc_sep" ] && [ $(which zenity 2>/dev/null) ] && [ "$width" ] && desc=$(zenity --title="New filename" --text="Enter filename after timestamp:" --entry --width=$width)
+    [ "$use_desc_sep" ] && [ $(which zenity 2>/dev/null) ] && [ "$width" ] && desc=$(zenity --title="New filename" --text="Enter filename after timestamp, or leave empty to use current:" --entry --width=$width)
+    [ "$use_desc_sep" ] && [ ! "$desc" ] && desc=$(echo $basename | grep "[0-9]\{4\}-[0-9][0-9]-[0-9][0-9]_[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]_.*" | cut -f 3- -d '_')
 
     timestamp=$(exiftool -CreateDate -d %Y-%m-%d_%H.%M.%S "$originalname" | cut -f 2 -d ':' | tr -d ' ')
     newbasename="$timestamp$use_desc_sep$desc"
