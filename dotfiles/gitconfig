@@ -20,6 +20,7 @@
     forcepush = push --force-with-lease
     linelog = log --pretty=oneline
     lastlog = log -p -1
+    logs = log --stat
     remotedelete = !test X$1 != X && git branch -D $1 && git push origin --delete $1
     remotedeletethis = !branchtodelete=$(git rev-parse --abbrev-ref HEAD) && echo "Deleting branch: $branchtodelete" && git checkout master && git branch -D $branchtodelete && git push origin --delete $branchtodelete && unset branchtodelete
     remotepush = !git push -u origin $(git rev-parse --abbrev-ref HEAD)
