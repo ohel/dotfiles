@@ -10,6 +10,7 @@ do
 done
 sleep $secs
 
+[ !"$DISPLAY" ] && DISPLAY=:0.0
 setxkbmap fi
 xset r rate 200 45
 xset b off

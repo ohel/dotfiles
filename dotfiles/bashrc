@@ -25,7 +25,7 @@ shopt -s autocd # "$ directory" equals "$ cd directory"
 shopt -s cdspell # cd directry -> cd directory
 
 case "$TERM" in
-xterm*|rxvt*)
+xterm*|rxvt*|linux)
     # Complete on tab and shift-tab.
     bind '"\t":menu-complete'
     bind '"\e[Z":menu-complete-backward'
@@ -52,6 +52,7 @@ which rg &>/dev/null && alias g="rg -S -uu $grep_ignore"
 
 which gvim &>/dev/null && alias gvim='gvim -p'
 which rsync &>/dev/null && alias rcp='rsync -ah --progress' && alias rs='rsync -avzu --delete'
+which xfce4-terminal &>/dev/null && alias term='xfce4-terminal'
 
 [ -e "$HOME/.scripts/grepedit.sh" ] && alias ge='~/.scripts/grepedit.sh'
 [ -e "$HOME/.scripts/findedit.sh" ] && alias fe='~/.scripts/findedit.sh'
