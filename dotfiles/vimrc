@@ -26,6 +26,7 @@ set pastetoggle=<f4> " Toggle paste mode (no auto indent).
 set showtabline=2 " Tab selector always visible.
 set textwidth=0 " Define text width if autowrapping: 0 disables autowrap, wraps to 80 on manual wrap (gq).
 set virtualedit=block " Allow selecting non-characters in visual block mode.
+set completeopt=menu,preview,longest " Omni completion options.
 
 if version >= 800
     set termguicolors " Use truecolor if possible. Support came in version 7.4.1770.
@@ -430,6 +431,9 @@ map <a-k> <up>
 map <a-j> <down>
 " Mainly for taglist plugin etc. to select ergonomically using home row.
 map <c-j> <cr>
+" For ergonomic omni menu selection.
+imap <a-h> <c-e>
+imap <a-l> <c-y>
 
 " Move screen lines, i.e. if text is wrapped, then move as you see the text flow, not as it actually is.
 inoremap <home> <c-o>g0
