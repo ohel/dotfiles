@@ -6,6 +6,7 @@
 name="$1" # Name of mountpoint and LUKS mapping.
 dev_uuid="$2" # UUID of the block device (e.g. /dev/sda or /dev/md1)
 vg_name="$3" # Optional name of LVM volume group.
+keyfile="${4:-/mnt/"$name"_key}" # Optional LUKS key location.
 
 if [ "$(mount | grep $name)" ] || [ "$(dmsetup ls | grep $name)" ]
 then
@@ -25,7 +26,6 @@ dev=$(blkid /dev/md/* | grep $dev_uuid | cut -f 1 -d ':')
 [ ! "$dev" ] && echo "Device not found." && exit 1
 
 keyopts=""
-keyfile=/mnt/"$name"_key
 [ -e $keyfile ] && keyopts="--key-file $keyfile"
 cryptsetup open $dev $name $keyopts && echo Created LUKS mapping $name.
 [ "$vg_name" ] && pvscan --cache --activate ay $(realpath /dev/mapper/$name) && echo Activated volume group $vg_name.

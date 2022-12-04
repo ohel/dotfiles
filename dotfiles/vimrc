@@ -32,7 +32,7 @@ if version >= 800
     set termguicolors " Use truecolor if possible. Support came in version 7.4.1770.
 endif
 
-" Same as "let mapleader = ' '", but more flexible.
+" Almost like "let mapleader = ' '", but doesn't matter when a leader shortcut is bound.
 map <space> <leader>
 
 " Last command.
@@ -690,8 +690,6 @@ function! OnVimEnter()
         " Insert mode toggles. (Grave moves cursor to ^, or the editing mark.)
         call arpeggio#map('i', '', 0, 'fj', '<esc>`^')
         call arpeggio#map('n', '', 0, 'fj', 'i<c-r>=col(".") == col("$")-1 ? "\<lt>right>" : ""<cr>')
-        " No highlight.
-        call arpeggio#map('n', '', 0, 'nh', ':noh<cr>')
 
         " Toggle Git blame window and log for current file.
         if exists(':Git')
@@ -702,14 +700,17 @@ function! OnVimEnter()
                     :exe "normal :Git blame\<cr>"
                 endif
             endfunction
-            call arpeggio#map('n', '', 0, 'gb', ':call ToggleGitBlame()<cr>')
-            call arpeggio#map('n', '', 0, 'gl', ':Git log -p %<cr>')
+            call arpeggio#map('n', 's', 0, 'gb', ':call ToggleGitBlame()<cr>')
+            call arpeggio#map('n', 's', 0, 'gl', ':Git log -p %<cr>')
         endif
 
         " vimagit staging
         if exists(':Magit')
-            call arpeggio#map('n', '', 0, 'gs', ':Magit<cr>')
+            call arpeggio#map('n', 's', 0, 'gs', ':Magit<cr>')
         endif
+
+        " Shortcut for CoC
+        call arpeggio#map('n', 's', 0, 'co', ':call feedkeys(" c")<cr>')
     endif
 
     " jsbeautify
@@ -740,12 +741,14 @@ function! OnVimEnter()
             endif
         endfunction
         nnoremap <silent> <leader>cs :call <SID>ShowDocumentation(0)<cr>
-        nmap <leader>ca <Plug>(coc-codeaction)
-        nmap <leader>cf <Plug>(coc-fix-current)
+        nmap <leader>ca <Plug>(coc-codeaction-selected)
         nmap <leader>cd <Plug>(coc-definition)
-        nmap <leader>ct <Plug>(coc-type-definition)
+        nmap <leader>ce <Plug>(coc-rename)
+        nmap <leader>cf <Plug>(coc-format-selected)
         nmap <leader>ci <Plug>(coc-implementation)
         nmap <leader>cr <Plug>(coc-references)
+        nmap <leader>ct <Plug>(coc-type-definition)
+        nmap <leader>cx <Plug>(coc-fix-current)
         inoremap <silent><expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<c-g>u\<cr>\<c-r>=coc#on_enter()\<cr>"
         inoremap <silent><expr> <c-j> coc#pum#visible() ? coc#pum#confirm() : "\<c-g>u\<cr>\<c-r>=coc#on_enter()\<cr>"
 
