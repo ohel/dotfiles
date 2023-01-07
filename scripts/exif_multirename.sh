@@ -37,7 +37,11 @@ do
     [ "$use_desc_sep" ] && [ ! "$desc" ] && desc=$(echo $basename | grep "[0-9]\{4\}-[0-9][0-9]-[0-9][0-9]_[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]_.*" | cut -f 3- -d '_')
 
     timestamp=$(exiftool -CreateDate -d %Y-%m-%d_%H.%M.%S "$originalname" | cut -f 2 -d ':' | tr -d ' ')
+    [ ! "$timestamp" ] && echo "No timestamp found in EXIF data!" && exit 1
     newbasename="$timestamp$use_desc_sep$desc"
+
+    # Nothing to rename so skip to next file.
+    [ "$newbasename.jpg" = "$originalname" ] && continue
 
     postfix=""
     if [ -e "$newbasename.jpg" ]
