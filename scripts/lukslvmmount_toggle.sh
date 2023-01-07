@@ -6,7 +6,7 @@
 name="$1" # Name of mountpoint and LUKS mapping.
 dev_uuid="$2" # UUID of the block device (e.g. /dev/sda or /dev/md1)
 vg_name="$3" # Optional name of LVM volume group.
-keyfile="${4:-/mnt/"$name"_key}" # Optional LUKS key location.
+keyfile="${4:-/mnt/$1_key}" # Optional LUKS key location.
 
 if [ "$(mount | grep $name)" ] || [ "$(dmsetup ls | grep $name)" ]
 then

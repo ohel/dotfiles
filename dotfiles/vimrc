@@ -803,6 +803,10 @@ function! OnVimEnter()
         silent call ToggleAlternativeFont()
     endif
 
+    if exists('*OnVimEnterExtra')
+        call OnVimEnterExtra()
+    endif
+
 endfunction
 
 
