@@ -1,6 +1,6 @@
 #!/bin/sh
 # Given an input video with AAC audio, resample to 44.1 kHz and normalize its audio.
-# Needs ffmpeg with fdkaac libs, with sox (for normalizing) and fdkaac encoders.
+# Needs ffmpeg with fdk-aac libs or fdkaac encoder for encoding, and sox for normalizing.
 # This is useful because encoding audio in Avidemux results in errors in the beginning of audio.
 
 input=$1
@@ -39,7 +39,7 @@ then
     bitrate=$(echo 48000*$aquality | bc)
     fdkaac -S -b $bitrate $tmpfile.normalized.wav -o $tmpfile.m4a
 else
-    ffmpeg -loglevel error -i $tmpfile.normalized.wav -codec:a libfdk_aac -aq 0.0$aquality -ar 44100 $tmpfile.m4a
+    ffmpeg -loglevel error -i $tmpfile.normalized.wav -codec:a libfdk_aac -cutoff 18000 -vbr 5 -ar 44100 $tmpfile.m4a
 fi
 
 echo Muxing video...

@@ -1,14 +1,14 @@
 #!/bin/bash
 # Copy and encode music to a given destination ($1, default ./). Used by drag'n'dropping files from media player playlist to a terminal window, for copying into a mobile phone.
-# Encoding is either Ogg Vorbis (default) or MP3 ($2 equals "mp3"), preserving simple metadata tags.
-# Ogg is encoded to MP3 (for crappy player hardware) but not vice versa.
-# Requires mutagen-inspect and oggenc.
+# Encoding is either AAC (default), OGG ($2 = "ogg") or MP3 ($2 = "mp3"), preserving simple metadata tags.
+# Requires mutagen-inspect and either ffmpeg with fdk-aac libs, oggenc or lame encoder, faad for decoding.
 # The encoding process is naively parallelized.
 
 destination=$(readlink -f ${1:-./})
 parallel_processes=7
-encoding="ogg"
+encoding="aac"
 [ "$#" -gt 1 ] && [ "$2" = "mp3" ] && encoding="mp3"
+[ "$#" -gt 1 ] && [ "$2" = "ogg" ] && encoding="ogg"
 
 encode() {
     tempdir=~/.cache
@@ -19,6 +19,7 @@ encode() {
     fileid=$(mutagen-inspect "$filein" | head -n 2 | tail -n 1)
     typeflac=$(echo $fileid | grep FLAC)
     typeogg=$(echo $fileid | grep Vorbis)
+    typeaac=$(echo $fileid | grep AAC)
     typemp3=$(echo $fileid | grep MPEG)
 
     # Default for ogg and flac.
@@ -32,6 +33,12 @@ encode() {
         tagtrack="^TRCK="
         tagartist="^TPE1="
         tagtitle="^TIT2="
+    elif [ "$typeaac" ]
+    then
+        tagalbum="^©alb="
+        tagtrack="^trkn="
+        tagartist="^©ART="
+        tagtitle="^©nam="
     fi
 
     meta_album=$(mutagen-inspect "$filein" | grep -a $tagalbum | cut -d '=' -f 2 | tr -d -c "[:alnum:] ")
@@ -49,39 +56,56 @@ encode() {
     meta_artist="${meta_artist:-"unknown artist"}"
     meta_title="${meta_title:-"unknown title"}"
 
-    echo -n "*"
+    wavfile=$(mktemp -p $tempdir/ --suffix=".wav")
     if [ "$typeflac" ]
     then
-        tmpfile=$(mktemp -p $tempdir/ --suffix=".ogg")
-        if [ "$encoding" == "mp3" ]
-        then
-            tmpfile=$(mktemp -p $tempdir/ --suffix=".mp3")
-            flac -c -s -d "$filein" 2>/dev/null | lame --silent --preset extreme --noreplaygain --id3v2-only --tt "$meta_title" --ta "$meta_artist" --tl "$meta_album" --tn "$meta_track" - $tmpfile
-        elif [ "$encoding" == "ogg" ]
-        then
-            flac -c -s -d "$filein" 2>/dev/null | oggenc --resample 44100 -Q -q 7 -a "$meta_artist" -l "$meta_album" -t "$meta_title" -N "$meta_track" -c "replaygain_album_peak=$meta_rg_ap" -c "replaygain_track_peak=$meta_rg_tp" -c "replaygain_album_gain=$meta_rg_ag" -c "replaygain_track_gain=$meta_rg_tg" -o $tmpfile -
-        fi
-        source="$tmpfile"
-
+        flac -c -s -d "$filein" -f -o $wavfile
     elif [ "$typeogg" ]
     then
-        tmpfile=$(mktemp -p $tempdir/ --suffix=".ogg")
-        if [ "$encoding" == "mp3" ]
+        if [ "$encoding" == "ogg" ]
         then
-            tmpwav=$(mktemp -p $tempdir/ --suffix=".wav")
-            oggdec -Q -o $tmpwav "$filein"
-            lame --silent --preset extreme --noreplaygain --id3v2-only --tt "$meta_title" --ta "$meta_artist" --tl "$meta_album" --tn "$meta_track" $tmpwav $tmpfile
-            rm $tmpwav
-            source="$tmpfile"
-        elif [ "$encoding" == "ogg" ]
-        then
-            source="$filein"
+            origin="$filein"
+        else
+            oggdec -Q -o $wavfile "$filein"
         fi
-
     elif [ "$typemp3" ]
     then
+        if [ "$encoding" == "mp3" ]
+        then
+            origin="$filein"
+        else
+            lame --decode "$filein" $wavfile
+        fi
+    elif [ "$typeaac" ]
+    then
+        if [ "$encoding" == "aac" ]
+        then
+            origin="$filein"
+        else
+            faad -o $wavfile "$filein"
+        fi
+    fi
+    echo -n "*"
+
+    tmpfile=""
+    if [ "$encoding" == "mp3" ]
+    then
         tmpfile=$(mktemp -p $tempdir/ --suffix=".mp3")
-        source="$filein"
+        lame --silent --preset extreme --noreplaygain --id3v2-only --tt "$meta_title" --ta "$meta_artist" --tl "$meta_album" --tn "$meta_track" $wavfile $tmpfile
+    elif [ "$encoding" == "ogg" ]
+    then
+        oggenc --resample 44100 -Q -q 7 -a "$meta_artist" -l "$meta_album" -t "$meta_title" -N "$meta_track" -c "replaygain_album_peak=$meta_rg_ap" -c "replaygain_track_peak=$meta_rg_tp" -c "replaygain_album_gain=$meta_rg_ag" -c "replaygain_track_gain=$meta_rg_tg" -o $tmpfile $wavfile
+    elif [ "$encoding" == "aac" ]
+    then
+        tmpfile=$(mktemp -p $tempdir/ --suffix=".m4a")
+        ffmpeg -loglevel error -y -i $wavfile -c:a libfdk_aac -vbr 5 -cutoff 20000 -ar 44100 \
+        -metadata artist="$meta_artist" -metadata album="$meta_album" -metadata title="$meta_title" -metadata track="$meta_track" \
+        $tmpfile
+        # Not supported by ffmpeg, not even via -map_metadata
+        # ----:com.apple.iTunes:replaygain_album_gain="MP4FreeForm(b'$meta_rg_ag', <AtomDataType.UTF8: 1>)
+        # ----:com.apple.iTunes:replaygain_album_peak="MP4FreeForm(b'$meta_rg_ap', <AtomDataType.UTF8: 1>)
+        # ----:com.apple.iTunes:replaygain_track_gain="MP4FreeForm(b'$meta_rg_tg', <AtomDataType.UTF8: 1>)
+        # ----:com.apple.iTunes:replaygain_track_peak="MP4FreeForm(b'$meta_rg_tp', <AtomDataType.UTF8: 1>)
     fi
     echo -n "*"
 
@@ -89,9 +113,10 @@ encode() {
     padding=""
     [ ${#meta_track} -lt 2 ] && padding="0"
 
-    cp "$source" "$dest_dir"/"$meta_album"/"$padding""$meta_track"_$(echo $meta_title | tr -c -d "[:alnum:]")_$(basename "$tmpfile")
-    rm "$tmpfile"
-
+    [ "$tmpfile" ] && origin=$tmpfile
+    cp "$origin" "$dest_dir"/"$meta_album"/"$padding""$meta_track"_$(echo $meta_title | tr -c -d "[:alnum:]")_$(basename "$origin")
+    rm $wavfile
+    [ "$tmpfile" ] && rm $tmpfile
     echo -n "*"
 }
 
@@ -99,7 +124,7 @@ export -f encode
 
 while [ 1 ]
 do
-    echo "Drag flac, ogg or mp3 files to the terminal window to start copying:"
+    echo "Drag flac, ogg, mp3 or aac files to the terminal window to start copying:"
     read list
 
     ! [ "$list" ] && exit 0

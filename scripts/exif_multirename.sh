@@ -39,6 +39,7 @@ do
     timestamp=$(exiftool -CreateDate -d %Y-%m-%d_%H.%M.%S "$originalname" | cut -f 2 -d ':' | tr -d ' ')
     [ ! "$timestamp" ] && echo "No timestamp found in EXIF data!" && exit 1
     newbasename="$timestamp$use_desc_sep$desc"
+    [ ! "$desc" ] && newbasename="$timestamp"
 
     # Nothing to rename so skip to next file.
     [ "$newbasename.jpg" = "$originalname" ] && continue
