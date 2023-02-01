@@ -12,7 +12,7 @@ fi
 if [ -e /proc/mdstat ]
 then
     numraidtotal=$(grep "active raid1" /proc/mdstat | wc -l)
-    numraidok=$(grep "\[\([0-9]\)\/\1\]" /proc/mdstat | wc -l)
+    numraidok=$(grep "\[\([0-9]\)/\1\]" /proc/mdstat | wc -l)
     if ! [ $numraidtotal -eq $numraidok ]
     then
         echo "RAID device note:"

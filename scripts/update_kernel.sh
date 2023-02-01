@@ -54,7 +54,7 @@ fi
 if [ ! "$use_grub" ]
 then
     # Mounts all fstab entries with /efi/ in them.
-    for efi_mount_point in $(grep "\/efi\(\/\S*\)\?\s" /etc/fstab | grep -o "\/\S*")
+    for efi_mount_point in $(grep "/efi\(/\S*\)\?\s" /etc/fstab | grep -o "/\S*")
     do
         [ "$(mount | grep " $efi_mount_point ")" ] || mount $efi_mount_point
     done

@@ -18,7 +18,7 @@ scriptsdir=$(dirname "$(readlink -f "$0")")
 # Enable Wake-On-Lan.
 if [ "$(which ethtool 2>/dev/null)" ]
 then
-    for physical_device in $(ls -l /sys/class/net | grep devices\/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')
+    for physical_device in $(ls -l /sys/class/net | grep devices/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')
     do
         ip=$(ip addr show $physical_device | grep -o "inet [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | cut -f 2 -d ' ')
         if [ "$ip" ]

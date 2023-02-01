@@ -14,7 +14,7 @@ modprobe tun
 
 if [ "$#" = 0 ]
 then
-    for physical_device in $(ls -l /sys/class/net | grep devices\/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')
+    for physical_device in $(ls -l /sys/class/net | grep devices/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')
     do
         ip=$(ip addr show $physical_device | grep -o "inet [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | cut -f 2 -d ' ')
         if [ "$ip" ]
@@ -27,7 +27,7 @@ else
     nic=$1
     [ -f $1 ] && nic=$(cat $1)
 
-    if [ "$(ls -l /sys/class/net | grep devices\/pci | grep -o "\-> [^ ]*" | grep -o $nic)" != "$nic" ]
+    if [ "$(ls -l /sys/class/net | grep devices/pci | grep -o "\-> [^ ]*" | grep -o $nic)" != "$nic" ]
     then
         echo "Network device not found: $nic"
         exit
