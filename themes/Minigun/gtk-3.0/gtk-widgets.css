@@ -172,7 +172,7 @@ textview text selection,
 flowbox flowboxchild:selected,
 spinbutton:not(.vertical) selection,
 entry selection {
-    background-color: @theme_selected_fg_color;
+    background-color: @theme_selected_bg_color;
     color: @theme_text_color;
 }
 
