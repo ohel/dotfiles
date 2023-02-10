@@ -11,9 +11,6 @@ then
     export QT_IM_MODULE=scim
 fi
 
-# Thread limit for ImageMagick
-export MAGICK_THREAD_LIMIT=16
-
 # Enable X fonts.
 export GDK_USE_XFT=1
 export QT_XFT=1
@@ -21,13 +18,6 @@ export QT_XFT=1
 # Qt5.7 no longer supports GTK styles so to get something reasonable (i.e. dark color scheme)
 # one must use qt5ct to change the look of Qt5 applications.
 export QT_QPA_PLATFORMTHEME=qt5ct
-
-# If HiDPI scaling is set in e.g. ~/.profile.env_extra
-if [ "$SCALE_HIDPI" = 1 ]
-then
-    export GDK_SCALE=2
-    export GDK_DPI_SCALE=0.5
-fi
 
 # Set default standby, suspend, off timeouts for DPMS. If using a television, DPMS is probably not supported but the signal is turned off so the TV power management may set standby.
 xset dpms 900 0 0

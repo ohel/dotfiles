@@ -90,13 +90,6 @@ then
     export PATH="$HOME/.ebcli-virtual-env/executables:$PATH"
 fi
 
-# Java
-if [ -e "/opt/current_jdk" ]
-then
-    export JAVA_HOME="/opt/current_jdk"
-    export PATH="$PATH:$JAVA_HOME/bin"
-fi
-
 # System specific stuff
 #######################
 
