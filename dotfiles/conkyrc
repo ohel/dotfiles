@@ -41,8 +41,8 @@ ${color 804040}${top name 3}${alignr}${top pid 3} ${top cpu 3} ${top mem 3}
 ${color 703030}${top name 4}${alignr}${top pid 4} ${top cpu 4} ${top mem 4}
 ${color 602020}${top name 5}${alignr}${top pid 5} ${top cpu 5} ${top mem 5}
 
-${color e06060}${rss http://rss.slashdot.org/Slashdot/slashdot/ 30 feed_title}
-${color a06060}${rss http://rss.slashdot.org/Slashdot/slashdot/ 30 item_titles 5}
+${color e06060}${rss http://rss.slashdot.org/Slashdot/slashdotMain 30 feed_title}
+${color a06060}${rss http://rss.slashdot.org/Slashdot/slashdotMain 30 item_titles 5}
 
 ${color e06060}${rss http://www.aljazeera.com/xml/rss/all.xml 30 feed_title}
 ${color a06060}${rss http://www.aljazeera.com/xml/rss/all.xml 30 item_titles 5}
