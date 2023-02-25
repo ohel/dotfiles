@@ -11,4 +11,6 @@ then
 fi
 
 echo "Press Ctrl-C to stop PulseAudio."
-pulseaudio -n -F /etc/pulse/jackpipe.pa
+echo
+echo "You may see errors such as \"jack_set_property() failed\" but they are not fatal."
+pulseaudio -n -F /etc/pulse/jackpipe.pa --exit-idle-time=-1
