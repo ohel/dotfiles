@@ -1,6 +1,6 @@
 autocmd VimEnter * call OnVimEnter()
 autocmd GUIEnter * set lines=31 columns=107 " Set window size when starting in GUI mode.
-autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line('$') | exe 'normal! g`"' | endif " Returns cursor to previous position when opening files.
+autocmd BufReadPost * call OnBufferRead()
 
 let g:dlines = 31 " Also set default size into memory.
 let g:dcols = 107
@@ -222,11 +222,7 @@ if exists('*plug#begin')
     Plug 'pangloss/vim-javascript' " Nicer JavaScript syntax highlighting etc.
     Plug 'leafgarland/typescript-vim' " TypeScript syntax.
     Plug 'maxmellon/vim-jsx-pretty' " React syntax.
-    Plug 'maksimr/vim-jsbeautify', { 'do': 'cd $VIMHOME/plugged/vim-jsbeautify && git submodule update --init --recursive' }
-    Plug 'prettier/vim-prettier', {
-      \ 'do': 'which npm && npm install',
-      \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown']
-      \ } " Code styling. Default trigger for prettier is: <leader>p
+    Plug 'prettier/vim-prettier', { 'do': 'which npm && npm install' } " Code styling.
     Plug 'Shougo/unite.vim' " Search and display information from various sources.
     Plug 'Shougo/unite-outline' " Unite source providing outline view of current buffer.
     Plug 'Shougo/vimproc.vim', { 'do': 'cd $VIMHOME/plugged/vimproc.vim && make -f make_unix.mak' } " Allows async operations.
@@ -237,6 +233,7 @@ if exists('*plug#begin')
     Plug 'pprovost/vim-ps1' " PowerShell support.
     Plug 'powerman/vim-plugin-AnsiEsc' " ANSI escape sequences, e.g. colored text.
     Plug 'jparise/vim-graphql' " GraphQL support.
+    Plug 'nathanaelkane/vim-indent-guides' " Indent guides.
 
     " Conquer of Completion: code completion.
     " CoC requires Node.js so check everything before loading the plugin.
@@ -481,9 +478,9 @@ let g:netrw_browse_split = 4
 let g:netrw_winsize = 25
 function ToggleNetrw()
     if &ft ==# 'netrw'
-        :exe "normal \<c-w>c"
+        exe "normal \<c-w>c"
     else
-        :exe "normal :Vexplore .\<cr>"
+        exe "normal :Vexplore .\<cr>"
     endif
 endfunction
 nnoremap <silent> <leader>n :call ToggleNetrw()<cr>
@@ -687,7 +684,7 @@ function! OnVimEnter()
     endif
 
     if exists(':Arpeggio')
-        " Insert mode toggles. (Grave moves cursor to ^, or the editing mark.)
+        " Insert mode toggles. Grave moves cursor to ^, or the editing mark.
         call arpeggio#map('i', '', 0, 'fj', '<esc>`^')
         call arpeggio#map('n', '', 0, 'fj', 'i<c-r>=col(".") == col("$")-1 ? "\<lt>right>" : ""<cr>')
 
@@ -695,27 +692,22 @@ function! OnVimEnter()
         if exists(':Git')
             function ToggleGitBlame()
                 if @% =~# 'fugitiveblame'
-                    :exe "normal \<c-w>c"
+                    exe "normal \<c-w>c"
                 else
-                    :exe "normal :Git blame\<cr>"
+                    exe "normal :Git blame\<cr>"
                 endif
             endfunction
             call arpeggio#map('n', 's', 0, 'gb', ':call ToggleGitBlame()<cr>')
             call arpeggio#map('n', 's', 0, 'gl', ':Git log -p %<cr>')
         endif
 
-        " vimagit staging
+        " Vimagit staging.
         if exists(':Magit')
             call arpeggio#map('n', 's', 0, 'gs', ':Magit<cr>')
         endif
 
-        " Shortcut for CoC
+        " Shortcut for CoC.
         call arpeggio#map('n', 's', 0, 'co', ':call feedkeys(" c")<cr>')
-    endif
-
-    " jsbeautify
-    if exists('*JsBeautify')
-        nnoremap <leader>jb :call JsBeautify()<cr>
     endif
 
     " tcomment
@@ -726,9 +718,20 @@ function! OnVimEnter()
         imap <silent> <leader>cc <esc>åc^
     endif
 
-    " ANSI escape sequences
+    " Enable partial formatting shortcut for Prettier.
+    if exists(':Prettier')
+        vmap <leader>p :PrettierPartial<cr>
+    endif
+
+
+    " Toggle ANSI escape sequences.
     if exists(':AnsiEsc')
         nnoremap <leader>e :AnsiEsc<cr>
+    endif
+
+    " Toggle indent guides.
+    if exists(':IndentGuidesToggle')
+        nnoremap <leader>i :IndentGuidesToggle<cr>
     endif
 
     " Code completion stuff etc.
@@ -786,6 +789,7 @@ function! OnVimEnter()
         nnoremap <silent> <leader>co :call CocOnOffToggle()<cr>
     endif
 
+    " CoC toggles.
     nnoremap <silent> <c-space> :exe exists('g:coc_enabled') && g:coc_enabled == 1 ? ':call feedkeys("i\<lt>c-r>=coc#refresh()\<lt>cr>")' : 'startinsert'<cr>
     inoremap <silent> <c-space> <c-r>=exists('g:coc_enabled') && g:coc_enabled == 1 ? "\<lt>c-r>=coc#refresh()\<lt>cr>" : "\<lt>esc>`^"<cr>
 
@@ -807,6 +811,18 @@ function! OnVimEnter()
         call OnVimEnterExtra()
     endif
 
+endfunction
+
+function! OnBufferRead()
+    " Set tab width to that of first line beginning with white space.
+    exe "normal! gg/^ \\|\\t\<cr>"
+    silent noh
+    silent call WhitespaceToTabWidth()
+
+    " Returns cursor to previous position when opening buffers.
+    if line("'\"") > 1 && line("'\"") <= line('$')
+        exe 'normal! `"'
+    endif
 endfunction
 
 
