@@ -815,9 +815,13 @@ endfunction
 
 function! OnBufferRead()
     " Set tab width to that of first line beginning with white space.
-    exe "normal! gg/^ \\|\\t\<cr>"
-    silent noh
-    silent call WhitespaceToTabWidth()
+    try
+        exe "normal! gg/^ \\|\\t\<cr>"
+        silent noh
+        silent call WhitespaceToTabWidth()
+    catch
+        " Don't error in case the search pattern fails.
+    endtry
 
     " Returns cursor to previous position when opening buffers.
     if line("'\"") > 1 && line("'\"") <= line('$')
