@@ -718,9 +718,10 @@ function! OnVimEnter()
         imap <silent> <leader>cc <esc>åc^
     endif
 
-    " Enable partial formatting shortcut for Prettier.
+    " Enable partial formatting shortcuts for Prettier.
     if exists(':Prettier')
         vmap <leader>p :PrettierPartial<cr>
+        vmap <leader>f :PrettierFragment<cr>
     endif
 
 
