@@ -28,6 +28,7 @@
     unstage = restore --staged
     visualize = log --graph --oneline --decorate --all
     diffc = diff --cached
+    reversestash = !git stash show -p | git apply --reverse
 [color]
     ui = auto
 [diff]
