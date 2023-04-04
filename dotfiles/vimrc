@@ -439,8 +439,7 @@ inoremap <end> <c-o>g$
 
 
 " Switch to alternate file (usually previously edited buffer).
-inoremap <leader>s <c-o>:b#<cr>
-nnoremap <leader>s :b#<cr>
+nnoremap <leader>sa :b#<cr><esc>`"
 
 " Uppercase word under cursor.
 nnoremap <leader>U gUiw
@@ -670,8 +669,8 @@ function! OnVimEnter()
             nnoremap <leader>fc :let @u="<c-r>=expand('%:t:r')<cr>"<cr>:Unite -start-insert file_rec/git:. buffer:-<cr><c-r>u
         endif
 
-        nnoremap <leader>u :UniteResume<cr>
-        nnoremap <leader>o :Unite outline<cr>
+        nnoremap <leader>r :UniteResume<cr>
+        nnoremap <leader>u :Unite outline<cr>
         nnoremap <leader>g :Unite grep:.<cr>
         " Search selected text.
         vnoremap <leader>g :Unite grep:.::<c-r>*<cr>
@@ -712,10 +711,9 @@ function! OnVimEnter()
 
     " tcomment
     if exists('g:loaded_tcomment')
-        " Toggle comment for the current/selected line(s).
-        nmap <silent> <leader>cc åc
-        vmap <silent> <leader>cc å
-        imap <silent> <leader>cc <esc>åc^
+        " Comment out/in the current/selected line(s).
+        nmap <silent> <leader>o åc
+        vmap <silent> <leader>o å
     endif
 
     " Enable partial formatting shortcuts for Prettier.
