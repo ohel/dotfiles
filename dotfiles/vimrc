@@ -235,6 +235,11 @@ if exists('*plug#begin')
     Plug 'jparise/vim-graphql' " GraphQL support.
     Plug 'nathanaelkane/vim-indent-guides' " Indent guides.
 
+    " Tag List - an old school source code browser plugin. Needs ctags to work.
+    if executable('ctags')
+        Plug 'yegappan/taglist'
+    endif
+
     " Conquer of Completion: code completion.
     " CoC requires Node.js so check everything before loading the plugin.
     let g:coc_global_extensions = [
@@ -328,25 +333,6 @@ if isdirectory($VIMHOME . '/plugged/vim-airline')
         silent !curl -fLo $VIMHOME/autoload/airline/themes/minigun.vim --create-dirs https://raw.githubusercontent.com/ohel/dotfiles/master/themes/minigun-airline.vim
     endif
     let g:airline_theme = 'minigun'
-endif
-
-
-
-" Other plugins.
-" **************
-
-" Tag List - an old school source code browser plugin. Needs ctags to work.
-if !isdirectory($VIMHOME . '/plugin/taglist') && executable('ctags')
-    echo('Downloading taglist...')
-    silent !git clone https://github.com/yegappan/taglist $VIMHOME/plugin/taglist
-    if !(has('win32') || has ('win64'))
-        silent !cp $VIMHOME/plugin/taglist/plugin/taglist.vim $VIMHOME/plugin/taglist.vim
-        silent !cp $VIMHOME/plugin/taglist/autoload/taglist.vim $VIMHOME/autoload/taglist.vim
-    endif
-endif
-if filereadable($VIMHOME . '/plugin/taglist.vim')
-    nnoremap <f1> :TlistToggle<cr>
-    inoremap <f1> <c-o>:TlistToggle<cr>
 endif
 
 
@@ -731,6 +717,12 @@ function! OnVimEnter()
     " Toggle indent guides.
     if exists(':IndentGuidesToggle')
         nnoremap <leader>i :IndentGuidesToggle<cr>
+    endif
+
+    " Toggle taglist.
+    if exists(':TlistToggle')
+        nnoremap <f1> :TlistToggle<cr>
+        inoremap <f1> <c-o>:TlistToggle<cr>
     endif
 
     " Code completion stuff etc.
