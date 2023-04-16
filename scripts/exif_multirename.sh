@@ -33,7 +33,8 @@ do
     fi
 
     desc=""
-    [ "$use_desc_sep" ] && [ $(which zenity 2>/dev/null) ] && [ "$width" ] && desc=$(zenity --title="New filename" --text="Enter filename after timestamp, or leave empty to use current:" --entry --width=$width)
+    [ "$use_desc_sep" ] && [ $(which zenity 2>/dev/null) ] && [ "$width" ] && desc=$(zenity --title="New filename" --text="Enter filename after timestamp, leave empty to use current, or cancel for no rename:" --entry --width=$width)
+    [ "$?" = 1 ] && continue
     [ "$use_desc_sep" ] && [ ! "$desc" ] && desc=$(echo $basename | grep "[0-9]\{4\}-[0-9][0-9]-[0-9][0-9]_[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]_.*" | cut -f 3- -d '_')
 
     timestamp=$(exiftool -CreateDate -d %Y-%m-%d_%H.%M.%S "$originalname" | cut -f 2 -d ':' | tr -d ' ')
