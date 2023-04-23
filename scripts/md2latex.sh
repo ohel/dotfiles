@@ -105,5 +105,5 @@ then
     pdflatex "$texfile"
     rm "$basename.aux"
     rm "$basename.log"
-    which xdg-open 2>&1 >/dev/null && xdg-open "$basename.pdf"
+    which xdg-open >/dev/null 2>&1 && xdg-open "$basename.pdf"
 fi

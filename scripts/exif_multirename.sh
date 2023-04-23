@@ -6,7 +6,7 @@
 # If multiple filenames are given, the _<input> is omitted from the end of the file name.
 
 [ ! "$1" ] && echo "Missing arguments." && exit 1
-[ ! $(which exiftool 2>/dev/null) ] && echo "Missing exiftool." && exit 1
+[ ! "$(which exiftool 2>/dev/null)" ] && echo "Missing exiftool." && exit 1
 
 use_desc_sep="_"
 [ "$#" -gt 1 ] && use_desc_sep=""
@@ -33,7 +33,7 @@ do
     fi
 
     desc=""
-    [ "$use_desc_sep" ] && [ $(which zenity 2>/dev/null) ] && [ "$width" ] && desc=$(zenity --title="New filename" --text="Enter filename after timestamp, leave empty to use current, or cancel for no rename:" --entry --width=$width)
+    [ "$use_desc_sep" ] && [ "$(which zenity 2>/dev/null)" ] && [ "$width" ] && desc=$(zenity --title="New filename" --text="Enter filename after timestamp, leave empty to use current, or cancel for no rename:" --entry --width=$width)
     [ "$?" = 1 ] && continue
     [ "$use_desc_sep" ] && [ ! "$desc" ] && desc=$(echo $basename | grep "[0-9]\{4\}-[0-9][0-9]-[0-9][0-9]_[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]_.*" | cut -f 3- -d '_')
 

@@ -3,7 +3,7 @@
 
 if test "X$1" != "Xnosync"
 then
-    sudo layman -s ALL
+    which layman >/dev/null 2>&1 && sudo layman -s ALL
     sudo emerge --sync
 fi
 emerge -DNtuvp world
