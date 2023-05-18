@@ -33,7 +33,7 @@ user_given_src_dir="$1"
 [ "$2" == "grub" ] && use_grub=1
 
 use_dracut=""
-$(which dracut > /dev/null 2>&1) && use_dracut=1
+$(which dracut >/dev/null 2>&1) && use_dracut=1
 
 #### GENERAL CHECKS #####
 
