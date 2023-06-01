@@ -92,6 +92,10 @@ p, li { white-space: pre-wrap; }
    <FX2Level>0</FX2Level>
    <FX3Level>0</FX3Level>
    <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
   </instrument>
   <instrument>
    <id>3</id>
@@ -195,6 +199,10 @@ p, li { white-space: pre-wrap; }
    <FX2Level>0</FX2Level>
    <FX3Level>0</FX3Level>
    <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
   </instrument>
   <instrument>
    <id>5</id>
@@ -227,6 +235,10 @@ p, li { white-space: pre-wrap; }
    <FX2Level>0</FX2Level>
    <FX3Level>0</FX3Level>
    <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
   </instrument>
   <instrument>
    <id>6</id>
@@ -259,6 +271,10 @@ p, li { white-space: pre-wrap; }
    <FX2Level>0</FX2Level>
    <FX3Level>0</FX3Level>
    <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
   </instrument>
   <instrument>
    <id>27</id>
@@ -420,7 +436,7 @@ p, li { white-space: pre-wrap; }
    <Attack>0</Attack>
    <Decay>0</Decay>
    <Sustain>0.5</Sustain>
-   <Release>1000</Release>
+   <Release>256</Release>
    <muteGroup>-1</muteGroup>
    <midiOutChannel>-1</midiOutChannel>
    <midiOutNote>36</midiOutNote>
@@ -437,7 +453,7 @@ p, li { white-space: pre-wrap; }
     <component_id>0</component_id>
     <gain>1</gain>
     <layer>
-     <filename>Dry-Kick.wav</filename>
+     <filename>Kick.wav</filename>
      <min>0</min>
      <max>1</max>
      <gain>1</gain>
@@ -618,6 +634,10 @@ p, li { white-space: pre-wrap; }
    <FX2Level>0</FX2Level>
    <FX3Level>0</FX3Level>
    <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
   </instrument>
   <instrument>
    <id>13</id>
@@ -792,6 +812,10 @@ p, li { white-space: pre-wrap; }
    <FX2Level>0</FX2Level>
    <FX3Level>0</FX3Level>
    <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
   </instrument>
   <instrument>
    <id>14</id>
@@ -895,6 +919,10 @@ p, li { white-space: pre-wrap; }
    <FX2Level>0</FX2Level>
    <FX3Level>0</FX3Level>
    <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
   </instrument>
   <instrument>
    <id>22</id>

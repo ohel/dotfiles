@@ -92,6 +92,10 @@ p, li { white-space: pre-wrap; }
    <FX2Level>0</FX2Level>
    <FX3Level>0</FX3Level>
    <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
   </instrument>
   <instrument>
    <id>3</id>
@@ -195,6 +199,10 @@ p, li { white-space: pre-wrap; }
    <FX2Level>0</FX2Level>
    <FX3Level>0</FX3Level>
    <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
   </instrument>
   <instrument>
    <id>5</id>
@@ -227,6 +235,10 @@ p, li { white-space: pre-wrap; }
    <FX2Level>0</FX2Level>
    <FX3Level>0</FX3Level>
    <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
   </instrument>
   <instrument>
    <id>6</id>
@@ -259,6 +271,10 @@ p, li { white-space: pre-wrap; }
    <FX2Level>0</FX2Level>
    <FX3Level>0</FX3Level>
    <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
   </instrument>
   <instrument>
    <id>11</id>
@@ -646,6 +662,10 @@ p, li { white-space: pre-wrap; }
    <FX2Level>0</FX2Level>
    <FX3Level>0</FX3Level>
    <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
   </instrument>
   <instrument>
    <id>13</id>
@@ -820,6 +840,10 @@ p, li { white-space: pre-wrap; }
    <FX2Level>0</FX2Level>
    <FX3Level>0</FX3Level>
    <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
   </instrument>
   <instrument>
    <id>18</id>
@@ -923,6 +947,10 @@ p, li { white-space: pre-wrap; }
    <FX2Level>0</FX2Level>
    <FX3Level>0</FX3Level>
    <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
   </instrument>
   <instrument>
    <id>22</id>

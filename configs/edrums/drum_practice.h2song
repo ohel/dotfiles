@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <song>
- <version>1.0.0-</version>
+ <version>1.2.0-</version>
  <bpm>120</bpm>
  <volume>0.73</volume>
  <metronomeVolume>0.5</metronomeVolume>
@@ -13,10 +13,17 @@
  <playbackTrackFilename></playbackTrackFilename>
  <playbackTrackEnabled>false</playbackTrackEnabled>
  <playbackTrackVolume>0</playbackTrackVolume>
- <mode>pattern</mode>
+ <action_mode>0</action_mode>
+ <isPatternEditorLocked>false</isPatternEditorLocked>
+ <isTimelineActivated>false</isTimelineActivated>
+ <mode>song</mode>
+ <pan_law_type>RATIO_STRAIGHT_POLYGONAL</pan_law_type>
+ <pan_law_k_norm>1.33333</pan_law_k_norm>
  <humanize_time>0</humanize_time>
  <humanize_velocity>0</humanize_velocity>
  <swing_factor>0</swing_factor>
+ <last_loaded_drumkit>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</last_loaded_drumkit>
+ <last_loaded_drumkit_name>Alesis Turbo (Hack)</last_loaded_drumkit_name>
  <componentList>
   <drumkitComponent>
    <id>0</id>
@@ -28,38 +35,45 @@
   <instrument>
    <id>1</id>
    <name>Kick</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
    <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>1</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0.05</randomPitchFactor>
    <gain>1</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
    <filterResonance>0</filterResonance>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
    <Attack>0</Attack>
    <Decay>0</Decay>
    <Sustain>0.5</Sustain>
    <Release>256</Release>
-   <randomPitchFactor>0.05</randomPitchFactor>
    <muteGroup>-1</muteGroup>
-   <isStopNote>false</isStopNote>
-   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <midiOutChannel>-1</midiOutChannel>
    <midiOutNote>36</midiOutNote>
+   <isStopNote>false</isStopNote>
+   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <isHihat>-1</isHihat>
    <lower_cc>0</lower_cc>
    <higher_cc>127</higher_cc>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
    <instrumentComponent>
     <component_id>0</component_id>
     <gain>1</gain>
     <layer>
      <filename>Kick.wav</filename>
+     <min>0</min>
+     <max>1</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -70,268 +84,42 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
-     <min>0</min>
-     <max>1</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
     </layer>
-   </instrumentComponent>
-  </instrument>
-  <instrument>
-   <id>2</id>
-   <name>- (Stick)</name>
-   <drumkit>Alesis Turbo (Hack)</drumkit>
-   <volume>1</volume>
-   <isMuted>false</isMuted>
-   <pan_L>1</pan_L>
-   <pan_R>1</pan_R>
-   <gain>1</gain>
-   <applyVelocity>true</applyVelocity>
-   <filterActive>false</filterActive>
-   <filterCutoff>1</filterCutoff>
-   <filterResonance>0</filterResonance>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
-   <Attack>0</Attack>
-   <Decay>0</Decay>
-   <Sustain>1</Sustain>
-   <Release>1000</Release>
-   <randomPitchFactor>0</randomPitchFactor>
-   <muteGroup>-1</muteGroup>
-   <isStopNote>false</isStopNote>
-   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
-   <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>37</midiOutNote>
-   <isHihat>-1</isHihat>
-   <lower_cc>0</lower_cc>
-   <higher_cc>127</higher_cc>
-   <instrumentComponent>
-    <component_id>0</component_id>
-    <gain>1</gain>
    </instrumentComponent>
   </instrument>
   <instrument>
    <id>3</id>
-   <name>Snare</name>
+   <name>- (Stick)</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
    <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>1</volume>
-   <isMuted>false</isMuted>
-   <pan_L>1</pan_L>
-   <pan_R>0.8</pan_R>
-   <gain>1</gain>
-   <applyVelocity>true</applyVelocity>
-   <filterActive>false</filterActive>
-   <filterCutoff>1</filterCutoff>
-   <filterResonance>0</filterResonance>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
-   <Attack>0</Attack>
-   <Decay>0</Decay>
-   <Sustain>1</Sustain>
-   <Release>256</Release>
-   <randomPitchFactor>0</randomPitchFactor>
-   <muteGroup>-1</muteGroup>
-   <isStopNote>false</isStopNote>
-   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
-   <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>38</midiOutNote>
-   <isHihat>-1</isHihat>
-   <lower_cc>0</lower_cc>
-   <higher_cc>127</higher_cc>
-   <instrumentComponent>
-    <component_id>0</component_id>
-    <gain>1</gain>
-    <layer>
-     <filename>Snare-Softest.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0</min>
-     <max>0.2</max>
-     <gain>0.6</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Snare-Soft.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.2</min>
-     <max>0.4</max>
-     <gain>0.8</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Snare-Med.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.4</min>
-     <max>0.6</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Snare-Hard.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.6</min>
-     <max>0.8</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Snare-Hardest.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.8</min>
-     <max>1</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-   </instrumentComponent>
-  </instrument>
-  <instrument>
-   <id>4</id>
-   <name>- (Hand Clap)</name>
-   <drumkit>Alesis Turbo (Hack)</drumkit>
-   <volume>1</volume>
-   <isMuted>false</isMuted>
+   <isMuted>true</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0</randomPitchFactor>
    <gain>1</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
    <filterResonance>0</filterResonance>
+   <Attack>0</Attack>
+   <Decay>0</Decay>
+   <Sustain>1</Sustain>
+   <Release>999</Release>
+   <muteGroup>-1</muteGroup>
+   <midiOutChannel>-1</midiOutChannel>
+   <midiOutNote>37</midiOutNote>
+   <isStopNote>false</isStopNote>
+   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
+   <isHihat>-1</isHihat>
+   <lower_cc>0</lower_cc>
+   <higher_cc>127</higher_cc>
    <FX1Level>0</FX1Level>
    <FX2Level>0</FX2Level>
    <FX3Level>0</FX3Level>
    <FX4Level>0</FX4Level>
-   <Attack>0</Attack>
-   <Decay>0</Decay>
-   <Sustain>1</Sustain>
-   <Release>1000</Release>
-   <randomPitchFactor>0</randomPitchFactor>
-   <muteGroup>-1</muteGroup>
-   <isStopNote>false</isStopNote>
-   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
-   <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>39</midiOutNote>
-   <isHihat>-1</isHihat>
-   <lower_cc>0</lower_cc>
-   <higher_cc>127</higher_cc>
-   <instrumentComponent>
-    <component_id>0</component_id>
-    <gain>1</gain>
-   </instrumentComponent>
-  </instrument>
-  <instrument>
-   <id>5</id>
-   <name>- (Snare Rimshot)</name>
-   <drumkit>Alesis Turbo (Hack)</drumkit>
-   <volume>1</volume>
-   <isMuted>false</isMuted>
-   <pan_L>1</pan_L>
-   <pan_R>1</pan_R>
-   <gain>1</gain>
-   <applyVelocity>true</applyVelocity>
-   <filterActive>false</filterActive>
-   <filterCutoff>1</filterCutoff>
-   <filterResonance>0</filterResonance>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
-   <Attack>0</Attack>
-   <Decay>0</Decay>
-   <Sustain>1</Sustain>
-   <Release>1000</Release>
-   <randomPitchFactor>0</randomPitchFactor>
-   <muteGroup>-1</muteGroup>
-   <isStopNote>false</isStopNote>
-   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
-   <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>40</midiOutNote>
-   <isHihat>-1</isHihat>
-   <lower_cc>0</lower_cc>
-   <higher_cc>127</higher_cc>
-   <instrumentComponent>
-    <component_id>0</component_id>
-    <gain>1</gain>
-   </instrumentComponent>
-  </instrument>
-  <instrument>
-   <id>6</id>
-   <name>- (Low Floor Tom)</name>
-   <drumkit>Alesis Turbo (Hack)</drumkit>
-   <volume>1</volume>
-   <isMuted>false</isMuted>
-   <pan_L>1</pan_L>
-   <pan_R>1</pan_R>
-   <gain>1</gain>
-   <applyVelocity>true</applyVelocity>
-   <filterActive>false</filterActive>
-   <filterCutoff>1</filterCutoff>
-   <filterResonance>0</filterResonance>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
-   <Attack>0</Attack>
-   <Decay>0</Decay>
-   <Sustain>1</Sustain>
-   <Release>1000</Release>
-   <randomPitchFactor>0</randomPitchFactor>
-   <muteGroup>-1</muteGroup>
-   <isStopNote>false</isStopNote>
-   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
-   <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>41</midiOutNote>
-   <isHihat>-1</isHihat>
-   <lower_cc>0</lower_cc>
-   <higher_cc>127</higher_cc>
    <instrumentComponent>
     <component_id>0</component_id>
     <gain>1</gain>
@@ -339,56 +127,46 @@
   </instrument>
   <instrument>
    <id>11</id>
-   <name>Hat Closed</name>
+   <name>Snare</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
    <drumkit>Alesis Turbo (Hack)</drumkit>
-   <volume>0.685345</volume>
+   <volume>1</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
-   <pan_R>0.6</pan_R>
-   <gain>3</gain>
+   <pan_R>0.8</pan_R>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0</randomPitchFactor>
+   <gain>1</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
    <filterResonance>0</filterResonance>
+   <Attack>0</Attack>
+   <Decay>0</Decay>
+   <Sustain>1</Sustain>
+   <Release>256</Release>
+   <muteGroup>-1</muteGroup>
+   <midiOutChannel>-1</midiOutChannel>
+   <midiOutNote>38</midiOutNote>
+   <isStopNote>false</isStopNote>
+   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
+   <isHihat>-1</isHihat>
+   <lower_cc>0</lower_cc>
+   <higher_cc>127</higher_cc>
    <FX1Level>0</FX1Level>
    <FX2Level>0</FX2Level>
    <FX3Level>0</FX3Level>
    <FX4Level>0</FX4Level>
-   <Attack>0</Attack>
-   <Decay>0</Decay>
-   <Sustain>1</Sustain>
-   <Release>1000</Release>
-   <randomPitchFactor>0</randomPitchFactor>
-   <muteGroup>-1</muteGroup>
-   <isStopNote>false</isStopNote>
-   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
-   <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>42</midiOutNote>
-   <isHihat>-1</isHihat>
-   <lower_cc>0</lower_cc>
-   <higher_cc>127</higher_cc>
    <instrumentComponent>
     <component_id>0</component_id>
     <gain>1</gain>
     <layer>
-     <filename>HatClosed-Softest.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
+     <filename>Snare-Softest.wav</filename>
      <min>0</min>
      <max>0.2</max>
-     <gain>1</gain>
+     <gain>0.6</gain>
      <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>HatClosed-Soft.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -399,13 +177,13 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Snare-Soft.wav</filename>
      <min>0.2</min>
      <max>0.4</max>
-     <gain>1</gain>
+     <gain>0.8</gain>
      <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>HatClosed-Med.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -416,13 +194,13 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Snare-Med.wav</filename>
      <min>0.4</min>
      <max>0.6</max>
      <gain>1</gain>
      <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>HatClosed-Hard.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -433,13 +211,13 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Snare-Hard.wav</filename>
      <min>0.6</min>
      <max>0.8</max>
      <gain>1</gain>
      <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>HatClosed-Hardest.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -450,48 +228,305 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Snare-Hardest.wav</filename>
      <min>0.8</min>
      <max>1</max>
      <gain>1</gain>
      <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
     </layer>
    </instrumentComponent>
   </instrument>
   <instrument>
    <id>8</id>
+   <name>- (Hand Clap)</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
+   <volume>1</volume>
+   <isMuted>true</isMuted>
+   <isSoloed>false</isSoloed>
+   <pan_L>1</pan_L>
+   <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0</randomPitchFactor>
+   <gain>1</gain>
+   <applyVelocity>true</applyVelocity>
+   <filterActive>false</filterActive>
+   <filterCutoff>1</filterCutoff>
+   <filterResonance>0</filterResonance>
+   <Attack>0</Attack>
+   <Decay>0</Decay>
+   <Sustain>1</Sustain>
+   <Release>999</Release>
+   <muteGroup>-1</muteGroup>
+   <midiOutChannel>-1</midiOutChannel>
+   <midiOutNote>39</midiOutNote>
+   <isStopNote>false</isStopNote>
+   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
+   <isHihat>-1</isHihat>
+   <lower_cc>0</lower_cc>
+   <higher_cc>127</higher_cc>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
+  </instrument>
+  <instrument>
+   <id>19</id>
+   <name>- (Snare Rimshot)</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
+   <volume>1</volume>
+   <isMuted>true</isMuted>
+   <isSoloed>false</isSoloed>
+   <pan_L>1</pan_L>
+   <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0</randomPitchFactor>
+   <gain>1</gain>
+   <applyVelocity>true</applyVelocity>
+   <filterActive>false</filterActive>
+   <filterCutoff>1</filterCutoff>
+   <filterResonance>0</filterResonance>
+   <Attack>0</Attack>
+   <Decay>0</Decay>
+   <Sustain>1</Sustain>
+   <Release>1000</Release>
+   <muteGroup>-1</muteGroup>
+   <midiOutChannel>-1</midiOutChannel>
+   <midiOutNote>40</midiOutNote>
+   <isStopNote>false</isStopNote>
+   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
+   <isHihat>-1</isHihat>
+   <lower_cc>0</lower_cc>
+   <higher_cc>127</higher_cc>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
+  </instrument>
+  <instrument>
+   <id>10</id>
+   <name>- (Low Floor Tom)</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
+   <volume>1</volume>
+   <isMuted>true</isMuted>
+   <isSoloed>false</isSoloed>
+   <pan_L>1</pan_L>
+   <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0</randomPitchFactor>
+   <gain>1</gain>
+   <applyVelocity>true</applyVelocity>
+   <filterActive>false</filterActive>
+   <filterCutoff>1</filterCutoff>
+   <filterResonance>0</filterResonance>
+   <Attack>0</Attack>
+   <Decay>0</Decay>
+   <Sustain>1</Sustain>
+   <Release>1000</Release>
+   <muteGroup>-1</muteGroup>
+   <midiOutChannel>-1</midiOutChannel>
+   <midiOutNote>41</midiOutNote>
+   <isStopNote>false</isStopNote>
+   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
+   <isHihat>-1</isHihat>
+   <lower_cc>0</lower_cc>
+   <higher_cc>127</higher_cc>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
+  </instrument>
+  <instrument>
+   <id>21</id>
+   <name>Hat Closed</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
+   <volume>0.685345</volume>
+   <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
+   <pan_L>1</pan_L>
+   <pan_R>0.6</pan_R>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0</randomPitchFactor>
+   <gain>3</gain>
+   <applyVelocity>true</applyVelocity>
+   <filterActive>false</filterActive>
+   <filterCutoff>1</filterCutoff>
+   <filterResonance>0</filterResonance>
+   <Attack>0</Attack>
+   <Decay>0</Decay>
+   <Sustain>1</Sustain>
+   <Release>1000</Release>
+   <muteGroup>-1</muteGroup>
+   <midiOutChannel>-1</midiOutChannel>
+   <midiOutNote>42</midiOutNote>
+   <isStopNote>false</isStopNote>
+   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
+   <isHihat>-1</isHihat>
+   <lower_cc>0</lower_cc>
+   <higher_cc>127</higher_cc>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+    <layer>
+     <filename>HatClosed-Softest.wav</filename>
+     <min>0</min>
+     <max>0.2</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>HatClosed-Soft.wav</filename>
+     <min>0.2</min>
+     <max>0.4</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>HatClosed-Med.wav</filename>
+     <min>0.4</min>
+     <max>0.6</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>HatClosed-Hard.wav</filename>
+     <min>0.6</min>
+     <max>0.8</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>HatClosed-Hardest.wav</filename>
+     <min>0.8</min>
+     <max>1</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+   </instrumentComponent>
+  </instrument>
+  <instrument>
+   <id>13</id>
    <name>Floor Tom</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
    <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>1</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>0.7</pan_L>
    <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0.05</randomPitchFactor>
    <gain>0.95</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
    <filterResonance>0</filterResonance>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
    <Attack>0</Attack>
    <Decay>0</Decay>
    <Sustain>1</Sustain>
    <Release>1000</Release>
-   <randomPitchFactor>0.05</randomPitchFactor>
    <muteGroup>-1</muteGroup>
-   <isStopNote>false</isStopNote>
-   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <midiOutChannel>-1</midiOutChannel>
    <midiOutNote>43</midiOutNote>
+   <isStopNote>false</isStopNote>
+   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <isHihat>-1</isHihat>
    <lower_cc>0</lower_cc>
    <higher_cc>127</higher_cc>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
    <instrumentComponent>
     <component_id>0</component_id>
     <gain>1</gain>
     <layer>
      <filename>TomFloor-Softest.wav</filename>
+     <min>0</min>
+     <max>0.2</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -502,13 +537,13 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
-     <min>0</min>
-     <max>0.2</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
     </layer>
     <layer>
      <filename>TomFloor-Soft.wav</filename>
+     <min>0.2</min>
+     <max>0.4</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -519,13 +554,13 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
-     <min>0.2</min>
-     <max>0.4</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
     </layer>
     <layer>
      <filename>TomFloor-Med.wav</filename>
+     <min>0.4</min>
+     <max>0.6</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -536,13 +571,13 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
-     <min>0.4</min>
-     <max>0.6</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
     </layer>
     <layer>
      <filename>TomFloor-Hard.wav</filename>
+     <min>0.6</min>
+     <max>0.8</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -553,65 +588,13 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
-     <min>0.6</min>
-     <max>0.8</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
     </layer>
     <layer>
      <filename>TomFloor-Hardest.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
      <min>0.8</min>
      <max>1</max>
      <gain>1</gain>
      <pitch>0</pitch>
-    </layer>
-   </instrumentComponent>
-  </instrument>
-  <instrument>
-   <id>19</id>
-   <name>Hat Pedal</name>
-   <drumkit>Alesis Turbo (Hack)</drumkit>
-   <volume>0.685345</volume>
-   <isMuted>false</isMuted>
-   <pan_L>1</pan_L>
-   <pan_R>0.6</pan_R>
-   <gain>1</gain>
-   <applyVelocity>false</applyVelocity>
-   <filterActive>false</filterActive>
-   <filterCutoff>1</filterCutoff>
-   <filterResonance>0</filterResonance>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
-   <Attack>0</Attack>
-   <Decay>0</Decay>
-   <Sustain>1</Sustain>
-   <Release>1000</Release>
-   <randomPitchFactor>0</randomPitchFactor>
-   <muteGroup>0</muteGroup>
-   <isStopNote>false</isStopNote>
-   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
-   <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>44</midiOutNote>
-   <isHihat>-1</isHihat>
-   <lower_cc>0</lower_cc>
-   <higher_cc>127</higher_cc>
-   <instrumentComponent>
-    <component_id>0</component_id>
-    <gain>1</gain>
-    <layer>
-     <filename>HatPedal-Softest.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -622,528 +605,51 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
-     <min>0</min>
-     <max>0.2</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>HatPedal-Soft.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.2</min>
-     <max>0.4</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>HatPedal-Med.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.4</min>
-     <max>0.6</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>HatPedal-Hard.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.6</min>
-     <max>0.8</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>HatPedal-Hardest.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.8</min>
-     <max>1</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-   </instrumentComponent>
-  </instrument>
-  <instrument>
-   <id>10</id>
-   <name>Low Tom</name>
-   <drumkit>Alesis Turbo (Hack)</drumkit>
-   <volume>1</volume>
-   <isMuted>false</isMuted>
-   <pan_L>0.8</pan_L>
-   <pan_R>1</pan_R>
-   <gain>0.95</gain>
-   <applyVelocity>true</applyVelocity>
-   <filterActive>false</filterActive>
-   <filterCutoff>1</filterCutoff>
-   <filterResonance>0</filterResonance>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
-   <Attack>0</Attack>
-   <Decay>0</Decay>
-   <Sustain>1</Sustain>
-   <Release>1000</Release>
-   <randomPitchFactor>0.05</randomPitchFactor>
-   <muteGroup>-1</muteGroup>
-   <isStopNote>false</isStopNote>
-   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
-   <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>45</midiOutNote>
-   <isHihat>-1</isHihat>
-   <lower_cc>0</lower_cc>
-   <higher_cc>127</higher_cc>
-   <instrumentComponent>
-    <component_id>0</component_id>
-    <gain>1</gain>
-    <layer>
-     <filename>Tom2-Softest.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0</min>
-     <max>0.2</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Tom2-Soft.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.2</min>
-     <max>0.4</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Tom2-Med.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.4</min>
-     <max>0.6</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Tom2-Hard.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.6</min>
-     <max>0.8</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Tom2-Hardest.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.8</min>
-     <max>1</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-   </instrumentComponent>
-  </instrument>
-  <instrument>
-   <id>21</id>
-   <name>Hat Open</name>
-   <drumkit>Alesis Turbo (Hack)</drumkit>
-   <volume>0.698276</volume>
-   <isMuted>false</isMuted>
-   <pan_L>1</pan_L>
-   <pan_R>0.6</pan_R>
-   <gain>1.6</gain>
-   <applyVelocity>true</applyVelocity>
-   <filterActive>false</filterActive>
-   <filterCutoff>1</filterCutoff>
-   <filterResonance>0</filterResonance>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
-   <Attack>0</Attack>
-   <Decay>0</Decay>
-   <Sustain>1</Sustain>
-   <Release>1000</Release>
-   <randomPitchFactor>0</randomPitchFactor>
-   <muteGroup>0</muteGroup>
-   <isStopNote>false</isStopNote>
-   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
-   <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>46</midiOutNote>
-   <isHihat>-1</isHihat>
-   <lower_cc>0</lower_cc>
-   <higher_cc>127</higher_cc>
-   <instrumentComponent>
-    <component_id>0</component_id>
-    <gain>1</gain>
-    <layer>
-     <filename>HatOpen-Softest.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0</min>
-     <max>0.2</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>HatOpen-Soft.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.2</min>
-     <max>0.4</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>HatOpen-Med.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.4</min>
-     <max>0.6</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>HatOpen-Hard.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.6</min>
-     <max>0.8</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>HatOpen-Hardest.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.8</min>
-     <max>1</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-   </instrumentComponent>
-  </instrument>
-  <instrument>
-   <id>12</id>
-   <name>- (Low-Mid Tom)</name>
-   <drumkit>Alesis Turbo (Hack)</drumkit>
-   <volume>1</volume>
-   <isMuted>false</isMuted>
-   <pan_L>1</pan_L>
-   <pan_R>1</pan_R>
-   <gain>1</gain>
-   <applyVelocity>true</applyVelocity>
-   <filterActive>false</filterActive>
-   <filterCutoff>1</filterCutoff>
-   <filterResonance>0</filterResonance>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
-   <Attack>0</Attack>
-   <Decay>0</Decay>
-   <Sustain>1</Sustain>
-   <Release>1000</Release>
-   <randomPitchFactor>0</randomPitchFactor>
-   <muteGroup>-1</muteGroup>
-   <isStopNote>false</isStopNote>
-   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
-   <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>47</midiOutNote>
-   <isHihat>-1</isHihat>
-   <lower_cc>0</lower_cc>
-   <higher_cc>127</higher_cc>
-   <instrumentComponent>
-    <component_id>0</component_id>
-    <gain>1</gain>
-   </instrumentComponent>
-  </instrument>
-  <instrument>
-   <id>13</id>
-   <name>High-Mid Tom</name>
-   <drumkit>Alesis Turbo (Hack)</drumkit>
-   <volume>1</volume>
-   <isMuted>false</isMuted>
-   <pan_L>1</pan_L>
-   <pan_R>0.9</pan_R>
-   <gain>0.8</gain>
-   <applyVelocity>true</applyVelocity>
-   <filterActive>false</filterActive>
-   <filterCutoff>1</filterCutoff>
-   <filterResonance>0</filterResonance>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
-   <Attack>0</Attack>
-   <Decay>0</Decay>
-   <Sustain>1</Sustain>
-   <Release>1000</Release>
-   <randomPitchFactor>0.05</randomPitchFactor>
-   <muteGroup>-1</muteGroup>
-   <isStopNote>false</isStopNote>
-   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
-   <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>48</midiOutNote>
-   <isHihat>-1</isHihat>
-   <lower_cc>0</lower_cc>
-   <higher_cc>127</higher_cc>
-   <instrumentComponent>
-    <component_id>0</component_id>
-    <gain>1</gain>
-    <layer>
-     <filename>Tom1-Softest.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0</min>
-     <max>0.2</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Tom1-Soft.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.2</min>
-     <max>0.4</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Tom1-Med.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.4</min>
-     <max>0.6</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Tom1-Hard.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.6</min>
-     <max>0.8</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Tom1-Hardest.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
-     <min>0.8</min>
-     <max>1</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
     </layer>
    </instrumentComponent>
   </instrument>
   <instrument>
    <id>26</id>
-   <name>Crash</name>
+   <name>Hat Pedal</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
    <drumkit>Alesis Turbo (Hack)</drumkit>
-   <volume>0.517241</volume>
+   <volume>0.685345</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
-   <pan_R>0.9</pan_R>
-   <gain>2</gain>
-   <applyVelocity>true</applyVelocity>
+   <pan_R>0.6</pan_R>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0</randomPitchFactor>
+   <gain>1</gain>
+   <applyVelocity>false</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
    <filterResonance>0</filterResonance>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
    <Attack>0</Attack>
    <Decay>0</Decay>
    <Sustain>1</Sustain>
    <Release>1000</Release>
-   <randomPitchFactor>0</randomPitchFactor>
-   <muteGroup>-1</muteGroup>
+   <muteGroup>0</muteGroup>
+   <midiOutChannel>-1</midiOutChannel>
+   <midiOutNote>44</midiOutNote>
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
-   <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>49</midiOutNote>
    <isHihat>-1</isHihat>
    <lower_cc>0</lower_cc>
    <higher_cc>127</higher_cc>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
    <instrumentComponent>
     <component_id>0</component_id>
     <gain>1</gain>
     <layer>
-     <filename>Crash-Softest.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
+     <filename>HatPedal-Softest.wav</filename>
      <min>0</min>
      <max>0.2</max>
      <gain>1</gain>
      <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Crash-Soft.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -1154,13 +660,13 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>HatPedal-Soft.wav</filename>
      <min>0.2</min>
      <max>0.4</max>
      <gain>1</gain>
      <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Crash-Med.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -1171,13 +677,13 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>HatPedal-Med.wav</filename>
      <min>0.4</min>
      <max>0.6</max>
      <gain>1</gain>
      <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Crash-Hard.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -1188,13 +694,13 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>HatPedal-Hard.wav</filename>
      <min>0.6</min>
      <max>0.8</max>
      <gain>1</gain>
      <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Crash-Hardest.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -1205,100 +711,68 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>HatPedal-Hardest.wav</filename>
      <min>0.8</min>
      <max>1</max>
      <gain>1</gain>
      <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
     </layer>
-   </instrumentComponent>
-  </instrument>
-  <instrument>
-   <id>15</id>
-   <name>- (High Tom)</name>
-   <drumkit>Alesis Turbo (Hack)</drumkit>
-   <volume>1</volume>
-   <isMuted>false</isMuted>
-   <pan_L>1</pan_L>
-   <pan_R>1</pan_R>
-   <gain>1</gain>
-   <applyVelocity>true</applyVelocity>
-   <filterActive>false</filterActive>
-   <filterCutoff>1</filterCutoff>
-   <filterResonance>0</filterResonance>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
-   <Attack>0</Attack>
-   <Decay>0</Decay>
-   <Sustain>1</Sustain>
-   <Release>1000</Release>
-   <randomPitchFactor>0</randomPitchFactor>
-   <muteGroup>-1</muteGroup>
-   <isStopNote>false</isStopNote>
-   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
-   <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>50</midiOutNote>
-   <isHihat>-1</isHihat>
-   <lower_cc>0</lower_cc>
-   <higher_cc>127</higher_cc>
-   <instrumentComponent>
-    <component_id>0</component_id>
-    <gain>1</gain>
    </instrumentComponent>
   </instrument>
   <instrument>
    <id>28</id>
-   <name>Ride (Soft Hit)</name>
+   <name>Low Tom</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
    <drumkit>Alesis Turbo (Hack)</drumkit>
-   <volume>0.633621</volume>
+   <volume>1</volume>
    <isMuted>false</isMuted>
-   <pan_L>0.6</pan_L>
+   <isSoloed>false</isSoloed>
+   <pan_L>0.8</pan_L>
    <pan_R>1</pan_R>
-   <gain>4</gain>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0.05</randomPitchFactor>
+   <gain>0.95</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
    <filterResonance>0</filterResonance>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
    <Attack>0</Attack>
    <Decay>0</Decay>
    <Sustain>1</Sustain>
    <Release>1000</Release>
-   <randomPitchFactor>0.05</randomPitchFactor>
    <muteGroup>-1</muteGroup>
+   <midiOutChannel>-1</midiOutChannel>
+   <midiOutNote>45</midiOutNote>
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
-   <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>51</midiOutNote>
    <isHihat>-1</isHihat>
    <lower_cc>0</lower_cc>
    <higher_cc>127</higher_cc>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
    <instrumentComponent>
     <component_id>0</component_id>
     <gain>1</gain>
     <layer>
-     <filename>Ride-Softest.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
+     <filename>Tom2-Softest.wav</filename>
      <min>0</min>
      <max>0.2</max>
      <gain>1</gain>
      <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Ride-Soft.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -1309,13 +783,13 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Tom2-Soft.wav</filename>
      <min>0.2</min>
      <max>0.4</max>
      <gain>1</gain>
      <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Ride-Med.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -1326,13 +800,13 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Tom2-Med.wav</filename>
      <min>0.4</min>
      <max>0.6</max>
      <gain>1</gain>
      <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Ride-Hard.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -1343,13 +817,13 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Tom2-Hard.wav</filename>
      <min>0.6</min>
      <max>0.8</max>
      <gain>1</gain>
      <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Ride-Hardest.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -1360,65 +834,68 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Tom2-Hardest.wav</filename>
      <min>0.8</min>
      <max>1</max>
      <gain>1</gain>
      <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
     </layer>
    </instrumentComponent>
   </instrument>
   <instrument>
    <id>27</id>
-   <name>Splash (Hard Hit)</name>
+   <name>Hat Open</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
    <drumkit>Alesis Turbo (Hack)</drumkit>
-   <volume>0.543103</volume>
+   <volume>0.698276</volume>
    <isMuted>false</isMuted>
-   <pan_L>0.9</pan_L>
-   <pan_R>1</pan_R>
-   <gain>1.75</gain>
+   <isSoloed>false</isSoloed>
+   <pan_L>1</pan_L>
+   <pan_R>0.6</pan_R>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0</randomPitchFactor>
+   <gain>1.6</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
    <filterResonance>0</filterResonance>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
    <Attack>0</Attack>
    <Decay>0</Decay>
    <Sustain>1</Sustain>
    <Release>1000</Release>
-   <randomPitchFactor>0</randomPitchFactor>
-   <muteGroup>-1</muteGroup>
+   <muteGroup>0</muteGroup>
+   <midiOutChannel>-1</midiOutChannel>
+   <midiOutNote>46</midiOutNote>
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
-   <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>52</midiOutNote>
    <isHihat>-1</isHihat>
    <lower_cc>0</lower_cc>
    <higher_cc>127</higher_cc>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
    <instrumentComponent>
     <component_id>0</component_id>
     <gain>1</gain>
     <layer>
-     <filename>Splash-Softest.wav</filename>
-     <ismodified>false</ismodified>
-     <smode>forward</smode>
-     <startframe>0</startframe>
-     <loopframe>0</loopframe>
-     <loops>0</loops>
-     <endframe>0</endframe>
-     <userubber>0</userubber>
-     <rubberdivider>1</rubberdivider>
-     <rubberCsettings>4</rubberCsettings>
-     <rubberPitch>1</rubberPitch>
+     <filename>HatOpen-Softest.wav</filename>
      <min>0</min>
      <max>0.2</max>
      <gain>1</gain>
      <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Splash-Soft.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -1429,13 +906,13 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>HatOpen-Soft.wav</filename>
      <min>0.2</min>
      <max>0.4</max>
      <gain>1</gain>
      <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Splash-Med.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -1446,13 +923,13 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>HatOpen-Med.wav</filename>
      <min>0.4</min>
      <max>0.6</max>
      <gain>1</gain>
      <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Splash-Hard.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -1463,13 +940,13 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>HatOpen-Hard.wav</filename>
      <min>0.6</min>
      <max>0.8</max>
      <gain>1</gain>
      <pitch>0</pitch>
-    </layer>
-    <layer>
-     <filename>Splash-Hardest.wav</filename>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -1480,48 +957,636 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>HatOpen-Hardest.wav</filename>
      <min>0.8</min>
      <max>1</max>
      <gain>1</gain>
      <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
     </layer>
    </instrumentComponent>
   </instrument>
   <instrument>
    <id>22</id>
-   <name>Clave</name>
+   <name>- (Low-Mid Tom)</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
    <drumkit>Alesis Turbo (Hack)</drumkit>
-   <volume>0.84</volume>
-   <isMuted>false</isMuted>
+   <volume>1</volume>
+   <isMuted>true</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0</randomPitchFactor>
    <gain>1</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
    <filterResonance>0</filterResonance>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
    <Attack>0</Attack>
    <Decay>0</Decay>
    <Sustain>1</Sustain>
    <Release>1000</Release>
-   <randomPitchFactor>0</randomPitchFactor>
    <muteGroup>-1</muteGroup>
+   <midiOutChannel>-1</midiOutChannel>
+   <midiOutNote>47</midiOutNote>
    <isStopNote>false</isStopNote>
    <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
-   <midiOutChannel>-1</midiOutChannel>
-   <midiOutNote>75</midiOutNote>
    <isHihat>-1</isHihat>
    <lower_cc>0</lower_cc>
    <higher_cc>127</higher_cc>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
+  </instrument>
+  <instrument>
+   <id>25</id>
+   <name>High-Mid Tom</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
+   <volume>1</volume>
+   <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
+   <pan_L>1</pan_L>
+   <pan_R>0.9</pan_R>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0.05</randomPitchFactor>
+   <gain>0.8</gain>
+   <applyVelocity>true</applyVelocity>
+   <filterActive>false</filterActive>
+   <filterCutoff>1</filterCutoff>
+   <filterResonance>0</filterResonance>
+   <Attack>0</Attack>
+   <Decay>0</Decay>
+   <Sustain>1</Sustain>
+   <Release>1000</Release>
+   <muteGroup>-1</muteGroup>
+   <midiOutChannel>-1</midiOutChannel>
+   <midiOutNote>48</midiOutNote>
+   <isStopNote>false</isStopNote>
+   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
+   <isHihat>-1</isHihat>
+   <lower_cc>0</lower_cc>
+   <higher_cc>127</higher_cc>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+    <layer>
+     <filename>Tom1-Softest.wav</filename>
+     <min>0</min>
+     <max>0.2</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Tom1-Soft.wav</filename>
+     <min>0.2</min>
+     <max>0.4</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Tom1-Med.wav</filename>
+     <min>0.4</min>
+     <max>0.6</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Tom1-Hard.wav</filename>
+     <min>0.6</min>
+     <max>0.8</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Tom1-Hardest.wav</filename>
+     <min>0.8</min>
+     <max>1</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+   </instrumentComponent>
+  </instrument>
+  <instrument>
+   <id>29</id>
+   <name>Crash</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
+   <volume>0.517241</volume>
+   <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
+   <pan_L>1</pan_L>
+   <pan_R>0.9</pan_R>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0</randomPitchFactor>
+   <gain>2</gain>
+   <applyVelocity>true</applyVelocity>
+   <filterActive>false</filterActive>
+   <filterCutoff>1</filterCutoff>
+   <filterResonance>0</filterResonance>
+   <Attack>0</Attack>
+   <Decay>0</Decay>
+   <Sustain>1</Sustain>
+   <Release>1000</Release>
+   <muteGroup>-1</muteGroup>
+   <midiOutChannel>-1</midiOutChannel>
+   <midiOutNote>49</midiOutNote>
+   <isStopNote>false</isStopNote>
+   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
+   <isHihat>-1</isHihat>
+   <lower_cc>0</lower_cc>
+   <higher_cc>127</higher_cc>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+    <layer>
+     <filename>Crash-Softest.wav</filename>
+     <min>0</min>
+     <max>0.2</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Crash-Soft.wav</filename>
+     <min>0.2</min>
+     <max>0.4</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Crash-Med.wav</filename>
+     <min>0.4</min>
+     <max>0.6</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Crash-Hard.wav</filename>
+     <min>0.6</min>
+     <max>0.8</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Crash-Hardest.wav</filename>
+     <min>0.8</min>
+     <max>1</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+   </instrumentComponent>
+  </instrument>
+  <instrument>
+   <id>30</id>
+   <name>- (High Tom)</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
+   <volume>1</volume>
+   <isMuted>true</isMuted>
+   <isSoloed>false</isSoloed>
+   <pan_L>1</pan_L>
+   <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0</randomPitchFactor>
+   <gain>1</gain>
+   <applyVelocity>true</applyVelocity>
+   <filterActive>false</filterActive>
+   <filterCutoff>1</filterCutoff>
+   <filterResonance>0</filterResonance>
+   <Attack>0</Attack>
+   <Decay>0</Decay>
+   <Sustain>1</Sustain>
+   <Release>1000</Release>
+   <muteGroup>-1</muteGroup>
+   <midiOutChannel>-1</midiOutChannel>
+   <midiOutNote>50</midiOutNote>
+   <isStopNote>false</isStopNote>
+   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
+   <isHihat>-1</isHihat>
+   <lower_cc>0</lower_cc>
+   <higher_cc>127</higher_cc>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+   </instrumentComponent>
+  </instrument>
+  <instrument>
+   <id>31</id>
+   <name>Ride (Soft Hit)</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
+   <volume>0.633621</volume>
+   <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
+   <pan_L>0.6</pan_L>
+   <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0.05</randomPitchFactor>
+   <gain>4</gain>
+   <applyVelocity>true</applyVelocity>
+   <filterActive>false</filterActive>
+   <filterCutoff>1</filterCutoff>
+   <filterResonance>0</filterResonance>
+   <Attack>0</Attack>
+   <Decay>0</Decay>
+   <Sustain>1</Sustain>
+   <Release>1000</Release>
+   <muteGroup>-1</muteGroup>
+   <midiOutChannel>-1</midiOutChannel>
+   <midiOutNote>51</midiOutNote>
+   <isStopNote>false</isStopNote>
+   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
+   <isHihat>-1</isHihat>
+   <lower_cc>0</lower_cc>
+   <higher_cc>127</higher_cc>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+    <layer>
+     <filename>Ride-Softest.wav</filename>
+     <min>0</min>
+     <max>0.2</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Ride-Soft.wav</filename>
+     <min>0.2</min>
+     <max>0.4</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Ride-Med.wav</filename>
+     <min>0.4</min>
+     <max>0.6</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Ride-Hard.wav</filename>
+     <min>0.6</min>
+     <max>0.8</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Ride-Hardest.wav</filename>
+     <min>0.8</min>
+     <max>1</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+   </instrumentComponent>
+  </instrument>
+  <instrument>
+   <id>32</id>
+   <name>Splash (Hard Hit)</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
+   <volume>0.543103</volume>
+   <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
+   <pan_L>0.9</pan_L>
+   <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0</randomPitchFactor>
+   <gain>1.75</gain>
+   <applyVelocity>true</applyVelocity>
+   <filterActive>false</filterActive>
+   <filterCutoff>1</filterCutoff>
+   <filterResonance>0</filterResonance>
+   <Attack>0</Attack>
+   <Decay>0</Decay>
+   <Sustain>1</Sustain>
+   <Release>999</Release>
+   <muteGroup>-1</muteGroup>
+   <midiOutChannel>-1</midiOutChannel>
+   <midiOutNote>52</midiOutNote>
+   <isStopNote>false</isStopNote>
+   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
+   <isHihat>-1</isHihat>
+   <lower_cc>0</lower_cc>
+   <higher_cc>127</higher_cc>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
+   <instrumentComponent>
+    <component_id>0</component_id>
+    <gain>1</gain>
+    <layer>
+     <filename>Splash-Softest.wav</filename>
+     <min>0</min>
+     <max>0.2</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Splash-Soft.wav</filename>
+     <min>0.2</min>
+     <max>0.4</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Splash-Med.wav</filename>
+     <min>0.4</min>
+     <max>0.6</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Splash-Hard.wav</filename>
+     <min>0.6</min>
+     <max>0.8</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+    <layer>
+     <filename>Splash-Hardest.wav</filename>
+     <min>0.8</min>
+     <max>1</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
+     <ismodified>false</ismodified>
+     <smode>forward</smode>
+     <startframe>0</startframe>
+     <loopframe>0</loopframe>
+     <loops>0</loops>
+     <endframe>0</endframe>
+     <userubber>0</userubber>
+     <rubberdivider>1</rubberdivider>
+     <rubberCsettings>4</rubberCsettings>
+     <rubberPitch>1</rubberPitch>
+    </layer>
+   </instrumentComponent>
+  </instrument>
+  <instrument>
+   <id>33</id>
+   <name>Clave</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
+   <drumkit>Alesis Turbo (Hack)</drumkit>
+   <volume>0.84</volume>
+   <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
+   <pan_L>1</pan_L>
+   <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0</randomPitchFactor>
+   <gain>1</gain>
+   <applyVelocity>true</applyVelocity>
+   <filterActive>false</filterActive>
+   <filterCutoff>1</filterCutoff>
+   <filterResonance>0</filterResonance>
+   <Attack>0</Attack>
+   <Decay>0</Decay>
+   <Sustain>1</Sustain>
+   <Release>999</Release>
+   <muteGroup>-1</muteGroup>
+   <midiOutChannel>-1</midiOutChannel>
+   <midiOutNote>75</midiOutNote>
+   <isStopNote>false</isStopNote>
+   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
+   <isHihat>-1</isHihat>
+   <lower_cc>0</lower_cc>
+   <higher_cc>127</higher_cc>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
    <instrumentComponent>
     <component_id>0</component_id>
     <gain>1</gain>
     <layer>
      <filename>808_Clave.flac</filename>
+     <min>0</min>
+     <max>1</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -1532,48 +1597,51 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
-     <min>0</min>
-     <max>1</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
     </layer>
    </instrumentComponent>
   </instrument>
   <instrument>
-   <id>25</id>
+   <id>34</id>
    <name>Conga</name>
+   <drumkitPath>/home/panther/.hydrogen/data/drumkits/Alesis Turbo (Hack)</drumkitPath>
    <drumkit>Alesis Turbo (Hack)</drumkit>
    <volume>0.88</volume>
    <isMuted>false</isMuted>
+   <isSoloed>false</isSoloed>
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
+   <pitchOffset>0</pitchOffset>
+   <randomPitchFactor>0</randomPitchFactor>
    <gain>0.5</gain>
    <applyVelocity>true</applyVelocity>
    <filterActive>false</filterActive>
    <filterCutoff>1</filterCutoff>
    <filterResonance>0</filterResonance>
-   <FX1Level>0</FX1Level>
-   <FX2Level>0</FX2Level>
-   <FX3Level>0</FX3Level>
-   <FX4Level>0</FX4Level>
    <Attack>0</Attack>
    <Decay>0</Decay>
    <Sustain>1</Sustain>
    <Release>1000</Release>
-   <randomPitchFactor>0</randomPitchFactor>
    <muteGroup>-1</muteGroup>
-   <isStopNote>false</isStopNote>
-   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <midiOutChannel>-1</midiOutChannel>
    <midiOutNote>63</midiOutNote>
+   <isStopNote>false</isStopNote>
+   <sampleSelectionAlgo>VELOCITY</sampleSelectionAlgo>
    <isHihat>-1</isHihat>
    <lower_cc>0</lower_cc>
    <higher_cc>127</higher_cc>
+   <FX1Level>0</FX1Level>
+   <FX2Level>0</FX2Level>
+   <FX3Level>0</FX3Level>
+   <FX4Level>0</FX4Level>
    <instrumentComponent>
     <component_id>0</component_id>
     <gain>1</gain>
     <layer>
      <filename>808_Conga.flac</filename>
+     <min>0</min>
+     <max>1</max>
+     <gain>1</gain>
+     <pitch>0</pitch>
      <ismodified>false</ismodified>
      <smode>forward</smode>
      <startframe>0</startframe>
@@ -1584,10 +1652,6 @@
      <rubberdivider>1</rubberdivider>
      <rubberCsettings>4</rubberCsettings>
      <rubberPitch>1</rubberPitch>
-     <min>0</min>
-     <max>1</max>
-     <gain>1</gain>
-     <pitch>0</pitch>
     </layer>
    </instrumentComponent>
   </instrument>
@@ -1595,61 +1659,58 @@
  <patternList>
   <pattern>
    <name>4/4</name>
+   <info></info>
    <category>not_categorized</category>
    <size>192</size>
-   <info></info>
+   <denominator>4</denominator>
    <noteList>
     <note>
      <position>0</position>
      <leadlag>0</leadlag>
      <velocity>0.8</velocity>
-     <pan_L>0.5</pan_L>
-     <pan_R>0.5</pan_R>
+     <pan>0</pan>
      <pitch>0</pitch>
-     <probability>1</probability>
      <key>C0</key>
      <length>-1</length>
-     <instrument>22</instrument>
+     <instrument>33</instrument>
      <note_off>false</note_off>
+     <probability>1</probability>
     </note>
     <note>
      <position>48</position>
      <leadlag>0</leadlag>
      <velocity>0.8</velocity>
-     <pan_L>0.5</pan_L>
-     <pan_R>0.5</pan_R>
+     <pan>0</pan>
      <pitch>0</pitch>
-     <probability>1</probability>
      <key>C0</key>
      <length>-1</length>
-     <instrument>25</instrument>
+     <instrument>34</instrument>
      <note_off>false</note_off>
+     <probability>1</probability>
     </note>
     <note>
      <position>96</position>
      <leadlag>0</leadlag>
      <velocity>0.8</velocity>
-     <pan_L>0.5</pan_L>
-     <pan_R>0.5</pan_R>
+     <pan>0</pan>
      <pitch>0</pitch>
-     <probability>1</probability>
      <key>C0</key>
      <length>-1</length>
-     <instrument>25</instrument>
+     <instrument>34</instrument>
      <note_off>false</note_off>
+     <probability>1</probability>
     </note>
     <note>
      <position>144</position>
      <leadlag>0</leadlag>
      <velocity>0.8</velocity>
-     <pan_L>0.5</pan_L>
-     <pan_R>0.5</pan_R>
+     <pan>0</pan>
      <pitch>0</pitch>
-     <probability>1</probability>
      <key>C0</key>
      <length>-1</length>
-     <instrument>25</instrument>
+     <instrument>34</instrument>
      <note_off>false</note_off>
+     <probability>1</probability>
     </note>
    </noteList>
   </pattern>
@@ -1665,25 +1726,25 @@
    <name>no plugin</name>
    <filename>-</filename>
    <enabled>false</enabled>
-   <volume>0.0</volume>
+   <volume>0</volume>
   </fx>
   <fx>
    <name>no plugin</name>
    <filename>-</filename>
    <enabled>false</enabled>
-   <volume>0.0</volume>
+   <volume>0</volume>
   </fx>
   <fx>
    <name>no plugin</name>
    <filename>-</filename>
    <enabled>false</enabled>
-   <volume>0.0</volume>
+   <volume>0</volume>
   </fx>
   <fx>
    <name>no plugin</name>
    <filename>-</filename>
    <enabled>false</enabled>
-   <volume>0.0</volume>
+   <volume>0</volume>
   </fx>
  </ladspa>
  <BPMTimeLine/>
