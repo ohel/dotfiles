@@ -66,6 +66,9 @@ then
     fi
 fi
 
+# Some applications require read access to the compiled kernel files.
+umask 0022
+
 #### CLEANUP FUNCTION #####
 
 function cleanup {
