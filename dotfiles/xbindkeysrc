@@ -29,7 +29,7 @@ XF86Mail
 Mod1 + Mod4 + w
 "~/.scripts/launchers/chromium.sh"
 Mod4 + w
-"~/.scripts/launchers/chromium.sh"
+"~/.scripts/launchers/chromium.sh file:///home/panther/.local/share/rssfeeds.html"
 XF86HomePage
 
 "gvim"

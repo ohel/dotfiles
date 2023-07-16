@@ -19,11 +19,17 @@ then
     wmctrl -i -a $focuswin
 fi
 
+url_invalid=""
+if [ "$(echo "$1" | cut -c -7)" = "file://" ]
+then
+    [ ! -e "$(echo "$1" | cut -c 8-)" ] && url_invalid=1
+fi
+
 if [ "$1" = "newwindow" ]
 then
     $scale $executable
     exit
-elif [ "$#" -eq 1 ]
+elif [ "$#" -eq 1 ] && [ ! "$url_invalid" ]
 then
     $scale $executable "$1"
 elif [ ! "$(ps -ef | grep chromium-browser | grep -v grep)" ]
