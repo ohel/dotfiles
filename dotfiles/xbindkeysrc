@@ -46,9 +46,6 @@ Mod4 + u
 "xkill"
 Control + Mod1 + Escape
 
-"~/.scripts/switch_background.sh"
-Mod4 + Pause
-
 "~/.scripts/screenlocker.sh"
 Control + Mod1 + Delete
 
