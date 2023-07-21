@@ -499,8 +499,3 @@ window.xfce4-panel {
 menubar *, statusbar * {
     background-image: none;
 }
-
-/* Fix 1 pixel margin underneath xfce4-panel. */
-window.xfce4-panel {
-    margin: 0;
-}
