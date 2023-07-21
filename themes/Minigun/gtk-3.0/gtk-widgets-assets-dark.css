@@ -488,13 +488,14 @@ scrolledwindow junction,
  * To help with OLED grid and gray noisiness *
  *********************************************/
 
+/* Order is important, define none background first. */
+menubar *, statusbar *, scrolledwindow *, textview * {
+    background-image: none;
+}
+
 menubar, statusbar, scrolledwindow, textview {
     background-image: url("assets/stone.png");
     background-repeat: repeat;
-}
-
-menubar *, statusbar *, scrolledwindow *, textview * {
-    background-image: none;
 }
 
 statusbar * {
