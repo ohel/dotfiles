@@ -490,12 +490,15 @@ scrolledwindow junction,
 
 menubar,
 statusbar,
-scrolledwindow.frame,
-window.xfce4-panel {
+scrolledwindow.frame {
     background-image: url("assets/stone.png");
     background-repeat: repeat;
 }
 
 menubar *, statusbar * {
     background-image: none;
+}
+
+statusbar * {
+    border: none;
 }
