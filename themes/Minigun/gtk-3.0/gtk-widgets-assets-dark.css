@@ -482,3 +482,25 @@ scrolledwindow junction,
     border-image: none;
     border-width: 0px;
 }
+
+/*********************************************
+ * GTK window backgrounds such as Thunar     *
+ * To help with OLED grid and gray noisiness *
+ *********************************************/
+
+menubar,
+statusbar,
+scrolledwindow.frame,
+window.xfce4-panel {
+    background-image: url("assets/stone.png");
+    background-repeat: repeat;
+}
+
+menubar *, statusbar * {
+    background-image: none;
+}
+
+/* Fix 1 pixel margin underneath xfce4-panel. */
+window.xfce4-panel {
+    margin: 0;
+}
