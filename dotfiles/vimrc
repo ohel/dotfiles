@@ -225,7 +225,9 @@ if exists('*plug#begin')
     Plug 'prettier/vim-prettier', { 'do': 'which npm && npm install' } " Code styling.
     Plug 'Shougo/unite.vim' " Search and display information from various sources.
     Plug 'Shougo/unite-outline' " Unite source providing outline view of current buffer.
-    Plug 'Shougo/vimproc.vim', { 'do': 'cd $VIMHOME/plugged/vimproc.vim && make -f make_unix.mak' } " Allows async operations.
+    if !has('nvim')
+        Plug 'Shougo/vimproc.vim', { 'do': 'cd $VIMHOME/plugged/vimproc.vim && make -f make_unix.mak' } " Allows async operations.
+    endif
     Plug 'tomtom/tcomment_vim' " Code commenting.
     Plug 'vim-airline/vim-airline' " Status/tabline.
     Plug 'tpope/vim-fugitive' " Git wrapper.
@@ -291,13 +293,6 @@ if isdirectory($VIMHOME . '/plugged/unite.vim')
     endif
 
     let g:unite_source_rec_async_command = ['find', '-L']
-
-    call unite#custom#profile('default', 'context', {
-        \ 'prompt' : '» ',
-        \ 'winheight' : 20,
-        \ 'direction' : 'bot',
-        \ 'short_source_names' : 1
-    \ })
 
     call unite#custom_source('menu', 'matchers', ['matcher_fuzzy'])
     call unite#custom_source('source', 'matchers', ['matcher_fuzzy'])

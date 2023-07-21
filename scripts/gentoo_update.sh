@@ -4,7 +4,7 @@
 if test "X$1" != "Xnosync"
 then
     which layman >/dev/null 2>&1 && sudo layman -s ALL
-    sudo emerge --sync
+    sudo emaint sync --auto
 fi
 emerge -DNtuvp world
 echo "Press return to start merging."
