@@ -242,16 +242,12 @@ if exists('*plug#begin')
         Plug 'yegappan/taglist'
     endif
 
-    " Conquer of Completion: code completion.
-    " CoC requires Node.js so check everything before loading the plugin.
-    let g:coc_global_extensions = [
-        \ 'coc-tsserver',
-        \ 'coc-json',
-        \ 'coc-css',
-        \ 'coc-clangd']
-    let g:coc_start_at_startup = 0
+    " CoC and Copilot require Node.js so check everything before loading the plugins.
+    if executable('node')
+        let s:node_path='node'
+    endif
     if isdirectory($NVM_DIR) " If using nvm, use the latest version.
-        let g:coc_node_path = system('ls -1v ' . $NVM_DIR . '/versions/node/*/bin/node | tail -n 1 | tr -d "\n"')
+        let s:node_path = system('ls -1v ' . $NVM_DIR . '/versions/node/*/bin/node | tail -n 1 | tr -d "\n"')
         let s:tsserver_path = system('ls -1v ' . $NVM_DIR . '/versions/node/*/lib/node_modules/typescript/lib/tsserver.js | tail -n 1 | tr -d "\n"')
         if !filereadable(s:tsserver_path)
             let s:npm_path=system('ls -1v ' . $NVM_DIR . '/versions/node/*/bin/npm | tail -n 1 | tr -d "\n"')
@@ -262,8 +258,25 @@ if exists('*plug#begin')
             endif
         endif
     endif
-    if (executable('node') || filereadable(g:coc_node_path))
+
+    " Conquer of Completion: code completion.
+    let g:coc_global_extensions = [
+        \ 'coc-tsserver',
+        \ 'coc-json',
+        \ 'coc-css',
+        \ 'coc-clangd']
+    let g:coc_start_at_startup = 0
+    if filereadable(s:node_path)
+        let g:coc_node_path=s:node_path
         Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+        " GitHub Copilot
+        if version >= 900
+            let g:copilot_node_command=s:node_path
+            " Disable Copilot by default.
+            let g:copilot_enabled = v:false
+            Plug 'github/copilot.vim', {'branch': 'release'}
+        endif
     endif
 
     call plug#end()
@@ -720,6 +733,11 @@ function! OnVimEnter()
         inoremap <f1> <c-o>:TlistToggle<cr>
     endif
 
+    " XML formatting using Python.
+    if executable('python')
+        nnoremap <leader>x :%!python -c "import xml.dom.minidom, sys; print(xml.dom.minidom.parse(sys.stdin).toprettyxml())"<cr>
+    endif
+
     " Code completion stuff etc.
     if exists(':CocStart')
         function s:ShowDocumentation(hover_only)
@@ -779,9 +797,20 @@ function! OnVimEnter()
     nnoremap <silent> <c-space> :exe exists('g:coc_enabled') && g:coc_enabled == 1 ? ':call feedkeys("i\<lt>c-r>=coc#refresh()\<lt>cr>")' : 'startinsert'<cr>
     inoremap <silent> <c-space> <c-r>=exists('g:coc_enabled') && g:coc_enabled == 1 ? "\<lt>c-r>=coc#refresh()\<lt>cr>" : "\<lt>esc>`^"<cr>
 
-    " XML formatting using Python.
-    if executable('python3')
-        nnoremap <leader>x :%!python3 -c "import xml.dom.minidom, sys; print(xml.dom.minidom.parse(sys.stdin).toprettyxml())"<cr>
+    " GitHub Copilot
+    if exists(':Copilot')
+        function CopOnOffToggle()
+            if g:copilot_enabled == v:false
+                let g:copilot_enabled = v:true
+                Copilot enable
+                echo 'Copilot enabled'
+            else
+                let g:copilot_enabled = v:false
+                echo 'Copilot disabled'
+                Copilot disable
+            endif
+        endfunction
+        nnoremap <silent> <leader>cp :call CopOnOffToggle()<cr>
     endif
 
     " Need to set these last here, otherwise they don't always work.
