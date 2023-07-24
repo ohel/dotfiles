@@ -5,11 +5,11 @@
 # 3. wait for some time (change_interval_s)
 # 4. repeat, starting the next blend with the current desktop background from last round
 
-change_interval_s=${1:-900}
+change_interval_s=${1:-1800}
 images_dir=${2:-~/.themes/backgrounds}
 tmp_dir=${3:-~/.cache/background_blender}
-step_percentage=5
-blend_speed_ms=250
+step_percentage=3
+blend_speed_ms=100
 
 mkdir -p $tmp_dir
 cd $tmp_dir
@@ -30,6 +30,7 @@ do
         p_a=$(expr 100 - $percentage)
         p_b=$percentage
         percentage=$(expr $percentage + $step_percentage)
+        [ $percentage -gt 100 ] && percentage=100
         if [ $p_a -eq 100 ]
         then
             if [ "$image_a" = "blend_100.png" ]
@@ -45,7 +46,7 @@ do
             convert $images_dir/$image_b blend_100.png
             break
         fi
-        magick $image_a $images_dir/$image_b -define compose:args=$p_b,$p_a -compose blend -composite blend_$p_b.png
+        magick $image_a $images_dir/$image_b -define compose:args=$p_b,$p_a -compose blend -composite blend_$p_b.jpg
     done
 
     sleep $change_interval_s
@@ -55,7 +56,7 @@ do
     while [ $percentage -le 100 ]
     do
         time1=$(date +%s%N | cut -b1-13)
-        feh --no-fehbg --bg-fill blend_$percentage.png
+        feh --no-fehbg --bg-fill $(ls blend_$percentage.png 2>/dev/null || echo blend_$percentage.jpg)
         time2=$(date +%s%N | cut -b1-13)
         time_diff=$(expr $time2 - $time1)
         time_wait=$(expr $blend_speed_ms - $time_diff)
