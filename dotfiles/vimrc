@@ -108,7 +108,7 @@ else
     set guifont=Monospace\ 10
 
     " Create default ctags database with a command such as:
-    " ctags -R -f ctagsdb --c++-kinds=+p --fields=+iaS --extra=+q /usr/lib64/gcc/x86_64-pc-linux-gnu/$(ls -t1 /usr/lib64/gcc/x86_64-pc-linux-gnu/)/include/
+    " ctags -R -f ctagsdb --c++-kinds=+p --fields=+iaS --extras=+q /usr/lib/gcc/x86_64*/$(ls -1 /usr/lib/gcc/x86* | sort -g | tail -n 1)/include/
     if executable('ctags')
         nnoremap <c-f1> :!ctags -R -f $VIMHOME/ctagsdb --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
     endif
