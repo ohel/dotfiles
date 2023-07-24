@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Show network usage (up/down MB/s) for interface $1 if given,
 # or by default for the first PCI interface with IPv4 address.
 # Only updates when speed changes enough to show on MB/s scale.

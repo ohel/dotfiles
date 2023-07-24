@@ -3,14 +3,14 @@
 # For use in Markdown documents (blogs) etc.
 # MP4 video thumbnails are also supported using ffmpeg.
 
-if [[ "$#" -lt 1 ]]
+if [ "$#" -lt 1 ]
 then
     echo "Give the maximum thumbnail size as a first parameter (\$1 x \$1 pixels)."
     echo "A nice example size for blog articles is 600, e.g. ./create_thumbs.sh 600"
     echo "Using a value of 600 since parameter was not given."
     echo ""
 fi
-[[ "$#" -gt 0 ]] && ! [[ $1 =~ ^[0-9]+$ ]] && exit 1
+[ "$#" -gt 0 ] && [[ ! $1 =~ ^[0-9]+$ ]] && echo "Size not given." && exit 1
 size=${1:-600}
 
 if [ "$#" -lt 2 ]

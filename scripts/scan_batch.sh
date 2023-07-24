@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Batch scanning script for a scanner. The scanner or the driver causes the
 # scanning operation to fail sometimes. This script takes care of that.
 # With Canon LiDE 200, there might also be a bug which causes the scans
@@ -40,7 +40,7 @@ do
             rm $scandir/$log
             echo
             echo "Press return to scan again, Ctrl-C to quit."
-            read
+            read tmp
         fi
     done
 done

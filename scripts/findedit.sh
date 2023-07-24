@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # List files using find, grepping "$1" from their names, then select a search result to edit.
 # If just one result is found, it is opened automatically.
 
@@ -31,9 +31,9 @@ do
 done
 
 echo -n "Edit the one with order number: "
-read -a index
+read selection
 
-index=$(echo $index | tr -c -d [:digit:])
-! [ "$index" ] && exit 1
+selection=$(echo $selection | tr -c -d [:digit:])
+! [ "$selection" ] && exit 1
 
-$editor "$(echo "$results" | head -n $index | tail -n 1)"
+$editor "$(echo "$results" | head -n $selection | tail -n 1)"

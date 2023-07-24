@@ -1,15 +1,16 @@
-#!/bin/bash
+#!/bin/sh
 # Given a directory of images (images_dir):
 # 1. create a blend of two random images with a certain transparency step (step_percentage) using ImageMagick (needs magick and convert)
-# 2. fade the desktop background using feh with a specified millisecond interval (blend_speed_ms) during transition
+# 2. fade the desktop background using feh with a specified millisecond interval (blend_interval_ms) during transition
 # 3. wait for some time (change_interval_s)
 # 4. repeat, starting the next blend with the current desktop background from last round
 
 change_interval_s=${1:-1800}
 images_dir=${2:-~/.themes/backgrounds}
 tmp_dir=${3:-~/.cache/background_blender}
-step_percentage=3
-blend_speed_ms=100
+
+step_percentage=2
+blend_interval_ms=50
 
 mkdir -p $tmp_dir
 cd $tmp_dir
@@ -56,10 +57,10 @@ do
     while [ $percentage -le 100 ]
     do
         time1=$(date +%s%N | cut -b1-13)
-        feh --no-fehbg --bg-fill $(ls blend_$percentage.png 2>/dev/null || echo blend_$percentage.jpg)
+        feh --no-fehbg --bg-fill blend_$percentage.???
         time2=$(date +%s%N | cut -b1-13)
         time_diff=$(expr $time2 - $time1)
-        time_wait=$(expr $blend_speed_ms - $time_diff)
+        time_wait=$(expr $blend_interval_ms - $time_diff)
         [ $time_wait -gt 0 ] && sleep $(echo "scale=3; $time_wait / 1000" | bc)
         percentage=$(expr $percentage + $step_percentage)
     done

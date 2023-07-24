@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # A generic script to rsync one document file to or from a remote location.
 # Document location must correspond to a remote backup location.
 # There are three parameters, second one is optional:
@@ -23,17 +23,17 @@ doc=${3:-$2}
 
 docpath=$(readlink -m $doc | cut -c $(echo $(echo $localdir | wc -c)+1 | bc )-)
 
-if [ "$mode" == "normal" ]
+if [ "$mode" = "normal" ]
 then
     ! [ -e "$localdir/$docpath" ] && echo "Error: file not found under $localdir." && exit 1
     rsync -avzu $localdir/$docpath $server:$remotedir/$docpath
-elif [ "$mode" == "normaldry" ]
+elif [ "$mode" = "normaldry" ]
 then
     rsync -avzun $localdir/$docpath $server:$remotedir/$docpath
-elif [ "$mode" == "reverse" ]
+elif [ "$mode" = "reverse" ]
 then
     rsync -avzu $server:$remotedir/$docpath $localdir/$docpath
-elif [ "$mode" == "reversedry" ]
+elif [ "$mode" = "reversedry" ]
 then
     rsync -avzun $server:$remotedir/$docpath $localdir/$docpath
 else

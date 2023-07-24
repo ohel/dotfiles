@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # To prevent OLED burn-in, changes the xfce4-panel length at an interval.
 
 interval=${1:-900}
