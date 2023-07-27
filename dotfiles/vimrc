@@ -454,12 +454,16 @@ cnoremap <c-cr> <cr>:noh<cr>zz
 cnoremap <c-n> <cr>:noh<cr>/<up>
 cnoremap <a-n> <cr>NN:noh<cr>/<up>
 
-" Close window.
-nnoremap <c-w><c-w> <c-w>c
-vnoremap <c-w><c-w> <c-w>c
+" More ergonomic window commands.
+" More defined later with Arpeggio.
 nnoremap <c-f4> <c-w>c
 vnoremap <c-f4> <c-w>c
 inoremap <c-f4> <esc><c-w>c
+nnoremap <leader>ww <c-w>=
+nnoremap <leader>wj <c-w>15<
+nnoremap <leader>wk <c-w>15>
+nnoremap <leader>w- <c-w>5-
+nnoremap <leader>w+ <c-w>5+
 
 
 
@@ -609,10 +613,6 @@ if has('gui_running') && exists('g:zoom_functions') && g:zoom_functions == 1
 
     nnoremap + :call ChangeFontSize(1)<cr>
     nnoremap - :call ChangeFontSize(-1)<cr>
-    inoremap <c-kplus> <c-r>=ChangeFontSize(1)<cr>
-    nnoremap <c-kplus> :call ChangeFontSize(1)<cr>
-    inoremap <c-kminus> <c-r>=ChangeFontSize(-1)<cr>
-    nnoremap <c-kminus> :call ChangeFontSize(-1)<cr>
     inoremap <c-mousedown> <c-r>=ChangeFontSize(1)<cr>
     nnoremap <c-mousedown> :call ChangeFontSize(1)<cr>
     inoremap <c-mouseup> <c-r>=ChangeFontSize(-1)<cr>
@@ -663,8 +663,8 @@ function! OnVimEnter()
             nnoremap <leader>fc :let @u="<c-r>=expand('%:t:r')<cr>"<cr>:Unite -start-insert file_rec/git:. buffer:-<cr><c-r>u
         endif
 
-        nnoremap <leader>r :UniteResume<cr>
-        nnoremap <leader>u :Unite outline<cr>
+        nnoremap <leader>u :UniteResume<cr>
+        nnoremap <leader>o :Unite outline<cr>
         nnoremap <leader>g :Unite grep:.<cr>
         " Search selected text.
         vnoremap <leader>g :Unite grep:.::<c-r>*<cr>
@@ -680,6 +680,13 @@ function! OnVimEnter()
         " Insert mode toggles. Grave moves cursor to ^, or the editing mark.
         call arpeggio#map('i', '', 0, 'fj', '<esc>`^')
         call arpeggio#map('n', '', 0, 'fj', 'i<c-r>=col(".") == col("$")-1 ? "\<lt>right>" : ""<cr>')
+
+        " More ergonomic window commands.
+        call arpeggio#map('n', 's', 0, 'wc', '<c-w>c') " close
+        call arpeggio#map('n', 's', 0, 'wh', '<c-w>s') " horizontal split
+        call arpeggio#map('n', 's', 0, 'wv', '<c-w>v') " vertical split
+        call arpeggio#map('n', 's', 0, 'wj', '<c-w>h<c-w>j') " go to next window left/down
+        call arpeggio#map('n', 's', 0, 'wk', '<c-w>l<c-w>k') " go to next window right/up
 
         " Toggle Git blame window and log for current file.
         if exists(':Git')
@@ -698,17 +705,18 @@ function! OnVimEnter()
         if exists(':Magit')
             call arpeggio#map('n', 's', 0, 'gs', ':Magit<cr>')
         endif
-
-        " Shortcut for CoC.
-        call arpeggio#map('n', 's', 0, 'co', ':call feedkeys(" c")<cr>')
     endif
 
     " tcomment
     if exists('g:loaded_tcomment')
         " Comment out/in the current/selected line(s).
-        nmap <silent> <leader>o åc
-        vmap <silent> <leader>o å
+        nmap <silent> <leader>cc åc
+        vmap <silent> <leader>cc å
     endif
+
+    " There are so many <leader>c shortcuts that preventing accidental delete motion is nice.
+    nmap <silent> <leader>c <Nop>
+    vmap <silent> <leader>c <Nop>
 
     " Enable partial formatting shortcuts for Prettier.
     if exists(':Prettier')
@@ -790,10 +798,14 @@ function! OnVimEnter()
                 echo 'Ignore the error.'
             endif
         endfunction
+
         nnoremap <silent> <leader>co :call CocOnOffToggle()<cr>
+        if exists(':Arpeggio')
+            call arpeggio#map('n', 's', 0, 'co', ':call CocOnOffToggle()<cr>')
+        endif
     endif
 
-    " CoC toggles.
+    " CoC and mode toggles.
     nnoremap <silent> <c-space> :exe exists('g:coc_enabled') && g:coc_enabled == 1 ? ':call feedkeys("i\<lt>c-r>=coc#refresh()\<lt>cr>")' : 'startinsert'<cr>
     inoremap <silent> <c-space> <c-r>=exists('g:coc_enabled') && g:coc_enabled == 1 ? "\<lt>c-r>=coc#refresh()\<lt>cr>" : "\<lt>esc>`^"<cr>
 
@@ -810,7 +822,15 @@ function! OnVimEnter()
                 Copilot disable
             endif
         endfunction
+        inoremap <silent> <a-d> <Plug>(copilot-dismiss)
+        inoremap <silent> <a-n> <Plug>(copilot-next)
+        inoremap <silent> <a-p> <Plug>(copilot-previous)
+        inoremap <silent> <a-a> <esc>:Copilot panel<cr>
+
         nnoremap <silent> <leader>cp :call CopOnOffToggle()<cr>
+        if exists(':Arpeggio')
+            call arpeggio#map('n', 's', 0, 'cp', ':call CopOnOffToggle()<cr>')
+        endif
     endif
 
     " Need to set these last here, otherwise they don't always work.
