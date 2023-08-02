@@ -11,9 +11,10 @@
 #   audio <device> [<gst pipeline file>]
 # where <device> is an ALSA device.
 
-qlexe=$(ps -ef | grep -o "[^ ]\{1,\}quodlibet.py$")
+qlexe=$(ps -ef | grep -o "[^ ]\{1,\}quodlibet\(.py\)\?$") && running=1
+[ ! $qlexe ] && qlexe=$(which quodlibet 2>/dev/null)
 [ ! $qlexe ] && qlexe=$(which quodlibet.py 2>/dev/null)
-[ ! $qlexe ] && qlexe=/opt/programs/quodlibet/quodlibet.py
+[ ! $qlexe ] && qlexe=/opt/programs/quodlibet/quodlibet.py[ ! -e $qlexe ] && echo "Exe not found." && exit 1
 
 logfile=~/.cache/qllog.txt
 
@@ -30,7 +31,7 @@ else
     fi
 fi
 
-if ! ps -ef | grep $qlexe | grep -v grep > /dev/null
+if [ ! "$running" ]
 then
     if [ "$pipelinefile" ]
     then

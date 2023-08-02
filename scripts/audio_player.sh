@@ -10,7 +10,7 @@
 #    * toggle-window
 #    * random-album
 
-ql=$(ps -ef | grep -o "[^ ]\{1,\}quodlibet.py$")
+ql=$(ps -ef | grep -o "[^ ]\{1,\}quodlibet\(.py\)\?$")
 spotify=$(ps -e | grep " spotify$")
 
 scriptsdir=$(dirname "$(readlink -f "$0")")
@@ -18,7 +18,7 @@ spotifydbus="dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/
 
 if [ "$1" = "play-pause" ]
 then
-    [ ! "$spotify" ] && "$scriptsdir"/launchers/quodlibet.sh play-pause
+    [ "$spotify" ] || "$scriptsdir"/launchers/quodlibet.sh play-pause
     [ "$spotify" ] && $spotifydbus.PlayPause
 elif [ "$1" = "previous" ]
 then
