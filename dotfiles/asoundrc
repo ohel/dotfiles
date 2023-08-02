@@ -166,7 +166,7 @@ pcm.binaural {
         pcm {
             type ladspa
             slave.pcm "system_default"
-            path "/usr/lib/ladspa"
+            path "/usr/lib64/ladspa"
             plugins [ {
                 label bs2b # Bauer stereophonic-to-binaural DSP
                 input {
@@ -193,7 +193,7 @@ pcm.softvol {
         pcm "system_default"
     }
     control {
-        name "Soft Master"
+        name "Master Volume"
         @args.CARD {
             type string
             default {
