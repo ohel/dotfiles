@@ -39,12 +39,12 @@ do
                 cp $image_a blend_0.png
             else
                 image_a=$images_dir/$image_a
-                convert $image_a blend_0.png
+                convert -quality 05 $image_a blend_0.png
             fi
             continue
         elif [ $p_b -eq 100 ]
         then
-            convert $images_dir/$image_b blend_100.png
+            convert -quality 05 $images_dir/$image_b blend_100.png
             break
         fi
         magick $image_a $images_dir/$image_b -define compose:args=$p_b,$p_a -compose blend -composite blend_$p_b.jpg
