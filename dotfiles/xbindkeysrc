@@ -16,10 +16,10 @@ XF86Search
 "xfce4-settings-manager"
 XF86Tools
 
-"xfce4-terminal --geometry=120x30 -e ranger"
+"xfce4-terminal --geometry=120x30 -x ranger"
 Mod4 + r
 
-"xfce4-terminal --working-directory=$HOME --title IPython -e ipython3"
+"xfce4-terminal --working-directory=$HOME --title IPython -x ipython3 -i -c 'from math import *'"
 XF86Calculator
 
 "claws-mail --select INBOX"
