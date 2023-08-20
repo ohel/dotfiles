@@ -2,7 +2,9 @@
 # Given filenames ending in .jpg, .JPG, .RW2 or .RW2.xmp, rename a matching JPEG file as:
 # YYYY-mm-dd_HH.MM.SS_<desc>.jpg, where <desc> is an optional description from zenity input.
 # If a similarly named .RW2 or .RW2.xmp file exists, they are renamed too, and the file name updated into the .RW2.xmp file contents.
-# Alternatively, if no JPEG file exists, RW2 or mp4 (MP4) files may be given as input directly.
+#
+# Alternatively, without a JPEG file, RW2, mp4 (MP4) or mov (MOV) files may be given as input directly.
+#
 # Exiftool is used for reading timestamp metadata.
 # If input is multiple files, the _<desc> is omitted from the end of the file name.
 # If input is a single file but no new description is given, and a description exists, the old one is used.
@@ -20,15 +22,10 @@ for inputname in "$@"
 do
     # Figure out the file extension.
     targetext=""
-    basename=$(basename -s .jpg "$inputname")
-    [ "$basename" = "$inputname" ] && basename=$(basename -s .JPG "$inputname")
-    [ "$basename" != "$inputname" ] && targetext="jpg"
-    [ "$basename" = "$inputname" ] && basename=$(basename -s .RW2 "$inputname")
-    [ "$basename" = "$inputname" ] && basename=$(basename -s .RW2.xmp "$inputname")
-    [ "$basename" != "$inputname" ] && [ ! "$targetext" ] && targetext="RW2"
-    [ "$basename" = "$inputname" ] && basename=$(basename -s .mp4 "$inputname")
-    [ "$basename" = "$inputname" ] && basename=$(basename -s .MP4 "$inputname")
-    [ "$basename" != "$inputname" ] && [ ! "$targetext" ] && targetext="mp4"
+    [ "$(echo "$inputname" | grep -oi "\.jpg$")" ] && basename=$(basename "$inputname" | sed "s/\.jpg$\|\.JPG$//") && targetext="jpg"
+    [ "$(echo "$inputname" | grep -o "\.RW2$\|\.RW2\.xmp$")" ] && basename=$(basename "$inputname" | sed "s/\.RW2$\|\.RW2\.xmp$//") && targetext="RW2"
+    [ "$(echo "$inputname" | grep -oi "\.mp4$")" ] && basename=$(basename "$inputname" | sed "s/\.mp4$\|\.MP4$//") && targetext="mp4"
+    [ "$(echo "$inputname" | grep -oi "\.mov$")" ] && basename=$(basename "$inputname" | sed "s/\.mov$\|\.MOV$//") && targetext="mov"
 
     originalname=""
     [ "$targetext" = "jpg" ] && [ -e "$basename.jpg" ] && originalname="$basename.jpg"
@@ -36,6 +33,8 @@ do
     [ "$targetext" = "RW2" ] && [ -e "$basename.RW2" ] && originalname="$basename.RW2"
     [ "$targetext" = "mp4" ] && [ -e "$basename.mp4" ] && originalname="$basename.mp4"
     [ "$targetext" = "mp4" ] && [ -e "$basename.MP4" ] && originalname="$basename.MP4"
+    [ "$targetext" = "mov" ] && [ -e "$basename.mov" ] && originalname="$basename.mov"
+    [ "$targetext" = "mov" ] && [ -e "$basename.MOV" ] && originalname="$basename.MOV"
 
     if [ ! "$originalname" ]
     then
@@ -76,8 +75,10 @@ do
         postfix="_$index"
     fi
 
+    [ "$targetext" = "mp4" ] && mv "$originalname" "$newbasename$postfix.mp4" && continue
+    [ "$targetext" = "mov" ] && mv "$originalname" "$newbasename$postfix.mov" && continue
+
     [ "$targetext" = "jpg" ] && mv "$originalname" "$newbasename$postfix.jpg"
-    [ "$targetext" = "mp4" ] && mv "$originalname" "$newbasename$postfix.mp4"
     [ -e "$basename.RW2" ] && mv "$basename.RW2" "$newbasename$postfix.RW2"
     [ -e "$basename.RW2.xmp" ] && sed -i -s "s/$basename.RW2/$newbasename$postfix.RW2/" "$basename.RW2.xmp"
     [ -e "$basename.RW2.xmp" ] && mv "$basename.RW2.xmp" "$newbasename$postfix.RW2.xmp"
