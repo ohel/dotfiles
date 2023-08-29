@@ -107,12 +107,6 @@ else
 
     set guifont=Monospace\ 10
 
-    " Create default ctags database with a command such as:
-    " ctags -R -f ctagsdb --c++-kinds=+p --fields=+iaS --extras=+q /usr/lib/gcc/x86_64*/$(ls -1 /usr/lib/gcc/x86* | sort -g | tail -n 1)/include/
-    if executable('ctags')
-        nnoremap <c-f1> :!ctags -R -f $VIMHOME/ctagsdb --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
-    endif
-
     " Plugins checking.
     if !isdirectory($VIMHOME . '/autoload')
         silent call mkdir($VIMHOME . '/autoload', 'p')
@@ -147,7 +141,6 @@ set undofile
 " Syntax and file type detection etc.
 syntax on
 filetype on
-autocmd FileType cpp set tags+=$VIMHOME/ctagsdb
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
@@ -157,6 +150,22 @@ autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd BufNewFile,BufRead *.xaml set filetype=xml
 autocmd BufNewFile,BufRead *.jsonl set filetype=json
+
+
+
+" Exuberant Ctags
+" ***************
+if executable('ctags')
+    set tags+=;/,tags;/ " Search tags file from upper directory levels if not found in current directory.
+    autocmd FileType c set tags+=$VIMHOME/tags_c
+    autocmd FileType cpp set tags+=$VIMHOME/tags_cpp
+
+    nnoremap <c-f1> :!ctags -R -f ./tags --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
+
+    if !filereadable($VIMHOME . '/tags_cpp')
+        call system('ctags -R -f ' . $VIMHOME . '/tags_cpp --c++-kinds=+p --fields=+iaS --extra=+q /usr/lib/gcc/x86_64*/$(ls -1 /usr/lib/gcc/x86* | sort -g | tail -n 1)/include/')
+    endif
+endif
 
 
 
@@ -559,7 +568,6 @@ nnoremap <f7> :call SetFileEncoding()<cr>
 
 " Set file format dialog.
 function SetFileFormat()
-
     let n = confirm("Select format for writing the file:\n(current: " . &ff . ")", "&Unix\n&Dos\n&Mac\n&Cancel", 4, "Question")
     if n == 1
         set ff=unix
@@ -568,13 +576,11 @@ function SetFileFormat()
     elseif n == 3
         set ff=mac
     endif
-
 endfunction
 nnoremap <f8> :call SetFileFormat()<cr>
 
 " Font zooming.
 if has('gui_running') && exists('g:zoom_functions') && g:zoom_functions == 1
-
     if !exists('g:zoom_level')
         let g:zoom_level = 1
     endif
@@ -620,7 +626,6 @@ if has('gui_running') && exists('g:zoom_functions') && g:zoom_functions == 1
 endif
 
 if has('gui_running')
-
     function ToggleAlternativeFont()
 
         if !exists('g:alt_font')
@@ -642,7 +647,6 @@ if has('gui_running')
 
     endfunction
     nnoremap ¨ :call ToggleAlternativeFont()<cr>
-
 endif
 
 function! OnVimEnter()
@@ -743,7 +747,14 @@ function! OnVimEnter()
 
     " XML formatting using Python.
     if executable('python')
-        nnoremap <leader>x :%!python -c "import xml.dom.minidom, sys; print(xml.dom.minidom.parse(sys.stdin).toprettyxml())"<cr>
+        let s:python_path='python'
+    endif
+    if isdirectory($HOME . '/.pyenv/versions')
+        " Use the latest Python virtual environment version 3.x
+        let s:python_path = system('ls -1v ' . $HOME . '/.pyenv/versions/*/bin/python3\.? | tail -n 1 | tr -d "\n"')
+    endif
+    if exists('s:python_path')
+        execute 'nnoremap <leader>x :%!' . s:python_path ' -c "import xml.dom.minidom, sys; print(xml.dom.minidom.parse(sys.stdin).toprettyxml())"<cr><cr>:%s/^[ \t]*$\n//g<cr>'
     endif
 
     " Code completion stuff etc.
