@@ -8,7 +8,13 @@ then
     exit 1
 fi
 
-sudo iwlist $interface scan | grep ESSID | cut -f 2 -d ":" | sed 's/^"\(.*\)"$/\1/'
+if [ "$(which iw 2>/dev/null)" ]
+then
+    sudo iw $interface scan | grep [^B]SSID | cut -f 2 -d ":" | sed 's/^"\(.*\)"$/\1/' | sort
+else
+    sudo iwlist $interface scan | grep ESSID | cut -f 2 -d ":" | sed 's/^"\(.*\)"$/\1/' | sort
+fi
+
 if [ "$#" -gt 0 ] && [ "$1" = "pause" ]
 then
     echo
