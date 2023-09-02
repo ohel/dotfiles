@@ -2,8 +2,8 @@
 # Mod4 = Windows
 # Mod5 = Alt gr
 
-# Common applications
-######################
+# Applications
+################################
 
 "xfce4-terminal --geometry=80x26"
 Mod4 + t
@@ -13,23 +13,22 @@ Mod4 + e
 "thunar"
 XF86Search
 
-"xfce4-settings-manager"
-XF86Tools
-
 "xfce4-terminal --geometry=120x30 -x ranger"
 Mod4 + r
 
 "xfce4-terminal --working-directory=$HOME --title IPython -x ipython3 -i -c 'from math import *'"
+Mod4 + c
+"xfce4-terminal --working-directory=$HOME --title IPython -x ipython3 -i -c 'from math import *'"
 XF86Calculator
 
 "claws-mail --select INBOX"
+Mod4 + Mod5 + 2 # Mod5 + 2 = @ in Finnish keyboard
+"claws-mail --select INBOX"
 XF86Mail
 
-"~/.scripts/launchers/chromium.sh newwindow"
-Mod1 + Mod4 + w
-"~/.scripts/launchers/chromium.sh"
+"~/.scripts/launchers/chromium.sh ifrunning file://~/.local/share/rssfeeds.html"
 Mod4 + w
-"~/.scripts/launchers/chromium.sh file:///home/panther/.local/share/rssfeeds.html"
+"~/.scripts/launchers/chromium.sh ifrunning file://~/.local/share/rssfeeds.html"
 XF86HomePage
 
 "gvim"
@@ -43,27 +42,8 @@ Control + Escape
 "xfce4-popup-whiskermenu"
 Mod4 + u
 
-"xkill"
-Control + Mod1 + Escape
-
-"~/.scripts/screenlocker.sh"
-Control + Mod1 + Delete
-
-# External display.
-"~/.scripts/external_display.sh switch"
-XF86Display
-"~/.scripts/external_display.sh switch"
-Mod4 + p
-"~/.scripts/external_display.sh mirror"
-Mod1 + Mod4 + p
-"~/.scripts/external_display.sh extend"
-Control + Mod1 + Mod4 + p
-
-# Screen capturing.
-"~/.scripts/screenshot.sh"
-Print
-"~/.scripts/screenshot.sh 2"
-Mod4 + Print
+# Remaps
+################################
 
 # Remap Caps Lock to Escape. Shift + Caps_Lock generates normal Caps_Lock. This is possible using xbindkeys and xdotool but apparently not using setxkbmap or xmodmap.
 "xdotool key --clearmodifiers Escape"
@@ -74,6 +54,47 @@ Caps_Lock
 Shift + Mod1 + j
 "xdotool keyup k && xdotool key --clearmodifiers Shift+Page_Up"
 Shift + Mod1 + k
+
+# Window manipulation
+################################
+
+"xkill"
+Control + Mod1 + Escape
+
+# Reset active window to upper left corner.
+"wmctrl -r :ACTIVE: -e 0,0,0,-1,-1"
+Mod4 + BackSpace
+
+# Prevent closing certain windows with a script.
+"~/.scripts/check_active_window.sh && wmctrl -c :ACTIVE:"
+Mod1 + F4
+"~/.scripts/check_active_window.sh && wmctrl -c :ACTIVE:"
+Control + Mod4 + w
+
+# Toggle window maximized.
+"wmctrl -r :ACTIVE: -b toggle,maximized_vert,maximized_horz"
+Mod4 + x
+
+# Minimize window.
+"xdotool getactivewindow windowminimize"
+Mod4 + z
+
+# Show desktop.
+"wmctrl -k on"
+Mod4 + m
+
+# Misc scripts and functionality
+################################
+
+# External display.
+"~/.scripts/external_display.sh switch"
+XF86Display
+"~/.scripts/external_display.sh switch"
+Mod4 + p
+"~/.scripts/external_display.sh mirror"
+Mod1 + Mod4 + p
+"~/.scripts/external_display.sh extend"
+Control + Mod1 + Mod4 + p
 
 # Backlight adjustment.
 "~/.scripts/backlight.sh -25"
@@ -100,6 +121,8 @@ Control + Mod1 + BackSpace
 
 # Touchpad toggles.
 "~/.scripts/toggle_touchpad.sh"
+Mod5 + Shift + t
+"~/.scripts/toggle_touchpad.sh"
 XF86TouchpadToggle
 "~/.scripts/toggle_touchpad_tapping.sh"
 Mod5 + t
@@ -108,25 +131,33 @@ Mod5 + t
 "~/.scripts/toggle_bluetooth.sh"
 Mod5 + b
 
-# Window manipulation
-######################
+# Screen capturing.
+"~/.scripts/screenshot.sh"
+Print
+"~/.scripts/screenshot.sh 2"
+Mod4 + Print
 
-# Reset active window to upper left corner.
-"wmctrl -r :ACTIVE: -e 0,0,0,-1,-1"
-Mod4 + BackSpace
+# Screen locker.
+"~/.scripts/screenlocker.sh"
+Control + Mod1 + Delete
 
-# Prevent closing certain windows with a script.
-"~/.scripts/check_active_window.sh && wmctrl -c :ACTIVE:"
-Mod1 + F4
+# Screen saver.
+"~/.scripts/screensaver.sh"
+Mod4 + s
+"~/.scripts/screensaver.sh standby"
+Mod1 + Mod4 + s
 
-# Toggle window maximized.
-"wmctrl -r :ACTIVE: -b toggle,maximized_vert,maximized_horz"
-Mod4 + x
+# Audio player control.
+"~/.scripts/audio_player.sh play-pause"
+XF86AudioPlay
 
-# Minimize window.
-"xdotool getactivewindow windowminimize"
-Mod4 + z
+"~/.scripts/audio_player.sh random-album"
+Mod4 + XF86AudioPlay
 
-# Show desktop.
-"wmctrl -k on"
-Mod4 + m
+"~/.scripts/audio_player.sh toggle-window"
+Mod4 + a
+
+"~/.scripts/audio_player.sh previous"
+Mod4 + XF86AudioLowerVolume
+"~/.scripts/audio_player.sh next"
+Mod4 + XF86AudioRaiseVolume

@@ -14,7 +14,7 @@
 qlexe=$(ps -ef | grep -o "[^ ]\{1,\}quodlibet\(.py\)\?$") && running=1
 [ ! $qlexe ] && qlexe=$(which quodlibet 2>/dev/null)
 [ ! $qlexe ] && qlexe=$(which quodlibet.py 2>/dev/null)
-[ ! $qlexe ] && qlexe=/opt/programs/quodlibet/quodlibet.py[ ! -e $qlexe ] && echo "Exe not found." && exit 1
+[ ! $qlexe ] && qlexe=/opt/programs/quodlibet/quodlibet.py && [ ! -e $qlexe ] && echo "Exe not found." && exit 1
 
 logfile=~/.cache/qllog.txt
 

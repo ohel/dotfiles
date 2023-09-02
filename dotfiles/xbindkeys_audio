@@ -1,0 +1,16 @@
+#!xbindkeys -f
+
+# An extra xbindkeys config for audio volume/mute keys.
+# Mod1 = Alt
+# Mod4 = Windows
+# Mod5 = Alt gr
+
+# For toggling between audio sources or muting etc.
+"~/.scripts_extra/toggle_audio.sh"
+XF86AudioMute
+
+# Software volume control. Most mixers support shortkeys natively: "volumeicon" is a nice one. A script can be used to add some intelligence, for example to use a different method of volume control if a specific application is running.
+"~/.scripts/master_volume.sh -"
+XF86AudioLowerVolume
+"~/.scripts/master_volume.sh +"
+XF86AudioRaiseVolume
