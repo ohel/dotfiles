@@ -5,38 +5,45 @@
 # Applications
 ################################
 
+# Terminal
 "xfce4-terminal --geometry=80x26"
 Mod4 + t
 
+# File explorer
 "thunar"
 Mod4 + e
 "thunar"
 XF86Search
 
+# File manager
 "xfce4-terminal --geometry=120x30 -x ranger"
 Mod4 + r
 
+# Calculator
 "xfce4-terminal --working-directory=$HOME --title IPython -x ipython3 -i -c 'from math import *'"
 Mod4 + c
 "xfce4-terminal --working-directory=$HOME --title IPython -x ipython3 -i -c 'from math import *'"
 XF86Calculator
 
+# Email
 "claws-mail --select INBOX"
 Mod4 + Mod5 + 2 # Mod5 + 2 = @ in Finnish keyboard
 "claws-mail --select INBOX"
 XF86Mail
 
+# Browser
 "~/.scripts/launchers/chromium.sh ifrunning file://~/.local/share/rssfeeds.html"
 Mod4 + w
 "~/.scripts/launchers/chromium.sh ifrunning file://~/.local/share/rssfeeds.html"
 XF86HomePage
 
+# Editor
 "gvim"
 Mod4 + v
-
 "gvim +1 ~/.memo"
 Mod1 + Mod4 + v
 
+# Menu
 "xfce4-popup-whiskermenu"
 Control + Escape
 "xfce4-popup-whiskermenu"
@@ -148,16 +155,27 @@ Mod4 + s
 Mod1 + Mod4 + s
 
 # Audio player control.
-"~/.scripts/audio_player.sh play-pause"
-XF86AudioPlay
-
-"~/.scripts/audio_player.sh random-album"
-Mod4 + XF86AudioPlay
-
 "~/.scripts/audio_player.sh toggle-window"
 Mod4 + a
-
+"~/.scripts/audio_player.sh play-pause"
+XF86AudioPlay
+"~/.scripts/audio_player.sh play-pause"
+Mod4 + Right
+"~/.scripts/audio_player.sh random-album"
+Mod4 + XF86AudioPlay
+"~/.scripts/audio_player.sh random-album"
+Mod4 + Left
 "~/.scripts/audio_player.sh previous"
 Mod4 + XF86AudioLowerVolume
+"~/.scripts/audio_player.sh previous"
+Mod1 + Mod4 + Left
 "~/.scripts/audio_player.sh next"
 Mod4 + XF86AudioRaiseVolume
+"~/.scripts/audio_player.sh next"
+Mod1 + Mod4 + Right
+
+# Software volume control.
+"~/.scripts/master_volume.sh +"
+Mod4 + Up
+"~/.scripts/master_volume.sh -"
+Mod4 + Down
