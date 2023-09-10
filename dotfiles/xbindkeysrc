@@ -176,6 +176,14 @@ Mod1 + Mod4 + Right
 
 # Software volume control.
 "~/.scripts/master_volume.sh +"
+XF86AudioRaiseVolume
+"~/.scripts/master_volume.sh +"
 Mod4 + Up
 "~/.scripts/master_volume.sh -"
+XF86AudioLowerVolume
+"~/.scripts/master_volume.sh -"
 Mod4 + Down
+
+# For toggling between audio sources or muting etc.
+"~/.scripts/toggle_audio.sh"
+XF86AudioMute
