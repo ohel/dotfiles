@@ -78,6 +78,10 @@ Mod1 + F4
 "~/.scripts/check_active_window.sh && wmctrl -c :ACTIVE:"
 Control + Mod4 + w
 
+# Toggle window always on top.
+"wmctrl -r :ACTIVE: -b toggle,above"
+Mod4 + o
+
 # Toggle window maximized.
 "wmctrl -r :ACTIVE: -b toggle,maximized_vert,maximized_horz"
 Mod4 + x
