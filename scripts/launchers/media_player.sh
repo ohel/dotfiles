@@ -41,7 +41,7 @@ then
 else
     echo "Using $DEFAULTPROFILE"
     profile=$DEFAULTPROFILE
-fi 
-    
+fi
+
 # This enables passing other parameters instead of just a filename.
 $EXE --profile=$profile "${@:2}" &

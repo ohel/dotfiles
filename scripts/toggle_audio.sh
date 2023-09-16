@@ -19,7 +19,7 @@ then
     fi
 
     echo "Set S/PDIF: $state"
-    notify-send -h int:transient:1 "S/PDIF: $state" -t 500
+    [ "$(which notify-send 2>/dev/null)" ] && notify-send -h int:transient:1 "S/PDIF: $state" -t 500
     exit 0
 fi
 
@@ -58,4 +58,4 @@ amixer -c $card set "$dev",0 "$new_vol"% >/dev/null
 winid=$(xwininfo -name Notification 2>/dev/null | head -n 2 | grep -o "0x[^ ]*")
 [ "$winid" ] && wmctrl -i -c $winid 2>/dev/null
 
-notify-send -h int:transient:1 "Volume: $new_vol" -t 500
+[ "$(which notify-send 2>/dev/null)" ] && notify-send -h int:transient:1 "Volume: $new_vol" -t 500

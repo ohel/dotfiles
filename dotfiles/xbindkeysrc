@@ -79,7 +79,7 @@ Mod1 + F4
 Control + Mod4 + w
 
 # Toggle window always on top.
-"wmctrl -r :ACTIVE: -b toggle,above"
+"wmctrl -r :ACTIVE: -b toggle,above && which notify-send 2>/dev/null && notify-send -h int:transient:1 'Toggled always on top' -t 500"
 Mod4 + o
 
 # Toggle window maximized.
