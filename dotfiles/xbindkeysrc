@@ -160,7 +160,7 @@ Mod1 + Mod4 + s
 
 # Audio player control.
 "~/.scripts/audio_player.sh toggle-window"
-Mod4 + a
+Mod4 + Left
 "~/.scripts/audio_player.sh play-pause"
 XF86AudioPlay
 "~/.scripts/audio_player.sh play-pause"
@@ -168,7 +168,7 @@ Mod4 + Right
 "~/.scripts/audio_player.sh random-album"
 Mod4 + XF86AudioPlay
 "~/.scripts/audio_player.sh random-album"
-Mod4 + Left
+Mod4 + a
 "~/.scripts/audio_player.sh previous"
 Mod4 + XF86AudioLowerVolume
 "~/.scripts/audio_player.sh previous"

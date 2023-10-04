@@ -45,4 +45,5 @@ then
 elif [ "$1" = "random-album" ]
 then
     [ "$ql" ] && $ql --random=album
+    [ "$ql" ] && $ql --next
 fi
