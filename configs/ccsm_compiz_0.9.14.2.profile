@@ -39,10 +39,6 @@ s0_gradient_2 = #ffffff80
 s0_gradient_3 = #ffffff80
 s0_outline_color = #000000ff
 
-[screenshot]
-s0_selection_outline_color = #2f2f4f9f
-s0_selection_fill_color = #2f2f4f4f
-
 [grid]
 s0_put_center_key = <Alt><Super>o
 s0_put_left_key = <Alt><Super>h
@@ -112,7 +108,7 @@ s0_hsize = 2
 [decor]
 s0_active_shadow_radius = 18.000000
 s0_active_shadow_opacity = 1.500000
-s0_active_shadow_color = #ff0000ff
+s0_active_shadow_color = #000000ff
 s0_active_shadow_x_offset = 0
 s0_active_shadow_y_offset = 0
 s0_inactive_shadow_radius = 18.000000
@@ -121,7 +117,7 @@ s0_inactive_shadow_color = #000000ff
 s0_inactive_shadow_x_offset = 0
 s0_inactive_shadow_y_offset = 0
 s0_decoration_match = (!any)
-s0_shadow_match = (any) & !(class=Remmina)
+s0_shadow_match = (any) & !(class=org.remmina.Remmina.org.remmina.Remmina)
 
 [move]
 s0_initiate_key = <Super>Return
