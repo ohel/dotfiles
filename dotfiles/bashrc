@@ -62,32 +62,11 @@ which xfce4-terminal &>/dev/null && alias term='xfce4-terminal'
 [ -e "$HOME/.scripts/launchers/media_player_dvd.sh" ] && alias playdvd='~/.scripts/launchers/media_player_dvd.sh'
 [ -e "$HOME/.scripts/alsadevice.sh" ] && alias alsadevice='source ~/.scripts/alsadevice.sh'
 
-[ -d "$HOME/.scripts" ] && export PATH="$HOME/.scripts:$PATH"
-[ -d "$HOME/.scripts_extra" ] && export PATH="$HOME/.scripts_extra:$PATH"
-[ -d "/opt/bin" ] && export PATH="$PATH:/opt/bin"
-export PATH=".:$PATH"
-
-# Various development related stuff
-###################################
-
 # Node Version Manager
-if [ -d "$HOME/.nvm" ]
+if [ "$NVM_DIR" ]
 then
-    export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-fi
-
-# For pipx etc.
-if [ -d "$HOME/.local/bin" ]
-then
-    export PATH="$PATH:/home/panther/.local/bin"
-fi
-
-# AWS CLI tools
-if [ -d "$HOME/.ebcli-virtual-env/executables" ]
-then
-    export PATH="$HOME/.ebcli-virtual-env/executables:$PATH"
 fi
 
 # System specific stuff

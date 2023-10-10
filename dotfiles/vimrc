@@ -153,19 +153,38 @@ autocmd BufNewFile,BufRead *.jsonl set filetype=json
 
 
 
-" Exuberant Ctags
-" ***************
+" Exuberant Ctags and compile commands
+" ************************************
 if executable('ctags')
+    " Some versions call the parameter 'extras' while others call it 'extra'.
+    let s:ctags_extras = system('ctags -L /dev/null -f /dev/null --extras && echo extras || echo extra')
+
     set tags+=;/,tags;/ " Search tags file from upper directory levels if not found in current directory.
     autocmd FileType c set tags+=$VIMHOME/tags_c
     autocmd FileType cpp set tags+=$VIMHOME/tags_cpp
 
-    nnoremap <c-f1> :!ctags -R -f ./tags --c++-kinds=+p --fields=+iaS --extras=+q .<cr>
-
     if !filereadable($VIMHOME . '/tags_cpp')
-        call system('ctags -R -f ' . $VIMHOME . '/tags_cpp --c++-kinds=+p --fields=+iaS --extras=+q /usr/lib/gcc/x86_64*/$(ls -1 /usr/lib/gcc/x86* | sort -g | tail -n 1)/include/')
+        call system('ctags -R -f ' . $VIMHOME . '/tags_cpp --c++-kinds=+p --fields=+iaS --' . s:ctags_extras . '=+q /usr/lib/gcc/x86_64*/$(ls -1 /usr/lib/gcc/x86* | sort -g | tail -n 1)/include/')
     endif
 endif
+
+" Create Compile Commands Or Ctags
+function CCCOC()
+    if filereadable('platformio.ini')
+        silent !pio run -t compiledb
+        echo('Created compile commands')
+    elseif filereadable('../platformio.ini')
+        cd ..
+        silent !pio run -t compiledb
+        cd -
+        echo('Created compile commands')
+    elseif exists('s:ctags_extras')
+        call system('ctags -R -f ./tags --c++-kinds=+p --fields=+iaS --' . s:ctags_extras . '=+q .')
+        echo('Created tags file')
+    endif
+endfunction
+
+nnoremap <c-f1> :call CCCOC()<cr>
 
 
 
