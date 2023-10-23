@@ -1,0 +1,2 @@
+# Write access to all users for JTAGICE mkII device.
+ACTION=="add", ENV{ID_MODEL}=="JTAGICE_mkII", ENV{ID_USB_INTERFACES}==":ff0000:", MODE="0666"

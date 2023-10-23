@@ -1,3 +1,0 @@
-# Set a+rw for ttyUSB-device of certain ESP8266 boards such as LinkNode D1.
-# To monitor use: screen /dev/ttyUSBX 115200
-ACTION=="add", ENV{ID_MODEL_FROM_DATABASE}=="HL-340 USB-Serial adapter", ENV{ID_USB_DRIVER}=="ch341", MODE="0666"

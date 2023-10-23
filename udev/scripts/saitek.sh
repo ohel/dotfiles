@@ -2,12 +2,11 @@
 # This script starts up xboxdrv for Saitek Cyborg Rumble Pad, creates symlink and sets read permission to new evdev.
 # Need to run as root.
 
-configfile=/opt/xboxdrv/current_saitek
-
-[ -e $configfile ] && opts="-c $configfile"
-
 ls -1 /dev/input/event* > /dev/shm/xboxdrv_oldevdev.txt
-/usr/bin/xboxdrv --silent --device-by-path $1:$2 --type xbox360 --led 6 $opts >/dev/null 2>&1 &
+
+configfile="/opt/xboxdrv/current_saitek"
+[ -e $configfile ] && config_file_opts="-c $configfile"
+/usr/bin/xboxdrv --silent --device-by-path $1:$2 --type xbox360 --led 6 $config_file_fjopts >/dev/null 2>&1 &
 
 # Wait for xboxdrv to create the js device.
 sleep 1

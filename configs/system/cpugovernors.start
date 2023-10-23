@@ -2,5 +2,11 @@
 for cpu in $(ls -d1 /sys/devices/system/cpu/cpu?)
 do
     chmod a+w $cpu/cpufreq/scaling_governor 2>/dev/null
-    einfo "Governor access rights set to everyone for $cpu."
 done
+for cpu in $(ls -d1 /sys/devices/system/cpu/cpu1?)
+do
+    chmod a+w $cpu/cpufreq/scaling_governor 2>/dev/null
+done
+
+einfo "Governor access rights set to everyone for all system CPUs."
+# Enable user setting of CPU governors. Useful for DOSBox for example.

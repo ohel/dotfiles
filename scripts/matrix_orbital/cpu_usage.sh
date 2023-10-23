@@ -1,5 +1,7 @@
 #!/bin/bash
 
+[ ! -e /dev/serial/matrix_orbital ] && echo No device && exit 1
+
 while true
 do
     column=2
@@ -12,9 +14,10 @@ do
         elif [ $usage -gt 7 ]
         then
             usagestring="1"$(expr $usage - 8)
-        else usagestring="0"$usage
+        else
+            usagestring="0"$usage
         fi
-        echo -e "\xFE\x3D\002$column\00$usagestring" > /dev/ttyUSB0
+        echo -e "\xFE\x3D\002$column\00$usagestring" > /dev/serial/matrix_orbital
         sleep 0.01
         column=$(expr $column + 1)
     done
