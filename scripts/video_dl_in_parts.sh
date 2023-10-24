@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Download videos in parts and concatenate parts to a single continuous video.
 # Copy the URL from a web browser's network tab; any segment is fine.
 # When downloaded segment contains just plain text, it's taken as the last segment.
@@ -41,7 +41,7 @@ do
 done
 
 echo Concatenating segments...
-ls $tmp_dir/seg_*.$extension | while read line; do echo file \'$line\'; done | ffmpeg -loglevel warning -protocol_whitelist file,pipe -f concat -safe 0 -i - -c copy complete.$extension
+ffmpeg -f concat -safe 0 -i <(for f in $tmp_dir/seg_*.$extension; do echo "file '$f'"; done) -c copy complete.$extension
 
 if [ ! -e complete.$extension ]
 then
