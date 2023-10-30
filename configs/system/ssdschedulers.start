@@ -1,6 +1,6 @@
 #!/bin/bash
-# Set NOOP schedulers (if available) for SSDs to save CPU resources as a scheduler isn't really needed with SSDs.
-# Also Kyber scheduler might lose LVM physical volumes and hang the computer on hdparm -Y.
+# Disable IO schedulers for SSDs to save CPU resources as a scheduler isn't really needed with SSDs.
+# Also Kyber scheduler (an otherwise nice choice) might lose LVM physical volumes and hang the computer on hdparm -Y.
 ssd_id_ends=(
     "2J3920085984"
     "2J4520110868"
@@ -11,10 +11,11 @@ ssd_id_ends=(
 
 for ssd in ${ssd_id_ends[@]}
 do
-    schedulerfile=/sys/block/$(ls -la /dev/disk/by-id/*$ssd | cut -f 2 -d '>' | cut -f 3 -d '/')/queue/scheduler
-    if [ -e $schedulerfile ] && [ $(grep noop $schedulerfile) ]
+    device=$(ls -la /dev/disk/by-id/*$ssd | cut -f 2 -d '>' | cut -f 3 -d '/')
+    schedulerfile=/sys/block/$device/queue/scheduler
+    if [ -e $schedulerfile ] && [ "$(grep -o none $schedulerfile)" ]
     then
-        echo noop > $schedulerfile
-        einfo "Set NOOP scheduler for $ssd."
+        echo none > $schedulerfile
+        einfo "Disabled IO scheduler for $device."
     fi
 done

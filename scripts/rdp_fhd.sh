@@ -1,6 +1,6 @@
 #!/bin/sh
 # Connect to a remote computer using xfreerdp, using scaled (when full screen) FullHD resolution.
-# Remote is assumed to have an IP address: x.y.0.$1 (where x and y match those of the host)
+# Remote is assumed to have an IP address: x.y.0.$1 (where x and y match those of the host, $1 defaults to 20)
 # User may be given as $2, defaults to current. $3 is other arguments to xfreerdp.
 
 for physical_device in $(ls -l /sys/class/net | grep devices/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')

@@ -1,6 +1,0 @@
-# Disable Enhanced Re-Transmission Mode for Bluetooth. This is needed for connecting to an Xbox One controller.
-if [ -e /sys/module/bluetooth/parameters/disable_ertm ]
-then
-    echo 1 > /sys/module/bluetooth/parameters/disable_ertm
-    einfo "Enhanced Re-Transmission Mode for Bluetooth is disabled."
-fi

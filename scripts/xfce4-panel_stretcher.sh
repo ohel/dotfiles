@@ -4,10 +4,13 @@
 interval=${1:-900}
 
 easeInOutExp200Steps() {
-    [ $1 -eq 0 ] && factor=0
-    [ $1 -eq 200 ] && factor=1
-
-    if [ $1 -lt 100 ]
+    if [ $1 -eq 0 ]
+    then
+        factor=0
+    elif [ $1 -eq 200 ]
+    then
+        factor=1
+    elif [ $1 -lt 100 ]
     then
         factor="e(($1/10 - 10) * l(2)) / 2"
     else

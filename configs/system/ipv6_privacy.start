@@ -1,7 +1,9 @@
 # Turn on IPv6 privacy extension to all network devices.
-sysctl -w net.ipv6.conf.all.use_tempaddr=2
-sysctl -w net.ipv6.conf.default.use_tempaddr=2
+sysctl -wq net.ipv6.conf.all.use_tempaddr=2
+sysctl -wq net.ipv6.conf.default.use_tempaddr=2
 for nic in $(ls /sys/class/net)
 do
-    [ "$nic" != "lo" ] && sysctl -w net.ipv6.conf.$nic.use_tempaddr=2
+    [ "$nic" != "lo" ] && sysctl -wq net.ipv6.conf.$nic.use_tempaddr=2
 done
+
+einfo "IPv6 privacy extensions enabled."
