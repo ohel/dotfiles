@@ -165,9 +165,9 @@ Mod4 + Left
 XF86AudioPlay
 "~/.scripts/audio_player.sh play-pause"
 Mod4 + Right
-"~/.scripts/audio_player.sh random-album"
+"~/.scripts/audio_player.sh random"
 Mod4 + XF86AudioPlay
-"~/.scripts/audio_player.sh random-album"
+"~/.scripts/audio_player.sh random"
 Mod4 + a
 "~/.scripts/audio_player.sh previous"
 Mod4 + XF86AudioLowerVolume

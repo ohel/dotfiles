@@ -9,7 +9,7 @@ vol_step=${4:-5}
 
 [ ! "$1" = "+" ] && [ ! "$1" = "-" ] && exit 1
 
-# PulseAudio volume control.
+# PulseAudio volume control. This also controls Spotify volume.
 if [ "$(ps -e | grep pulseaudio$)" ]
 then
     default_sink=$(pacmd list-sinks | grep "\* index" | cut -f 2 -d ':' | tr -d ' ')
@@ -24,7 +24,7 @@ then
     exit 0
 fi
 
-# Application volume control.
+# Application volume control if JACK running.
 if [ "$(ps -e | grep jackd$)" ]
 then
     # Quod Libet volume control.
