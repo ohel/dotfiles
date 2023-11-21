@@ -55,11 +55,25 @@ do
         [ ! "$desc" ] && desc=$(echo $basename | grep "[0-9]\{4\}-[0-9][0-9]-[0-9][0-9]_[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]_.*" | cut -f 3- -d '_')
     fi
 
-    # Prefer Date/Time Original if found as it is usually more correct.
-    # Note that especially for video files, the create timestamp might be when the video ends, not when it starts.
-    timestamp=$(exiftool -DateTimeOriginal -d %Y-%m-%d_%H.%M.%S "$originalname" | cut -f 2 -d ':' | tr -d ' ')
-    [ ! "$timestamp" ] && timestamp=$(exiftool -CreateDate -d %Y-%m-%d_%H.%M.%S "$originalname" | cut -f 2 -d ':' | tr -d ' ')
-    [ ! "$timestamp" ] && echo "No timestamp found in EXIF data, continuing batch." && continue
+    # For video files, Samsung S23 doesn't store the timezone offset information anywhere, but it writes an author tag.
+    # Recognize these cases and use the filename as timestamp if possible.
+    author=$(exiftool -Author "$originalname" | cut -f 2 -d ':' | tr -d ' ')
+    timestamp=""
+    if [ "$author" = "GalaxyS23" ]
+    then
+        timestamp=$(echo "$originalname" | grep -o "^[0-9]\{4,\}-[0-9][0-9]-[0-9][0-9]_[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]")
+        raw_timestamp=$(echo "$originalname" | grep -o "^[0-9]\{8,\}_[0-9]\{6,\}")
+        [ "$raw_timestamp" ] && timestamp=$(echo $raw_timestamp | sed "s/\([0-9]\{4,\}\)\([0-9][0-9]\)\([0-9][0-9]\)_\([0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)/\1-\2-\3_\4.\5.\6/")
+    fi
+
+    if [ ! "$timestamp" ]
+    then
+        # Prefer Date/Time Original if found as it is usually more correct.
+        # Note that especially for video files, the create timestamp might be when the video ends, not when it starts.
+        timestamp=$(exiftool -DateTimeOriginal -d %Y-%m-%d_%H.%M.%S "$originalname" | cut -f 2 -d ':' | tr -d ' ')
+        [ ! "$timestamp" ] && timestamp=$(exiftool -CreateDate -d %Y-%m-%d_%H.%M.%S "$originalname" | cut -f 2 -d ':' | tr -d ' ')
+        [ ! "$timestamp" ] && echo "No timestamp found in EXIF data, continuing batch." && continue
+    fi
 
     # If no description is given, just use the timestamp as the file name.
     newbasename="$timestamp$separator$desc"
