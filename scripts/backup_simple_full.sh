@@ -16,4 +16,5 @@ rsync -avu --delete \
   --exclude $prefix/run/\* \
   --exclude $prefix/sys/\* \
   --exclude $prefix/tmp/\* \
+  --exclude node_modules \
   $prefix/ $backupmount/
