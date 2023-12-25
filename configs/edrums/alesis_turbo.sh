@@ -8,6 +8,15 @@
 # Some drum sets, such as the Alesis Turbo, send their hi-hat pedal status
 # along with the hi-hat note. The mididings script is used to modify the MIDI
 # note according to the pedal status; other tweaks are also possible.
+#
+# Software required for this script to work (read the script for details and how they are being used):
+#   * aconnect from the alsa-utils package
+#   * jackd, the JACK Audio Connection Kit sound server
+#   * qjackctl, a graphical JACK control software
+#   * hydrogen, the Hydrogen drum machine
+#   * alsa_in, alsa_out, jack_connect and jack_disconnect from the jack-example-tools package
+#   * jack-rack, an effects rack for JACK
+#   * mididings, a MIDI router and processor
 
 DRUMS="Alesis Turbo"
 QJACK_PRESET=${1:-edrums}
@@ -55,9 +64,12 @@ echo "Connecting MIDI"
 aconnect "$DRUMS" mididings 2>/dev/null
 aconnect mididings:1 Hydrogen 2>/dev/null
 
-# Nothing was started, so this must've been just a MIDI reconnect after automatic power off.
+# Nothing was started, so this must've been just a MIDI reconnect after an automatic power off of the edrums.
 [ "$pid_qjackctrl$pid_hydrogen$pid_mididings" = "" ] && exit 0
 
+# This is needed if we want to play over music and the music player can't connect to JACK directly.
+# Use the loopback device as the music player output device.
+# The ALSA config for the loopback device setup is in my dotfiles, filename `asoundrc`.
 echo "Connecting ALSA/JACK bridge"
 alsa_in -j "ALSA output" -d loop_playback_out &
 alsa_out -j "ALSA input" -d loop_record_in &
@@ -65,6 +77,8 @@ sleep 1
 jack_connect "ALSA output:capture_1" "system:playback_1"
 jack_connect "ALSA output:capture_2" "system:playback_2"
 
+# Use a previously saved nice reverb config for the drums, if present.
+# The reverb config here can be found in my dotfiles.
 if [ "$(which jack-rack 2>/dev/null)" ] && [ -e /opt/jackrack/reverb_drums ]
 then
     echo "Connecting JACK Rack"
