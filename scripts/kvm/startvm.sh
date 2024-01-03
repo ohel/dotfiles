@@ -43,8 +43,8 @@ then
         echo "The bridge $vm_bridge does not exist. Aborting..."
         exit 1
     fi
-    ./vmnetwork.sh
 fi
+./vmnetwork.sh
 
 modprobe tun
 modprobe kvm

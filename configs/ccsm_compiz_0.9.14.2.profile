@@ -116,8 +116,8 @@ s0_inactive_shadow_opacity = 1.500000
 s0_inactive_shadow_color = #000000ff
 s0_inactive_shadow_x_offset = 0
 s0_inactive_shadow_y_offset = 0
-s0_decoration_match = (!any)
-s0_shadow_match = (any) & !(class=org.remmina.Remmina.org.remmina.Remmina)
+s0_decoration_match = (!any) & !(class=org.remmina.Remmina)
+s0_shadow_match = (any) & !(class=org.remmina.Remmina)
 
 [move]
 s0_initiate_key = <Super>Return

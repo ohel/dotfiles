@@ -4,10 +4,10 @@
 # - Optionally ($2 = "bridge" or "b") set up network bridge where bridged VM tap devices should be added.
 # - Set up virtual machine bridge where routed VM tap devices should be added.
 # - Set up virtual localhost for consistent host access.
+# - Specify ACCEPT policy to FORWARD chain.
 # Source $reset_script to undo everything.
 
 reset_script=network_reset
-
 echo "" > $reset_script
 
 modprobe tun
@@ -40,6 +40,12 @@ echo "Using adapter: $nic with IP: $ip"
 forward=$(sysctl -q -e net.ipv4.conf.$nic.forwarding | cut -f 3 -d ' ')
 sysctl -q -e -w net.ipv4.conf.$nic.forwarding=1
 echo "sudo sysctl -q -e -w net.ipv4.conf.$nic.forwarding=$forward" >> $reset_script
+
+if [ ! "$(iptables -L FORWARD | grep "policy ACCEPT")" ]
+then
+    iptables -P FORWARD ACCEPT
+    echo "iptables -P FORWARD DROP" >> $reset_script
+fi
 
 # Network bridge. Note: not all interfaces support bridging.
 if [ "$2" = "bridge" ] || [ "$2" = "b" ]
@@ -91,18 +97,19 @@ else
 fi
 
 # Virtual localhost. Use this IP within guests to use services running locally on the host.
+vm_guest_host_ip="10.0.1.127/24"
 if ip tuntap 2>/dev/null | cut -f 1 -d ':' | grep vlocalhost\$ >/dev/null
 then
     echo "Virtual localhost already exists."
 else
     ip tuntap add mode tap vlocalhost
     ip link set vlocalhost up
-    ip addr add 10.0.1.127/24 dev vlocalhost scope host
+    ip addr add $vm_guest_host_ip dev vlocalhost scope host
     rule="PREROUTING -i vlocalhost -j DNAT --to 127.0.0.1"
     iptables -t nat -A $rule
 
     echo "sudo iptables -t nat -D $rule" >> $reset_script
-    echo "sudo ip addr del 10.0.1.127/24 dev vlocalhost scope host" >> $reset_script
+    echo "sudo ip addr del $vm_guest_host_ip dev vlocalhost scope host" >> $reset_script
     echo "sudo ip link set vlocalhost down" >> $reset_script
     echo "sudo ip tuntap del mode tap vlocalhost" >> $reset_script
 fi
