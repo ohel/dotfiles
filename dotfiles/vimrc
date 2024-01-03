@@ -296,6 +296,9 @@ if exists('*plug#begin')
         \ 'coc-clangd']
     let g:coc_start_at_startup = 0
     if exists('s:node_path') && filereadable(s:node_path)
+        " Set to path for plugins that expect a global node binary, e.g. Prettier.
+        let $PATH = s:node_path[:-6] . ':' . $PATH
+
         let g:coc_node_path=s:node_path
         Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
@@ -744,10 +747,11 @@ function! OnVimEnter()
     nmap <silent> <leader>c <Nop>
     vmap <silent> <leader>c <Nop>
 
-    " Enable partial formatting shortcuts for Prettier.
+    " Formatting shortcuts for Prettier.
     if exists(':Prettier')
         vmap <leader>p :PrettierPartial<cr>
         vmap <leader>f :PrettierFragment<cr>
+        nnoremap <leader>jp :set syntax=json<cr>:Prettier<cr>
     endif
 
 
