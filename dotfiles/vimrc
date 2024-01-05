@@ -1,3 +1,6 @@
+" Note: if mapping Alt key combinations they might prevent some keys from working over SSH.
+" One such combination is <a-d> which would disable 'ä' on a Finnish keyboard.
+
 autocmd VimEnter * call OnVimEnter()
 autocmd GUIEnter * set lines=31 columns=107 " Set window size when starting in GUI mode.
 autocmd BufReadPost * call OnBufferRead()
@@ -409,6 +412,10 @@ inoremap <c-a> <esc>gg<s-v>G
 inoremap <silent> <left> <c-r>=col('.') == 1 ? "\<lt>c-o>gkg$" : "\<lt>left>"<cr>
 inoremap <silent> <right> <c-r>=col('.') == col('$') ? "\<lt>c-o>gjg0" : "\<lt>right>"<cr>
 
+" Move screen lines, i.e. if text is wrapped, then move as you see the text flow, not as it actually is.
+inoremap <home> <c-o>g0
+inoremap <end> <c-o>g$
+
 " Emulate common shift + keys functionality.
 inoremap <silent> <s-up> <c-o>v<up>
 vnoremap <silent> <s-up> <up>
@@ -423,14 +430,11 @@ inoremap <silent> <s-end> <c-o>v<end><left>
 nnoremap <c-insert> V"+y<esc>:let @*=@+<cr>:echo "Line copied."<cr>
 vnoremap <c-insert> "+y<esc>:let @*=@+<cr>:echo "Copied."<cr>
 vnoremap <c-c> "+y<esc>:let @*=@+<cr>:echo "Copied."<cr>
-" Go to visual mode for copying word under cursor.
-inoremap <c-insert> <esc>`^viw
 
 " Common insert hotkeys.
+" Use <c-q> in GUI mode to insert control characters.
 nnoremap <s-insert> "+P
 inoremap <s-insert> <c-r>=col('.') == col('$') ? "\<lt>esc>`^\"+pa" : "\<lt>esc>`^\"+Pa"<cr>
-" At some point <s-insert> in command mode stopped working in GUI vim.
-" Use <c-q> in GUI mode to insert control characters.
 cnoremap <c-v> <c-r>+
 inoremap <c-v> <c-r>=col('.') == col('$') ? "\<lt>esc>`^\"+pa" : "\<lt>esc>`^\"+Pa"<cr>
 
@@ -449,20 +453,18 @@ vnoremap <c-h> :s/\v/g\|:silent noh<left><left><left><left><left><left><left><le
 
 
 
-" Select and scroll up/down for lists (c-j also usually works for selection).
-imap <a-k> <up>
-imap <a-j> <down>
-map <a-k> <up>
-map <a-j> <down>
-" Mainly for taglist plugin etc. to select ergonomically using home row.
-map <c-j> <cr>
-" For ergonomic omni menu selection.
+" Select/cancel and scroll for lists.
+" Remap must be enabled e.g. for CoC selection lists to work.
+" Without remap, Omni completion list would be shown instead of CoC.
+imap <a-j> <c-n>
+imap <a-k> <c-p>
 imap <a-h> <c-e>
 imap <a-l> <c-y>
-
-" Move screen lines, i.e. if text is wrapped, then move as you see the text flow, not as it actually is.
-inoremap <home> <c-o>g0
-inoremap <end> <c-o>g$
+" This is for CoC reference match list searching. Still need to select using <cr>.
+map <a-j> <down>
+map <a-k> <up>
+" This is for some plugins such as taglist to select ergonomically.
+map <c-j> <cr>
 
 
 
@@ -483,10 +485,8 @@ nnoremap N Nzz
 " Clear search highlight.
 nnoremap <silent> <c-n> :silent noh<cr>
 
-" Incremental search next without highlight and select match.
-cnoremap <c-cr> <cr>:noh<cr>zz
+" Incremental search next without highlight.
 cnoremap <c-n> <cr>:noh<cr>/<up>
-cnoremap <a-n> <cr>NN:noh<cr>/<up>
 
 " More ergonomic window commands.
 " More defined later with Arpeggio.
@@ -859,7 +859,7 @@ function! OnVimEnter()
                 Copilot disable
             endif
         endfunction
-        inoremap <silent> <a-d> <Plug>(copilot-dismiss)
+        inoremap <silent> <a-c> <Plug>(copilot-dismiss)
         inoremap <silent> <a-n> <Plug>(copilot-next)
         inoremap <silent> <a-p> <Plug>(copilot-previous)
         inoremap <silent> <a-a> <esc>:Copilot panel<cr>
