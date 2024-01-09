@@ -19,8 +19,6 @@ prompt_git=""
 [ -e ~/.config/git-prompt.sh ] && source ~/.config/git-prompt.sh && prompt_git='$(__git_ps1 "(%s) ")'
 PS1="\[\e[0;37m\]$prompt_prefix\w \[\e[0;96m\]$prompt_git\[\e[0;90m\]\$\[\e[m\] "
 
-LS_COLORS="*.md=00;32:*.rw2=01;35:$LS_COLORS"
-
 set -o vi
 shopt -s globstar # recursive glob like **/*.log or cd **/scripts
 shopt -s autocd # "$ directory" equals "$ cd directory"
