@@ -804,10 +804,8 @@ function! OnVimEnter()
         nmap <leader>cx <Plug>(coc-fix-current)
         inoremap <silent><expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<c-g>u\<cr>\<c-r>=coc#on_enter()\<cr>"
         inoremap <silent><expr> <c-j> coc#pum#visible() ? coc#pum#confirm() : "\<c-g>u\<cr>\<c-r>=coc#on_enter()\<cr>"
-        nnoremap <nowait><expr> <c-e> coc#float#has_scroll() ? coc#float#scroll(1) : "\<c-e>"
-        nnoremap <nowait><expr> <c-y> coc#float#has_scroll() ? coc#float#scroll(0) : "\<c-y>"
-        inoremap <nowait><expr> <c-e> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<c-e>"
-        inoremap <nowait><expr> <c-y> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<c-y>"
+        inoremap <nowait><expr> <c-d> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<c-d>"
+        inoremap <nowait><expr> <c-u> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<c-u>"
 
         " Note: the hover help hides the diagnostics float by design,
         " so it's better to have CursorHold autocommand off by default.
