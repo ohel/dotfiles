@@ -528,7 +528,7 @@ endfunction
 
 silent call SetTabWidth(4) " Default tab width.
 
-function WhitespaceToTabWidth()
+function s:WhitespaceToTabWidth()
     normal! ^
     let tabwidth = col('.') - 1
     if tabwidth > 0
@@ -537,13 +537,13 @@ function WhitespaceToTabWidth()
 endfunction
 
 " Set tab width to current line whitespace width.
-nnoremap <leader><tab> :call WhitespaceToTabWidth()<cr>
+nnoremap <leader><tab> :call <SID>WhitespaceToTabWidth()<cr>
 
 
 
 " Relative line numbering came in Vim 7.3.
 if version >= 703
-    function ToggleRelativeNumbering()
+    function s:ToggleRelativeNumbering()
         if &rnu
             set rnu!
             echo 'Absolute numbering set.'
@@ -553,11 +553,11 @@ if version >= 703
         endif
         return ''
     endfunction
-    inoremap <silent> <f3> <c-r>=ToggleRelativeNumbering()<cr>
-    nnoremap <silent> <f3> :call ToggleRelativeNumbering()<cr>
+    inoremap <silent> <f3> <c-r>=<SID>ToggleRelativeNumbering()<cr>
+    nnoremap <silent> <f3> :call <SID>ToggleRelativeNumbering()<cr>
 endif
 
-function ToggleWrap()
+function s:ToggleWrap()
     if &wrap
         set nowrap
         echo 'No wrap set.'
@@ -567,21 +567,21 @@ function ToggleWrap()
     endif
     return ''
 endfunction
-inoremap <silent> <f2> <c-r>=ToggleWrap()<cr>
-nnoremap <silent> <f2> :call ToggleWrap()<cr>
+inoremap <silent> <f2> <c-r>=<SID>ToggleWrap()<cr>
+nnoremap <silent> <f2> :call <SID>ToggleWrap()<cr>
 
 " Print file info: encoding and format.
-function PrintFileInfo()
+function s:PrintFileInfo()
     redir => filename
     silent !echo %:p
     redir END
     let filename = substitute(filename, ".*\n\(.*\n\)", "\1", "")
     let n = confirm(filename . "\n" . &fileencoding . "\n" . &ff, "", 1, "Info")
 endfunction
-nnoremap <f6> :call PrintFileInfo()<cr>
+nnoremap <f6> :call <SID>PrintFileInfo()<cr>
 
 " Set file encoding dialog.
-function SetFileEncoding()
+function s:SetFileEncoding()
     let n = confirm("Select file encoding:\n(current: " . &fileencoding . ")", "&UTF-8\n&ISO-8859-1\n&Cancel", 3, "Question")
     if n == 1
         set fileencoding=utf-8
@@ -589,10 +589,10 @@ function SetFileEncoding()
         set fileencoding=iso-8859-1
     endif
 endfunction
-nnoremap <f7> :call SetFileEncoding()<cr>
+nnoremap <f7> :call <SID>SetFileEncoding()<cr>
 
 " Set file format dialog.
-function SetFileFormat()
+function s:SetFileFormat()
     let n = confirm("Select format for writing the file:\n(current: " . &ff . ")", "&Unix\n&Dos\n&Mac\n&Cancel", 4, "Question")
     if n == 1
         set ff=unix
@@ -602,7 +602,7 @@ function SetFileFormat()
         set ff=mac
     endif
 endfunction
-nnoremap <f8> :call SetFileFormat()<cr>
+nnoremap <f8> :call <SID>SetFileFormat()<cr>
 
 " Font zooming.
 if has('gui_running') && exists('g:zoom_functions') && g:zoom_functions == 1
@@ -610,10 +610,10 @@ if has('gui_running') && exists('g:zoom_functions') && g:zoom_functions == 1
         let g:zoom_level = 1
     endif
 
-    function ChangeFontSize(delta)
+    function s:ChangeFontSize(delta)
 
-        if exists('g:alt_font_toggle')
-            silent call ToggleAlternativeFont()
+        if exists('g:alt_font_in_use')
+            silent call <SID>ToggleAlternativeFont()
         endif
 
         let fontsize = substitute(&guifont, '[^0-9]', '', 'g')
@@ -642,27 +642,27 @@ if has('gui_running') && exists('g:zoom_functions') && g:zoom_functions == 1
         return ''
     endfunction
 
-    nnoremap + :call ChangeFontSize(1)<cr>
-    nnoremap - :call ChangeFontSize(-1)<cr>
-    inoremap <c-mousedown> <c-r>=ChangeFontSize(1)<cr>
-    nnoremap <c-mousedown> :call ChangeFontSize(1)<cr>
-    inoremap <c-mouseup> <c-r>=ChangeFontSize(-1)<cr>
-    nnoremap <c-mouseup> :call ChangeFontSize(-1)<cr>
+    nnoremap + :call <SID>ChangeFontSize(1)<cr>
+    nnoremap - :call <SID>ChangeFontSize(-1)<cr>
+    inoremap <c-mousedown> <c-r>=<SID>ChangeFontSize(1)<cr>
+    nnoremap <c-mousedown> :call <SID>ChangeFontSize(1)<cr>
+    inoremap <c-mouseup> <c-r>=<SID>ChangeFontSize(-1)<cr>
+    nnoremap <c-mouseup> :call <SID>ChangeFontSize(-1)<cr>
 endif
 
 if has('gui_running')
-    function ToggleAlternativeFont()
+    function s:ToggleAlternativeFont()
 
         if !exists('g:alt_font')
             return ''
         endif
 
-        if exists('g:alt_font_toggle')
-            let &guifont = g:alt_font_toggle
-            unlet g:alt_font_toggle
+        if exists('g:alt_font_in_use')
+            let &guifont = g:alt_font_in_use
+            unlet g:alt_font_in_use
             echo 'Normal font in use: ' &guifont
         else
-            let g:alt_font_toggle = &guifont
+            let g:alt_font_in_use = &guifont
             let &guifont = g:alt_font
             echo 'Alternative font in use: ' &guifont
         endif
@@ -671,7 +671,7 @@ if has('gui_running')
         return ''
 
     endfunction
-    nnoremap ¨ :call ToggleAlternativeFont()<cr>
+    nnoremap ¨ :call <SID>ToggleAlternativeFont()<cr>
 endif
 
 function! OnVimEnter()
@@ -793,6 +793,7 @@ function! OnVimEnter()
             endif
         endfunction
         nnoremap <silent> <leader>cs :call <SID>ShowDocumentation(0)<cr>
+        nnoremap <silent> <leader>cg :CocDiagnostics<cr>
         nmap <leader>ca <Plug>(coc-codeaction-selected)
         nmap <leader>cd <Plug>(coc-definition)
         nmap <leader>ce <Plug>(coc-rename)
@@ -803,11 +804,15 @@ function! OnVimEnter()
         nmap <leader>cx <Plug>(coc-fix-current)
         inoremap <silent><expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<c-g>u\<cr>\<c-r>=coc#on_enter()\<cr>"
         inoremap <silent><expr> <c-j> coc#pum#visible() ? coc#pum#confirm() : "\<c-g>u\<cr>\<c-r>=coc#on_enter()\<cr>"
+        nnoremap <nowait><expr> <c-e> coc#float#has_scroll() ? coc#float#scroll(1) : "\<c-e>"
+        nnoremap <nowait><expr> <c-y> coc#float#has_scroll() ? coc#float#scroll(0) : "\<c-y>"
+        inoremap <nowait><expr> <c-e> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<c-e>"
+        inoremap <nowait><expr> <c-y> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<c-y>"
 
         " Note: the hover help hides the diagnostics float by design,
         " so it's better to have CursorHold autocommand off by default.
         let s:coc_hh_enabled = 0
-        function CocHoverHelpOnOffToggle()
+        function s:CocHoverHelpOnOffToggle()
             if s:coc_hh_enabled == 0
                 let s:coc_hh_enabled = 1
                 set updatetime=250
@@ -820,7 +825,7 @@ function! OnVimEnter()
                 echo 'Conquer of Completion hover help: OFF'
             endif
         endfunction
-        nnoremap <silent> <leader>ch :call CocHoverHelpOnOffToggle()<cr>
+        nnoremap <silent> <leader>ch :call <SID>CocHoverHelpOnOffToggle()<cr>
 
         let g:coc_enabled = 0
         function CocOnOffToggle()
@@ -876,7 +881,7 @@ function! OnVimEnter()
 
     " Define g:alt_font to start with it.
     if has('gui_running')
-        silent call ToggleAlternativeFont()
+        silent call <SID>ToggleAlternativeFont()
     endif
 
     if exists('*OnVimEnterExtra')
@@ -890,7 +895,7 @@ function! OnBufferRead()
     try
         exe "normal! gg/^ \\|\\t\<cr>"
         silent noh
-        silent call WhitespaceToTabWidth()
+        silent call <SID>WhitespaceToTabWidth()
     catch
         " Don't error in case the search pattern fails.
     endtry
