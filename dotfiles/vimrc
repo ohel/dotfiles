@@ -889,9 +889,10 @@ function! OnVimEnter()
 endfunction
 
 function! OnBufferRead()
-    " Set tab width to that of first line beginning with white space.
+    " Set tab width to that of first line beginning with white space,
+    " but ignore comment lines (usually starting with *, /, # or ").
     try
-        exe "normal! gg/^ \\|\\t\<cr>"
+        exe "normal! gg/^\\( \\|\\t\\)\\+[^*/#\"]\<cr>"
         silent noh
         silent call <SID>WhitespaceToTabWidth()
     catch
