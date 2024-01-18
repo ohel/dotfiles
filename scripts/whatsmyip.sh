@@ -24,9 +24,22 @@ readpw() {
 if [ "$routermodel" = "tw" ]
 then
     readpw
-    wanipv4=$(wget http://$routerip/adm/status.asp --user=$username --password=$pw -q -O - \
-        | grep 'id="idv4wanip"' \
-        | grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}")
+    # Sometimes the router gives an unauthorized error a few times.
+    tries=10
+    while [ $tries -gt 0 ]
+    do
+        wanipv4=$(wget http://$routerip/adm/status.asp --user=$username --password=$pw -q -O - \
+            | grep "\(id=\"idv4wanip\"\)\|\(Document Error\)" \
+            | grep -o "\(Error\)\|\([0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\)")
+        if [ "$wanipv4" = "Error" ]
+        then
+            tries=$(expr $tries - 1)
+            wanipv4=""
+            sleep 1
+        else
+            break
+        fi
+    done
 elif [ "$routermodel" = "fast" ]
 then
     # Check if login is needed. The router remembers logged in computers with some kind of logic.
