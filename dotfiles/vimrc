@@ -794,7 +794,7 @@ function! OnVimEnter()
         endfunction
         nnoremap <silent> <leader>cs :call <SID>ShowDocumentation(0)<cr>
         nnoremap <silent> <leader>cg :CocDiagnostics<cr>
-        nmap <leader>ca <Plug>(coc-codeaction-selected)
+        nmap <leader>ca <Plug>(coc-codeaction-selected)<cr>
         nmap <leader>cd <Plug>(coc-definition)
         nmap <leader>ce <Plug>(coc-rename)
         nmap <leader>cf <Plug>(coc-format-selected)
@@ -908,6 +908,10 @@ endfunction
 
 
 " Host specific stuff.
+" function OnVimEnterExtra()
+"    if stridx(&filetype, 'typescript') > -1
+"        :call CocOnOffToggle()
+" etc.
 if filereadable($HOME . '/.vimrc_extra')
     source $HOME/.vimrc_extra
 endif
