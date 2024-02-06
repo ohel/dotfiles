@@ -22,7 +22,6 @@ set hidden " Do not close file buffers when opening a new one, use :ls to list b
 set hlsearch " Highlight search.
 set ic " Set ignore case on searches, remedy with set noic or use \C in search term.
 set incsearch " Incremental search.
-set nocp " Nocompatible: enables features which are not Vi compatible.
 set noswapfile
 set number  " Line numbering.
 set pastetoggle=<f4> " Toggle paste mode (no auto indent).

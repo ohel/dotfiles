@@ -9,4 +9,3 @@ do
 done
 
 einfo "Governor access rights set to everyone for all system CPUs."
-# Enable user setting of CPU governors. Useful for DOSBox for example.
