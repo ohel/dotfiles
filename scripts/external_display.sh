@@ -7,6 +7,8 @@
 #
 # If a secondary display is not found, the primary display is reset to its best resolution.
 #
+# DPI may be overridden with DPI environment variable or ~/.config/dpi file.
+#
 # An operating mode for the script may be given as parameter $1 or $2:
 # switch = switch the display between primary and secondary (default mode if parameter not given)
 # extend = extend to the other display (xrandr position may be given in $3, defaults to "right-of")
@@ -17,6 +19,9 @@
 testfile=/tmp/external_display
 primary_background=~/.themes/background
 secondary_background=~/.themes/background2
+dpi_config_file=~/.config/dpi
+
+panel_pid=$(ps -e | grep xfce4-panel$ | tr -s ' ' | cut -f -2 -d ' ')
 
 # Identify HiDPI (4K) displays by their resolution width. This is also the maximum resolution limit (so 4096x2160 is skipped).
 HIDPI_WIDTH=3840
@@ -90,9 +95,9 @@ else
         xrandr --output $primary_display --mode $primary_mode --primary \
             --output $secondary_display --mode $secondary_mode --$position $primary_display
         panelwin="xfce4-panel"
-        panelheight=$(xwininfo -id $(wmctrl -l | grep $panelwin | cut -f 1 -d ' ') | grep Height | cut -f 2 -d ":" | tr -d -c [:digit:])
-        panel_y=$(echo $(echo $primary_mode | cut -f 2 -d 'x') - $panelheight | bc)
-        wmctrl -r $panelwin -e 0,$panel_y,0,-1,-1
+        [ "$panel_pid" ] && panelheight=$(xwininfo -id $(wmctrl -l | grep $panelwin | cut -f 1 -d ' ') | grep Height | cut -f 2 -d ":" | tr -d -c [:digit:])
+        [ "$panel_pid" ] && panel_y=$(echo $(echo $primary_mode | cut -f 2 -d 'x') - $panelheight | bc)
+        [ "$panel_pid" ] && wmctrl -r $panelwin -e 0,$panel_y,0,-1,-1
     elif [ "$script_mode" = "mirror" ]
     then
         echo "Mirroring to external display $secondary_display."
@@ -138,8 +143,13 @@ else
     touch $testfile
 fi
 
+# Kill xfce4-panel for later reloading so that icons scale correctly.
+# The -r parameter sometimes just crashes the panel, so we have to restart it manually if it was running.
+[ "$panel_pid" ] && kill -KILL $panel_pid >/dev/null 2>&1
+
 # Xrandr only shows the physical size if the display is connected, therefore we need to call xrandr again.
-# Sometimes the size does not actually match real world; one can export primary display override env var DPI per-system.
+# Sometimes the size does not actually match real world; one can export primary display override env var DPI per-system, or with ~/.config/dpi file.
+# The DPI values set here are just something I've found to usually work nicely in my use cases.
 xrandrout="$(xrandr)"
 p_phys_width=$(echo "$xrandrout" | grep -A 1 $primary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
 if [ "$p_phys_width" ] && [ $p_phys_width -gt 0 ]
@@ -148,10 +158,9 @@ then
     p_dpi_set=96
     [ $p_dpi_calc -gt 100 ] && p_dpi_set=112
     [ $p_dpi_calc -gt 140 ] && [ $p_phys_width -gt 300 ] && p_dpi_set=144
-    [ "$DPI" ] && p_dpi_set=$DPI
 fi
-[ "$DPI" ] && p_dpi_set=$DPI
-common_dpi=$p_dpi_set # Note: var may be empty.
+[ "$DPI" ] && common_dpi=$DPI
+[ -e $dpi_config_file ] && common_dpi=$(cat $dpi_config_file)
 
 scale=1
 [ $p_width -eq $HIDPI_WIDTH ] && [ $ignore_primary_scale -eq 0 ] && scale=2
@@ -164,7 +173,7 @@ then
     [ $s_dpi_calc -gt 100 ] && s_dpi_set=112
     [ $s_dpi_calc -gt 140 ] && [ $s_phys_width -gt 300 ] && s_dpi_set=144
     [ $s_width -eq $HIDPI_WIDTH ] && scale=2
-    (! [ "$common_dpi" ] || [ $s_dpi_set -lt $p_dpi_set ]) && common_dpi=$s_dpi_set
+    [ ! "$common_dpi" ] && [ "$p_dpi_set" ] && [ $s_dpi_set -lt $p_dpi_set ] && common_dpi=$s_dpi_set
 fi
 
 # HiDPI (4K) displays need some magic. Not all applications (e.g. GTK2) support scaling, so double the DPI is required for them to look "normal".
@@ -184,5 +193,5 @@ fi
 
 which feh >/dev/null 2>&1 && feh --bg-fill --no-fehbg $primary_background $secondary_background 2>/dev/null
 
-# Reloads icons so that they scale correctly.
-ps -ef | grep xfce4-panel$ > /dev/null && xfce4-panel -r
+# The panel may have restarted automatically resulting in an error but ignore it.
+[ "$panel_pid" ] && setsid xfce4-panel >/dev/null 2>&1 &
