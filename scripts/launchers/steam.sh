@@ -2,5 +2,6 @@
 # Steam launcher.
 
 cd ~/.steam/root
-rm config/htmlcache/*
-env SDL_AUDIODRIVER=alsa ./steam.sh &
+rm -rf config/htmlcache/*
+ps -e | grep pulseaudio || /etc/pulse/alsapipe.pa &
+./steam.sh >/tmp/steam.log 2>&1 &

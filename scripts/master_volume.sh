@@ -1,10 +1,10 @@
 #!/bin/sh
-# Raise ($1 = "+") or lower ($1 = "-") the volume level of device $3 (default: "Virtual Master") on card $2 (default: "any") by $4 integer percent units (default: 5) using ALSA mixer. If card = "any", all ALSA cards are searched for the device and the first one found is used.
+# Raise ($1 = "+") or lower ($1 = "-") the volume level of device $3 (default: "Master") on card $2 (default: "any") by $4 integer percent units (default: 5) using ALSA mixer. If card = "any", all ALSA cards are searched for the device and the first one found is used. Capabilities with just volume (not pvolume or others) are preferred so that software volume control takes precedence over hardware. The last channel found for the device is used for control.
 # If PulseAudio is running, change the volume of the default sink instead.
 # If JACK is running, change ($1) the volume of a running audio player application if one is running. Otherwise do nothing.
 
 card=${2:-any}
-dev=${3:-"Virtual Master"}
+dev=${3:-"Master"}
 vol_step=${4:-5}
 
 [ ! "$1" = "+" ] && [ ! "$1" = "-" ] && exit 1
@@ -58,15 +58,23 @@ then
     do
         if [ "$(amixer scontrols -c $cardnum | grep "$dev")" ]
         then
-            card=$cardnum
-            break
+            # First try to find a card with just volume capability.
+            if [ "$(amixer -c $cardnum get "$dev",0 | grep "Capabilities: volume")" ]
+            then
+                card=$cardnum
+                break
+            else
+                altcard=$cardnum
+            fi
         fi
     done
+    [ "$card" = "any" ] && [ "$altcard" ] && card=$altcard
 fi
 
 [ "$card" = "any" ] && echo "Control not found from any device." && exit 1
 
-current_vol=$(amixer -c $card get "$dev",0 | grep "Front Left:" | sed "s/.*\[\([0-9]*\)%\].*/\1/")
+channel=$(amixer -c $card get "$dev",0 | tail -n 1 | cut -f 1 -d ':' | sed "s/^[ ]*//")
+current_vol=$(amixer -c $card get "$dev",0 | grep "$channel:" | sed "s/.*\[\([0-9]*\)%\].*/\1/")
 [ ! "$current_vol" ] && echo "Could not get current volume." && exit 1
 
 new_vol=$(expr $current_vol $1 $vol_step)

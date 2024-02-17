@@ -26,6 +26,10 @@
 # In the file, define at least these two devices so that they point to some device defined in the same file:
 # pcm.system_default = "pcm.my_device"
 # ctl.system_default = "ctl.my_ctl"
+#
+# Note: to remove obsolete CTL devices from mixers, edit/remove the file: /var/lib/alsa/asound.state
+# Also make sure alsactl does not store mixer values on shutdown, otherwise the ghost device
+# will keep appearing in the asound.state file. This is usually an alsasound service setting.
 
 </opt/system_alsa_devices.conf>
 
@@ -185,7 +189,7 @@ pcm.binaural {
 
 # Software volume control.
 # Without using the device first, sometimes it is not visible to applications, e.g. volumeicon.
-# To fix this, you can play a dummy wav first in a script: aplay -q -D softvol dummy.wav
+# To fix this, you can play a dummy sound first in a script: arecord -f cd -s 1 | aplay -D softvol
 pcm.softvol {
     @args [ CARD ]
     type softvol
@@ -193,7 +197,7 @@ pcm.softvol {
         pcm "system_default"
     }
     control {
-        name "Master Volume"
+        name "Master"
         @args.CARD {
             type string
             default {
@@ -204,8 +208,12 @@ pcm.softvol {
     }
     hint {
         show on
-        description "Software volume control"
+        description "Software master volume"
     }
+}
+ctl.softvol {
+    @func refer
+    name "ctl.system_default"
 }
 
 # WAV recording device.
