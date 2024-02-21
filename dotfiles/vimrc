@@ -118,13 +118,6 @@ else
         echo('Downloading vim-plug...')
         silent !curl -fLo $VIMHOME/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     endif
-    if !filereadable($VIMHOME . '/autoload/pathogen.vim')
-        echo('Downloading pathogen...')
-        silent !curl -fLo $VIMHOME/autoload/pathogen.vim https://tpo.pe/pathogen.vim
-    endif
-    if !isdirectory($VIMHOME . '/bundle')
-        silent call mkdir($VIMHOME . '/bundle', 'p')
-    endif
 
 endif
 
@@ -191,54 +184,6 @@ nnoremap <c-f1> :call CCCOC()<cr>
 
 
 
-" Pathogen plugins.
-" *****************
-
-function InstallPathogenPlugin(bundlename, githuburl)
-    if !isdirectory($VIMHOME . '/bundle/' . a:bundlename)
-        echo('Downloading ' . a:bundlename . '...')
-        let $pathogen_git_cmd = 'git clone https://github.com/' . a:githuburl . '.git ' . $VIMHOME . '/bundle/' . a:bundlename
-        silent !$pathogen_git_cmd
-    endif
-endfunction
-
-" JavaScript's Template Strings highlighting.
-call InstallPathogenPlugin('vim-js-pretty-template', 'Quramy/vim-js-pretty-template')
-
-" Better JSON(L) syntax highlighting.
-let g:vim_json_syntax_conceal = 0
-function ToggleJsonSyntaxConceal()
-    if &l:conceallevel == 0
-        setlocal conceallevel=2
-        let g:vim_json_syntax_conceal = 1
-        e
-    else
-        setlocal conceallevel=0
-    endif
-endfunction
-call InstallPathogenPlugin('vim-json', 'elzr/vim-json')
-nnoremap <leader>jc :call ToggleJsonSyntaxConceal()<cr>
-nnoremap <leader>js :set syntax=json<cr>
-
-" Pug (Jade) syntax.
-call InstallPathogenPlugin('vim-pug', 'digitaltoad/vim-pug')
-
-" Python autocompletion.
-call InstallPathogenPlugin('pydiction', 'rkulla/pydiction')
-
-" Kotlin support.
-call InstallPathogenPlugin('kotlin-vim', 'udalov/kotlin-vim')
-
-" Load Pathogen plugins.
-if filereadable($VIMHOME . '/autoload/pathogen.vim')
-    silent! exe pathogen#infect()
-endif
-
-if filereadable($VIMHOME . '/bundle/pydiction/complete-dict')
-    let g:pydiction_location = '$VIMHOME/pydiction/complete-dict'
-    let g:pydiction_menu_height = 15
-endif
-
 " Plugged plugins.
 " ****************
 
@@ -267,6 +212,11 @@ if exists('*plug#begin')
     Plug 'powerman/vim-plugin-AnsiEsc' " ANSI escape sequences, e.g. colored text.
     Plug 'jparise/vim-graphql' " GraphQL support.
     Plug 'nathanaelkane/vim-indent-guides' " Indent guides.
+    Plug 'Quramy/vim-js-pretty-template' " JavaScript's Template Strings highlighting.
+    Plug 'digitaltoad/vim-pug' " Pug (Jade) syntax.
+    Plug 'rkulla/pydiction' " Python autocompletion.
+    Plug 'udalov/kotlin-vim' " Kotlin support.
+    Plug 'elzr/vim-json' " Better JSON(L) syntax highlighting.
 
     " Tag List - an old school source code browser plugin. Needs ctags to work.
     if executable('ctags')
@@ -378,6 +328,26 @@ if isdirectory($VIMHOME . '/plugged/vim-airline')
     endif
     let g:airline_theme = 'minigun'
 endif
+
+" Pydiction autocompletion.
+if filereadable($VIMHOME . '/plugged/pydiction/complete-dict')
+    let g:pydiction_location = '$VIMHOME/plugged/pydiction/complete-dict'
+    let g:pydiction_menu_height = 15
+endif
+
+" JSON syntax conceal.
+let g:vim_json_syntax_conceal = 0
+function ToggleJsonSyntaxConceal()
+    if &l:conceallevel == 0
+        setlocal conceallevel=2
+        let g:vim_json_syntax_conceal = 1
+        e " Reload for conceal to work.
+    else
+        setlocal conceallevel=0
+    endif
+endfunction
+nnoremap <leader>jc :call ToggleJsonSyntaxConceal()<cr>
+nnoremap <leader>js :set syntax=json<cr>
 
 
 
@@ -742,17 +712,12 @@ function! OnVimEnter()
         vmap <silent> <leader>cc å
     endif
 
-    " There are so many <leader>c shortcuts that preventing accidental delete motion is nice.
-    nmap <silent> <leader>c <Nop>
-    vmap <silent> <leader>c <Nop>
-
     " Formatting shortcuts for Prettier.
     if exists(':Prettier')
         vmap <leader>p :PrettierPartial<cr>
         vmap <leader>f :PrettierFragment<cr>
         nnoremap <leader>jp :set syntax=json<cr>:Prettier<cr>
     endif
-
 
     " Toggle ANSI escape sequences.
     if exists(':AnsiEsc')
@@ -872,6 +837,10 @@ function! OnVimEnter()
         endif
     endif
 
+    " There are so many <leader>c shortcuts that preventing accidental delete motion is nice.
+    nmap <silent> <leader>c <Nop>
+    vmap <silent> <leader>c <Nop>
+
     " Need to set these last here, otherwise they don't always work.
     set visualbell " Set visual bell instead of audible beep.
     set t_vb= " Disable visual flashing on bell.
@@ -906,7 +875,7 @@ endfunction
 
 
 
-" Host specific stuff.
+" Host specific stuff, e.g.:
 " function OnVimEnterExtra()
 "    if stridx(&filetype, 'typescript') > -1
 "        :call CocOnOffToggle()
