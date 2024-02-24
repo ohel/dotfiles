@@ -2,11 +2,15 @@
 # Backup script for full system, home, and misc backup. Backup process is logged.
 
 # The backup_config should have these four variables (three of them bash arrays) defined:
-# mountables: Mount points needed in backup.
-# systembackupdir: Location where to put full system backups.
-# backup_source_dirs: Source directories for misc backup.
-# backup_dest_dirs: Destination directories for misc backup. Should correspond to source directories.
+#    mountables: Mount points needed in backup.
+#    systembackupdir: Location where to put full system backups.
+#    backup_source_dirs: Source directories for misc backup.
+#    backup_dest_dirs: Destination directories for misc backup. Should correspond to source directories.
 # Optionally also: systembackupexcludelist: Things to exclude from backup.
+#
+# Additionally, for home backups each user may have a ~/.config/backup_exclude file.
+# It can define paths relative to that home directory for stuff that should be excluded.
+
 backup_config=/opt/backup_config
 
 [ ! -e $backup_config ] && echo "Error: missing backup config $backup_config" && exit 1
