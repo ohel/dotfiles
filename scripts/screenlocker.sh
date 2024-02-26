@@ -1,14 +1,28 @@
 #!/bin/sh
 # Lock screen using i3lock.
+# Randomizes a locksreen image from $imagesdir or uses $image if directory doesn't exist.
+# If ImageMagick's convert exists, uses it to resize and feed raw image to i3lock.
 
-lockscreensdir=~/.themes/lockscreens
-lockscreen=~/.themes/lockscreen.png
+imagesdir=~/.themes/lockscreens
+image=~/.themes/lockscreen.png
 
-if [ -d $lockscreensdir ]
+# i3lock is already running.
+[ "$(ps -e | grep i3lock)" ] && exit 1
+
+if [ -d $imagesdir ]
 then
-    count=$(ls -1 $lockscreensdir/*.png | wc -l)
+    count=$(ls -1 $imagesdir/*.* | wc -l)
     index=$(shuf -i 1-$count -n 1)
-    lockscreen=$(ls -1 $lockscreensdir/*.png | head -n $index | tail -n 1)
+    image=$(ls -1 $imagesdir/*.* | head -n $index | tail -n 1)
 fi
 
-[ "$(ps -e | grep i3lock)" ] || i3lock -t -e -i $lockscreen
+# Primary screen resolution of form <width>x<height>, e.g. 3840x2160.
+resolution=$(xrandr | grep primary | cut -f 4 -d ' ' | cut -f 1 -d '+' | grep -o "[0-9]*x[0-9]*")
+
+if [ "$resolution" ] && [ "$(which convert 2>/dev/null)" ]
+then
+    size=$(echo $resolution | cut -f 1 -d 'x')
+    convert -resize "$size"x"$size" -gravity center -crop $resolution+0+0 $image RGB:- | i3lock -e --raw $resolution:rgb -i /dev/stdin
+else
+    i3lock -t -e -i $image
+fi
