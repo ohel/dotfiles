@@ -18,17 +18,29 @@ s0_zoom_box_fill_color = #2f2f2f4f
 s0_zoom_mode = 1
 s0_speed = 30.000000
 
+[wobbly]
+s0_snap_key = Disabled
+s0_friction = 8.000000
+s0_spring_k = 10.000000
+s0_map_window_match = 
+s0_move_window_match = 
+
 [composite]
 s0_unredirect_match = (any) & !(class=mpv) & !(class=Vlc) & !(class=google-chrome) & !(class=chromium-browser-chromium)
 
 [animation]
-s0_open_effects = animation:Fade;animation:Fade;animation:Fade;
-s0_close_effects = animation:Fade;animation:Fade;animation:Fade;
+s0_open_effects = animation:Zoom;animation:Fade;animation:Fade;
+s0_open_durations = 120;80;80;
+s0_open_matches = (type=Normal | Unknown) & !(type=Normal & override_redirect=1);((type=Menu | PopupMenu | DropdownMenu | Combo | Dialog | ModalDialog | Normal) & !(class=\\.exe$));(type=Tooltip | Notification | Utility) & !(name=compiz) & !(title=notify-osd);
+s0_close_effects = animation:Glide 2;animation:Fade;animation:Fade;
+s0_close_matches = (type=Normal | Unknown) & !(type=Normal & override_redirect=1);((type=Menu | PopupMenu | DropdownMenu | Combo | Dialog | ModalDialog | Normal) & !(class=\\.exe$));(type=Tooltip | Notification | Utility) & !(name=compiz) & !(title=notify-osd);
 s0_minimize_effects = animation:Dream;
-s0_minimize_durations = 100;
+s0_minimize_durations = 120;
 s0_unminimize_effects = animation:Dream;
-s0_unminimize_durations = 100;
+s0_unminimize_durations = 120;
+s0_focus_effects = animation:None;
 s0_dream_zoom_to_taskbar = false
+s0_zoom_from_center = 3
 
 [resizeinfo]
 s0_fade_time = 100
@@ -38,6 +50,20 @@ s0_gradient_1 = #ffffff80
 s0_gradient_2 = #ffffff80
 s0_gradient_3 = #ffffff80
 s0_outline_color = #000000ff
+
+[expo]
+s0_expo_key = <Alt><Super>space
+s0_next_vp_button = Disabled
+s0_prev_vp_button = Disabled
+s0_zoom_time = 0.150000
+s0_deform = 2
+s0_curve = 0.750000
+s0_x_offset = 0
+s0_y_offset = 0
+s0_distance = 0.060000
+s0_vp_distance = 0.000000
+s0_aspect_ratio = 0.750000
+s0_vp_brightness = 100.000000
 
 [grid]
 s0_put_center_key = <Alt><Super>o
@@ -90,7 +116,7 @@ s0_natural_precision = 10.000000
 s0_exit_after_pull = true
 
 [core]
-s0_active_plugins = core;composite;crashhandler;opengl;compiztoolbox;decor;grid;imgjpeg;imgpng;imgsvg;mousepoll;move;neg;place;put;regex;resize;resizeinfo;text;winrules;animation;annotate;cube;ezoom;rotate;scale;scaleaddon;switcher;
+s0_active_plugins = core;composite;crashhandler;opengl;compiztoolbox;decor;firepaint;grid;imgjpeg;imgpng;imgsvg;mousepoll;move;neg;place;put;regex;resize;resizeinfo;text;winrules;wobbly;animation;annotate;cube;expo;ezoom;rotate;scale;scaleaddon;switcher;
 s0_audible_bell = false
 s0_outputs = 3840x2160+0+0;
 s0_focus_prevention_level = 0
@@ -126,6 +152,16 @@ s0_key_move_inc = 50
 s0_snapoff_semimaximized = false
 s0_snapback_semimaximized = false
 
+[firepaint]
+s0_initiate_button = <Control><Alt><Super>Button1
+s0_clear_key = Disabled
+s0_clear_button = <Control><Alt><Super>Button3
+s0_bg_brightness = 100.000000
+s0_num_particles = 2500
+s0_fire_slowdown = 5.000000
+s0_fire_life = 0.800000
+s0_fire_color = #00ffff38
+
 [put]
 s0_put_center_key = <Super>n
 s0_put_left_key = <Super>h
@@ -152,7 +188,6 @@ s0_screen_toggle_key = Disabled
 
 [cube]
 s0_unfold_key = Disabled
-s0_speed = 2.500000
 
 [annotate]
 s0_initiate_line_button = Disabled
@@ -175,6 +210,8 @@ s0_rotate_left_key = Disabled
 s0_rotate_right_key = <Super>Tab
 s0_rotate_left_window_key = Disabled
 s0_rotate_right_window_key = <Shift><Super>Tab
+s0_rotate_flip_left_edge = 
+s0_rotate_flip_right_edge = 
 
 [scale]
 s0_spacing = 0

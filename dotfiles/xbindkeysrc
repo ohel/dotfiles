@@ -72,6 +72,10 @@ Control + Mod1 + Escape
 "wmctrl -r :ACTIVE: -e 0,0,0,-1,-1"
 Mod4 + BackSpace
 
+# Resize active window. Could be used for RDP windows etc.
+"~/.scripts/resize_active_window.sh"
+Mod1 + Mod4 + BackSpace
+
 # Prevent closing certain windows with a script.
 "~/.scripts/check_active_window.sh && wmctrl -c :ACTIVE:"
 Mod1 + F4
