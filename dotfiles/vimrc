@@ -71,7 +71,7 @@ function TabOrComplete()
         return "\<c-x>\<c-f>"
     elseif col('.') > 1 && strpart( getline('.'), col('.')-2, 2 ) =~ '^\w'
         if empty(&omnifunc)
-            return "\<c-n>"
+            return "\<c-x>\<c-n>"
         else
             return "\<c-x>\<c-o>"
         endif
@@ -143,7 +143,7 @@ autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-autocmd BufNewFile,BufRead *.md set filetype=markdown
+autocmd BufNewFile,BufRead *.md set filetype=markdown | set omnifunc=
 autocmd BufNewFile,BufRead *.xaml set filetype=xml
 autocmd BufNewFile,BufRead *.jsonl set filetype=json
 
