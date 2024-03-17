@@ -16,7 +16,7 @@
 #
 # Control devices corresponding to PCM devices are defined for program compatibility.
 #
-# To prevent reference loops, default PCM can be overwritten from this file, but system_default should always point to a system specific device, not defined here. For example this chain works:
+# To prevent reference loops, default PCM can be overwritten from this file, but system_default should always point to a system specific device, not defined here. This also means that you may only define from this config as ALSA_DEFAULT_PCM a device that has system_default as its default device. For example this chain works:
 #
 #    ALSA_DEFAULT_PCM = eq
 #    eq.slave.pcm = system_default
@@ -30,6 +30,8 @@
 # Note: to remove obsolete CTL devices from mixers, edit/remove the file: /var/lib/alsa/asound.state
 # Also make sure alsactl does not store mixer values on shutdown, otherwise the ghost device
 # will keep appearing in the asound.state file. This is usually an alsasound service setting.
+#
+# Note: sometimes the concat function seems to bug/misbehave. For example, playing speaker-test into pcm.wav will try to output to "filefile" instead of "file".
 
 </opt/system_alsa_devices.conf>
 
@@ -41,7 +43,8 @@
 pcm.!default {
     @func refer
     name { @func concat
-        strings [ "pcm."
+        strings [
+            "pcm."
             { @func getenv
                 vars [ ALSA_DEFAULT_PCM ]
                 default "system_default"
@@ -52,7 +55,8 @@ pcm.!default {
 ctl.!default {
     @func refer
     name { @func concat
-        strings [ "ctl."
+        strings [
+            "ctl."
             { @func getenv
                 vars [ ALSA_DEFAULT_CTL ]
                 default "system_default"
@@ -70,7 +74,8 @@ pcm.null {
 pcm.hifi {
     @func refer
     name { @func concat
-        strings [ "pcm."
+        strings [
+            "pcm."
             { @func getenv
                 vars [ ALSA_HIFI_PCM ]
                 default "default"
@@ -85,7 +90,8 @@ pcm.hifi {
 ctl.hifi {
     @func refer
     name { @func concat
-        strings [ "ctl."
+        strings [
+            "ctl."
             { @func getenv
                 vars [ ALSA_HIFI_CTL ]
                 default "default"
@@ -102,7 +108,10 @@ pcm.movie {
         pcm {
             type multi
             slaves.speakers {
-                pcm "hifi"
+                pcm {
+                    type plug
+                    slave.pcm "default"
+                }
                 channels 2
             }
             bindings.0.slave speakers
@@ -136,7 +145,10 @@ pcm.movie_balanced_matrix {
         pcm {
             type multi
             slaves.speakers {
-                pcm "hifi"
+                pcm {
+                    type plug
+                    slave.pcm "default"
+                }
                 channels 2
             }
             bindings.0.slave speakers
@@ -169,7 +181,7 @@ pcm.binaural {
         rate 44100
         pcm {
             type ladspa
-            slave.pcm "system_default"
+            slave.pcm "default"
             path "/usr/lib64/ladspa"
             plugins [ {
                 label bs2b # Bauer stereophonic-to-binaural DSP
@@ -193,9 +205,7 @@ pcm.binaural {
 pcm.softvol {
     @args [ CARD ]
     type softvol
-    slave {
-        pcm "system_default"
-    }
+    slave.pcm "system_default"
     control {
         name "Master"
         @args.CARD {
@@ -219,7 +229,7 @@ ctl.softvol {
 # WAV recording device.
 pcm.wav {
     type file
-    slave.pcm "system_default"
+    slave.pcm "default"
     format "wav"
     file { @func concat
         strings [
@@ -227,7 +237,8 @@ pcm.wav {
                 vars [ HOME ]
                 default "/dev/shm"
             }
-        "/alsa_out.wav" ]
+            "/alsa_out.wav"
+        ]
     }
     hint {
         show on

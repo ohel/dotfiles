@@ -32,15 +32,15 @@ slang=fi,en
 
 sub-auto=fuzzy # loads all subs containing movie name
 sub-ass-hinting=native
-sub-ass-force-style=FontName=Tahoma,FontSize=12,Bold=0,Outline=1,Shadow=0
+sub-ass-style-overrides=FontName=Tahoma,FontSize=12,Bold=0,Outline=1,Shadow=0
 sub-pos=100
-sub-scale=1.0
+sub-scale=0.7
 sub-gauss=0.5
 sub-border-size=3.0
 sub-border-color="#C0000000"
 
-sub-color="#20FFFFFF" # less visible
-#sub-color="#C0FFFFFF" # more visible
+#sub-color="#20FFFFFF" # less visible
+sub-color="#C0FFFFFF" # more visible
 
 
 
@@ -88,7 +88,6 @@ profile=common-movie
 profile-desc="stereo sound profile for movies"
 
 ao=alsa
-audio-device=alsa/hifi
 audio-channels=stereo
 alsa-ignore-chmap
 profile=common-movie
