@@ -11,12 +11,14 @@
 #   audio <device> [<gst pipeline file>]
 # where <device> is an ALSA device.
 
-qlexe=$(ps -ef | grep -o "\([^ ]\{1,\}quodlibet\(.py\)\?$\)\|\(\/usr\/bin\/quodlibet\)") && running=1
-[ ! $qlexe ] && qlexe=$(which quodlibet 2>/dev/null)
-[ ! $qlexe ] && qlexe=$(which quodlibet.py 2>/dev/null)
-[ ! $qlexe ] && qlexe=/opt/programs/quodlibet/quodlibet.py && [ ! -e $qlexe ] && echo "Exe not found." && exit 1
-
 logfile=~/.cache/qllog.txt
+
+qlexe=$(ps -ef | grep "\([^ ]\{1,\}quodlibet\(.py\)\?$\)\|\(/usr/bin/quodlibet\)" | grep -v grep | grep -o "\([^ ]\{1,\}quodlibet\(.py\)\?$\)\|\(/usr/bin/quodlibet\)") && running=1
+[ ! "$qlexe" ] && qlexe=$(which quodlibet 2>/dev/null)
+[ ! "$qlexe" ] && qlexe=$(which quodlibet.py 2>/dev/null)
+[ ! "$qlexe" ] && qlexe=/opt/programs/quodlibet/quodlibet.py && [ ! -e $qlexe ] && echo "Exe not found." && exit 1
+
+echo "Using Quod Libet exe: $qlexe"
 
 if [ "$#" = 0 ]
 then
@@ -57,4 +59,4 @@ else
     [ "$device" ] && params="--toggle-window"
 fi
 
-$qlexe $params >$logfile 2>&1 &
+"$qlexe" $params >$logfile 2>&1 &
