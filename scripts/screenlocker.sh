@@ -2,6 +2,7 @@
 # Lock screen using i3lock.
 # Randomizes a locksreen image from $imagesdir or uses $image if directory doesn't exist.
 # If ImageMagick's convert exists, uses it to resize and feed raw image to i3lock.
+# If ~/.config/blank_screen exists, also blanks the screen right after locking.
 
 imagesdir=~/.themes/lockscreens
 image=~/.themes/lockscreen.png
@@ -26,3 +27,6 @@ then
 else
     i3lock -t -e -i $image
 fi
+
+# Blank screen right after. The sleep is so that using hotkeys for script don't wake up the screen immediately.
+[ -e ~/.config/blank_screen ] && sleep 0.1 && xset s activate

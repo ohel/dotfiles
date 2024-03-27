@@ -4,6 +4,7 @@
 # 2. fade the desktop background using feh with a specified millisecond interval (blend_interval_ms) during transition
 # 3. wait for some time (change_interval_s)
 # 4. repeat, starting the next blend with the current desktop background from last round
+# If ~/.themes/background is a symbolic link to background image, it is updated as well after blending.
 
 change_interval_s=${1:-1800}
 images_dir=${2:-~/.themes/backgrounds}

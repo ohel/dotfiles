@@ -156,11 +156,9 @@ Mod4 + Print
 "~/.scripts/screenlocker.sh"
 Control + Mod1 + Delete
 
-# Screen saver.
-"~/.scripts/screensaver.sh"
+# Screen saver. The sleep is so that the hotkeys don't wake up the screen immediately.
+"sleep 0.5 && xset s activate"
 Mod4 + s
-"~/.scripts/screensaver.sh standby"
-Mod1 + Mod4 + s
 
 # Audio player control.
 "~/.scripts/audio_player.sh toggle-window"
