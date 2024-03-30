@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Given an input Markdown file, create a simple LaTeX file out of it using these rules:
 # * Hash-prefixed (sub(sub))titles are converted to (sub(sub))sections.
 # * Double quotes are converted to LaTeX style.

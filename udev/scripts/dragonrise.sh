@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # A script for udev rule to run when adding a DragonRise gamepad.
 # It runs xboxdrv for the gamepad and symlinks the extra joystick device created by xboxdrv.
 # Need to run as root.

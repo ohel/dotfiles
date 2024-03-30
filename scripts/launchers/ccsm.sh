@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # CompizConfig Settings Manager launcher.
 # Compiz 0.9 series with prefix /opt/programs/compiz.
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Backup or restore Chromium default profile bookmarks, preferences and extensions.
 # This is to avoid using Google accounts.
 

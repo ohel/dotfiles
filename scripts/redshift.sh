@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Change screen color temperature using the redshift tool.
 # Give a temperature delta in $1, e.g. -500.
 # If $1 or $2 = r, reset adjustments.

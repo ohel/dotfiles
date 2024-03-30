@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Toggles external display using xrandr.
 #
 # Primary display is assumed to be the first one connected listed in xrandr output, or may be given as input parameter $1 or $2.

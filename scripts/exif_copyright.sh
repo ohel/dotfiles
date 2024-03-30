@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Add copyright info to all jpeg files in current directory.
 
 [ "$1" = "" ] && exit 1

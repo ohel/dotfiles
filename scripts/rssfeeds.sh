@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Gather some RSS feeds and create an HTML file from them.
 
 output=~/.local/share/rssfeeds.html

@@ -1,3 +1,4 @@
 # Set up a Saitek Xbox 360 gamepad.
-ACTION=="add", ENV{ID_VENDOR}=="Saitek", ENV{ID_MODEL}=="Cyborg_Rumble_Pad_-_PC_Xbox_360", RUN+="/bin/bash /opt/udev/scripts/saitek.sh %E{BUSNUM} %E{DEVNUM}"
-ACTION=="remove", ENV{ID_VENDOR}=="Saitek", ENV{ID_MODEL}=="Cyborg_Rumble_Pad_-_PC_Xbox_360", RUN+="/bin/bash /opt/udev/scripts/saitek_remove.sh"
+# TODO: the script is always killed after a timeout. Nowadays udev needs some other way.
+ACTION=="add", ENV{ID_VENDOR}=="Saitek", ENV{ID_MODEL}=="Cyborg_Rumble_Pad_-_PC_Xbox_360", RUN+="/usr/bin/bash /opt/udev/scripts/saitek.sh %E{BUSNUM} %E{DEVNUM}"
+ACTION=="remove", ENV{ID_VENDOR}=="Saitek", ENV{ID_MODEL}=="Cyborg_Rumble_Pad_-_PC_Xbox_360", RUN+="/usr/bin/bash /opt/udev/scripts/saitek_remove.sh"

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # A single script that will:
 # - open Chromium browser if it is not running
 # - focus an existing Chromium instance

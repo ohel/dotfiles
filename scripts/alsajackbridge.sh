@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Connect JACK to an ALSA loopback device.
 
 alsa_in -j "ALSA output" -d loop_playback_out &

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Play a dummy sound that software volume control device is visible for volumeicon. Before the device is used, it might not be visible. For recording dummy sound, prefer null device if found, default otherwise.
 
 ALSA_DEVICE=softvol

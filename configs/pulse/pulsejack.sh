@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Run JACK daemon if not running and start PulseAudio as a JACK pipe.
 
 device="hw:M4"

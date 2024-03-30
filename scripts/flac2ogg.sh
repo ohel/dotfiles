@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Encode all flac files in subdirectories to ogg vorbis in batches of $batchsize. This is far from perfect parallelization, but good enough.
 
 oggdir=${1:-ogg}

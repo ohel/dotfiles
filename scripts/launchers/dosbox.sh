@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Runs DosBox. Prevent DosBox's speed from changing by setting CPU affinity and CPU governor for the specific core.
 # If su is required, use tee to echo.
 # echo performance | sudo tee /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor > /dev/null

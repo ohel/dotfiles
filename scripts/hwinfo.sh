@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Display some info about CPU and AMD GPU.
 
 num_cores=$(grep "cpu cores" /proc/cpuinfo | head -n 1 | cut -f 2 -d ':' | tr -d ' ')

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Backup user home directories and call system backup script
 # depending on how long it is since last backup.
 # The backup schedule timestamp checkfile is called backup_interval_checkfile,

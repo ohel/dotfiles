@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Toggles between best resolution and given mode $1 (FullHD, i.e. 1920x1080 by default) for all displays showing a picture.
 # UI scaling is set also if HiDPI resolutions are being set.
 # Unfortunately setting GDK_SCALE won't work on the fly since it's an environment variable.

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # A generic script to rsync one document file to or from a remote location.
 # Document location must correspond to a remote backup location.
 # There are three parameters, second one is optional:

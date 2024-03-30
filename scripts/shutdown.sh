@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # A common shutdown script I use.
 
 if [ "$(which zenity 2>/dev/null)" ] && [ "$DISPLAY" ]

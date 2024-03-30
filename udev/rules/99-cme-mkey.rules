@@ -1,2 +1,3 @@
 # CME M-key MIDI keyboard. Fires up a plug'n'play script.
-ACTION=="add", ATTR{product}=="CME M-KEY", RUN+="/bin/su panther -c '/bin/bash /opt/udev/scripts/cmemkey.sh'"
+# TODO: the script is always killed after a timeout. Nowadays udev needs some other way.
+ACTION=="add", ATTR{product}=="CME M-KEY", RUN+="/usr/bin/su panther -c '/usr/bin/bash /opt/udev/scripts/cmemkey.sh'"

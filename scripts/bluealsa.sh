@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Without PulseAudio one must use BlueALSA to connect to Bluetooth headsets.
 # Unfortunately, there's no way of using a dmix device with bluealsa directly,
 # as ALSA will just give an error message if dmix has bluealsa as slave.

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Update a Gentoo system: update overlays, update world, rebuild stuff if necessary, clean distfiles.
 
 if test "X$1" != "Xnosync"

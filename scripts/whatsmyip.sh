@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # When using a router with dynamic WAN IPv4 address, access router status page and get the address.
 # Supports the following router models (pass as parameter):
 #    tw: Telewell TW-LTE/4G/3G router, WiFI AC

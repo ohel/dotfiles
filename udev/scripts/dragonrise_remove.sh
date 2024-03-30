@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # A script for udev rule to run when removing a DragonRise gamepad.
 # It cleans up symlinks created by the adding script.
 # Need to run as root.

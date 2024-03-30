@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Create a simple index.html from directory contents up to one level of sub directories.
 # White spaces are not supported in file or directory names.
 # A dummy .htaccess file is written also.
@@ -12,7 +12,7 @@
 #
 # If there's a file named update.sh, it is omitted from the index.
 # For an image gallery, the update.sh contents could be something like this:
-    # #!/bin/sh
+    # #!/usr/bin/sh
     # create_thumbs.sh 600 *.jpg *.png
     # create_index.sh root Root
     # chmod o+r *

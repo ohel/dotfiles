@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Compiz 0.9 series installed with prefix /opt/programs/compiz.
 
 if [ "$(ps -e | grep compiz)" ]

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Create thumbnails of given size ($1) of given media files ($2).
 # For use in Markdown documents (blogs) etc.
 # MP4 video thumbnails are also supported using ffmpeg.

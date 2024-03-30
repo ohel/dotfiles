@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # If an audio player is running, send command given in $1.
 # Audio players:
 #    * Quod Libet

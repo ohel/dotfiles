@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Raise ($1 = "+") or lower ($1 = "-") the volume level of device $3 (default: "Master") on card $2 (default: "any") by $4 integer percent units (default: 5) using ALSA mixer. If card = "any", all ALSA cards are searched for the device and the first one found is used. Capabilities with just volume (not pvolume or others) are preferred so that software volume control takes precedence over hardware. The last channel found for the device is used for control.
 # If changing ALSA volume fails (perhaps deliberately) and PulseAudio is running, change the volume of the default PulseAudio sink instead.
 # If JACK is running, change ($1) the volume of a running audio player application if one is running. Otherwise do nothing (no ALSA or PulseAudio volume control).

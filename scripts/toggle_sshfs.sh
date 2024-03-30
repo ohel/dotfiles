@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Given a mountpoint, a remote host and a remote mountpoint, mount or unmount an sshfs.
 
 if [ "$#" -eq 0 ]

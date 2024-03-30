@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Search stuff using rg/ag/grep "$1", then from the search results open filenames matching search terms.
 
 editor=$EDITOR

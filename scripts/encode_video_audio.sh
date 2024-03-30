@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Given an input video with AAC audio, resample to 44.1 kHz and normalize its audio.
 # Needs ffmpeg with fdk-aac libs or fdkaac encoder for encoding, and sox for normalizing.
 # This is useful because encoding audio in Avidemux results in errors in the beginning of audio.

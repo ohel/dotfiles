@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 
 [ -f ~/.Xresources ] && xrdb -merge -I$HOME ~/.Xresources
 
@@ -25,7 +25,7 @@ xset dpms 900 0 0
 xset s off
 
 # Restore ALSA state (volumes etc.) if saved.
-[ -f ~/.asound.state ] && /usr/sbin/alsactl restore -f ~/.asound.state 2>/dev/null
+[ -f ~/.asound.state ] && /usr/bin/alsactl restore -f ~/.asound.state 2>/dev/null
 
 # Sometimes I link .thumbnails and .cache to directories under .commoncache
 # and .commoncache itself somewhere under a tmpfs, for example $XDG_RUNTIME_DIR.

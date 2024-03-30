@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Steam launcher.
 
 ps -e | grep pulseaudio || /etc/pulse/alsapipe.pa &

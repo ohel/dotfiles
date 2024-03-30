@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # A script which checks whether any QEMU-KVM virtual machines are running, or if RAID devices are resyncing.
 # Call this script before the actual shutdown (script), this will hold for input if anything needs attention.
 

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Source this file to quickly set default ALSA device.
 
 if [ "$#" = 0 ]

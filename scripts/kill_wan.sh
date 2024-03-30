@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Prevent all network connections except those to LAN. IP forwarding is also disabled.
 
 if [ ! "$(which iptables 2>/dev/null)" ]

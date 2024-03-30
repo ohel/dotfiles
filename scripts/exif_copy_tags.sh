@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Copy tags from one file to another, clearing everything from the destination file, except for the thumbnail. Ask for optional user description tag to add.
 # Tags can also be added instead of copied.
 

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Flushes all iptables rules and accepts all packets.
 
 iptables -F

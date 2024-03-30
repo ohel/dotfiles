@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # List files using find, grepping "$1" from their names, then select a search result to edit.
 # If just one result is found, it is opened automatically.
 

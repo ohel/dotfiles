@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Connect to IP address $1 with username $2 and password $3, and consider it a Windows host if $4 is "win[dows]".
 # Or, just use the default values, in which case $1 may be "win[dows]" too.
 

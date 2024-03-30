@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 
 # The AAC encoder in Avidemux is buggy and adds a strange sound to the beginning of each track.
 # Given an .avi video (saved in Avidemux) with PCM audio, this script will compress the audio

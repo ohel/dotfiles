@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Start and connect basic stuff to begin practicing with electric drums:
 #   * Start JACK server if not running, with the edrums/$1 preset.
 #   * Start mididings to fix MIDI messages.

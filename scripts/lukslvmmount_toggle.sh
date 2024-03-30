@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Open a LUKS device (or file vault), activate an LVM volume group if there is one, and mount a partition.
 # If partition is already mounted, unmount, deactivate and close the device.
 # Partition is assumed to be in /etc/fstab and mount point in /mnt/name.

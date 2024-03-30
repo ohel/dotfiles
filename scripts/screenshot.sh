@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Take a screen cap with running index postfix.
 
 count=$(expr 1 + $(ls ~/screenshot*.png 2>/dev/null | grep "screenshot[0-9]*.png" | wc -l))

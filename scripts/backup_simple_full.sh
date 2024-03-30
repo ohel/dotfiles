@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Simple full system backup into a mountpoint $1 using rsync.
 # Optionally backup is done using prefix $2 (useful for offline system backup).
 

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # A generic audio toggle script to toggle digital interface, audio mute state or volume levels.
 
 [ -e ~/.scripts_extra/toggle_audio.sh ] && . ~/.scripts_extra/toggle_audio.sh

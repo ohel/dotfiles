@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Split a FLAC file according to CUE sheet and tag the resulting files.
 # Uses the cuetools package: https://github.com/svend/cuetools
 

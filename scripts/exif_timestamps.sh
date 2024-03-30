@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Change exif dates for files of supported file types in current directory + or - given hours, minutes and seconds.
 
 echo "Change exif dates of .jpg, .RW2, .mp4 and .mov files in current directory."

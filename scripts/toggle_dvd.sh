@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Mount or unmount DVD.
 
 device="/dev/sr0"

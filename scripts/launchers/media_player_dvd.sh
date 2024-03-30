@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Helper script for launching DVDs (or DVD image files).
 # Unfortunately most media players do not support DVD menus anymore.
 

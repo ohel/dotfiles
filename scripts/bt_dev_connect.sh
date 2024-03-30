@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Power on the default Bluetooth controller and connect to device with MAC $1.
 # Assumes the Bluetooth device has been set up beforehand.
 # To set up a device, power on a controller using bluetoothctl and pair, trust and connect the device.

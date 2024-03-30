@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 XBOXDRVDIR=/opt/xboxdrv
 ln -sf $XBOXDRVDIR/$2.cfg $XBOXDRVDIR/current_$1
 echo "Symlink $XBOXDRVDIR/current_$1 now points to $XBOXDRVDIR/$2.cfg."

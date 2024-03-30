@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Change laptop screen backlight brightness via script.
 # Give a brightness delta integer (positive or negative prefixed with -) as parameter.
 # If parameter is not an integer (has a .), it is interpreted as a percentage of max brightness.

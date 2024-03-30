@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Establish an OpenVPN connection using $1 as config and
 # create an iptables filter working like a VPN kill switch.
 # VPN server IP is deduced after succesful connection, so it may be dynamic.

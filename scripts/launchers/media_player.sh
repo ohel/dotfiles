@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Helper script for launching video files in media player.
 # Must correspond with media player config.
 

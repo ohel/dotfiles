@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Simple archive contents viewer for common archive types.
 
 filename="$1"

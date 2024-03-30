@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Start a Qemu-KVM virtual machine. Consider this script a template to copy per virtual machine.
 # Assumes the client has drivers installed for the paravirtualized VirtIO Ethernet Adapter,
 # VirtIO SCSI controller, and QXL video device.

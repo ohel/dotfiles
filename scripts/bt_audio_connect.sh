@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Connect to device with MAC address ALSA_BLUETOOTH_MAC (environment variable).
 # Prefer pcm.bluetooth device MAC if defined in ~/.asoundrc or /etc/asound.conf.
 # Override MAC may be given as $1.

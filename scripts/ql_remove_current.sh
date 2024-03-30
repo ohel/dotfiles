@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Remove (move to temporary location) currently playing song in Quod Libet.
 # This is useful when searching nice ones from a very large number of songs.
 

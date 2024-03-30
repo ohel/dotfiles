@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Backup script for full system, home, and misc backup. Backup process is logged.
 
 # The backup_config should have these four variables (three of them bash arrays) defined:

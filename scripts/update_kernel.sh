@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Update a kernel by compiling a new kernel if it exists, using old config file from currently running kernel as base.
 # If dracut is found, a new initramfs image is created using it in hostonly mode.
 # The script copies the necessary files to the boot partition.

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Connect ALSA loopback devices to default audio output and input devices.
 
 buffer_size=2048

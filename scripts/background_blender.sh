@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Given a directory of images (images_dir):
 # 1. create a blend of two random images with a certain transparency step (step_percentage) using ImageMagick (needs magick and convert)
 # 2. fade the desktop background using feh with a specified millisecond interval (blend_interval_ms) during transition

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Given an input video, compress it to a H.264 video.
 # Audio must be PCM (so input video must probably be AVI).
 # Audio is resampled to 44.1 kHz.

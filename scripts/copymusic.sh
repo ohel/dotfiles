@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Copy and encode music to a given destination ($1, default ./). Used by drag'n'dropping files from media player playlist to a terminal window, for copying into a mobile phone.
 # Encoding is either AAC (default), OGG ($2 = "ogg") or MP3 ($2 = "mp3"), preserving simple metadata tags.
 # Requires mutagen-inspect and either ffmpeg with fdk-aac libs, oggenc or lame encoder, faad for decoding.

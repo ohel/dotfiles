@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Connect CME M-Key MIDI keyboard to FluidSynth using ALSA or JACK.
 # Give "jack" or "cli" as $1 or $2. Defaults to ALSA with GUI (qsynth).
 # In CLI and if jackd is already running, JACK is always used.

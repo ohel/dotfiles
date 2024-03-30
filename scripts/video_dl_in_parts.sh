@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Download videos in parts and concatenate parts to a single continuous video.
 # Copy the URL from a web browser's network tab; any segment is fine.
 # When downloaded segment contains just plain text, it's taken as the last segment.

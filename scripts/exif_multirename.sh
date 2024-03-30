@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Given filenames ending in .jpg, .JPG, .RW2 or .RW2.xmp, rename a matching JPEG file as:
 # YYYY-mm-dd_HH.MM.SS_<desc>.jpg, where <desc> is an optional description from zenity input.
 # If a similarly named .RW2 or .RW2.xmp file exists, they are renamed too, and the file name updated into the .RW2.xmp file contents.

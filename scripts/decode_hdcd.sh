@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Decode a HDCD signal from flac files a[0-9].flac etc. to b[0-9].flac.
 # Uses the Windows application eac3to and Wine to run it.
 

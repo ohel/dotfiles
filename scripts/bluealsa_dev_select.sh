@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # If using multiple Bluetooth audio devices with BlueALSA,
 # select one by creating a proper ALSA configuration file
 # based on bluetoothctl device listing and user selection.

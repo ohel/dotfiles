@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Batch scanning script for a scanner. The scanner or the driver causes the
 # scanning operation to fail sometimes. This script takes care of that.
 # With Canon LiDE 200, there might also be a bug which causes the scans

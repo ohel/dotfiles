@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # A generic echoing backup script to rsync something to or from a remote location.
 # There are four mandatory parameters, the rest are optional rsync excludes.
 # The parameters are:

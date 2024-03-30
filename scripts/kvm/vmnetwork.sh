@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Set up networking for KVM virtual machines:
 # - SNAT to first PCI NIC, or $1 if given. $1 may be also a filename, with file contents being the NIC.
 # - Optionally ($2 = "bridge" or "b") set up network bridge where bridged VM tap devices should be added.

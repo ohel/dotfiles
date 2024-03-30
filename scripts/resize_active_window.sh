@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Resize current active window according to some rules.
 # For now, the window must be a Remmina (RDP) window.
 # The sizes of the window will be cycled through the following list: [1920x1080, 2560x1440, 3840x2160]

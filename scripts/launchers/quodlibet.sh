@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # A startup script for Quod Libet. Output is redirected to a log file for debug purposes.
 #
 # By default, starts the player or if it's running, toggles its visibility.

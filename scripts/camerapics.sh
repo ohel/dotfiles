@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Download pictures from a digital camera via PictBridge/PTP/MTP using gphoto2.
 
 folder=$(gphoto2 --list-folders | grep -o "[^ ']*DCIM/[^']*" | tail -n 1)

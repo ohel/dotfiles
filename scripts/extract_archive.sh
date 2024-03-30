@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Simple archive extractor for common archive types.
 
 filename="$1"

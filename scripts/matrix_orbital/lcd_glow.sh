@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Make an LCD device backlight glow.
 
 dev=/dev/serial/matrix_orbital

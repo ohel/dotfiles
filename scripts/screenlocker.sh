@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Lock screen using i3lock.
 # Randomizes a locksreen image from $imagesdir or uses $image if directory doesn't exist.
 # If ImageMagick's convert exists, uses it to resize and feed raw image to i3lock.

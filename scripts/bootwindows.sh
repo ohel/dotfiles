@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Boot to first Windows selection either using legacy GRUB or rEFInd with EFI variables.
 
 if [ "$(which zenity 2>/dev/null)" ] && [ "$DISPLAY" ]

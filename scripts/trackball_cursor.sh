@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Creates a secondary mouse pointer for Kensington Eagle Trackball.
 # Can be used for example with a Wii emulator for multiple controllers.
 

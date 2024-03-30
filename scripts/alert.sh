@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Play an alert sound if there is a file called alert.set in user's home directory.
 # May be used e.g. with an email client which generates the file on certain conditions.
 # Use crontab to schedule the alert checking for the user (crontab -e -u user).

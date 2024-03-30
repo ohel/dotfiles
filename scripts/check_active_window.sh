@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Return 0 if active window is not in check lists, 1 if it is.
 # Check the output of "wmctrl -lx" to write the list files.
 #

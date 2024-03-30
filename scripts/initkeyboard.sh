@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Sometimes a keyboard acts weird or hangs up.
 # Reconnecting it physically usually works, but everything must be set anew. This script solves that.
 

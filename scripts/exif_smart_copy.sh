@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Given two image files, add tags from one to another and rename the files.
 # This is done by calling other EXIF scripts. A note is added to EXIF source filename.
 # The source for copying is based on which image has the ISO speed rating EXIF info.

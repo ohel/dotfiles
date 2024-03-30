@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Reboot a router with model $1, username $3. This comes in handy with unstable consumer devices.
 # If $2 equals "auto", no user input is asked (unless a password is required).
 # Supports the following router models (pass as $1):

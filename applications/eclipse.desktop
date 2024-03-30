@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Name=Eclipse
-Exec=env PATH="PATH:/opt/bin/java_bin" /opt/programs/eclipse/eclipse
-Icon=eclipse
-Terminal=false
-Type=Application
-Categories=Application;Development;
-

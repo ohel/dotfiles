@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Enable or disable a touchpad. Do this via kernel module if Elan touchpad or via xinput if Synaptics.
 
 if [ "$(lsmod | grep elan_i2c)" ]

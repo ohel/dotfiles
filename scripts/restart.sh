@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Safely restart computer.
 
 if [ "$(which zenity 2>/dev/null)" ] && [ "$DISPLAY" ]

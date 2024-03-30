@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Updates all git repositories inside current directory.
 # Useful e.g. when keeping local bare repository backup mirrors of remote git repositories.
 
