@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Name=Flatpak portals
+Comment=Portals for flatpak
+Exec=.scripts/launchers/flatpak_portals.sh
+OnlyShowIn=XFCE;
+StartupNotify=false
+Terminal=false
+Hidden=false

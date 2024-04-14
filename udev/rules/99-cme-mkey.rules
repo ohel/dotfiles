@@ -1,3 +1,3 @@
 # CME M-key MIDI keyboard. Fires up a plug'n'play script.
-# TODO: the script is always killed after a timeout. Nowadays udev needs some other way.
+# Note: If the script is always killed after a timeout, it's because of udev not being able to start processes in the background.
 ACTION=="add", ATTR{product}=="CME M-KEY", RUN+="/usr/bin/su panther -c '/usr/bin/bash /opt/udev/scripts/cmemkey.sh'"
