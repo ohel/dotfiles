@@ -66,7 +66,7 @@ fi
 if [ ! "$do_pulse" ]
 then
     channel=$(amixer -c $card get "$dev",0 | tail -n 1 | cut -f 1 -d ':' | sed "s/^[ ]*//")
-    current_vol=$(amixer -c $card get "$dev",0 | grep "$channel:" | sed "s/.*\[\([0-9]*\)%\].*/\1/")
+    current_vol=$(amixer -M -c $card get "$dev",0 | grep "$channel:" | sed "s/.*\[\([0-9]*\)%\].*/\1/")
     [ ! "$current_vol" ] && echo "Could not get current volume." && do_pulse=yes
 fi
 
@@ -75,7 +75,7 @@ then
     new_vol=$(expr $current_vol $1 $vol_step)
     [ "$1" = "+" ] && [ $new_vol -gt 100 ] && new_vol=100
     [ "$1" = "-" ] && [ $new_vol -lt $vol_step ] && new_vol=$vol_step
-    amixer -c $card set "$dev",0 "$new_vol"% >/dev/null
+    amixer -M -c $card set "$dev",0 "$new_vol"% >/dev/null
 fi
 
 # PulseAudio volume control. This also controls for example Spotify's volume, as it is locked to PulseAudio volume.
