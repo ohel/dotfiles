@@ -9,23 +9,17 @@ then
     rm -rf config/htmlcache/*
     ./steam.sh "$@" >/tmp/steam.log 2>&1 &
 else
-    # Steam can't handle symlinks in media directories but fails immediately.
-    for link in $(find ~/.var/app/com.valvesoftware.Steam/media/ -type l)
-    do
-        rm $link
-    done
+    # If your XDG directory (defined in ~/.config/user-dirs.dirs) is a symbolic link,
+    # Flatpak creates a copy of the symlink to Steam's media directory.
+    # Steam can't handle symlinks but fails immediately.
+    # Removing the symlinks doesn't seem to work anymore, either.
+    if [ $(find ~/.var/app/com.valvesoftware.Steam/media/ -type l | wc -l) -gt 0 ]
+    then
+        msg="Found symbolic link in Steam's media directory."
+        echo $msg
+        [ "$(which zenity 2>/dev/null)" ] && zenity --title="Steam error" --text="$msg" --error
+        exit 1
+    fi
 
     /usr/bin/flatpak run --branch=stable --arch=x86_64 --command=/app/bin/steam --file-forwarding com.valvesoftware.Steam "$@" >/tmp/steam.log 2>&1 &
-
-    # Steam tries creating the symlinks again and again until it fails, so check and remove if they are being created. Wait 30 seconds for Steam to start.
-    counter=0
-    while [ $counter -lt 30 ]
-    do
-        for link in $(find ~/.var/app/com.valvesoftware.Steam/media/ -type l)
-        do
-            rm $link
-        done
-        sleep 1
-        counter=$(expr $counter + 1)
-    done
 fi

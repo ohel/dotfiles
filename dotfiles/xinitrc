@@ -44,6 +44,8 @@ which mhwaveedit 2>/dev/null && mkdir -p /tmp/mhwaveedit
 # The code consists of a single pause() call.
 lastone=$(ls /opt/programs/pause/pause 2>/dev/null)
 
+export XDG_CURRENT_DESKTOP="X-Generic"
+
 # To use this file as an Xsession file, create a link:
 # ln -s ~/.xinitrc ~/.xsession && chmod +x ~/.xinitrc
 if [ $(basename "$0") = ".xsession" ] || [ ! "$lastone" ]
