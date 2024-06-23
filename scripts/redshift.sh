@@ -2,10 +2,10 @@
 # Change screen color temperature using the redshift tool.
 # Give a temperature delta in $1, e.g. -500.
 # If $1 or $2 = r, reset adjustments.
-# If $1 or $2 = b, also change brightness. This is done using the backlight script (if backlight is module present), otherwise using redshift.
+# If $1 or $2 = b, also change brightness. This is done using a backlight control script (if backlight exists), otherwise using redshift.
 # If no parameters are given, uses a simple custom algorithm to automatically guess good values.
-# Use this in a user's crontab (crontab -e -u user) for example like this:
-# 5 * * * * DISPLAY=:0.0 /home/user/.scripts/redshift.sh
+# To make adjusting automatic, use this script in a user's crontab (crontab -e -u user) for example like this:
+# 0,30 * * * * DISPLAY=:0.0 /home/user/.scripts/redshift.sh
 
 cachedir=~/.cache
 scriptsdir=$(dirname "$(readlink -f "$0")")
@@ -48,19 +48,19 @@ else
     # Compensate for winter months making the shift earlier.
     month=$(date +%m)
     compensation=0
-    [ $month -gt 10 ] && compensation=3
-    [ $month -gt 11 ] && compensation=4
-    [ $month -lt 3 ] && compensation=3
-    [ $month -lt 2 ] && compensation=4
+    [ $month -gt 10 ] && compensation=2
+    [ $month -gt 11 ] && compensation=3
+    [ $month -lt 3 ] && compensation=2
+    [ $month -lt 2 ] && compensation=3
     hourval=$(expr $(date +%H) + $compensation)
     [ $hourval -lt 8 ] && hourval=26
     [ $hourval -gt 26 ] && hourval=26
     hourval=$(expr $hourval - 20)
     [ $hourval -lt 0 ] && hourval=0
-    hourval=$(expr 6 - $hourval)
+    factor=$(expr 6 - $hourval)
     set_brightness=1
     delta=$(expr $max - $min)
-    new=$(echo "scale=2; $min + $hourval / 6 * $delta" | bc | cut -f 1 -d '.')
+    new=$(echo "scale=2; $min + $factor/6 * $delta" | bc | cut -f 1 -d '.')
     notify_time=3000
 fi
 
@@ -75,8 +75,8 @@ version=$(redshift -V | cut -f 2 -d ' ' | tr -d '.')
 b=""
 if [ "$set_brightness" ]
 then
-    brightness=$(echo "scale=2; $new / $max" | bc)
-    # Script will succeed if hardware backlight can be used, will fail otherwise.
+    brightness=$(echo "scale=2; $new/$max" | bc)
+    # Script will succeed if hardware backlight can be used, fail otherwise - in which case use the -b parameter for redshift.
     # Use a much dimmer value for hardware backlights.
     $scriptsdir/backlight.sh $(echo "scale=2; $brightness * $brightness * $brightness * 0.75" | bc) || b="-b $brightness"
 fi

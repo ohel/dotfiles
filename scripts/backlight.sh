@@ -3,9 +3,9 @@
 # Give a brightness delta integer (positive or negative prefixed with -) as parameter.
 # If parameter is not an integer (has a .), it is interpreted as a percentage of max brightness.
 
-backlight=/sys/class/backlight/intel_backlight
+backlight=$(ls /sys/class/backlight/ | head -n 1)
 
-[ ! -e $backlight ] && exit 1
+[ ! "$backlight" ] && echo "No backlight control found." && exit 1
 [ "$#" -eq 0 ] && exit 1
 
 max=$(cat $backlight/max_brightness)
