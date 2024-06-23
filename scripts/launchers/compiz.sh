@@ -1,14 +1,16 @@
 #!/usr/bin/sh
-# Compiz 0.9 series installed with prefix /opt/programs/compiz.
+# Compiz 0.9 series installed with custom prefix.
 
-if [ "$(ps -e | grep compiz)" ]
+prefix=/opt/programs/compiz
+
+if [ "$(ps -ef | grep $prefix/bin/compiz | grep -v grep)" ]
 then
-    killall -9 compiz
-    killall -9 gtk-window-decorator
+    killall -9 compiz 2>/dev/null
+    killall -9 gtk-window-decorator 2>/dev/null
 fi
-env LD_LIBRARY_PATH=/opt/programs/compiz/lib64:/opt/programs/compiz/lib/compiz /opt/programs/compiz/bin/compiz ccp --replace &
+env LD_LIBRARY_PATH=$prefix/lib64:$prefix/lib/compiz $prefix/bin/compiz ccp --replace &
 
-/opt/programs/compiz/bin/gtk-window-decorator --replace &
+$prefix/bin/gtk-window-decorator --replace &
 
 # This would use the metacity theme /usr/share/themes/current_compiz but it only works if Metacity is installed.
-# /opt/programs/compiz/bin/gtk-window-decorator --replace --metacity-theme current_compiz &
+# $prefix/bin/gtk-window-decorator --replace --metacity-theme current_compiz &

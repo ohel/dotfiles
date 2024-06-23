@@ -6,6 +6,10 @@
 # 4. repeat, starting the next blend with the current desktop background from last round
 # If ~/.themes/background is a symbolic link to background image, it is updated as well after blending.
 
+scriptname=$(basename $0)
+existing_scripts=$(ps -ef | grep "/usr/bin/sh .*$scriptname$" | grep -v grep | wc -l)
+[ $existing_scripts -gt 2 ] && echo "Background blender already running." && exit 1
+
 change_interval_s=${1:-1800}
 images_dir=${2:-~/.themes/backgrounds}
 tmp_dir=${3:-~/.cache/background_blender}

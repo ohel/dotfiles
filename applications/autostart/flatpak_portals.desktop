@@ -4,7 +4,6 @@ Type=Application
 Name=Flatpak portals
 Comment=Portals for flatpak
 Exec=.scripts/launchers/flatpak_portals.sh
-OnlyShowIn=XFCE;
 StartupNotify=false
 Terminal=false
 Hidden=false

@@ -1,4 +1,4 @@
-#!/usr/bin/pulseaudio -nF
+#!/usr/bin/pulseaudio -nDF
 # Make PulseAudio a simple ALSA bridge.
 
 .fail

@@ -1,10 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Application
-Name=Multimedia keys
-Comment=Set extra bindings
-Exec=.scripts_extra/mmkeys.sh
-OnlyShowIn=XFCE;
+Name=Key bindings
+Comment=Set key bindings
+Exec=.scripts_extra/keybindings.sh
 StartupNotify=false
 Terminal=false
 Hidden=false
+RunHook=0
+

@@ -4,7 +4,6 @@ Type=Application
 Name=Check router
 Comment=Check if router is OK
 Exec=.scripts/checkrouter.sh fast auto
-OnlyShowIn=XFCE;
 StartupNotify=false
 Terminal=false
 Hidden=false

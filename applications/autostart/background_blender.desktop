@@ -3,7 +3,6 @@ Encoding=UTF-8
 Type=Application
 Name=Background blender
 Exec=.scripts/background_blender.sh
-OnlyShowIn=XFCE;
 RunHook=0
 StartupNotify=false
 Terminal=false

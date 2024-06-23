@@ -1,9 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Application
-Name=udiskie
-Comment=Automounter
-Exec=/usr/bin/udiskie -NAt2
+Name=RSS feeds gatherer
+Exec=.scripts/rssfeeds.sh
 StartupNotify=false
 Terminal=false
 Hidden=false

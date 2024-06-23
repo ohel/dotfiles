@@ -3,7 +3,6 @@ Encoding=UTF-8
 Type=Application
 Name=feh (Set background)
 Exec=feh --no-fehbg --bg-fill .themes/background
-OnlyShowIn=XFCE;
 StartupNotify=false
 Terminal=false
 Hidden=false

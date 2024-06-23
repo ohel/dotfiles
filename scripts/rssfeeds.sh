@@ -1,6 +1,10 @@
 #!/usr/bin/bash
 # Gather some RSS feeds and create an HTML file from them.
 
+scriptname=$(basename $0)
+existing_scripts=$(ps -ef | grep "/usr/bin/bash .*$scriptname$" | grep -v grep | wc -l)
+[ $existing_scripts -gt 2 ] && echo "RSS feeds script already running." && exit 1
+
 output=~/.local/share/rssfeeds.html
 feeds=(
     "http://rss.slashdot.org/Slashdot/slashdotMain"
@@ -34,7 +38,8 @@ EOF
     echo "<hr>" >> $output
     for feed in ${feeds[@]}
     do
-        rsstool --sdesc --html -o $out_tmp "$feed"
+        # Suppress non-error messages from stderr with grep trick.
+        rsstool --sdesc --html -o $out_tmp "$feed" 2>&1 | grep -v "[0-9] feeds"
         sed -i "s/\(^.*\)<a\(.*$\)/<tr><td>\1<\/td><td><a\2<\/td><\/tr>/g" $out_tmp
         sed -i "s/<br>//g" $out_tmp
         tail -n 5 $out_tmp >> $output

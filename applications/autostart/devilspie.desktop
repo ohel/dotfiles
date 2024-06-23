@@ -4,7 +4,6 @@ Type=Application
 Name=Devilspie2
 Comment=Perform scripted actions to new windows
 Exec=/usr/bin/devilspie2
-OnlyShowIn=XFCE;
 StartupNotify=false
 Terminal=false
 Hidden=false

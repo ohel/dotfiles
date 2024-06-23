@@ -4,7 +4,6 @@ Type=Application
 Name=Compiz
 Comment=Compiz window manager
 Exec=.scripts/launchers/compiz.sh
-OnlyShowIn=XFCE;
 StartupNotify=false
 Terminal=false
 Hidden=false

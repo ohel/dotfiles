@@ -4,7 +4,6 @@ Type=Application
 Name=Claws mail
 Comment=Email application
 Exec=.scripts/launchers/clawsmail.sh
-OnlyShowIn=XFCE;
 StartupNotify=false
 Terminal=false
 Hidden=false

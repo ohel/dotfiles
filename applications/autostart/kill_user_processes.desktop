@@ -1,9 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
+Version=0.9.4
 Type=Application
-Name=udiskie
-Comment=Automounter
-Exec=/usr/bin/udiskie -NAt2
+Name=Kill user processes
+Exec=/usr/bin/killall -u panther
+RunHook=1
 StartupNotify=false
 Terminal=false
 Hidden=false

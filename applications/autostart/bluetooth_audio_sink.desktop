@@ -4,8 +4,8 @@ Type=Application
 Name=Bluetooth Audio Sink
 Comment=Receive A2DP Bluetooth audio
 Icon=bluetooth
-Exec=bash -c 'ps -e | grep bluealsa && bluealsa-aplay --profile-a2dp 00:00:00:00:00:00'
-OnlyShowIn=XFCE;
+Exec=bash -c 'ps -e | grep bluealsa >/dev/null 2>&1 && bluealsa-aplay --profile-a2dp 00:00:00:00:00:00'
 StartupNotify=false
 Terminal=false
 Hidden=false
+

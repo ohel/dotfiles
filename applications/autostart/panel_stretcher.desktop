@@ -3,7 +3,6 @@ Encoding=UTF-8
 Type=Application
 Name=Panel stretcher
 Exec=.scripts/xfce4-panel_stretcher.sh
-OnlyShowIn=XFCE;
 RunHook=0
 StartupNotify=false
 Terminal=false

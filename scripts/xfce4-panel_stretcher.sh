@@ -1,6 +1,10 @@
 #!/usr/bin/sh
 # To prevent OLED burn-in, changes the xfce4-panel length at an interval.
 
+scriptname=$(basename $0)
+existing_scripts=$(ps -ef | grep "/usr/bin/sh .*$scriptname$" | grep -v grep | wc -l)
+[ $existing_scripts -gt 2 ] && echo "Panel stretcher already running." && exit 1
+
 interval=${1:-900}
 
 easeInOutExp200Steps() {

@@ -33,18 +33,19 @@ xset s off
 mkdir -p $(readlink ~/.commoncache) 2>/dev/null
 mkdir -p $(readlink ~/.thumbnails) 2>/dev/null
 mkdir -p $(readlink ~/.cache) 2>/dev/null
-which mpv 2>/dev/null && [ -d ~/.commoncache ] && mkfifo ~/.commoncache/mpvfifo
-[ -d ~/.sessions ] && ln -sf ~/.sessions ~/.cache/sessions
+which mpv >/dev/null 2>&1 && [ -d ~/.commoncache ] && [ ! -e ~/.commoncache/mpvfifo ] && mkfifo ~/.commoncache/mpvfifo
+[ -d ~/.sessions ] && [ ! -e ~/.cache/sessions ] && ln -sf ~/.sessions ~/.cache/sessions
 
 # This temporary directory is needed if using mhwaveedit.
-which mhwaveedit 2>/dev/null && mkdir -p /tmp/mhwaveedit
+which mhwaveedit >/dev/null 2>&1 && mkdir -p /tmp/mhwaveedit
 
 # This application does absolutely nothing, it just waits to be killed, keeping X alive.
 # It is as stable as it gets, even if the real session manager might be unstable.
 # The code consists of a single pause() call.
 lastone=$(ls /opt/programs/pause/pause 2>/dev/null)
 
-export XDG_CURRENT_DESKTOP="X-Generic"
+# Need to set to XFCE so that log out etc. works correctly when using XFCE panel. Otherwise X-Generic would be more correct.
+export XDG_CURRENT_DESKTOP="XFCE"
 
 # To use this file as an Xsession file, create a link:
 # ln -s ~/.xinitrc ~/.xsession && chmod +x ~/.xinitrc
