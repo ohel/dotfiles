@@ -21,4 +21,6 @@ echo "Connecting to $remote_ip" as $user.
 echo "Press Ctrl+Alt+Return to toggle full screen."
 echo "Press right Ctrl to release grabbed keyboard."
 
-xfreerdp /v:$remote_ip /smart-sizing:1920x1080 /f /network:lan /u:$user /bpp:24 +glyph-cache +fonts +grab-keyboard /audio-mode:1 -drives -floatbar -decorations -compression $3
+# Audio-mode 1 leaves sound on server, 2 disables audio.
+# Flags +fonts and +keyboard-grab are already enabled by default.
+xfreerdp /v:$remote_ip /u:$user /d:"" /smart-sizing:1920x1080 /network:lan /bpp:24 /cache:glyph:on /audio-mode:1 +f -floatbar -drives -decorations -compression $3
