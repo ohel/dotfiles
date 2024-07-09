@@ -8,6 +8,8 @@ backlight=$(ls /sys/class/backlight/ | head -n 1)
 [ ! "$backlight" ] && echo "No backlight control found." && exit 1
 [ "$#" -eq 0 ] && exit 1
 
+backlight="/sys/class/backlight/$backlight"
+
 max=$(cat $backlight/max_brightness)
 current=$(cat $backlight/brightness)
 
