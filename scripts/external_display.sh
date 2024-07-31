@@ -20,11 +20,14 @@ testfile=/tmp/external_display
 primary_background=~/.themes/background
 secondary_background=~/.themes/background2
 dpi_config_file=~/.config/dpi
+primary_display_file=~/.config/primary_display
 
 panel_pid=$(ps -e | grep xfce4-panel$ | tr -s ' ' | cut -f -2 -d ' ')
 
-# Identify HiDPI (4K) displays by their resolution width. This is also the maximum resolution limit (so 4096x2160 is skipped).
-HIDPI_WIDTH=3840
+# Identify 4K displays by their resolution width. This is also the maximum resolution limit (so 4096x2160 is skipped).
+MAX_4K_WIDTH=3840
+
+[ -e $primary_display_file ] && primary_display=$(cat $primary_display_file)
 
 script_mode="switch"
 ([ "$1" = "switch" ] || [ "$1" = "extend" ] || [ "$1" = "mirror" ]) && script_mode=$1
@@ -33,7 +36,7 @@ then
     primary_display=$1
     script_mode=$2
 else
-    primary_display=$2
+    primary_display=${primary_display:-2}
 fi
 
 xrandrout="$(xrandr)"
@@ -45,7 +48,7 @@ p_width=$(echo $primary_mode | cut -f 1 -d 'x')
 # Sometimes the native resolution is not the first mode line, but the second. This might be the case with e.g. 4K televisions.
 mode_candidate=$(echo "$xrandrout" | grep -A 2 $primary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
 mc_width=$(echo $mode_candidate | grep -o "^[0-9]\{3,4\}")
-([ $p_width -gt $HIDPI_WIDTH ] || ([ $mc_width -le $HIDPI_WIDTH ] && [ $(echo $primary_mode | grep -o "^[0-9]\{3,4\}") -lt $mc_width ])) && primary_mode=$mode_candidate
+([ $p_width -gt $MAX_4K_WIDTH ] || ([ $mc_width -le $MAX_4K_WIDTH ] && [ $(echo $primary_mode | grep -o "^[0-9]\{3,4\}") -lt $mc_width ])) && primary_mode=$mode_candidate
 
 echo "Primary display: $primary_display, mode: $primary_mode"
 
@@ -56,7 +59,7 @@ then
     mode_candidate=$(echo "$xrandrout" | grep -A 2 $secondary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
     mc_width=$(echo $mode_candidate | grep -o "^[0-9]\{3,4\}")
     s_width=$(echo $secondary_mode | cut -f 1 -d 'x')
-    ([ $s_width -gt $HIDPI_WIDTH ] || ([ $mc_width -le $HIDPI_WIDTH ] && [ $(echo $secondary_mode | grep -o "^[0-9]\{3,4\}") -lt $mc_width ])) && secondary_mode=$mode_candidate
+    ([ $s_width -gt $MAX_4K_WIDTH ] || ([ $mc_width -le $MAX_4K_WIDTH ] && [ $(echo $secondary_mode | grep -o "^[0-9]\{3,4\}") -lt $mc_width ])) && secondary_mode=$mode_candidate
     echo "Secondary display: $secondary_display, mode: $secondary_mode"
 fi
 
@@ -163,7 +166,7 @@ fi
 [ -e $dpi_config_file ] && common_dpi=$(cat $dpi_config_file)
 
 scale=1
-[ $p_width -eq $HIDPI_WIDTH ] && [ $ignore_primary_scale -eq 0 ] && scale=2
+[ $p_width -eq $MAX_4K_WIDTH ] && [ $ignore_primary_scale -eq 0 ] && scale=2
 
 [ "$secondary_display" ] && s_phys_width=$(echo "$xrandrout" | grep -A 1 $secondary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
 if [ "$s_phys_width" ] && [ $s_phys_width -gt 0 ]
@@ -172,7 +175,7 @@ then
     s_dpi_set=96
     [ $s_dpi_calc -gt 100 ] && s_dpi_set=112
     [ $s_dpi_calc -gt 140 ] && [ $s_phys_width -gt 300 ] && s_dpi_set=144
-    [ $s_width -eq $HIDPI_WIDTH ] && scale=2
+    [ $s_width -eq $MAX_4K_WIDTH ] && scale=2
     [ ! "$common_dpi" ] && [ "$p_dpi_set" ] && [ $s_dpi_set -lt $p_dpi_set ] && common_dpi=$s_dpi_set
 fi
 
