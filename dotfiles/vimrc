@@ -641,6 +641,9 @@ if has('gui_running')
 
     endfunction
     nnoremap ¨ :call <SID>ToggleAlternativeFont()<cr>
+
+    nnoremap <s-ScrollWheelUp> 5zh
+    nnoremap <s-ScrollWheelDown> 5zl
 endif
 
 function! OnVimEnter()
