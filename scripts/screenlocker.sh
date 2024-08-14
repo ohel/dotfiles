@@ -17,8 +17,8 @@ then
     image=$(ls -1 $imagesdir/*.* | head -n $index | tail -n 1)
 fi
 
-# Primary screen resolution of form <width>x<height>, e.g. 3840x2160.
-resolution=$(xrandr | grep primary | cut -f 4 -d ' ' | cut -f 1 -d '+' | grep -o "[0-9]*x[0-9]*")
+# First found screen resolution of form <width>x<height>, e.g. 3840x2160.
+resolution=$(xrandr | grep "[0-9.][0-9.]\*" | head -n 1 | grep -o "[0-9]*x[0-9]*")
 
 if [ "$resolution" ] && [ "$(which convert 2>/dev/null)" ]
 then

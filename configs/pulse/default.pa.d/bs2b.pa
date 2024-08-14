@@ -1,0 +1,9 @@
+# Make PulseAudio use LADSPA stereo-to-binaural plugin by default.
+# Add this file to /etc/pulse/default.pa.d, and to your default.pa file:
+# .nofail
+# .include /etc/pulse/default.pa.d
+
+.nofail
+load-module module-ladspa-sink sink_name=bs2b plugin=bs2b label=bs2b control=650,9.0
+set-default-sink bs2b
+.fail
