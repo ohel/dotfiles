@@ -38,9 +38,6 @@ then
     exit 0
 fi
 
-# If ALSA fails, we'll do PulseAudio volume control instead.
-do_pulse=""
-
 # ALSA volume control.
 if [ "$card" = "any" ]
 then
@@ -61,13 +58,15 @@ then
     [ "$card" = "any" ] && [ "$altcard" ] && card=$altcard
 fi
 
+# If ALSA fails, we'll do PulseAudio volume control instead.
+do_pulse=""
 [ "$card" = "any" ] && echo "Control not found from any ALSA device." && do_pulse=yes
 
 if [ ! "$do_pulse" ]
 then
     channel=$(amixer -c $card get "$dev",0 | tail -n 1 | cut -f 1 -d ':' | sed "s/^[ ]*//")
     current_vol=$(amixer -M -c $card get "$dev",0 | grep "$channel:" | sed "s/.*\[\([0-9]*\)%\].*/\1/")
-    [ ! "$current_vol" ] && echo "Could not get current volume." && do_pulse=yes
+    [ ! "$current_vol" ] && echo "Could not get current volume from ALSA." && do_pulse=yes
 fi
 
 if [ ! "$do_pulse" ]
@@ -78,11 +77,17 @@ then
     amixer -M -c $card set "$dev",0 "$new_vol"% >/dev/null
 fi
 
-# PulseAudio volume control. This also controls for example Spotify's volume, as it is locked to PulseAudio volume.
-if [ "$do_pulse" ] && [ "$(ps -e | grep pulseaudio$)" ]
+# PulseAudio (PipeWire) volume control. This also controls for example Spotify's volume, as it is locked to PulseAudio volume.
+if [ "$do_pulse" ] && [ "$(ps -e | grep \\\(pulseaudio$\\\)\\\|\\\(pipewire-pulse\\\))" ]
 then
-    default_sink=$(pacmd list-sinks | grep "\* index" | cut -f 2 -d ':' | tr -d ' ')
-    [ ! "$default_sink" ] && echo "Could not get default sink." && exit 1
+
+    # If PipeWire was running instead of PulseAudio, pacmd would fail.
+    if [ "$(ps -e | grep pipewire-pulse)" ]
+    then
+        default_sink="@DEFAULT_SINK@"
+    else
+        default_sink=$(pacmd list-sinks | grep "\* index" | cut -f 2 -d ':' | tr -d ' ')
+    fi
 
     current_vol=$(pactl get-sink-volume $default_sink | grep -o "[0-9]\{1,3\}%" | head -n 1 | tr -d '%')
     new_vol=$(echo "$current_vol $1 $vol_step" | bc)
