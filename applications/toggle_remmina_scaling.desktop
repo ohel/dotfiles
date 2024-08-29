@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Toggle Remmina scaling factor
+Comment=Toggle between 100% and 200% RDP scaling
+Exec=.scripts/toggle_remmina_scaling.sh
+Icon=zoom-fit-best
+Terminal=false
+StartupNotify=false
