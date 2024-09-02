@@ -1,6 +1,6 @@
 #!/usr/bin/sh
 # Raise ($1 = "+") or lower ($1 = "-") the volume level of device $3 (default: "Master") on card $2 (default: "any") by $4 integer percent units (default: 5) using ALSA mixer. If card = "any", all ALSA cards are searched for the device and the first one found is used. Capabilities with just volume (not pvolume or others) are preferred so that software volume control takes precedence over hardware. The last channel found for the device is used for control.
-# If changing ALSA volume fails (perhaps deliberately) and PulseAudio is running, change the volume of the default PulseAudio sink instead.
+# If changing ALSA volume fails (perhaps deliberately), card is set to "any", and PulseAudio is running, change the volume of the default PulseAudio sink instead.
 # If JACK is running, change ($1) the volume of a running audio player application if one is running. Otherwise do nothing (no ALSA or PulseAudio volume control).
 # If ~/.config/master_volume_dev exists, that file is used for ALSA device by default unless given as $3. Use a non-existent device to force PulseAudio.
 
@@ -67,20 +67,12 @@ then
     channel=$(amixer -c $card get "$dev",0 | tail -n 1 | cut -f 1 -d ':' | sed "s/^[ ]*//")
     current_vol=$(amixer -M -c $card get "$dev",0 | grep "$channel:" | sed "s/.*\[\([0-9]*\)%\].*/\1/")
     [ ! "$current_vol" ] && echo "Could not get current volume from ALSA." && do_pulse=yes
-fi
-
-if [ ! "$do_pulse" ]
-then
-    new_vol=$(expr $current_vol $1 $vol_step)
-    [ "$1" = "+" ] && [ $new_vol -gt 100 ] && new_vol=100
-    [ "$1" = "-" ] && [ $new_vol -lt $vol_step ] && new_vol=$vol_step
-    amixer -M -c $card set "$dev",0 "$new_vol"% >/dev/null
+    [ ! "$do_pulse" ] && new_vol=$(expr $current_vol $1 $vol_step)
 fi
 
 # PulseAudio (PipeWire) volume control. This also controls for example Spotify's volume, as it is locked to PulseAudio volume.
 if [ "$do_pulse" ] && [ "$(ps -e | grep \\\(pulseaudio$\\\)\\\|\\\(pipewire-pulse\\\))" ]
 then
-
     # If PipeWire was running instead of PulseAudio, pacmd would fail.
     if [ "$(ps -e | grep pipewire-pulse)" ]
     then
@@ -91,11 +83,15 @@ then
 
     current_vol=$(pactl get-sink-volume $default_sink | grep -o "[0-9]\{1,3\}%" | head -n 1 | tr -d '%')
     new_vol=$(echo "$current_vol $1 $vol_step" | bc)
-    [ "$1" = "+" ] && [ $new_vol -gt 100 ] && new_vol=100
-    [ "$1" = "-" ] && [ $new_vol -lt $vol_step ] && new_vol=$vol_step
-
-    pactl set-sink-volume $default_sink "$new_vol"%
 fi
+
+[ "$1" = "+" ] && [ $new_vol -gt 100 ] && new_vol=100
+# If step < 10%, force minimum volume equal to step size.
+[ "$1" = "-" ] && [ $vol_step -le 10 ] && [ $new_vol -lt $vol_step ] && new_vol=$vol_step
+[ "$1" = "-" ] && [ $new_vol -lt 0 ] && new_vol=0
+
+[ ! "$do_pulse" ] && amixer -M -c $card set "$dev",0 "$new_vol"% >/dev/null
+[ "$do_pulse" ] && pactl set-sink-volume $default_sink "$new_vol"%
 
 [ ! "$(which notify-send 2>/dev/null)" ] || [ ! "$DISPLAY" ] && exit 0
 
