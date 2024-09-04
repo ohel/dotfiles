@@ -193,3 +193,7 @@ Mod4 + Down
 # For toggling between audio sources or muting etc.
 "~/.scripts/toggle_audio.sh"
 XF86AudioMute
+
+# Make the Copilot key work as the Menu key. In reality an F23 key is also sent, but it's not seen on Linux apparently.
+"xdotool key --clearmodifiers Menu"
+Mod4 + Shift_L
