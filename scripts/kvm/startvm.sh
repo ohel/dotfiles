@@ -70,15 +70,19 @@ fi
 soundhw=""
 if [ "$audio" = 1 ]
 then
-    soundhw="-device intel-hda -device hda-duplex,audiodev=snd0"
+    soundhw="-device intel-hda -device hda-duplex,audiodev=snd$net_id"
     if [ "$(ps -e | grep pulseaudio)" ]
     then
-        soundhw="$soundhw -audiodev pa,id=snd0"
+        socket=$(ls /run/user/*/pulse/native 2>/dev/null | head -n 1)
+        [ ! "$socket" ] && continue
+        user=$(ls -o $socket | cut -f 3 -d ' ')
+        cp /home/$user/.config/pulse/cookie ~/.config/pulse/cookie
+        soundhw="$soundhw -audiodev pa,id=snd$net_id,server=unix:$socket"
     else
         modprobe snd-aloop
         dac="hw:Loopback,,0,,4" # loop_vm_dac_in
         adc="hw:Loopback,,1,,5" # loop_vm_adc_out
-        soundhw="$soundhw -audiodev alsa,id=snd0,out.dev=$dac,in.dev=$adc"
+        soundhw="$soundhw -audiodev alsa,id=snd$net_id,out.dev=$dac,in.dev=$adc"
     fi
 fi
 
@@ -92,14 +96,18 @@ then
     [ "$net_id" -lt 10 ] && port="0"$port
     videohw="-vga qxl \
         -device virtio-serial-pci \
-        -device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 \
-        -chardev spicevmc,id=spicechannel0,name=vdagent \
+        -device virtserialport,chardev=spicechannel$net_id,name=com.redhat.spice.0 \
+        -chardev spicevmc,id=spicechannel$net_id,name=vdagent \
         -spice port=600$port,addr=127.0.0.1,disable-ticketing=on"
 fi
 
+# Note: if you have multiple virtual machines, their network devices must have different MAC addresses. Otherwise only one works at a time.
+mac_end=$net_id
+[ "$net_id" -lt 10 ] && mac_end="0"$mac_end
+
 bridged_net_devices=""
 [ "$bridged_network" = 1 ] && bridged_net_devices=\
-    "-device virtio-net-pci,netdev=net"$net_id"_1 -netdev tap,id=net"$net_id"_1,br=$net_bridge,script=kvm_tap_netbridge.sh"
+    "-device virtio-net-pci,netdev=brdev$net_id,mac=00:00:00:00:01:$mac_end -netdev tap,id=brdev$net_id,br=$net_bridge,script=kvm_tap_netbridge.sh"
 
 echo "Starting the virtual machine..."
 qemu-system-x86_64 \
@@ -114,7 +122,7 @@ qemu-system-x86_64 \
 -m $vm_mem_mb \
 -k fi \
 -display none \
--device virtio-net-pci,netdev=net"$net_id"_0 -netdev tap,id=net"$net_id"_0,br=$vm_bridge,script=kvm_tap_vmbridge.sh \
+-device virtio-net-pci,netdev=netdev$net_id,mac=00:00:00:00:00:$mac_end -netdev tap,id=netdev$net_id,br=$vm_bridge,script=kvm_tap_vmbridge.sh \
 -drive file="$img_name",if=virtio,format=raw \
 $bridged_net_devices \
 $soundhw \
@@ -128,17 +136,25 @@ $videohw \
 
 # Common workarounds and tweaks:
 # * Fixes most problems and some BSODs in Windows, especially during setup:
-# -cpu core2duo \
+#     -cpu core2duo \
 # * Required if VM hangs during POST until VNC connection is established:
-# -no-kvm-irqchip \
+#     -no-kvm-irqchip \
+# * The br parameter for netdev does not work, it always adds the tap device to first bridge found. Therefore we need to use scripts.
 # * To fix cursor position in Windows clients, use the usb-tablet device. It might help in VNC connections with other guests also:
-# -device usb-tablet \
+#     -device usb-tablet \
 # * Pass a single USB port through to client (check bus and port with lsusb -t):
-# -device usb-host,hostbus=1,hostport=1 \
+#     -device usb-host,hostbus=1,hostport=1 \
 #   * After Qemu version 2.10.50 (approximately), passed devices nowadays need to have a manually defined USB host controller. However, there is no need to define the "id", "bus" or "addr" parameters manually anymore, they are handled automatically. The USB device speed must also match the host controller speed: for example, a USB headset probably requires nec-usb-xhci.
 #   * In short: first define the controller, then the device which should attach to it.
 #   * The deprecated -usbdevice option implied the ich9-usb-uhci[123] and ich-9-usb-echi1 controllers.
-# * The br parameter for netdev does not work, it always adds the tap device to first bridge found. Therefore we need to use scripts.
+#   * Therefore, to use usb-tablet and pass through devices, add:
+#       -device ich9-usb-uhci1 \
+#       -device ich9-usb-uhci2 \
+#       -device ich9-usb-uhci3 \
+#       -device ich9-usb-ehci1 \
+#       -device usb-tablet \
+#       -device nec-usb-xhci \
+#       -device usb-host,hostbus=1,hostport=1
 
 sleep 2
 
