@@ -6,7 +6,18 @@
 #    systembackupdir: Location where to put full system backups.
 #    backup_source_dirs: Source directories for misc backup.
 #    backup_dest_dirs: Destination directories for misc backup. Should correspond to source directories.
-# Optionally also: systembackupexcludelist: Things to exclude from backup.
+# Optionally also: systembackupexcludelist: Things to exclude from backup. For example:
+#    systembackupexcludelist=(
+#        "/dev/shm/\*"
+#        "/run/\*"
+#        "/home/\*"
+#        "/mnt/\*/\*"
+#        "/proc/\*"
+#        "/sys/\*"
+#        "/tmp/\*"
+#        "/var/lib/docker/\*"
+#        "/swapfile"
+#    )
 #
 # Additionally, for home backups each user may have a ~/.config/backup_exclude file.
 # It can define paths relative to that home directory for stuff that should be excluded.

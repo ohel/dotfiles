@@ -15,3 +15,6 @@ setxkbmap fi
 xset r rate 200 45
 xset b off
 xbindkeys
+
+# Sometimes the Windows key, Alt, Ctrl or Shift gets stuck. This should clear the status.
+xdotool key --clearmodifiers space

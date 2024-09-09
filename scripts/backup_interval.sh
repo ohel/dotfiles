@@ -8,7 +8,7 @@
 backup() {
     scriptsdir=${1:-$HOME}
     backupmountpoint=/mnt/raidstorage
-    backupdir=backups/misc/home_dirs/
+    backupdir=backups/misc/home_dirs
 
     [ ! -e $backupmountpoint ] && return
 

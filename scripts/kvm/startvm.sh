@@ -127,12 +127,6 @@ qemu-system-x86_64 \
 $bridged_net_devices \
 $soundhw \
 $videohw \
--device ich9-usb-uhci1 \
--device ich9-usb-uhci2 \
--device ich9-usb-uhci3 \
--device ich9-usb-ehci1 \
--device usb-tablet \
--device nec-usb-xhci \
 
 # Common workarounds and tweaks:
 # * Fixes most problems and some BSODs in Windows, especially during setup:
