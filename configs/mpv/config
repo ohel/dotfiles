@@ -2,12 +2,20 @@
 [common]
 profile-desc="common settings for all profiles"
 
-# monitor aspect ratio
-monitoraspect=16:9
+vo=gpu-next
+gpu-api=vulkan
+hwdec=vulkan
+opengl-swapinterval=1
 
 # loop video forever
 loop-file=inf
 
+# languages
+alang=en,fi
+slang=fi,en
+
+ao=alsa
+alsa-ignore-chmap
 volume-max=100
 volume=100
 
@@ -25,10 +33,6 @@ msg-level=ao=debug,af=debug,identify=info
 
 profile=gpu-hq
 scaler-resizes-only=yes
-
-# languages
-alang=en,fi
-slang=fi,en
 
 sub-auto=fuzzy # loads all subs containing movie name
 sub-ass-hinting=native
@@ -48,10 +52,8 @@ sub-color="#C0FFFFFF" # more visible
 [surroundmovie]
 profile-desc="surround sound profile for movies"
 
-ao=alsa
 audio-device=alsa/movie
 audio-channels=5.1(alsa)
-alsa-ignore-chmap
 ad-lavc-downmix=no
 profile=common-movie
 
@@ -61,10 +63,8 @@ profile=common-movie
 [surroundmoviebalancedmatrix]
 profile-desc="another surround sound profile for movies"
 
-ao=alsa
 audio-device=alsa/movie_balanced_matrix
 audio-channels=5.1(alsa)
-alsa-ignore-chmap
 ad-lavc-downmix=no
 profile=common-movie
 
@@ -77,7 +77,6 @@ profile-desc="openal profile for movies"
 # "hrtf = true" in ~/.alsoftrc enables HRTF with OpenAL
 ao=openal
 audio-channels=5.1(alsa)
-alsa-ignore-chmap
 ad-lavc-downmix=no
 profile=common-movie
 
@@ -87,9 +86,7 @@ profile=common-movie
 [stereomovie]
 profile-desc="stereo sound profile for movies"
 
-ao=alsa
 audio-channels=stereo
-alsa-ignore-chmap
 profile=common-movie
 
 
@@ -98,17 +95,8 @@ profile=common-movie
 [general]
 profile-desc="profile for general video"
 
-ao=alsa
-
 # don't load subtitles
 no-sub-auto
-
-# don't print anything unnecessary
-really-quiet
-
-# video
-vo=gpu
-opengl-swapinterval=1
 
 
 

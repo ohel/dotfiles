@@ -14,4 +14,7 @@ profile="$1"
 [ "$#" = 1 ] && profile="sr"
 
 scriptdir=$(dirname "$(readlink -f "$0")")
-$scriptdir/media_player.sh $profile --cache=no dvd://$3 --dvd-device="$device"
+$scriptdir/media_player.sh $profile \
+    --cache=no \
+    --deinterlace=auto \
+    dvd://$3 --dvd-device="$device"
