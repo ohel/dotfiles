@@ -1,8 +1,8 @@
 #!/usr/bin/sh
 # Raise ($1 = "+") or lower ($1 = "-") the volume level of device $3 (default: "Master") on card $2 (default: "any") by $4 integer percent units (default: 5) using ALSA mixer. If card = "any", all ALSA cards are searched for the device and the first one found is used. Capabilities with just volume (not pvolume or others) are preferred so that software volume control takes precedence over hardware. The last channel found for the device is used for control.
-# If changing ALSA volume fails (perhaps deliberately), card is set to "any", and PulseAudio is running, change the volume of the default PulseAudio sink instead.
+# If changing ALSA volume fails (perhaps deliberately), card is set to "any", and PulseAudio is running, change the volume of the default PulseAudio sink instead. Same happens if card is set to "PulseAudio".
 # If JACK is running, change ($1) the volume of a running audio player application if one is running. Otherwise do nothing (no ALSA or PulseAudio volume control).
-# If ~/.config/master_volume_dev exists, that file is used for ALSA device by default unless given as $3. Use a non-existent device to force PulseAudio.
+# If ~/.config/master_volume_dev exists, that file is used for ALSA device by default unless given as $3. Use "PulseAudio" as device to always force PulseAudio.
 
 card=${2:-any}
 dev=${3:-"Master"}
@@ -11,8 +11,10 @@ vol_step=${4:-5}
 [ ! "$1" = "+" ] && [ ! "$1" = "-" ] && exit 1
 [ ! "$3" ] && [ -e ~/.config/master_volume_dev ] && dev=$(cat ~/.config/master_volume_dev)
 
+do_pulse="" && [ "$dev" = "PulseAudio" ] && do_pulse=yes
+
 # Application volume control if JACK running.
-if [ "$(ps -e | grep jackd$)" ]
+if [ ! "$do_pulse" ] && [ "$(ps -e | grep jackd$)" ]
 then
     # Quod Libet volume control.
     ql=$(ps -ef | grep -o "[^ ]\{1,\}quodlibet\(.py\)\?$")
@@ -39,7 +41,7 @@ then
 fi
 
 # ALSA volume control.
-if [ "$card" = "any" ]
+if [ ! "$do_pulse" ] && [ "$card" = "any" ]
 then
     for cardnum in $(cat /proc/asound/cards | grep -o "[0-9 ]*\[" | tr -d -c "[:digit:]\n")
     do
@@ -59,8 +61,7 @@ then
 fi
 
 # If ALSA fails, we'll do PulseAudio volume control instead.
-do_pulse=""
-[ "$card" = "any" ] && echo "Control not found from any ALSA device." && do_pulse=yes
+[ ! "$do_pulse" ] && [ "$card" = "any" ] && echo "Control not found from any ALSA device." && do_pulse=yes
 
 if [ ! "$do_pulse" ]
 then
@@ -71,10 +72,10 @@ then
 fi
 
 # PulseAudio (PipeWire) volume control. This also controls for example Spotify's volume, as it is locked to PulseAudio volume.
-if [ "$do_pulse" ] && [ "$(ps -e | grep \\\(pulseaudio$\\\)\\\|\\\(pipewire-pulse\\\))" ]
+if [ "$do_pulse" ]
 then
     # If PipeWire was running instead of PulseAudio, pacmd would fail.
-    if [ "$(ps -e | grep pipewire-pulse)" ]
+    if [ "$(pactl info | grep -i pipewire)" ]
     then
         default_sink="@DEFAULT_SINK@"
     else
