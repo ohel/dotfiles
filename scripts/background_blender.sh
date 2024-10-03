@@ -5,6 +5,7 @@
 # 3. wait for some time (change_interval_s)
 # 4. repeat, starting the next blend with the current desktop background from last round
 # If ~/.themes/background is a symbolic link to background image, it is updated as well after blending.
+# If ~/.themes/background2 exists, it is used as second argument for feh.
 
 scriptname=$(basename $0)
 existing_scripts=$(ps -ef | grep "/usr/bin/sh .*$scriptname$" | grep -v grep | wc -l)
@@ -25,7 +26,8 @@ count=$(ls -1 $images_dir/ | wc -l)
 image_a=$(ls -1 $images_dir/ | head -n $(shuf -i 1-$count -n 1) | tail -n 1)
 image_b=$(ls -1 $images_dir/ | head -n $(shuf -i 1-$count -n 1) | tail -n 1)
 [ -L ~/.themes/background ] && rm ~/.themes/background && ln -s $images_dir/$image_a ~/.themes/background
-feh --no-fehbg --bg-fill $images_dir/$image_a
+secondary_background="" && [ -e ~/.themes/background2 ] && secondary_background=~/.themes/background2
+feh --no-fehbg --bg-fill $images_dir/$image_a $secondary_background
 
 while [ 1 ]
 do
@@ -62,7 +64,7 @@ do
     while [ $percentage -le 100 ]
     do
         time1=$(date +%s%N | cut -b1-13)
-        feh --no-fehbg --bg-fill blend_$percentage.???
+        feh --no-fehbg --bg-fill blend_$percentage.??? $secondary_background
         time2=$(date +%s%N | cut -b1-13)
         time_diff=$(expr $time2 - $time1)
         time_wait=$(expr $blend_interval_ms - $time_diff)
