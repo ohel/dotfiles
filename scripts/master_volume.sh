@@ -68,7 +68,6 @@ then
     channel=$(amixer -c $card get "$dev",0 | tail -n 1 | cut -f 1 -d ':' | sed "s/^[ ]*//")
     current_vol=$(amixer -M -c $card get "$dev",0 | grep "$channel:" | sed "s/.*\[\([0-9]*\)%\].*/\1/")
     [ ! "$current_vol" ] && echo "Could not get current volume from ALSA." && do_pulse=yes
-    [ ! "$do_pulse" ] && new_vol=$(expr $current_vol $1 $vol_step)
 fi
 
 # PulseAudio (PipeWire) volume control. This also controls for example Spotify's volume, as it is locked to PulseAudio volume.
@@ -81,15 +80,23 @@ then
     else
         default_sink=$(pacmd list-sinks | grep "\* index" | cut -f 2 -d ':' | tr -d ' ')
     fi
-
     current_vol=$(pactl get-sink-volume $default_sink | grep -o "[0-9]\{1,3\}%" | head -n 1 | tr -d '%')
-    new_vol=$(echo "$current_vol $1 $vol_step" | bc)
 fi
 
-[ "$1" = "+" ] && [ $new_vol -gt 100 ] && new_vol=100
-# If step < 10%, force minimum volume equal to step size.
+new_vol=$(echo "$current_vol $1 $vol_step" | bc)
+
+# If step <= 10% and new volume less than 10%, use half step size, rounded down.
+# For example, a step of 5% results in volume change of 2% in the 0-10% range for finer tuning.
+use_new_step=""
+[ "$1" = "-" ] && [ $new_vol -lt 10 ] && use_new_step=1
+[ "$1" = "+" ] && [ $current_vol -lt 10 ] && use_new_step=1
+[ "$use_new_step" ] && [ $vol_step -le 10 ] && vol_step=$(expr $vol_step / 2)
+[ "$use_new_step" ] && new_vol=$(echo "$current_vol $1 $vol_step" | bc)
+
+# If step <= 10%, force minimum volume equal to step size.
 [ "$1" = "-" ] && [ $vol_step -le 10 ] && [ $new_vol -lt $vol_step ] && new_vol=$vol_step
 [ "$1" = "-" ] && [ $new_vol -lt 0 ] && new_vol=0
+[ "$1" = "+" ] && [ $new_vol -gt 100 ] && new_vol=100
 
 [ ! "$do_pulse" ] && amixer -M -c $card set "$dev",0 "$new_vol"% >/dev/null
 [ "$do_pulse" ] && pactl set-sink-volume $default_sink "$new_vol"%
