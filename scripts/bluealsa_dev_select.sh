@@ -50,8 +50,9 @@ pcm.bluetooth {
     type plug
     slave.pcm {
         type bluealsa
-        device { @func concat
-            strings [ "$device_mac" ]
+        device { @func getenv
+            vars [ ]
+            default "$device_mac"
         }
         profile "a2dp"
     }
