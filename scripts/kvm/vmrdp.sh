@@ -9,7 +9,7 @@ cliparams_win="+fonts +window-drag /cert-ignore /kbd:Finnish /sec:nla /bpp:32 /s
 cliparams_other="/bpp:24"
 
 default_ip=10.0.1.10
-if [ "$1" = "win" || "$1" = "windows" ]
+if [ "$1" = "win" ] || [ "$1" = "windows" ]
 then
     os="windows"
     ip=$default_ip
@@ -19,7 +19,7 @@ fi
 user=${2:-$(whoami)}
 pass=${3:-$user}
 
-[ "$4" = "win" || "$4" = "windows" ] && os="windows"
+[ "$4" = "win" ] || [ "$4" = "windows" ] && os="windows"
 
 if [ "$os" = "windows" ]
 then

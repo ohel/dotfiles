@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 # Update a kernel by compiling a new kernel if it exists, using old config file from currently running kernel as base.
-# If dracut is found, a new initramfs image is created using it in hostonly mode.
+# If dracut is found, a new initramfs image is created using it.
 # The script copies the necessary files to the boot partition.
 #
 # By default, in rEFInd mode, the script works by updating the directory <EFI system partition>/EFI which is assumed to be mounted to $EFI_DEST_DIR.
@@ -11,8 +11,9 @@
 #
 # In grub mode, instead of rEFInd configs and EFI directory, grub.conf and /boot/boot are updated.
 #
-# If $1 == "grub" or $2 == "grub", grub mode is used.
-# If $1 or $2 is something else, it will be used as the kernel source directory instead. Nothing will be removed, just compiled and copied. The config files (refind.conf and grub.conf) will not be updated, either. This may be used for example to recompile a currently running kernel version with an updated .config file.
+# If $1 or $2 is "grub", grub mode is used.
+# If $1 or $2 is "hostonly", dracut is run using hostonly mode.
+# If $1 or $2 (or $3) is something else, it will be used as the kernel source directory instead. Nothing will be removed, just compiled and copied. The config files (refind.conf and grub.conf) will not be updated, either. This may be used for example to recompile a currently running kernel version with an updated .config file.
 
 # Kernel source directory prefix for automatic release detection. Directories with other prefixes are skipped.
 PREFIX="linux"
@@ -28,9 +29,13 @@ BACKUP_MENUENTRY_IDENTIFIER="backup release"
 
 cwd="$(pwd)"
 use_grub=""
+hostonly_mode=""
 user_given_src_dir="$1"
-[ "$1" == "grub" ] && use_grub=1 && user_given_src_dir="$2"
-[ "$2" == "grub" ] && use_grub=1
+[ "$1" == "grub" ] && use_grub=yes && user_given_src_dir="$2"
+[ "$2" == "grub" ] && use_grub=yes
+[ "$1" == "hostonly" ] && hostonly_mode="--hostonly" && user_given_src_dir="$2"
+[ "$2" == "hostonly" ] && hostonly_mode="--hostonly"
+[ "$use_grub" ] && [ "$hostonly_mode" ] && user_given_src_dir="$3"
 
 use_dracut=""
 $(which dracut >/dev/null 2>&1) && use_dracut=1
@@ -215,7 +220,7 @@ echo "Copied kernel image to /boot."
 if [ "$use_dracut" ]
 then
     echo "Creating initramfs using dracut..."
-    dracut --hostonly --kver $new_release > /dev/null 2>&1
+    dracut $hostonly_mode --kver $new_release --force > /dev/null
     if [ ! -e /boot/initramfs-$new_release.img ]
     then
         echo "Error creating initramfs image. Aborting."
