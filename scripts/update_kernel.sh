@@ -220,7 +220,7 @@ echo "Copied kernel image to /boot."
 if [ "$use_dracut" ]
 then
     echo "Creating initramfs using dracut..."
-    dracut $hostonly_mode --kver $new_release --force > /dev/null
+    dracut $hostonly_mode --kver $new_release --force
     if [ ! -e /boot/initramfs-$new_release.img ]
     then
         echo "Error creating initramfs image. Aborting."
