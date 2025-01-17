@@ -1,6 +1,7 @@
 Files in this directory are usually located in ~/.config, but not always.
 
 * ccsm_compiz_0_9.profile: Compiz config settings manager profile for Compiz 0.9 series.
+* coc: Conquer of Completion settings. For use with Vim.
 * edrums: Some configuration files related to certain eletric MIDI drums.
 * fluidsynth_config: FluidSynth channel mapping configuration for MIDI keyboards.
 * hrtf_1059.mhr: Head-related transfer function made with makehrtf using the HRIR measurements from the Ircam/AKG Listen project. Used with OpenAL, see the alsoftrc dotfile.

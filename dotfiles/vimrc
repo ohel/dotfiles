@@ -241,11 +241,7 @@ if exists('*plug#begin')
     endif
 
     " Conquer of Completion: code completion.
-    let g:coc_global_extensions = [
-        \ 'coc-tsserver',
-        \ 'coc-json',
-        \ 'coc-css',
-        \ 'coc-clangd']
+    " Go to ~/.config/coc/extensions and use npm to manage extensions.
     let g:coc_start_at_startup = 0
     if exists('s:node_path') && filereadable(s:node_path)
         " Set to path for plugins that expect a global node binary, e.g. Prettier.

@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "coc-json": "*",
+    "coc-tsserver": "*",
+    "coc-css": "*",
+    "coc-clangd": "*",
+    "coc-go": "*",
+    "coc-angular": "*"
+  }
+}
