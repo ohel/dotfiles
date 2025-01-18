@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 # Update a kernel by compiling a new kernel if it exists, using old config file from currently running kernel as base.
 # If dracut is found, a new initramfs image is created using it.
+# If /opt/mok/mok.key and /opt/mok/mok.crt exist, the kernel is signed with sbsign.
 # The script copies the necessary files to the boot partition.
 #
 # By default, in rEFInd mode, the script works by updating the directory <EFI system partition>/EFI which is assumed to be mounted to $EFI_DEST_DIR.
@@ -204,6 +205,19 @@ then
 fi
 
 echo "Compiled kernel."
+
+if [ -e /opt/mok/mok.key ] && [ -e /opt/mok/mok.crt ]
+then
+    if [ ! "$(which sbsign 2>/dev/null)" ]
+    then
+        echo "Unable to find sbsign. Aborting."
+        read
+        exit 1
+    fi
+    sbsign --key /opt/mok/mok.key --cert /opt/mok/mok.crt --output arch/x86_64/boot/bzImage arch/x86_64/boot/bzImage
+    echo "Signed kernel using MOK."
+fi
+
 make modules_install
 echo "Installed modules."
 
