@@ -18,6 +18,7 @@
 #        "/var/lib/docker/\*"
 #        "/swapfile"
 #    )
+# Similarly, miscbackupexcludefile can be defined for misc backups. It is passed as exclude-from=FILE parameter to rsync.
 #
 # Additionally, for home backups each user may have a ~/.config/backup_exclude file.
 # It can define paths relative to that home directory for stuff that should be excluded.
@@ -26,6 +27,7 @@ backup_config=/opt/backup_config
 
 [ ! -e $backup_config ] && echo "Error: missing backup config $backup_config" && exit 1
 . /opt/backup_config
+
 [ ! "$mountables" ] && echo "Error: missing definition for mountables" && exit 1
 [ ! "$systembackupdir" ] && echo "Error: missing definition for systembackupdir" && exit 1
 [ ! "$backup_source_dirs" ] && echo "Error: missing definition for backup_source_dirs" && exit 1
@@ -162,10 +164,21 @@ then
     num_of_misc=${#backup_source_dirs[@]}
     if [ $num_of_misc -ne ${#backup_dest_dirs[@]} ]
     then
-        echo "The number of misc backup source and destination directories does not match!"
-        echo "Aborting..."
+        echo "The number of misc backup source and destination directories does not match. Aborting."
         exit 1
     fi
+
+    excludefrom=""
+    if [ "$miscbackupexcludefile" ]
+    then
+        if [ ! -e "$miscbackupexcludefile" ]
+        then
+            echo "Misc backup exclude file doesn't exist. Aborting."
+            exit 1
+        fi
+        excludefrom="--exclude-from=$miscbackupexcludefile --delete-excluded"
+    fi
+
     index=0
     while [ $index -lt $num_of_misc ]
     do
@@ -178,7 +191,7 @@ then
             echo
             echo "*******************************************************************************"
             echo "Synchronising $sourcedir with $destdir..."
-            rsync -ah --progress --delete --log-file "$logdir""$datestring""_rsync_""$index"".log" $sourcedir $destdir
+            rsync -ah --progress --delete $excludefrom --log-file "$logdir""$datestring""_rsync_""$index"".log" $sourcedir $destdir
         fi
         index=$(expr $index + 1)
     done
