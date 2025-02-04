@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-# Create thumbnails of given size ($1) of given media files ($2).
+# Create thumbnails of given size ($1) of given media files ($2) using ImageMagick.
 # For use in Markdown documents (blogs) etc.
 # MP4 video thumbnails are also supported using ffmpeg.
 
@@ -53,7 +53,7 @@ do
         ffmpeg -i "$1" -vf thumbnail -frames:v 1 -y $videotempfile &> /dev/null
         inputfile=$videotempfile
     fi
-    convert -auto-orient "$inputfile" -resize "$size"x"$size" -strip -quality 75 "$filename_thumb"
+    magick "$inputfile" -auto-orient -resize "$size"x"$size" -strip -quality 75 "$filename_thumb"
 
     [ "$videotempfile" ] && [ -e "$videotempfile" ] && rm "$videotempfile"
 

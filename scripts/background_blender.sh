@@ -1,6 +1,6 @@
 #!/usr/bin/sh
 # Given a directory of images (images_dir):
-# 1. create a blend of two random images with a certain transparency step (step_percentage) using ImageMagick (needs magick and convert)
+# 1. create a blend of two random images with a certain transparency step (step_percentage) using ImageMagick
 # 2. fade the desktop background using feh with a specified millisecond interval (blend_interval_ms) during transition
 # 3. wait for some time (change_interval_s)
 # 4. repeat, starting the next blend with the current desktop background from last round
@@ -46,12 +46,12 @@ do
                 cp $image_a blend_0.png
             else
                 image_a=$images_dir/$image_a
-                convert -quality 05 $image_a blend_0.png
+                magick -quality 05 $image_a blend_0.png
             fi
             continue
         elif [ $p_b -eq 100 ]
         then
-            convert -quality 05 $images_dir/$image_b blend_100.png
+            magick -quality 05 $images_dir/$image_b blend_100.png
             break
         fi
         magick $image_a $images_dir/$image_b -define compose:args=$p_b,$p_a -compose blend -composite blend_$p_b.jpg
