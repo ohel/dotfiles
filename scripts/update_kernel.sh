@@ -6,7 +6,7 @@
 #
 # By default, in rEFInd mode, the script works by updating the directory <EFI system partition>/EFI which is assumed to be mounted to $EFI_DEST_DIR.
 # Boot files are copied to $EFI_DEST_DIR/linux, and all config files named "refind.conf" under $EFI_DEST_DIR are updated to point to the kernel release.
-# It is assumed there are only two versions in the config files: the current one, and a backup, identified with $BACKUP_MENUENTRY_IDENTIFIER in its menuentry.
+# It is assumed there are only two versions in the config files: the current one, and a backup, identified with $BACKUP_MENUENTRY_IDENTIFIER in its menuentry. The backup release may be a submenuentry (accessible by pressing Insert, F2, or + key in rEFInd).
 # The backup release will be made to point to the current running release.
 # The backup release menuentry disabled state will be toggled based on whether there is only a single kernel after cleanup.
 #
@@ -131,7 +131,7 @@ function cleanup {
 
     for config_file in $(find $EFI_DEST_DIR/ -name refind.conf)
     do
-        backup_begin=$(grep -n "$BACKUP_MENUENTRY_IDENTIFIER" $config_file | cut -f 1 -d ':')
+        backup_begin=$(grep -in "$BACKUP_MENUENTRY_IDENTIFIER" $config_file | cut -f 1 -d ':')
         backup_end=$(grep -n "menuentry" $config_file | grep -A 1 "^$backup_begin" | tail -n 1 | cut -f 1 -d ':')
         [ ! $backup_end ] && backup_end=$(wc -l $config_file) # Backup entry is the last menuentry.
         [ "$backup_begin" ] && sed -i "$backup_begin,$backup_end s/# *disabled/disabled/" $config_file
@@ -261,7 +261,7 @@ function update_refind_config {
     current_release=$(uname -r)
     sed -i "s/\(\(kernel\)\|\(initramfs\)\)-[2-9]\.[0-9]*\.[0-9]*/\1-$new_release/g" $config_file
 
-    backup_begin=$(grep -n "$BACKUP_MENUENTRY_IDENTIFIER" $config_file | cut -f 1 -d ':')
+    backup_begin=$(grep -in "$BACKUP_MENUENTRY_IDENTIFIER" $config_file | cut -f 1 -d ':')
     backup_end=$(grep -n "menuentry" $config_file | grep -A 1 "^$backup_begin" | tail -n 1 | cut -f 1 -d ':')
     [ ! $backup_end ] && backup_end=$(wc -l $config_file) # Backup entry is the last menuentry.
     if [ "$backup_begin" ]
