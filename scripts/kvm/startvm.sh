@@ -7,6 +7,18 @@ img_name="${1:-"vm.img"}"
 vm_name="${2:-"KVM"}"
 net_id=${3:-10} # Used as the last number of static IP address of the guest, MAC address and VNC display.
 
+pid=$(ps -ef | grep "qemu.*$vm_name" | grep -v grep | tr -s ' ' | cut -f 2 -d ' ')
+if [ "$pid" ]
+then
+    echo $vm_name virtual machine is already running with PID: $pid
+    echo "Press return to kill."
+    read tmp
+    kill $pid
+    sleep 2
+    echo "Press return to restart the virtual machine."
+    read tmp
+fi
+
 vm_mem_mb=8192
 vm_num_cores=4
 vm_threads_per_core=1
@@ -16,10 +28,26 @@ audio=0
 auto_network=1
 auto_vnc=0
 boot_from_cd=0
+boot_menu=0
 bridged_network=0
+tpm=1
+uefi=1
+
+# If using too old OVMF files, some keys are required to be enrolled for secure boot.
+# Use /usr/share/edk2-ovmf/UefiShell.iso as cdrom_image to boot and do:
+#   Shell> fs0:
+#   FS0:\> EnrollDefaultKeys.efi
+#   FS0:\> reset
+# If the file is not .iso but .img instead, try adding it as another drive and booting from there.
+# If there is an error "OEM String with app prefix 4E32566D-8E9E-4F52-81D3-5BB9715F9727 not found" try newer OVMF files with keys already enrolled.
+secure_boot=1
 
 vm_bridge=vmbridge
 net_bridge=netbridge
+uefi_bios="/usr/share/edk2-ovmf/OVMF_CODE.fd"
+[ "$secure_boot" = 1 ] && uefi_bios="/usr/share/edk2-ovmf/OVMF_CODE.secboot.fd"
+# Should be a copy of /usr/share/edk2-ovmf/OVMF_VARS.secboot.fd for storing UEFI variables and keys. Required with secure boot.
+uefi_vars="$(basename -s .img $img_name)_OVMF_VARS.secboot.fd"
 cdrom_image="image.iso"
 
 if [ "$(which gvncviewer 2>/dev/null)" ]
@@ -55,18 +83,6 @@ else
     modprobe kvm-amd
 fi
 
-pid=$(ps -ef | grep "qemu.*$vm_name" | grep -v grep | tr -s ' ' | cut -f 2 -d ' ')
-if [ "$pid" ]
-then
-    echo $vm_name virtual machine is already running with PID: $pid
-    echo "Press return to kill."
-    read tmp
-    kill $pid
-    sleep 2
-    echo "Press return to restart the virtual machine."
-    read tmp
-fi
-
 soundhw=""
 if [ "$audio" = 1 ]
 then
@@ -86,8 +102,9 @@ then
     fi
 fi
 
-bootstring="c"
-[ "$boot_from_cd" = 1 ] && bootstring="d -cdrom $cdrom_image"
+boot_options="order=c"
+[ "$boot_from_cd" = 1 ] && boot_options="order=d -cdrom $cdrom_image"
+[ "$boot_menu" = 1 ] && boot_options="menu=on"
 
 videohw="-vga std"
 if [ ! "$(echo quit | qemu-system-x86_64 -vga qxl -machine none -nographic 2>&1 | grep QXL)" ]
@@ -109,24 +126,53 @@ bridged_net_devices=""
 [ "$bridged_network" = 1 ] && bridged_net_devices=\
     "-device virtio-net-pci,netdev=brdev$net_id,mac=00:00:00:00:01:$mac_end -netdev tap,id=brdev$net_id,br=$net_bridge,script=kvm_tap_netbridge.sh"
 
+uefi_options=""
+[ "$uefi" = 1 ] && uefi_options="-smbios type=0,uefi=on -bios $uefi_bios"
+
+tpm_options=""
+if [ "$tpm" = 1 ]
+then
+    mkdir -p /tmp/emulated_tpm
+    [ ! "$(ps -ef | grep "swtpm.*/tmp/emulated_tpm.*level=20$")" ] && \
+    swtpm socket -d --tpm2 --tpmstate dir=/tmp/emulated_tpm \
+    --ctrl type=unixio,path=/tmp/emulated_tpm/swtpm-sock \
+    --log level=20
+    tpm_options="-chardev socket,id=chrtpm,path=/tmp/emulated_tpm/swtpm-sock -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0"
+fi
+
+secure_boot_options=""
+if [ "$secure_boot" = 1 ]
+then
+    [ ! -e "$uefi_vars" ] && echo "$uefi_vars doesn't exist." && exit 1
+    secure_boot_options="-global driver=cfi.pflash01,property=secure,value=on \
+    -drive if=pflash,format=raw,unit=0,file=$uefi_bios,readonly=on \
+    -drive if=pflash,format=raw,unit=1,file=$uefi_vars \
+    -global ICH9-LPC.disable_s3=1"
+    # Need to disable ACPI S3 suspend/resume, otherwise will result in error:
+    # "Guest has not initialized the display (yet)."
+    # https://bugs.archlinux.org/task/59465.html
+fi
+
 echo "Starting the virtual machine..."
 qemu-system-x86_64 \
--vnc localhost:$net_id \
 -daemonize \
 -enable-kvm \
 -name "$vm_name" \
--boot $bootstring \
+-boot $boot_options \
 -machine q35,accel=kvm \
 -cpu host \
 -smp cores=$vm_num_cores,threads=$vm_threads_per_core,sockets=1 \
 -m $vm_mem_mb \
 -k fi \
--display none \
--device virtio-net-pci,netdev=netdev$net_id,mac=00:00:00:00:00:$mac_end -netdev tap,id=netdev$net_id,br=$vm_bridge,script=kvm_tap_vmbridge.sh \
+-display vnc=localhost:$net_id \
+-device virtio-net,netdev=netdev$net_id,mac=00:00:00:00:00:$mac_end -netdev tap,id=netdev$net_id,br=$vm_bridge,script=kvm_tap_vmbridge.sh \
 -drive file="$img_name",if=virtio,format=raw \
 $bridged_net_devices \
 $soundhw \
 $videohw \
+$uefi_options \
+$tpm_options \
+$secure_boot_options
 
 # Common workarounds and tweaks:
 # * Fixes most problems and some BSODs in Windows, especially during setup:
