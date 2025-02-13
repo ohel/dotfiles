@@ -2,10 +2,11 @@
 # Start a Qemu-KVM virtual machine. Consider this script a template to copy per virtual machine.
 # Assumes the client has drivers installed for the paravirtualized VirtIO Ethernet Adapter,
 # VirtIO SCSI controller, and QXL video device.
+# There's two parameters: passthrough and bridged_network. 0 disables (default), 1 enables.
 
-img_name="${1:-"vm.img"}"
-vm_name="${2:-"KVM"}"
-net_id=${3:-10} # Used as the last number of static IP address of the guest, MAC address and VNC display.
+img_name="vm.img"
+vm_name="KVM"
+net_id=10 # Used as the last number of static IP address of the guest, MAC address and VNC display.
 
 pid=$(ps -ef | grep "qemu.*$vm_name" | grep -v grep | tr -s ' ' | cut -f 2 -d ' ')
 if [ "$pid" ]
@@ -23,14 +24,14 @@ vm_mem_mb=8192
 vm_num_cores=4
 vm_threads_per_core=1
 
-# Note: sounds might not work with new KVM/Qemu versions, especially on modern Windows guests. The audio emulation bugs so that there are cracks and pops all the time, if sounds even work at all.
 audio=0
-auto_network=1
-auto_vnc=0
+auto_setup_network=1
+auto_start_vnc=0
 boot_from_cd=0
 boot_menu=0
-bridged_network=0
-tpm=1
+bridged_network=${2:-0}
+passthrough=${1:-0}
+tpm=0
 uefi=1
 
 # If using too old OVMF files, some keys are required to be enrolled for secure boot.
@@ -40,7 +41,7 @@ uefi=1
 #   FS0:\> reset
 # If the file is not .iso but .img instead, try adding it as another drive and booting from there.
 # If there is an error "OEM String with app prefix 4E32566D-8E9E-4F52-81D3-5BB9715F9727 not found" try newer OVMF files with keys already enrolled.
-secure_boot=1
+secure_boot=0
 
 vm_bridge=vmbridge
 net_bridge=netbridge
@@ -50,13 +51,55 @@ uefi_bios="/usr/share/edk2-ovmf/OVMF_CODE.fd"
 uefi_vars="$(basename -s .img $img_name)_OVMF_VARS.secboot.fd"
 cdrom_image="image.iso"
 
-if [ "$(which gvncviewer 2>/dev/null)" ]
+# See /sys/kernel/iommu_groups/*/devices/* for IOMMU groups, and for details e.g.: lspci -nns 000:13:00
+# If two GPUs share the same driver, unbinding the driver ("echo DEVICE-ID > /sys/bus/pci/devices/DEVICE-ID/driver/unbind") would result in X11 crashing.
+# If using X11 and auto adding GPUs is disabled, you may want to explicitly define the GPU a device refers to, e.g.
+# Section "Device"
+#   BusID "PCI:3:0:0" # Here 0000:3:00.0 would be the primary GPU device address.
+# Another option is to ignore the passthrough device:
+# Section "Device"
+#   Driver "modesetting"
+#   BusID "PCI:13:0:0"
+#   Option "Ignore" "true"
+# The driver has probably been loaded already during initramfs, though. In that case create a modprobe rule such as:
+#   options vfio-pci ids=1002:13c0
+#   softdep amdgpu pre: vfio-pci
+# This would make kernel load vfio-pci before amdgpu and bind vfio-pci to id 1002:13c0.
+# Use "lspci -nn | grep VGA" to check the device id.
+# This script assumes the VGA driver has been bound correctly already. Only the audio driver is unbound.
+# NOTE: especially AMD GPUs might have problems with Windows guests not resetting them correctly, resulting in a passed through device working exactly once during host uptime. Take this into account when testing if the passthrough works. A common indication is "error 43" in device manager for the GPU.
+# There are tools such as RadeonResetBugFixService.exe to mitigate the problem.
+passthrough_video_device="0000:13:00.0"
+passthrough_audio_device="0000:13:00.1"
+passthrough_vbios="vbios_164E.dat"
+passthrough_gopdriver="AMDGopDriver.rom"
+
+if [ "$passthrough" = 1 ]
 then
-    vncviewer="gvncviewer localhost:$net_id"
-elif [ "$(which vncviewer 2>/dev/null)" ]
-then
-    vncviewer="vncviewer :$net_id"
+    # Will probe: vfio, vfio_pci, vfio_pci_core, vfio_iommu_type1
+    # Note that sometimes is required in /etc/modprobe.d/vfio.conf: options vfio_iommu_type1 allow_unsafe_interrupts=1
+    modprobe vfio_pci # Will probe: vfio, vfio_pci, vfio_pci_core, vfio_iommu_type1
+
+    if [ -e /sys/bus/pci/devices/$passthrough_audio_device ]
+    then
+        if [ "$(realpath /sys/bus/pci/devices/$passthrough_audio_device/driver)" != "/sys/bus/pci/drivers/vfio-pci" ]
+        then
+            [ -e /sys/bus/pci/devices/$passthrough_audio_device/driver/unbind ] && echo $passthrough_audio_device > /sys/bus/pci/devices/$passthrough_audio_device/driver/unbind
+            pad_vendor=$(cat /sys/bus/pci/devices/$passthrough_audio_device/vendor)
+            pad_device=$(cat /sys/bus/pci/devices/$passthrough_audio_device/device)
+            echo "$pad_vendor $pad_device" > /sys/bus/pci/drivers/vfio-pci/new_id
+        fi
+    fi
+
+    # This root device is required, otherwise guest fails with error 43 for the GPU.
+    passthrough_options="-device pcie-root-port,id=pcie0,slot=0"
+    [ -e /sys/bus/pci/devices/$passthrough_video_device ] && passthrough_options="$passthrough_options -device vfio-pci,host=$passthrough_video_device,bus=pcie0,addr=00.0,x-vga=on,multifunction=on,romfile=$passthrough_vbios"
+    [ -e /sys/bus/pci/devices/$passthrough_audio_device ] && passthrough_options="$passthrough_options -device vfio-pci,host=$passthrough_audio_device,bus=pcie0,addr=00.1,romfile=$passthrough_gopdriver"
 fi
+
+modprobe tun
+modprobe kvm
+lscpu | grep Intel && modprobe kvm-intel || modprobe kvm-amd
 
 if [ "$bridged_network" = 1 ] && [ "$(brctl show $net_bridge 2>&1 | grep "\(No\)\|\(not \)")" ]
 then
@@ -66,7 +109,7 @@ fi
 
 if [ "$(brctl show $vm_bridge 2>&1 | grep "\(No\)\|\(not \)")" ]
 then
-    if [ "$auto_network" = 0 ]
+    if [ "$auto_setup_network" = 0 ]
     then
         echo "The bridge $vm_bridge does not exist. Aborting..."
         exit 1
@@ -74,13 +117,24 @@ then
 fi
 ./vmnetwork.sh
 
-modprobe tun
-modprobe kvm
-if [ "$(lscpu | grep Intel)" ]
+# Use KVM software, e.g. Input Leap when headless.
+# Alternatively use -vga std and Qemu VNC.
+# Guest screen might require some input such as a mouse click, even with text-only VNC.
+# NOTE: if using passthrough reset fixes such as RadeonResetBugFixService, it might remove the QXL device on startup.
+videohw="-vga none"
+if [ "$passthrough" = 0 ] || [ ! -e /sys/bus/pci/devices/$passthrough_video_device ]
 then
-    modprobe kvm-intel
-else
-    modprobe kvm-amd
+    videohw="-vga std"
+    if [ ! "$(echo quit | qemu-system-x86_64 -vga qxl -machine none -nographic 2>&1 | grep QXL)" ]
+    then
+        port=$net_id
+        [ "$net_id" -lt 10 ] && port="0"$port
+        videohw="-device qxl-vga,vgamem_mb=64,ram_size_mb=256,vram_size_mb=256 \
+            -device virtio-serial-pci \
+            -device virtserialport,chardev=spicechannel$net_id,name=com.redhat.spice.0 \
+            -chardev spicevmc,id=spicechannel$net_id,name=vdagent \
+            -spice port=600$port,addr=127.0.0.1,disable-ticketing=on"
+    fi
 fi
 
 soundhw=""
@@ -105,18 +159,6 @@ fi
 boot_options="order=c"
 [ "$boot_from_cd" = 1 ] && boot_options="order=d -cdrom $cdrom_image"
 [ "$boot_menu" = 1 ] && boot_options="menu=on"
-
-videohw="-vga std"
-if [ ! "$(echo quit | qemu-system-x86_64 -vga qxl -machine none -nographic 2>&1 | grep QXL)" ]
-then
-    port=$net_id
-    [ "$net_id" -lt 10 ] && port="0"$port
-    videohw="-vga qxl \
-        -device virtio-serial-pci \
-        -device virtserialport,chardev=spicechannel$net_id,name=com.redhat.spice.0 \
-        -chardev spicevmc,id=spicechannel$net_id,name=vdagent \
-        -spice port=600$port,addr=127.0.0.1,disable-ticketing=on"
-fi
 
 # Note: if you have multiple virtual machines, their network devices must have different MAC addresses. Otherwise only one works at a time.
 mac_end=$net_id
@@ -153,6 +195,9 @@ then
     # https://bugs.archlinux.org/task/59465.html
 fi
 
+# Shall the guest know it is running virtualized. Turning off might help when installing certain drivers (e.g. for passthrough GPU).
+cpu_host_kvm=off
+
 echo "Starting the virtual machine..."
 qemu-system-x86_64 \
 -daemonize \
@@ -160,7 +205,7 @@ qemu-system-x86_64 \
 -name "$vm_name" \
 -boot $boot_options \
 -machine q35,accel=kvm \
--cpu host \
+-cpu host,kvm=$cpu_host_kvm \
 -smp cores=$vm_num_cores,threads=$vm_threads_per_core,sockets=1 \
 -m $vm_mem_mb \
 -k fi \
@@ -184,17 +229,18 @@ $secure_boot_options
 #     -device usb-tablet \
 # * Pass a single USB port through to client (check bus and port with lsusb -t):
 #     -device usb-host,hostbus=1,hostport=1 \
-#   * After Qemu version 2.10.50 (approximately), passed devices nowadays need to have a manually defined USB host controller. However, there is no need to define the "id", "bus" or "addr" parameters manually anymore, they are handled automatically. The USB device speed must also match the host controller speed: for example, a USB headset probably requires nec-usb-xhci.
+#   * After Qemu version ~2.10.50, passed devices need to have a manually defined USB host controller. However, there is no need to define the "id", "bus" or "addr" parameters anymore. The USB device speed must also match the host controller speed: for example, a USB headset probably requires nec-usb-xhci.
 #   * In short: first define the controller, then the device which should attach to it.
 #   * The deprecated -usbdevice option implied the ich9-usb-uhci[123] and ich-9-usb-echi1 controllers.
-#   * Therefore, to use usb-tablet and pass through devices, add:
+#   * Therefore, to use usb-tablet and pass through devices (note the USB device definitions before $passthrough_options, otherwise e.g. mouse might not work), add:
 #       -device ich9-usb-uhci1 \
 #       -device ich9-usb-uhci2 \
 #       -device ich9-usb-uhci3 \
 #       -device ich9-usb-ehci1 \
 #       -device usb-tablet \
 #       -device nec-usb-xhci \
-#       -device usb-host,hostbus=1,hostport=1
+#       -device usb-host,hostbus=1,hostport=1 \
+#       $passthrough_options
 
 sleep 2
 
@@ -205,7 +251,11 @@ then
     renice +15 $pid
 fi
 
-if [ "$auto_vnc" = 1 ] && [ "$vncviewer" ]
+if [ "$(which gvncviewer 2>/dev/null)" ]
 then
-    $vncviewer &
+    vncviewer="gvncviewer localhost:$net_id"
+elif [ "$(which vncviewer 2>/dev/null)" ]
+then
+    vncviewer="vncviewer :$net_id"
 fi
+[ "$auto_start_vnc" = 1 ] && [ "$vncviewer" ] && $vncviewer &
