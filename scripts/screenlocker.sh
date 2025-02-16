@@ -23,7 +23,7 @@ resolution=$(xrandr | grep "[0-9.][0-9.]\*" | head -n 1 | grep -o "[0-9]*x[0-9]*
 if [ "$resolution" ] && [ "$(which magick 2>/dev/null)" ]
 then
     size=$(echo $resolution | cut -f 1 -d 'x')
-    magick $image -resize "$size"x"$size" -gravity center -crop $resolution+0+0 RGB:- | i3lock -e --raw $resolution:rgb -i /dev/stdin
+    magick $image -resize "$size"x"$size" -gravity center -crop $resolution+0+0 RGB:- | i3lock -e -t --raw $resolution:rgb -i /dev/stdin
 else
     i3lock -t -e -i $image
 fi

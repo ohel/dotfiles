@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Toggle GPU passthrough
+Exec=sudo .scripts/kvm/toggle_gpu_passthrough.sh
+Icon=video-display
+Categories=System
+Hidden=false
+Terminal=true
