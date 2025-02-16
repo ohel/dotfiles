@@ -224,3 +224,10 @@ s0_multioutput_mode = 0
 s0_initiate_key = <Super>space
 s0_initiate_all_key = Disabled
 
+[workarounds]
+s0_ooo_menu_fix = false
+s0_java_fix = false
+s0_java_taskbar_fix = false
+s0_aiglx_fragment_fix = false
+s0_initial_damage_complete_redraw = false
+s0_force_swap_buffers = true

@@ -36,7 +36,7 @@ then
     primary_display=$1
     script_mode=$2
 else
-    primary_display=${primary_display:-$2}
+    primary_display=${2:-$primary_display}
 fi
 
 xrandrout="$(xrandr)"

@@ -1,7 +1,7 @@
+#!/usr/bin/sh
 # Toggles Docker services on/off.
 # The critical bit is Docker setting a FORWARD policy DROP which would break my virtual machines.
 # Other than that, this script mainly just cleans up everything.
-#!/usr/bin/sh
 
 if [ "$(which systemctl 2>/dev/null)" ]
 then

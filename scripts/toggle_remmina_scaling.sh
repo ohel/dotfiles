@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/usr/bin/sh
+# Toggles scaling factor for Remmina RDP connections between 100% and 200%.
+# It's useful to scale when you have a high-DPI display and connect via high-resolution RDP.
 
 conf=~/.config/remmina/remmina.pref
 

@@ -1,9 +1,7 @@
 #!/usr/bin/sh
-
 # The AAC encoder in Avidemux is buggy and adds a strange sound to the beginning of each track.
 # Given an .avi video (saved in Avidemux) with PCM audio, this script will compress the audio
 # using AAC and mux the results in a single .mp4 file.
-
 # Audio is resampled to 44.1 kHz and bitrate is given via an optional second parameter.
 # Needs ffmpeg with fdkaac libs, with sox (for normalizing) and fdkaac encoders optionally.
 

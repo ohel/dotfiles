@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Toggle Compiz Workarounds plugin
+Exec=.scripts/toggle_compiz_workarounds.sh
+Icon=video-display
+Categories=System
+Hidden=false
