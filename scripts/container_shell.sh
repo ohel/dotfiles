@@ -1,8 +1,12 @@
 #!/usr/bin/sh
-# List running Docker containers and select one where to run an interactive shell, or alternatively the command given in $1.
+# List running containers and select one where to run an interactive shell, or alternatively the command given in $1.
+# Both Podman and Docker work if not aliased.
 
-containers=$(docker ps --format "table {{.ID}} {{.Names}}" | grep -A 99 "CONTAINER ID NAMES")
 cmd=${1:-/bin/sh}
+manager=docker
+[ "$(which podman 2>/dev/null)" ] && manager="podman"
+
+containers=$($manager ps --format "table {{.ID}} {{.Names}}" | grep -A 99 "CONTAINER ID NAMES")
 
 if [ ! "$containers" ] || [ $(echo "$containers" | wc -l) -eq 1 ]
 then
@@ -28,4 +32,4 @@ selection=$(echo $selection | tr -c -d [:digit:])
 
 head_index=$(expr $selection + 1)
 container_id=$(echo "$containers" | head -n $head_index | tail -n 1 | cut -f -1 -d ' ')
-docker exec -it $container_id "$cmd"
+$manager exec -it $container_id "$cmd"
