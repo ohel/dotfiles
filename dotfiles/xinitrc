@@ -27,14 +27,15 @@ xset s off
 # Restore ALSA state (volumes etc.) if saved.
 [ -f ~/.asound.state ] && /usr/bin/alsactl restore -f ~/.asound.state 2>/dev/null
 
-# Sometimes I link .thumbnails and .cache to directories under .commoncache
-# and .commoncache itself somewhere under a tmpfs, for example $XDG_RUNTIME_DIR.
-[ "$XDG_RUNTIME_DIR" ] && [ ! -e ~/.commoncache ] && ln -s $XDG_RUNTIME_DIR ~/.commoncache
-mkdir -p $(readlink ~/.commoncache) 2>/dev/null
-mkdir -p $(readlink ~/.thumbnails) 2>/dev/null
+# Link .cache under .tmpfs and .tmpfs itself somewhere under a tmpfs, for example $XDG_RUNTIME_DIR.
+[ "$XDG_RUNTIME_DIR" ] && [ ! -e ~/.tmpfs ] && ln -s $XDG_RUNTIME_DIR ~/.tmpfs
+mkdir -p $(readlink ~/.tmpfs) 2>/dev/null
 mkdir -p $(readlink ~/.cache) 2>/dev/null
-which mpv >/dev/null 2>&1 && [ -d ~/.commoncache ] && [ ! -e ~/.commoncache/mpvfifo ] && mkfifo ~/.commoncache/mpvfifo
+which mpv >/dev/null 2>&1 && [ -d ~/.cache ] && [ ! -e ~/.cache/mpvfifo ] && mkfifo ~/.cache/mpvfifo
+# Persist sessions if directory exists.
 [ -d ~/.sessions ] && [ ! -e ~/.cache/sessions ] && ln -sf ~/.sessions ~/.cache/sessions
+# Persist pip cache if directory exists.
+[ -d ~/.pip-cache ] && [ ! -e ~/.cache/pip ] && ln -sf ~/.pip-cache ~/.cache/pip
 
 # This temporary directory is needed if using mhwaveedit.
 which mhwaveedit >/dev/null 2>&1 && mkdir -p /tmp/mhwaveedit

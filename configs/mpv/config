@@ -22,7 +22,7 @@ volume=100
 osd-color="#40FFFFFF"
 
 no-input-default-bindings
-input-ipc-server=~/.commoncache/mpvfifo
+input-ipc-server=~/.cache/mpvfifo
 
 ###############################################################################
 [common-movie]

@@ -3,7 +3,10 @@
 # - open Chromium browser if it is not running
 # - focus an existing Chromium instance
 # - open the new tab page if no URL is given
-# - open the given URL or a new Chromium window if $1 = newwindow
+# - if $1 = "ifrunning", only open page if Chromium is already running
+# - if $1 = "newwindow", open URL in new window
+# - if $1 = "app", open URL in app mode
+# Give the URL as the last parameter to the script.
 
 # Since version 91 the scale is computed automatically.
 scale="env GDK_DPI_SCALE=1 GDK_SCALE=1"
@@ -18,6 +21,8 @@ focuswin=$(wmctrl -l | grep -e "Chromium" | tail -n 1 | cut -f 1 -d ' ')
 
 if_running=""
 [ "$1" = "ifrunning" ] && if_running=1 && shift
+[ "$1" = "newwindow" ] && new_window=1 && shift
+[ "$1" = "app" ] && app=1 && shift
 
 url=$1
 
@@ -30,19 +35,29 @@ then
     [ ! -e "$filename" ] && file_url_invalid=1 || url="file://$filename"
 fi
 
-[ "$1" = "newwindow" ] && $scale $executable && exit 0
+if [ "$new_window" ]
+then
+    $scale $executable --new-window "$url" &
+    exit 0
+fi
+
+if [ "$app" ]
+then
+    $scale $executable --app="$url" &
+    exit 0
+fi
 
 running_exe=$(ps -ef | grep $executable | grep -v grep)
 
 if [ "$if_running" ] && [ "$running_exe" ] && [ ! "$file_url_invalid" ]
 then
-    $scale $executable "$url"
+    $scale $executable "$url" &
 elif [ ! "$if_running" ] && [ "$url" ] && [ ! "$file_url_invalid" ]
 then
-    $scale $executable "$url"
+    $scale $executable "$url" &
 elif [ ! "$running_exe" ]
 then
-    $scale $executable
+    $scale $executable &
 else
     # To open a blank page: $executable about:blank
     # Instead of opening a blank page, use Ctrl+t to open "new tab" page, which may be for example a speed dial extension page.
