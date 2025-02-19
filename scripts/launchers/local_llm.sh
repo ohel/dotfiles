@@ -3,6 +3,10 @@
 
 prefix=/opt/programs/ollama
 openwebui=/opt/programs/open-webui-venv
+scriptsdir=$(dirname "$(readlink -f "$0")")
+logsdir=~/.cache/local_llm_logs
+
+mkdir -p $logsdir
 
 if [ "$1" = "stop" ]
 then
@@ -15,7 +19,7 @@ fi
 
 if [ ! "$(ps -ef | grep "$prefix/bin/ollama serve$")" ]
 then
-    env LD_LIBRARY_PATH=$prefix/lib $prefix/bin/ollama serve &
+    env LD_LIBRARY_PATH=$prefix/lib $prefix/bin/ollama serve > $logsdir/ollama.log 2>&1 &
 fi
 
 if [ ! "$(ps -ef | grep "$openwebui/bin/open-webui serve$")" ]
@@ -23,9 +27,8 @@ then
     . $openwebui/bin/activate
     # cd so that .webui_secret_key is read from ~
     cd ~
-    open-webui serve &
+    open-webui serve > $logsdir/openwebui.log 2>&1 &
     sleep 5
 fi
 
-scriptsdir=$(dirname "$(readlink -f "$0")")
-$scriptsdir/chromium.sh app "http://localhost:8080"
+$scriptsdir/chromium.sh app "http://localhost:8080" &
