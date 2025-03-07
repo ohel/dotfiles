@@ -5,7 +5,7 @@
 conf=~/.config/remmina/remmina.pref
 
 sf=$(grep rdp_desktopScaleFactor $conf | cut -f 2 -d '=')
-[ $sf -eq 100 ] && sf=200 || sf=100
+[ $sf -eq 100 ] && sf=150 || sf=100
 new_sf=${1:-$sf}
 
-sed -i "s/rdp_desktopScaleFactor=[12]00/rdp_desktopScaleFactor=$new_sf/" $conf
+sed -i "s/rdp_desktopScaleFactor=1[50]0/rdp_desktopScaleFactor=$new_sf/" $conf
