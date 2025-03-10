@@ -6,6 +6,7 @@
 
 imagesdir=~/.themes/lockscreens
 image=~/.themes/lockscreen.png
+tmpfile=/dev/shm/lockscreen
 
 # i3lock is already running.
 [ "$(ps -e | grep i3lock)" ] && exit 1
@@ -23,9 +24,11 @@ resolution=$(xrandr | grep "[0-9.][0-9.]\*" | head -n 1 | grep -o "[0-9]*x[0-9]*
 if [ "$resolution" ] && [ "$(which magick 2>/dev/null)" ]
 then
     size=$(echo $resolution | cut -f 1 -d 'x')
-    magick $image -resize "$size"x"$size" -gravity center -crop $resolution+0+0 RGB:- | i3lock -e -t --raw $resolution:rgb -i /dev/stdin
+    # Use a temporary file instead of pipe because with xautolock magick might segfault otherwise.
+    magick $image -resize "$size"x"$size" -gravity center -crop $resolution+0+0 RGB:$tmpfile
+    i3lock -e -t --raw $resolution:rgb -i $tmpfile
 else
-    i3lock -t -e -i $image
+    i3lock -e -t -i $image
 fi
 
 # Blank screen right after. The sleep is so that using hotkeys for script don't wake up the screen immediately.
