@@ -10,7 +10,7 @@
 #    * toggle-window
 #    * random
 
-ql=$(ps -ef | grep -o "\([^ ]\{1,\}quodlibet\(.py\)\?$\)\|\(\/usr\/bin\/quodlibet\)")
+ql=$(ps -ef | grep -o "\([^ ]\{1,\}quodlibet\(.py\)\?$\)\|\(/usr/bin/quodlibet\)")
 qlcontrol="$HOME/.quodlibet/control"
 spotify=$(ps -e | grep " spotify$")
 
