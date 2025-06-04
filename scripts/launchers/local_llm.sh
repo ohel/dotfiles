@@ -22,6 +22,8 @@ then
     env LD_LIBRARY_PATH=$prefix/lib $prefix/bin/ollama serve > $logsdir/ollama.log 2>&1 &
 fi
 
+[ "$1" = "ollama" ] && echo "Only running ollama." && exit 0
+
 if [ ! "$(ps -ef | grep "$openwebui/bin/open-webui serve$")" ]
 then
     . $openwebui/bin/activate

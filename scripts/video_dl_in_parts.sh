@@ -17,6 +17,10 @@ extension=${4:-mp4}
 
 tmp_dir=$(mktemp -d)
 
+echo "Enter output filename without extension [complete]:"
+read completed
+[ ! "$completed" ] && completed="complete"
+
 current_index=1
 while [ $current_index -le $max_index ]
 do
@@ -41,12 +45,12 @@ do
 done
 
 echo Concatenating segments...
-ffmpeg -f concat -safe 0 -i <(for f in $tmp_dir/seg_*.$extension; do echo "file '$f'"; done) -c copy complete.$extension
+ffmpeg -f concat -safe 0 -i <(for f in $tmp_dir/seg_*.$extension; do echo "file '$f'"; done) -c copy "$completed".$extension
 
 if [ ! -e complete.$extension ]
 then
     echo Error concatenating files using ffmpeg, using cat instead.
-    cat $tmp_dir/seg_*.$extension >> complete.$extension
+    cat $tmp_dir/seg_*.$extension >> "$completed".$extension
 fi
 
 rm $tmp_dir/seg_*.$extension

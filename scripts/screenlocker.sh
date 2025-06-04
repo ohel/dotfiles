@@ -6,7 +6,6 @@
 
 imagesdir=~/.themes/lockscreens
 image=~/.themes/lockscreen.png
-tmpfile=/dev/shm/lockscreen
 
 # i3lock is already running.
 [ "$(ps -e | grep i3lock)" ] && exit 1
@@ -24,12 +23,22 @@ resolution=$(xrandr | grep "[0-9.][0-9.]\*" | head -n 1 | grep -o "[0-9]*x[0-9]*
 if [ "$resolution" ] && [ "$(which magick 2>/dev/null)" ]
 then
     size=$(echo $resolution | cut -f 1 -d 'x')
-    # Use a temporary file instead of pipe because with xautolock magick might segfault otherwise.
-    magick $image -resize "$size"x"$size" -gravity center -crop $resolution+0+0 RGB:$tmpfile
+    # Sometimes magick segfaults with xautolock for some reason. Seems to happen more often with pipes than temporary files.
+    # Hence we kill the magick process if it runs for more than a couple of seconds.
+    conflict_pid=$(ps -ef | grep "magick" | grep -v grep | tr -s ' ' | cut -f 2 -d ' ')
+    magick $image -resize "$size"x"$size" -gravity center -crop $resolution+0+0 RGB:- | i3lock -e -t --raw $resolution:rgb -i /dev/stdin
     i3lock -e -t --raw $resolution:rgb -i $tmpfile
 else
+    conflict_pid="skip"
     i3lock -e -t -i $image
 fi
 
 # Blank screen right after. The sleep is so that using hotkeys for script don't wake up the screen immediately.
 [ -e ~/.config/blank_screen ] && sleep 0.1 && xset s activate
+
+if [ "$conflict_pid" ]
+then
+    sleep 2
+    pid=$(ps -ef | grep "magick" | grep -v grep | tr -s ' ' | cut -f 2 -d ' ')
+    [ "$pid" ] && kill -9 $pid
+fi
