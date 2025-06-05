@@ -1,4 +1,5 @@
 # Make PulseAudio use LADSPA stereo-to-binaural plugin by default.
+# This is useful if you're always using headphones with this computer.
 # Add this file to /etc/pulse/default.pa.d, and to your default.pa file:
 # .nofail
 # .include /etc/pulse/default.pa.d

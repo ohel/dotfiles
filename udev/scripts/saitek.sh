@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # This script starts up xboxdrv for Saitek Cyborg Rumble Pad, creates symlink and sets read permission to new evdev.
 # Need to run as root.
 

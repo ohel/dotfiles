@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Display WiFi status
-Exec=/home/panther/.scripts/wifi_status.sh pause
+Exec=watch -n 1 /home/panther/.scripts/wifi_status.sh
 Icon=network-wireless-symbolic
 Terminal=true
 Categories=Network;Utility

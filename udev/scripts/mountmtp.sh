@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 # Mount a device using simple-mtpfs.
 
 user=panther
