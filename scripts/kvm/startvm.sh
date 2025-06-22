@@ -51,7 +51,14 @@ uefi_bios="/usr/share/edk2-ovmf/OVMF_CODE.fd"
 uefi_vars="$(basename -s .img $img_name)_OVMF_VARS.secboot.fd"
 cdrom_image="image.iso"
 
-# See /sys/kernel/iommu_groups/*/devices/* for IOMMU groups, and for details e.g.: lspci -nns 000:13:00
+# Use "lspci -nn | grep VGA" to check the device id.
+# To find out the device bus, list details using device id. E.g. for AMD IGP:
+#   $ lspci -nnk -d 1002:13c0
+#   11:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Granite Ridge [Radeon Graphics] [1002:13c0] (rev c2)
+#   	Subsystem: ASRock Incorporation Device [1849:364e]
+#   	Kernel driver in use: vfio-pci
+#   	Kernel modules: amdgpu
+# See /sys/kernel/iommu_groups/*/devices/* for IOMMU groups, and for details e.g.: lspci -nns 000:11:00
 # If two GPUs share the same driver, unbinding the driver ("echo DEVICE-ID > /sys/bus/pci/devices/DEVICE-ID/driver/unbind") would result in X11 crashing.
 # If using X11 and auto adding GPUs is disabled, you may want to explicitly define the GPU a device refers to, e.g.
 # Section "Device"
@@ -65,12 +72,11 @@ cdrom_image="image.iso"
 #   options vfio-pci ids=1002:13c0
 #   softdep amdgpu pre: vfio-pci
 # This would make kernel load vfio-pci before amdgpu and bind vfio-pci to id 1002:13c0.
-# Use "lspci -nn | grep VGA" to check the device id.
 # This script assumes the VGA driver has been bound correctly already. Only the audio driver is unbound.
 # NOTE: especially AMD GPUs might have problems with Windows guests not resetting them correctly, resulting in a passed through device working exactly once during host uptime. Take this into account when testing if the passthrough works. A common indication is "error 43" in device manager for the GPU.
 # There are tools such as RadeonResetBugFixService.exe to mitigate the problem.
-passthrough_video_device="0000:13:00.0"
-passthrough_audio_device="0000:13:00.1"
+passthrough_video_device="0000:11:00.0"
+passthrough_audio_device="0000:11:00.1"
 passthrough_vbios="vbios_164E.dat"
 passthrough_gopdriver="AMDGopDriver.rom"
 

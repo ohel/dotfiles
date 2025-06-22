@@ -6,14 +6,16 @@
 # Parameters:
 # $1: URL (use double quotes)
 # $2: segment cue, defaults to "seg-"; a growing segment index should follow
-# $3: max index, if not automatically detected; defaults to 1000
-# $4: extension; defaults to "mp4"
+# $3: start index; defaults to 1
+# $4: max index, if not automatically detected; defaults to 1000
+# $5: extension; defaults to "mp4"
 
 seg_cue=${2:-seg-}
 url_part_1=$(echo "$1" | sed "s/\(.*\)$seg_cue[0-9]*\(.*\)/\1$seg_cue/")
 url_part_2=$(echo "$1" | sed "s/\(.*\)$seg_cue[0-9]*\(.*\)/\2/")
-max_index=${3:-1000}
-extension=${4:-mp4}
+start_index=${3:-1}
+max_index=${4:-1000}
+extension=${5:-mp4}
 
 tmp_dir=$(mktemp -d)
 
@@ -21,7 +23,7 @@ echo "Enter output filename without extension [complete]:"
 read completed
 [ ! "$completed" ] && completed="complete"
 
-current_index=1
+current_index=$start_index
 while [ $current_index -le $max_index ]
 do
     if [ $current_index -lt 10 ]
