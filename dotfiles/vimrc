@@ -146,6 +146,7 @@ autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 autocmd BufNewFile,BufRead *.md set filetype=markdown | set omnifunc=
 autocmd BufNewFile,BufRead *.xaml set filetype=xml
 autocmd BufNewFile,BufRead *.jsonl set filetype=json
+let g:markdown_fenced_languages = ['html', 'xml', 'js=javascript', 'javascript', 'json=javascript', 'ts=typescript', 'typescript', 'sh', 'yml=yaml', 'yaml']
 
 
 
