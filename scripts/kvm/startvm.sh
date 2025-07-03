@@ -73,8 +73,8 @@ cdrom_image="image.iso"
 #   softdep amdgpu pre: vfio-pci
 # This would make kernel load vfio-pci before amdgpu and bind vfio-pci to id 1002:13c0.
 # This script assumes the VGA driver has been bound correctly already. Only the audio driver is unbound.
-# NOTE: especially AMD GPUs might have problems with Windows guests not resetting them correctly, resulting in a passed through device working exactly once during host uptime. Take this into account when testing if the passthrough works. A common indication is "error 43" in device manager for the GPU.
-# There are tools such as RadeonResetBugFixService.exe to mitigate the problem.
+# NOTE: especially AMD GPUs might have problems with Windows guests not resetting them correctly during guest shut down, resulting in a passed through device working exactly once during host uptime. Take this into account when testing if the passthrough works. A common indication is "error 43" in Windows device manager for the GPU.
+# There are tools such as RadeonResetBugFixService.exe to mitigate the problem. What they do is they remove the device from Windows before shutdown, and add the device anew on startup. This forces Windows to reset the device correctly.
 passthrough_video_device="0000:11:00.0"
 passthrough_audio_device="0000:11:00.1"
 passthrough_vbios="vbios_164E.dat"
@@ -82,9 +82,9 @@ passthrough_gopdriver="AMDGopDriver.rom"
 
 if [ "$passthrough" = 1 ]
 then
-    # Will probe: vfio, vfio_pci, vfio_pci_core, vfio_iommu_type1
+    # This will probe: vfio_pci, vfio, vfio_pci_core, vfio_iommu_type1
     # Note that sometimes is required in /etc/modprobe.d/vfio.conf: options vfio_iommu_type1 allow_unsafe_interrupts=1
-    modprobe vfio_pci # Will probe: vfio, vfio_pci, vfio_pci_core, vfio_iommu_type1
+    modprobe vfio_pci
 
     if [ -e /sys/bus/pci/devices/$passthrough_audio_device ]
     then
