@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Boot to Windows
+Exec=sudo .scripts/boot_windows.sh /mnt/efi/a/EFI/Microsoft/Boot/default_selection_override.conf
+Terminal=false
+Type=Application
+Icon=windows
+Categories=System

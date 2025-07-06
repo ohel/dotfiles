@@ -1,31 +1,24 @@
 #!/usr/bin/bash
 # A generic echoing backup script to rsync something to or from a remote location.
-# There are five mandatory parameters, the rest are optional rsync excludes.
+# There are four mandatory parameters and the rest are optional rsync excludes.
 # The parameters are:
-# $1: mode (normal, normaldry, reverse, reversedry)
+# $1: mode (normal, dry, reverse, reversedry)
 # $2: localdir (the directory to back up)
 # $3: server (SSH)
-# $4: remoterootdir (prefix for directories on the remote end, e.g. ~backups)
-# $5: target (directory in server under $remoterootdir)
-# The mode parameter may be postfixed with nowait (e.g. normalnowait) to skip the countdown.
+# $4: target (directory in server, usually backups/$localdir)
+# The mode parameter may include:
+#   * nowait (e.g. normalnowait) to skip the countdown
+#   * git (e.g. reversegit) to include git directories
 # By default git working directories are skipped when syncing from a remote location.
-# The mode parameter may be postfixed with gitdirs (e.g. reversegitdirs) to include git directories.
 
 countdown=3 # Wait this many seconds before actually starting the operation to prevent accidents.
 
-echo
-
-if [ "$#" -lt 4 ]
-then
-    echo "Required parameters missing."
-    exit 1
-fi
+[ "$#" -lt 4 ] && echo "Required parameters missing." && exit 1
 
 mode=$1
 localdir=$2
 server=$3
-remoterootdir=$4
-target=$5
+target=$4
 shift; shift; shift; shift
 excludelist=("$@")
 
@@ -36,13 +29,13 @@ do
     echo "Excluding: $excludeitem"
 done
 
-if [ "$(echo $mode | grep nowait\$)" ]
-then
-    countdown=0
-    mode=$(echo $mode | sed s/nowait\$//)
-fi
+use_normal_mode="" && [ "$(echo $mode | grep normal)" ] && use_normal_mode=yes
+use_reverse_mode="" && [ "$(echo $mode | grep reverse)" ] && use_reverse_mode=yes
+use_dryrun_mode="" && [ "$(echo $mode | grep dry)" ] && use_dryrun_mode=yes
+[ ! "$use_reverse_mode" ] && [ "$use_dryrun_mode" ] && use_normal_mode=yes
+[ "$(echo $mode | grep nowait)" ] && countdown=0
 
-if [[ "$(echo $mode | grep reverse)" != "" && "$(echo $mode | grep gitdirs\$)" == "" ]]
+if [ "$use_reverse_mode" ] && [ ! "$(echo $mode | grep git)" ]
 then
     git_dirs=$(find $localdir -type d -name .git | sed "s/\/\.git\$//" | sed "s/^\.\///")
     for excludeitem in ${git_dirs[@]}
@@ -51,29 +44,29 @@ then
         echo "Skipping git working dir: $excludeitem"
     done
 fi
-mode=$(echo $mode | sed s/gitdirs\$//)
 
 echo
 
 rsync_options="-avzu --delete"
-if [ "$mode" == "normal" ]
+if [ "$use_normal_mode" ] && [ ! "$use_dryrun_mode" ]
 then
-    echo "Starting \"$target\" backup *TO* remote in $countdown seconds."
+    echo "Backup \"$localdir\" *TO* remote \"$target\" in $countdown seconds."
     sleep $countdown
-    rsync $rsync_options $excludeparams $localdir $server:$remoterootdir/$target
-elif [ "$mode" == "normaldry" ]
+    rsync $rsync_options $excludeparams $localdir $server:$target
+elif [ "$use_normal_mode" ] && [ "$use_dryrun_mode" ]
 then
-    echo "Dry run backup \"$target\" *TO* remote."
-    rsync -n $rsync_options $excludeparams $localdir $server:$remoterootdir/$target
-elif [ "$mode" == "reverse" ]
+    echo "Dry run backup \"$localdir\" *TO* remote \"$target\"."
+    rsync -n $rsync_options $excludeparams $localdir $server:$target
+elif [ "$use_reverse_mode" ] && [ ! "$use_dryrun_mode" ]
 then
-    echo "Starting \"$target\" synchronizing *FROM* remote in $countdown seconds."
+    echo "Synchronize \"$target\" *FROM* remote to local \"$localdir\" in $countdown seconds."
     sleep $countdown
-    rsync $rsync_options $excludeparams $server:$remoterootdir/$target/ $localdir
-elif [ "$mode" == "reversedry" ]
+    rsync $rsync_options $excludeparams $server:$target/ $localdir
+elif [ "$use_reverse_mode" ] && [ "$use_dryrun_mode" ]
 then
-    echo "Dry run synchronize \"$target\" *FROM* remote."
-    rsync -n $rsync_options $excludeparams $server:$remoterootdir/$target/ $localdir
+    echo "Dry run synchronize \"$target\" *FROM* remote to local \"$localdir\"."
+    rsync -n $rsync_options $excludeparams $server:$target/ $localdir
 else
-    echo "Unknown backup mode: $mode. Aborted."
+    echo "Unknown mode parameter: $mode"
+    exit 1
 fi

@@ -1,8 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Name=xboxdrv default
-Exec=/opt/xboxdrv/xboxdrvdefault.sh
-Icon=xfce-games
-Terminal=true
-Type=Application
-Categories=Application;Game;

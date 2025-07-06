@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Chromium incognito
-Exec=chromium-browser --incognito
+Exec=env GDK_DPI_SCALE=1 GDK_SCALE=1 chromium-browser --incognito
 Icon=chromium-browser
 Terminal=false
 Categories=Network

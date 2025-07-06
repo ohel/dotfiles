@@ -8,7 +8,7 @@ link_quality=$(cat /proc/net/wireless 2>/dev/null | tail -n 1 | tr -s ' ' | cut 
 link_quality=$(echo "$link_quality. / .7" | bc)
 link_info="$(iw dev $nic link)"
 ssid=$(echo " $link_info" | grep SSID | cut -f 2 -d ':')
-signal=$(echo " $link_info" | grep "signal" | grep -o "\-.*")
+signal_strength=$(echo " $link_info" | grep "signal" | grep -o "\-.*")
 rx_bitrate=$(echo " $link_info" | grep "rx bitrate" | cut -f 2 -d ':')
 tx_bitrate=$(echo " $link_info" | grep "tx bitrate" | cut -f 2 -d ':')
 wifi_gen=4
@@ -21,7 +21,7 @@ echo RX bitrate:$rx_bitrate
 echo TX bitrate:$tx_bitrate
 if [ "$link_quality" = 0 ]
 then
-    echo "Signal: $signal"
+    echo "Signal strength: $signal_strength"
 else
-    echo "Quality: $link_quality% ($signal)"
+    echo "Quality: $link_quality% ($signal_strength)"
 fi

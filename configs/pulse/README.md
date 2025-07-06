@@ -1,11 +1,11 @@
 PulseAudio configuration files for simple ALSA and JACK bridges, to use PulseAudio-only applications without really using PulseAudio. The default location for the config files is /etc/pulse.
 PulseAudio seems to have problems with JACK sometimes so the ALSA loopback pipe could be used with `alsa_in, alsa_out` for the same effect.
 
-* client.conf: PulseAudio client configuration. Essentially just disables auto-spawning PulseAudio.
+* `client.conf`: PulseAudio client configuration. Essentially just disables auto-spawning PulseAudio.
 * `pipe_daemon.conf`: Sets up PulseAudio as just an inobtrusive pipe. Override or link daemon.conf to this file.
 * `bluetooth_daemon.conf`: Sets up PulseAudio with non-flat volumes and resampling, e.g. for Bluetooth use. Override or link daemon.conf to this file.
-* alsapipe.pa: Loads just the essential ALSA modules for PA to work as an ALSA pipe.
-* bluetooth.pa: Loads just the essential Bluetooth modules for PA to work as a Bluetooth bridge.
-* looppipe.pa: Loads just the essential ALSA modules for PA to work as an ALSA pipe using the "loop" ALSA device, which should have a hw:Loopback device behind it.
-* jackpipe.pa: Loads just the essential JACK modules for PA to work as a JACK pipe.
-* pulsejack.sh: Run JACK daemon and PulseAudio as JACK pipe.
+* `alsapipe.pa`: Loads just the essential ALSA modules for PA to work as an ALSA pipe.
+* `bluetooth.pa`: Loads just the essential Bluetooth modules for PA to work as a Bluetooth bridge.
+* `looppipe.pa`: Loads just the essential ALSA modules for PA to work as an ALSA pipe using the "loop" ALSA device, which should have a hw:Loopback device behind it.
+* `jackpipe.pa`: Loads just the essential JACK modules for PA to work as a JACK pipe.
+* `pulsejack.sh`: Run JACK daemon and PulseAudio as JACK pipe.

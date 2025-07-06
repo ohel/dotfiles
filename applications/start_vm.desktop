@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=Windows KVM: Power On
-Exec=/home/panther/.scripts_extra/win11pro_passthrough.sh
+Name=Start VM (GPU passthrough)
+Exec=.scripts/kvm/startvm_passthrough.sh
 Icon=computer
 Terminal=false
 Type=Application

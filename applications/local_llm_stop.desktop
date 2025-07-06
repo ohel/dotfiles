@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Stop local LLM
-Exec=/home/panther/.scripts/launchers/local_llm.sh stop
+Exec=.scripts/launchers/local_llm.sh stop
 Icon=process-stop
 Terminal=false
 Categories=Network;Utility

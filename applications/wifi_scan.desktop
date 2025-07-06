@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=Scan for WiFi networks
-Exec=/home/panther/.scripts/wifi_scan.sh pause
+Name=Scan WiFi networks
+Exec=.scripts/wifi_scan.sh pause
 Icon=network-wireless-symbolic
 Terminal=true
 Categories=Network;Utility
