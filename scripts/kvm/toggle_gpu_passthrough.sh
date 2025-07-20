@@ -3,9 +3,9 @@
 # Note that toggling from $driver to VFIO-PCI probably crashes X.
 # Also toggling from VFIO-PCI to $driver might not always work, or work more than once. Kernel bugs, NULL dereferences etc. may occur.
 
-gpu=${1:-"0000:13:00.0"}
+gpu=${1:-"0000:11:00.0"}
 driver=${2:-"amdgpu"}
-audio=${3:-"0000:13:00.1"}
+audio=${3:-"0000:11:00.1"}
 
 # Is VFIO currently in use?
 is_vfio="" && [ "$(realpath /sys/bus/pci/devices/$gpu/driver)" = "/sys/bus/pci/drivers/vfio-pci" ] && is_vfio=yes

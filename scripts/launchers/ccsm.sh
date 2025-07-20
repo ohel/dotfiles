@@ -1,8 +1,14 @@
 #!/usr/bin/sh
 # CompizConfig Settings Manager launcher.
-# Compiz 0.9 series with prefix /opt/programs/compiz.
+# Compiz 0.9 series installed with custom prefix.
+
+prefix=/opt/programs/compiz
 
 pv=$(python -V | grep -o "3\.[0-9]\{1,\}")
-env LD_LIBRARY_PATH=/opt/programs/compiz/lib64 \
-PYTHONPATH=/opt/programs/compiz/lib/python$pv/site-packages:/opt/programs/compiz/lib64/python$pv/site-packages \
-/opt/programs/compiz/bin/ccsm &
+shebangv=$(head -n 1 $prefix/bin/ccsm | grep -o "3\.[0-9]\{1,\}")
+[ "$pv" != "$shebangv" ] && echo "Wrong shebang Python version for ccsm binary!" && exit 1
+[ ! -e $prefix/lib/python$pv ] && echo "Wrong Python version for site-packages!" && exit 1
+
+env LD_LIBRARY_PATH=$prefix/lib64 \
+PYTHONPATH=$prefix/lib/python$pv/site-packages \
+$prefix/bin/ccsm &
