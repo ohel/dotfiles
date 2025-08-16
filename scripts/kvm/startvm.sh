@@ -211,7 +211,7 @@ qemu-system-x86_64 \
 -name "$vm_name" \
 -boot $boot_options \
 -machine q35,accel=kvm \
--cpu host,kvm=$cpu_host_kvm \
+-cpu host,kvm=$cpu_host_kvm,+topoext \
 -smp cores=$vm_num_cores,threads=$vm_threads_per_core,sockets=1 \
 -m $vm_mem_mb \
 -k fi \

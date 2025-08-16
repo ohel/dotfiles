@@ -1,12 +1,13 @@
 #!/usr/bin/bash
 # Copy and encode music to a given destination ($1, default ./). Used by drag'n'dropping files from media player playlist to a terminal window, for copying into a mobile phone.
-# Encoding is either AAC (default), OGG ($2 = "ogg") or MP3 ($2 = "mp3"), preserving simple metadata tags.
+# Encoding is either AAC ($2 = "aac", OGG ($2 = "ogg"), MP3 ($2 = "mp3"), or avoiding re-encoding any of the above ($2 = "any", defaults to AAC if encoding needed) preserving simple metadata tags.
 # Requires mutagen-inspect and either ffmpeg with fdk-aac libs, oggenc or lame encoder, faad for decoding.
 # The encoding process is naively parallelized.
 
 destination=$(readlink -f ${1:-./})
-parallel_processes=7
-encoding="aac"
+parallel_processes=12
+encoding="any"
+[ "$#" -gt 1 ] && [ "$2" = "aac" ] && encoding="aac"
 [ "$#" -gt 1 ] && [ "$2" = "mp3" ] && encoding="mp3"
 [ "$#" -gt 1 ] && [ "$2" = "ogg" ] && encoding="ogg"
 
@@ -56,13 +57,14 @@ encode() {
     meta_artist="${meta_artist:-"unknown artist"}"
     meta_title="${meta_title:-"unknown title"}"
 
+    # Create temporary WAV source file or avoid re-encoding.
     wavfile=$(mktemp -p $tempdir/ --suffix=".wav")
     if [ "$typeflac" ]
     then
         flac -c -s -d "$filein" -f -o $wavfile
     elif [ "$typeogg" ]
     then
-        if [ "$encoding" == "ogg" ]
+        if [ "$encoding" == "ogg" ] || [ "$encoding" == "any" ]
         then
             origin="$filein"
         else
@@ -70,7 +72,7 @@ encode() {
         fi
     elif [ "$typemp3" ]
     then
-        if [ "$encoding" == "mp3" ]
+        if [ "$encoding" == "mp3" ] || [ "$encoding" == "any" ]
         then
             origin="$filein"
         else
@@ -78,7 +80,7 @@ encode() {
         fi
     elif [ "$typeaac" ]
     then
-        if [ "$encoding" == "aac" ]
+        if [ "$encoding" == "aac" ] || [ "$encoding" == "any" ]
         then
             origin="$filein"
         else
@@ -87,25 +89,28 @@ encode() {
     fi
     echo -n "*"
 
+    # Encode the WAV source file with selected encoding.
     tmpfile=""
-    if [ "$encoding" == "mp3" ]
+    if [ ! "$origin" ]
     then
-        tmpfile=$(mktemp -p $tempdir/ --suffix=".mp3")
-        lame --silent --preset extreme --noreplaygain --id3v2-only --tt "$meta_title" --ta "$meta_artist" --tl "$meta_album" --tn "$meta_track" $wavfile $tmpfile
-    elif [ "$encoding" == "ogg" ]
-    then
-        oggenc --resample 44100 -Q -q 7 -a "$meta_artist" -l "$meta_album" -t "$meta_title" -N "$meta_track" -c "replaygain_album_peak=$meta_rg_ap" -c "replaygain_track_peak=$meta_rg_tp" -c "replaygain_album_gain=$meta_rg_ag" -c "replaygain_track_gain=$meta_rg_tg" -o $tmpfile $wavfile
-    elif [ "$encoding" == "aac" ]
-    then
-        tmpfile=$(mktemp -p $tempdir/ --suffix=".m4a")
-        ffmpeg -loglevel error -y -i $wavfile -c:a libfdk_aac -vbr 5 -cutoff 20000 -ar 44100 \
-        -metadata artist="$meta_artist" -metadata album="$meta_album" -metadata title="$meta_title" -metadata track="$meta_track" \
-        $tmpfile
-        # Not supported by ffmpeg, not even via -map_metadata
-        # ----:com.apple.iTunes:replaygain_album_gain="MP4FreeForm(b'$meta_rg_ag', <AtomDataType.UTF8: 1>)
-        # ----:com.apple.iTunes:replaygain_album_peak="MP4FreeForm(b'$meta_rg_ap', <AtomDataType.UTF8: 1>)
-        # ----:com.apple.iTunes:replaygain_track_gain="MP4FreeForm(b'$meta_rg_tg', <AtomDataType.UTF8: 1>)
-        # ----:com.apple.iTunes:replaygain_track_peak="MP4FreeForm(b'$meta_rg_tp', <AtomDataType.UTF8: 1>)
+        if [ "$encoding" == "mp3" ]
+        then
+            tmpfile=$(mktemp -p $tempdir/ --suffix=".mp3")
+            lame --silent --preset extreme --noreplaygain --id3v2-only --tt "$meta_title" --ta "$meta_artist" --tl "$meta_album" --tn "$meta_track" $wavfile $tmpfile
+        elif [ "$encoding" == "ogg" ]
+        then
+            oggenc --resample 44100 -Q -q 7 -a "$meta_artist" -l "$meta_album" -t "$meta_title" -N "$meta_track" -c "replaygain_album_peak=$meta_rg_ap" -c "replaygain_track_peak=$meta_rg_tp" -c "replaygain_album_gain=$meta_rg_ag" -c "replaygain_track_gain=$meta_rg_tg" -o $tmpfile $wavfile
+        elif [ "$encoding" == "aac" ]
+        then
+            tmpfile=$(mktemp -p $tempdir/ --suffix=".m4a")
+            ffmpeg -loglevel error -y -i $wavfile -c:a libfdk_aac -vbr 5 -cutoff 20000 -ar 44100 \
+            -metadata artist="$meta_artist" -metadata album="$meta_album" -metadata title="$meta_title" -metadata track="$meta_track" $tmpfile
+            # Not supported by ffmpeg, not even via -map_metadata
+            # ----:com.apple.iTunes:replaygain_album_gain="MP4FreeForm(b'$meta_rg_ag', <AtomDataType.UTF8: 1>)
+            # ----:com.apple.iTunes:replaygain_album_peak="MP4FreeForm(b'$meta_rg_ap', <AtomDataType.UTF8: 1>)
+            # ----:com.apple.iTunes:replaygain_track_gain="MP4FreeForm(b'$meta_rg_tg', <AtomDataType.UTF8: 1>)
+            # ----:com.apple.iTunes:replaygain_track_peak="MP4FreeForm(b'$meta_rg_tp', <AtomDataType.UTF8: 1>)
+        fi
     fi
     echo -n "*"
 
@@ -114,7 +119,7 @@ encode() {
     [ ${#meta_track} -lt 2 ] && padding="0"
 
     [ "$tmpfile" ] && origin=$tmpfile
-    cp "$origin" "$dest_dir"/"$meta_album"/"$padding""$meta_track"_$(echo $meta_title | tr -c -d "[:alnum:]")_$(basename "$origin")
+    cp "$origin" "$dest_dir"/"$meta_album"/"$padding""$meta_track"_$(echo $meta_title | tr -c -d "[:alnum:]")_"$(basename "$origin")"
     rm $wavfile
     [ "$tmpfile" ] && rm $tmpfile
     echo -n "*"
@@ -143,7 +148,7 @@ do
     album=$(echo "$album" | sed s/" "/_/)
 
     # The underscore is a placeholder for $0.
-    echo $list | tr " " "\000" | xargs --null -I {} -n 1 -P $parallel_processes bash -c 'encode "$@"' _ $encoding "$destination" "{}" "$album"
+    echo $list | sed "s/' /'\x0/g" | xargs --null -I {} -n 1 -P $parallel_processes bash -c 'encode "$@"' _ $encoding "$destination" "{}" "$album"
 
     echo ""
     echo "All done."

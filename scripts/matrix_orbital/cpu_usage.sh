@@ -1,6 +1,5 @@
-#!/usr/bin/bash
-
-[ ! -e /dev/serial/matrix_orbital ] && echo No device && exit 1
+#!/usr/bin/sh
+dev=/dev/serial/matrix_orbital && [ ! -e $dev ] && dev=/dev/null
 
 while true
 do
@@ -17,7 +16,7 @@ do
         else
             usagestring="0"$usage
         fi
-        echo -e "\xFE\x3D\002$column\00$usagestring" > /dev/serial/matrix_orbital
+        echo -en "\xFE\x3D\002$column\00$usagestring" > $dev
         sleep 0.01
         column=$(expr $column + 1)
     done

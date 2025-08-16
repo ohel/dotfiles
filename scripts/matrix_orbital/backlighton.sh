@@ -1,6 +1,5 @@
-#!/usr/bin/bash
-
-[ ! -e /dev/serial/matrix_orbital ] && echo No device && exit 1
+#!/usr/bin/sh
+dev=/dev/serial/matrix_orbital && [ ! -e $dev ] && dev=/dev/null
 
 # last byte = minutes the light is on, 0 = permanently
-echo -e "\xFEB\x00" > /dev/serial/matrix_orbital
+echo -en "\xFEB\x00" > $dev

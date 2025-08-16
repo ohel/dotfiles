@@ -22,7 +22,7 @@ echo "Using Quod Libet exe: $qlexe"
 
 if [ "$#" = 0 ]
 then
-    params="--toggle-window"
+    [ "$running" ] && params="--toggle-window"
 else
     [ "$1" = "toggle-window" ] && params="--toggle-window"
     [ "$1" = "play-pause" ] && params="--play-pause"

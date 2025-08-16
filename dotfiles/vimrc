@@ -141,7 +141,6 @@ autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 autocmd BufNewFile,BufRead *.md set filetype=markdown | set omnifunc=
 autocmd BufNewFile,BufRead *.xaml set filetype=xml
@@ -215,7 +214,6 @@ if exists('*plug#begin')
     Plug 'nathanaelkane/vim-indent-guides' " Indent guides.
     Plug 'Quramy/vim-js-pretty-template' " JavaScript's Template Strings highlighting.
     Plug 'digitaltoad/vim-pug' " Pug (Jade) syntax.
-    Plug 'rkulla/pydiction' " Python autocompletion.
     Plug 'udalov/kotlin-vim' " Kotlin support.
     Plug 'elzr/vim-json' " Better JSON(L) syntax highlighting.
 
@@ -324,12 +322,6 @@ if isdirectory($VIMHOME . '/plugged/vim-airline')
         silent !curl -fLo $VIMHOME/autoload/airline/themes/minigun.vim --create-dirs https://raw.githubusercontent.com/ohel/dotfiles/master/themes/minigun-airline.vim
     endif
     let g:airline_theme = 'minigun'
-endif
-
-" Pydiction autocompletion.
-if filereadable($VIMHOME . '/plugged/pydiction/complete-dict')
-    let g:pydiction_location = '$VIMHOME/plugged/pydiction/complete-dict'
-    let g:pydiction_menu_height = 15
 endif
 
 " JSON syntax conceal.

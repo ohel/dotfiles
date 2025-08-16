@@ -1,10 +1,11 @@
 #!/usr/bin/sh
 # When using a router with dynamic WAN IPv4 address, access router status page and get the address.
-# Supports the following router models (pass as parameter):
+# Supports the following sources (pass as parameter):
+#    ipinfo: Do not use the router, instead use ipinfo.io (default)
 #    tw: Telewell TW-LTE/4G/3G router, WiFI AC
 #    fast: Sagemcom FAST3686 (DNA Valokuitu Plus)
 
-routermodel=${1:-tw}
+ipsource=${1:-ipinfo}
 username=${2:-admin}
 routerip=$(ip route | grep default | grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}")
 
@@ -21,7 +22,10 @@ readpw() {
     stty $stty_orig
 }
 
-if [ "$routermodel" = "tw" ]
+if [ "$ipsource" = "ipinfo" ]
+then
+    wanipv4=$(wget https://ipinfo.io/ip -q -O -)
+elif [ "$ipsource" = "tw" ]
 then
     readpw
     # Sometimes the router gives an unauthorized error a few times.
@@ -40,7 +44,7 @@ then
             break
         fi
     done
-elif [ "$routermodel" = "fast" ]
+elif [ "$ipsource" = "fast" ]
 then
     # Check if login is needed. The router remembers logged in computers with some kind of logic.
     responsepage=$(wget http://$routerip/RgSetup.asp -q -O -)

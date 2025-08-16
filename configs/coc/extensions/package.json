@@ -5,6 +5,7 @@
     "coc-css": "*",
     "coc-clangd": "*",
     "coc-go": "*",
-    "coc-angular": "*"
+    "coc-angular": "*",
+    "coc-pyright": "*"
   }
 }

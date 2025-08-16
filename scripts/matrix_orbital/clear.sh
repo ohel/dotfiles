@@ -1,5 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/sh
+dev=/dev/serial/matrix_orbital && [ ! -e $dev ] && dev=/dev/null
 
-[ ! -e /dev/serial/matrix_orbital ] && echo No device && exit 1
-
-echo -e "\xFEX" > /dev/serial/matrix_orbital
+echo -en "\xFEX" > $dev
