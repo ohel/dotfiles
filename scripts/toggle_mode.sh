@@ -125,4 +125,4 @@ fi
 which feh >/dev/null 2>&1 && feh --bg-fill --no-fehbg $primary_background $secondary_background 2>/dev/null
 
 # Reloads icons so that they scale correctly.
-ps -ef | grep xfce4-panel$ > /dev/null && xfce4-panel -r
+ps -ef | grep -q "xfce4-panel$" && xfce4-panel -r

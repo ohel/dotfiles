@@ -27,7 +27,7 @@ then
     fi
 
     # Spotify volume control.
-    [ ! "$(ps -e | grep " spotify$")" ] && exit 1
+    ! ps -e | grep " spotify$" && exit 1
 
     current_vol=$(dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:org.mpris.MediaPlayer2.Player string:Volume | grep -o "double [0-9].*" | cut -f 2 -d ' ')
     new_vol=$(echo "scale=2; $current_vol $1 $vol_step/100" | bc)

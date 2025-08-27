@@ -31,7 +31,7 @@ then
     exit 0
 fi
 
-if [ "$#" -gt 0 ] && [ "$(echo "$1" | grep "^[-+0-9]*$")" ]
+if [ "$#" -gt 0 ] && echo "$1" | grep -q "^[-+0-9]*$"
 then
     delta=$(echo "$1" | tr -d '+')
     new=$(echo $current + $delta | bc)

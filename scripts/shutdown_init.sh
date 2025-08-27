@@ -2,7 +2,7 @@
 # A script which checks whether any QEMU-KVM virtual machines are running, or if RAID devices are resyncing.
 # Call this script before the actual shutdown (script), this will hold for input if anything needs attention.
 
-if [ "$(ps -ef | grep qemu.* | grep -v grep)" ]
+if ps -ef | grep "qemu.*" | grep -qv grep
 then
     echo "A virtual machine is running."
     read tmp
@@ -21,7 +21,7 @@ then
         exit 1
     fi
 
-    if [ "$(grep resync /proc/mdstat)" ]
+    if grep -q resync /proc/mdstat
     then
         echo "RAID devices resyncing:"
         cat "/proc/mdstat"

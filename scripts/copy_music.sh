@@ -64,7 +64,7 @@ encode() {
         flac -c -s -d "$filein" -f -o $wavfile
     elif [ "$typeogg" ]
     then
-        if [ "$encoding" == "ogg" ] || [ "$encoding" == "any" ]
+        if [ "$encoding" = "ogg" ] || [ "$encoding" = "any" ]
         then
             origin="$filein"
         else
@@ -72,7 +72,7 @@ encode() {
         fi
     elif [ "$typemp3" ]
     then
-        if [ "$encoding" == "mp3" ] || [ "$encoding" == "any" ]
+        if [ "$encoding" = "mp3" ] || [ "$encoding" = "any" ]
         then
             origin="$filein"
         else
@@ -80,27 +80,27 @@ encode() {
         fi
     elif [ "$typeaac" ]
     then
-        if [ "$encoding" == "aac" ] || [ "$encoding" == "any" ]
+        if [ "$encoding" = "aac" ] || [ "$encoding" = "any" ]
         then
             origin="$filein"
         else
             faad -o $wavfile "$filein"
         fi
     fi
-    echo -n "*"
+    printf "*"
 
     # Encode the WAV source file with selected encoding.
     tmpfile=""
     if [ ! "$origin" ]
     then
-        if [ "$encoding" == "mp3" ]
+        if [ "$encoding" = "mp3" ]
         then
             tmpfile=$(mktemp -p $tempdir/ --suffix=".mp3")
             lame --silent --preset extreme --noreplaygain --id3v2-only --tt "$meta_title" --ta "$meta_artist" --tl "$meta_album" --tn "$meta_track" $wavfile $tmpfile
-        elif [ "$encoding" == "ogg" ]
+        elif [ "$encoding" = "ogg" ]
         then
             oggenc --resample 44100 -Q -q 7 -a "$meta_artist" -l "$meta_album" -t "$meta_title" -N "$meta_track" -c "replaygain_album_peak=$meta_rg_ap" -c "replaygain_track_peak=$meta_rg_tp" -c "replaygain_album_gain=$meta_rg_ag" -c "replaygain_track_gain=$meta_rg_tg" -o $tmpfile $wavfile
-        elif [ "$encoding" == "aac" ]
+        elif [ "$encoding" = "aac" ]
         then
             tmpfile=$(mktemp -p $tempdir/ --suffix=".m4a")
             ffmpeg -loglevel error -y -i $wavfile -c:a libfdk_aac -vbr 5 -cutoff 20000 -ar 44100 \
@@ -112,7 +112,7 @@ encode() {
             # ----:com.apple.iTunes:replaygain_track_peak="MP4FreeForm(b'$meta_rg_tp', <AtomDataType.UTF8: 1>)
         fi
     fi
-    echo -n "*"
+    printf "*"
 
     mkdir -p "$dest_dir"/"$meta_album"
     padding=""
@@ -122,7 +122,7 @@ encode() {
     cp "$origin" "$dest_dir"/"$meta_album"/"$padding""$meta_track"_$(echo $meta_title | tr -c -d "[:alnum:]")_"$(basename "$origin")"
     rm $wavfile
     [ "$tmpfile" ] && rm $tmpfile
-    echo -n "*"
+    printf "*"
 }
 
 export -f encode
@@ -137,12 +137,12 @@ do
     echo "Type in an album name or leave empty to read from tags:"
     read album
     echo "COPYING AND ENCODING:"
-    echo -n "| 0% "
+    printf "| 0% "
     spacecount=$(expr $(expr $(echo $list | wc -w) \* 3) - 11)
     while [ $spacecount -gt 0 ]
     do
         spacecount=$(expr $spacecount - 1)
-        echo -n " "
+        printf " "
     done
     echo "100% |"
     album=$(echo "$album" | sed s/" "/_/)

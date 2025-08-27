@@ -8,7 +8,7 @@ imagesdir=~/.themes/lockscreens
 image=~/.themes/lockscreen.png
 
 # i3lock is already running.
-[ "$(ps -e | grep i3lock)" ] && exit 1
+ps -e | grep -q i3lock && exit 1
 
 if [ -d $imagesdir ]
 then

@@ -25,7 +25,7 @@ do
     num=$(find $scandir/ -size +0k -iname "scan*.png" | wc -l)
     fnum=$num
     [ $num -lt 10 ] && fnum="0$fnum"
-    echo -n "Scanning scan$fnum.png..."
+    printf "Scanning scan%s.png..." "$fnum"
     errors=1
     while [ $errors -gt 0 ]
     do
@@ -35,7 +35,7 @@ do
         if [ $errors -gt 0 ]
         then
             rm $scandir/$log
-            echo -n "."
+            printf "."
         else
             rm $scandir/$log
             echo

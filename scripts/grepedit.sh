@@ -16,7 +16,7 @@ grep_ignore=""
 rg -S -uu $grep_ignore "$1" 2>/dev/null || ag "$1" 2>/dev/null || grep -n -R -i --color=auto "$1" 2>/dev/null
 
 echo Enter search terms for filenames. All terms must match the name to edit a file.
-echo -n "Search for: "
+printf "Search for: "
 read -a words
 greps=""
 for word in "${words[@]}"

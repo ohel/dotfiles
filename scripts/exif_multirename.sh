@@ -23,11 +23,11 @@ for inputname in "$@"
 do
     # Figure out the file extension.
     targetext=""
-    [ "$(echo "$inputname" | grep -oi "\.jpg$")" ] && basename=$(basename "$inputname" | sed "s/\.jpg$\|\.JPG$//") && targetext="jpg"
-    [ "$(echo "$inputname" | grep -o "\.RW2$\|\.RW2\.xmp$")" ] && basename=$(basename "$inputname" | sed "s/\.RW2$\|\.RW2\.xmp$//") && targetext="RW2"
-    [ "$(echo "$inputname" | grep -o "\.CR3$\|\.CR3\.xmp$")" ] && basename=$(basename "$inputname" | sed "s/\.CR3$\|\.CR3\.xmp$//") && targetext="CR3"
-    [ "$(echo "$inputname" | grep -oi "\.mp4$")" ] && basename=$(basename "$inputname" | sed "s/\.mp4$\|\.MP4$//") && targetext="mp4"
-    [ "$(echo "$inputname" | grep -oi "\.mov$")" ] && basename=$(basename "$inputname" | sed "s/\.mov$\|\.MOV$//") && targetext="mov"
+    echo "$inputname" | grep -oi "\.jpg$" && basename=$(basename "$inputname" | sed "s/\.jpg$\|\.JPG$//") && targetext="jpg"
+    echo "$inputname" | grep -o "\.RW2$\|\.RW2\.xmp$" && basename=$(basename "$inputname" | sed "s/\.RW2$\|\.RW2\.xmp$//") && targetext="RW2"
+    echo "$inputname" | grep -o "\.CR3$\|\.CR3\.xmp$" && basename=$(basename "$inputname" | sed "s/\.CR3$\|\.CR3\.xmp$//") && targetext="CR3"
+    echo "$inputname" | grep -oi "\.mp4$" && basename=$(basename "$inputname" | sed "s/\.mp4$\|\.MP4$//") && targetext="mp4"
+    echo "$inputname" | grep -oi "\.mov$" && basename=$(basename "$inputname" | sed "s/\.mov$\|\.MOV$//") && targetext="mov"
 
     originalname=""
     [ "$targetext" = "jpg" ] && [ -e "$basename.jpg" ] && originalname="$basename.jpg"

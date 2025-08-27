@@ -107,13 +107,13 @@ modprobe tun
 modprobe kvm
 lscpu | grep Intel && modprobe kvm-intel || modprobe kvm-amd
 
-if [ "$bridged_network" = 1 ] && [ "$(brctl show $net_bridge 2>&1 | grep "\(No\)\|\(not \)")" ]
+if [ "$bridged_network" = 1 ] && brctl show $net_bridge 2>&1 | grep -q "\(No\)\|\(not \)"
 then
     echo "Set up the bridged network manually first."
     exit 1
 fi
 
-if [ "$(brctl show $vm_bridge 2>&1 | grep "\(No\)\|\(not \)")" ]
+if brctl show $vm_bridge 2>&1 | grep -q "\(No\)\|\(not \)"
 then
     if [ "$auto_setup_network" = 0 ]
     then
@@ -147,7 +147,7 @@ soundhw=""
 if [ "$audio" = 1 ]
 then
     soundhw="-device intel-hda -device hda-duplex,audiodev=snd$net_id"
-    if [ "$(ps -e | grep pulseaudio)" ]
+    if ps -e | grep -q pulseaudio
     then
         socket=$(ls /run/user/*/pulse/native 2>/dev/null | head -n 1)
         [ ! "$socket" ] && continue
@@ -181,7 +181,7 @@ tpm_options=""
 if [ "$tpm" = 1 ]
 then
     mkdir -p /tmp/emulated_tpm
-    [ ! "$(ps -ef | grep "swtpm.*/tmp/emulated_tpm.*level=20$")" ] && \
+    ! ps -ef | grep -q "swtpm.*/tmp/emulated_tpm.*level=20$" && \
     swtpm socket -d --tpm2 --tpmstate dir=/tmp/emulated_tpm \
     --ctrl type=unixio,path=/tmp/emulated_tpm/swtpm-sock \
     --log level=20
@@ -257,10 +257,10 @@ then
     renice +15 $pid
 fi
 
-if [ "$(which gvncviewer 2>/dev/null)" ]
+if which gvncviewer >/dev/null 2>&1
 then
     vncviewer="gvncviewer localhost:$net_id"
-elif [ "$(which vncviewer 2>/dev/null)" ]
+elif which vncviewer >/dev/null 2>&1
 then
     vncviewer="vncviewer :$net_id"
 fi

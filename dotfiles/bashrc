@@ -9,7 +9,7 @@ export HISTSIZE=4096
 
 # Common history for all bash shells may be set by environment variable.
 # Not on by default as it may get a bit bothersome.
-PROMPT_COMMAND='if [ "$COMMON_HISTORY" = "1" ]; then history -a; history -c; history -r; fi; echo -ne "\e]0;Terminal: ${PWD}\007"'
+PROMPT_COMMAND='if [ "$COMMON_HISTORY" = "1" ]; then history -a; history -c; history -r; fi; printf "\e]0;Terminal: ${PWD}\007"'
 
 prompt_prefix="\u@\h:"
 [ ! "$SSH_CLIENT" ] && [ ! "$SSH_TTY" ] && [ -e ~/.config/local_prompt_prefix ] && prompt_prefix=$(cat ~/.config/local_prompt_prefix)

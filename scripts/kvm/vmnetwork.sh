@@ -23,7 +23,7 @@ else
     nic=$1
     [ -f $1 ] && nic=$(cat $1)
 
-    if [ "$(ls -l /sys/class/net | grep devices/pci | grep -o "\-> [^ ]*" | grep -o $nic)" != "$nic" ]
+    if [ "$(ls -l /sys/class/net | grep devices/pci | grep -o '-> [^ ]*' | grep -o $nic)" != "$nic" ]
     then
         echo "Network device not found: $nic"
         exit 1

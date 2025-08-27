@@ -30,7 +30,7 @@ do
     index=$(expr $index + 1)
 done
 
-echo -n "Edit the one with order number: "
+printf "Edit the one with order number: "
 read selection
 
 selection=$(echo $selection | tr -c -d [:digit:])

@@ -27,7 +27,7 @@ image_a=$(ls -1 $images_dir/ | head -n $(shuf -i 1-$count -n 1) | tail -n 1)
 image_b=$(ls -1 $images_dir/ | head -n $(shuf -i 1-$count -n 1) | tail -n 1)
 [ -L ~/.themes/background ] && rm ~/.themes/background && ln -s $images_dir/$image_a ~/.themes/background
 
-monitor_count=$(xrandr --listmonitors | grep Monitors: | grep -o [0-9]*)
+monitor_count=$(xrandr --listmonitors | grep Monitors: | grep -o "[0-9]*")
 secondary_background="" && [ $monitor_count > 1 ] && [ -e ~/.themes/background2 ] && secondary_background=~/.themes/background2
 feh --no-fehbg --bg-fill $images_dir/$image_a $secondary_background
 
@@ -61,7 +61,7 @@ do
 
     sleep $change_interval_s
 
-    monitor_count=$(xrandr --listmonitors | grep Monitors: | grep -o [0-9]*)
+    monitor_count=$(xrandr --listmonitors | grep Monitors: | grep -o "[0-9]*")
     secondary_background="" && [ $monitor_count > 1 ] && [ -e ~/.themes/background2 ] && secondary_background=~/.themes/background2
 
     # Fade images.

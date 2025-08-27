@@ -34,7 +34,7 @@ if version >= 800
     set termguicolors " Use truecolor if possible. Support came in version 7.4.1770.
 endif
 
-" Almost like "let mapleader = ' '", but doesn't matter when a leader shortcut is bound.
+" Almost like "let mapleader = ' '", but doesn't matter at what time the leader shortcut is bound.
 map <space> <leader>
 
 " Last command.
@@ -633,6 +633,10 @@ if has('gui_running')
 
     nnoremap <s-ScrollWheelUp> 5zh
     nnoremap <s-ScrollWheelDown> 5zl
+
+    " Duplicate gVim window.
+    nnoremap <leader>wd :silent execute '!gvim +"call cursor(' . line('.') . ',' . col('.') . ')" % &' <cr>
+
 endif
 
 function! OnVimEnter()

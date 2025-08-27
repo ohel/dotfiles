@@ -24,7 +24,7 @@ then
 fi
 
 # Toggle PulseAudio default sink muted state.
-if [ "$(ps -e | grep pulseaudio$)" ]
+if ps -e | grep -q "pulseaudio$"
 then
     default_sink=$(pacmd list-sinks | grep "\* index" | cut -f 2 -d ':' | tr -d ' ')
     [ ! "$default_sink" ] && exit 1

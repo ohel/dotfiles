@@ -17,14 +17,14 @@ then
     exit 0
 fi
 
-if [ ! "$(ps -ef | grep "$prefix/bin/ollama serve$")" ]
+if ! ps -ef | grep -q "$prefix/bin/ollama serve$"
 then
     env LD_LIBRARY_PATH=$prefix/lib $prefix/bin/ollama serve > $logsdir/ollama.log 2>&1 &
 fi
 
 [ "$1" = "ollama" ] && echo "Only running ollama." && exit 0
 
-if [ ! "$(ps -ef | grep "$openwebui/bin/open-webui serve$")" ]
+if ! ps -ef | grep "$openwebui/bin/open-webui serve$"
 then
     . $openwebui/bin/activate
     # cd so that .webui_secret_key is read from ~

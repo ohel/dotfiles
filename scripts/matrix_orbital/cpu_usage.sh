@@ -16,7 +16,7 @@ do
         else
             usagestring="0"$usage
         fi
-        echo -en "\xFE\x3D\002$column\00$usagestring" > $dev
+        printf "\xFE\x3D\002%s\00%s" "$column" "$usagestring" > $dev
         sleep 0.01
         column=$(expr $column + 1)
     done

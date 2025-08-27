@@ -30,7 +30,7 @@ do
     index=$(expr $index + 1)
 done
 
-echo -n "Exec $cmd in container with order number: "
+printf "Exec %s in container with order number: " "$cmd"
 read selection
 
 selection=$(echo $selection | tr -c -d [:digit:])

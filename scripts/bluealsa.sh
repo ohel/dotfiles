@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/sh
 # Without PulseAudio one must use BlueALSA to connect to Bluetooth headsets.
 # Unfortunately, there's no way of using a dmix device with bluealsa directly,
 # as ALSA will just give an error message if dmix has bluealsa as slave.
@@ -10,7 +10,7 @@
 # The other end of the loopback device must be connected somewhere.
 # This script has two modes, one using JACK and the other using a pipe.
 
-# If $1 == "jack", a JACK server using a BlueALSA device as output
+# If $1 = "jack", a JACK server using a BlueALSA device as output
 # is started and the loopback device is connected to it.
 # If $1 is something else or empty, audio is routed using arecord and aplay.
 
@@ -35,7 +35,7 @@ tmp_bashrc=/dev/shm/bluealsabashrc
 
 scriptsdir=$(dirname "$(readlink -f "$0")")
 
-if [ ! "$(ps -e | grep "bluealsa$")" ]
+if ! ps -e | grep -q "bluealsa$"
 then
     echo "BlueALSA is not running."
     sleep 1
@@ -49,14 +49,14 @@ then
     exit 1
 fi
 
-if [ "$mode" == "jack" ]
+if [ "$mode" = "jack" ]
 then
     /usr/bin/jackd -r -p128 -dalsa -d$bt_audio -r44100 -p512 -n2 -s -S -P -o2 >/dev/null &
-    echo -n "Waiting for jackd to start 3..."
+    printf "Waiting for jackd to start 3..."
     tput cub 4 && sleep 1
-    echo -n "2"
+    printf "2"
     tput cub 1 && sleep 1
-    echo -n "1"
+    printf "1"
     tput cub 1 && sleep 1
     tput cuf 4 && echo
 
@@ -64,14 +64,14 @@ then
     # If audio is playing when starting alsa_in, audio will work after that, too.
     # If audio is not playing when you start alsa_in, ALSA gives a format error.
     echo "Run speaker-test hack..."
-    speaker-test -D $loop_in -r 44100 -X -f 1 -t sine -l 1 &>/dev/null &
+    speaker-test -D $loop_in -r 44100 -X -f 1 -t sine -l 1 >/dev/null 2>&1 &
     sleep 1
-    alsa_in -j "Loop out" -d $loop_out &>/dev/null &
+    alsa_in -j "Loop out" -d $loop_out >/dev/null 2>&1 &
     echo "Waiting for alsa_in to start..."
     sleep 1
 
-    jack_connect "Loop out:capture_1" "system:playback_1" &>/dev/null
-    jack_connect "Loop out:capture_2" "system:playback_2" &>/dev/null
+    jack_connect "Loop out:capture_1" "system:playback_1" >/dev/null 2>&1
+    jack_connect "Loop out:capture_2" "system:playback_2" >/dev/null 2>&1
 else
     sleep 1
     arecord -f cd --buffer-size $buffer_size -D $loop_out | env LIBASOUND_THREAD_SAFE=0 aplay --buffer-size $buffer_size -D $bt_audio -f cd &
@@ -83,10 +83,10 @@ then
     cat > $tmp_bashrc << EOF
     export ALSA_DEFAULT_PCM=$loop_in
     export ALSA_DEFAULT_CTL=$loop_ctl
-    PROMPT_COMMAND='echo -ne "\e]0;ALSA loop\007"'
+    PROMPT_COMMAND='printf "\e]0;ALSA loop\007"'
     PS1='\[\e[0;37m\]\w \[\e[1;36m\]ALSA loop \[\e[1;30m\]\$\[\e[0m\] '
     cd
-    echo -ne '\e[8;8;50t'
+    printf '\e[8;8;50t'
     echo "ALSA defaults in this shell are:"
     echo
     echo "    ALSA_DEFAULT_PCM=$loop_in"
@@ -100,22 +100,22 @@ EOF
 else
     killall $bt_env_program
     sleep 1
-    env ALSA_DEFAULT_PCM=$loop_in ALSA_DEFAULT_CTL=$loop_ctl $bt_env_program &>/dev/null &
+    env ALSA_DEFAULT_PCM=$loop_in ALSA_DEFAULT_CTL=$loop_ctl $bt_env_program >/dev/null 2>&1 &
     clear
-    echo -ne '\e[8;7;50t'
+    printf '\e[8;7;50t'
     echo "Started $bt_env_program in an environment where:"
     echo
     echo "    ALSA_DEFAULT_PCM=$loop_in"
     echo "    ALSA_DEFAULT_CTL=$loop_ctl"
     echo
     echo "Press return to exit."
-    read
+    read tmp
 fi
 
-if [ "$mode" == "jack" ]
+if [ "$mode" = "jack" ]
 then
-    killall alsa_in &>/dev/null
-    killall jackd &>/dev/null
+    killall alsa_in >/dev/null 2>&1
+    killall jackd >/dev/null 2>&1
 else
-    kill $pid &>/dev/null
+    kill $pid >/dev/null 2>&1
 fi

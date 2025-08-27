@@ -3,7 +3,7 @@
 
 prefix=/opt/programs/compiz
 
-if [ "$(ps -ef | grep $prefix/bin/compiz | grep -v grep)" ]
+if ps -ef | grep "$prefix/bin/compiz" | grep -qv grep
 then
     killall -9 compiz 2>/dev/null
     killall -9 gtk-window-decorator 2>/dev/null

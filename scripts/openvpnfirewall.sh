@@ -31,7 +31,7 @@ num_routes=$(ip route show | wc -l)
 
 modprobe tun
 
-echo -n "Connecting VPN..."
+printf "Connecting VPN..."
 openvpn $1 >$logfile 2>&1 &
 
 # Wait till no more routes seem to be created for the VPN connection. The number of routes depends on the VPN and system configuration.
@@ -41,7 +41,7 @@ wait_routes() {
     wait_cycle_count=0
     while [ $wait_cycle_count -lt 10 ] || [ $first_route -ne 0 ]
     do
-        echo -n "."
+        printf "."
         sleep 1
         if [ $(ip route show | wc -l) -ne $num_routes ]
         then
@@ -136,7 +136,7 @@ do
     echo "DNS traffic outside VPN tunnel is now allowed."
 
     num_routes=$(ip route show | wc -l)
-    echo -n "Reconnecting VPN..."
+    printf "Reconnecting VPN..."
     openvpn $1 >$logfile 2>&1 &
     wait_routes $num_routes -1
     echo

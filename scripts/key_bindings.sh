@@ -13,11 +13,11 @@ xbindkeys -fg $scriptsdir/../dotfiles/xbindkeys_mouseemu.scm
 
 # This is to fix Alt+F4 binding issue. Sometimes it just refuses to bind the first time.
 sleep 2
-xbkpid=$(ps -ef | grep xbindkeys$ | tr -s ' ' | cut -f 2 -d ' ')
+xbkpid=$(ps -ef | grep "xbindkeys$" | tr -s ' ' | cut -f 2 -d ' ')
 kill $xbkpid
 while [ "$xbkpid" ]
 do
     sleep 1
-    xbkpid=$(ps -ef | grep xbindkeys$ | tr -s ' ' | cut -f 2 -d ' ')
+    xbkpid=$(ps -ef | grep "xbindkeys$" | tr -s ' ' | cut -f 2 -d ' ')
 done
 xbindkeys

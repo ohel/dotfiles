@@ -9,7 +9,7 @@ then
     exit 1
 fi
 
-iw $interface scan 2>/dev/null || sudo iw $interface scan | grep [^B]SSID | cut -f 2 -d ":" | sed 's/^"\(.*\)"$/\1/' | sort
+iw $interface scan 2>/dev/null || sudo iw $interface scan | grep "[^BE]SSID:" | cut -f 2 -d ":" | sed 's/^"\(.*\)"$/\1/' | sort
 
 if [ "$#" -gt 0 ] && [ "$1" = "pause" ]
 then

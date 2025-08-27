@@ -22,7 +22,7 @@ secondary_background=~/.themes/background2
 dpi_config_file=~/.config/dpi
 primary_display_file=~/.config/primary_display
 
-panel_pid=$(ps -e | grep xfce4-panel$ | tr -s ' ' | cut -f -2 -d ' ')
+panel_pid=$(ps -e | grep "xfce4-panel$" | tr -s ' ' | cut -f -2 -d ' ')
 
 # Identify 4K displays by their resolution width. This is also the maximum resolution limit (so 4096x2160 is skipped).
 MAX_4K_WIDTH=3840
@@ -114,13 +114,13 @@ else
         for modeline in $primary_modes
         do
             # Check that we're still comparing resolutions from primary display, i.e. the line is a modeline.
-            [ ! "$(echo $modeline | grep "[0-9]\{3,4\}x[0-9]\{3,4\}")" ] && break
+            ! echo $modeline | grep -q "[0-9]\{3,4\}x[0-9]\{3,4\}" && break
             if [ ! "$selected_mode" ]
             then
                 for match in $secondary_modes
                 do
                     # Check that we're still comparing resolutions to secondary display, i.e. the line is a modeline.
-                    [ ! "$(echo $match | grep "[0-9]\{3,4\}x[0-9]\{3,4\}")" ] && break
+                    ! echo $match | grep -q "[0-9]\{3,4\}x[0-9]\{3,4\}" && break
                     if [ "$modeline" = "$match" ]
                     then
                         echo "Found common resolution $match."

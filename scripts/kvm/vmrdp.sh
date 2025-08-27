@@ -3,7 +3,7 @@
 # Or, just use the default values, in which case $1 may be "win[dows]" too.
 
 sound_params=""
-[ ! "$(ps -e | grep pulseaudio)" ] && sound_params=":sys:alsa"
+! ps -e | grep -q pulseaudio && sound_params=":sys:alsa"
 
 cliparams_win="+fonts +window-drag /cert-ignore /kbd:Finnish /sec:nla /bpp:32 /sound$sound_params /microphone$sound_params"
 cliparams_other="/bpp:24"

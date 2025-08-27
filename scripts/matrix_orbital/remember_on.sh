@@ -1,4 +1,4 @@
 #!/usr/bin/sh
 dev=/dev/serial/matrix_orbital && [ ! -e $dev ] && dev=/dev/null
 
-echo -en "\xFEF" > $dev
+printf "\xFE\x93\x01" > $dev

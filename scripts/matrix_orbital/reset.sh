@@ -1,8 +1,7 @@
-#!/usr/bin/bash
+#!/usr/bin/sh
 # Reset, clear (\xFEX), send cursor home (\xFEH) and turn off (\xFEF) LCD.
+dev=/dev/serial/matrix_orbital && [ ! -e $dev ] && dev=/dev/null
 
-[ ! -e /dev/serial/matrix_orbital ] && echo No device && exit 1
+/usr/bin/stty -F $dev speed 19200 -onlcr
 
-/usr/bin/stty -F /dev/serial/matrix_orbital speed 19200 -onlcr
-
-echo -en "\xFEX\xFEH\xFEF" > /dev/serial/matrix_orbital
+printf "\xFEX\xFEH\xFEF" > $dev

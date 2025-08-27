@@ -13,7 +13,7 @@
 
 logfile=~/.cache/qllog.txt
 
-ps -ef | grep "\(python-exec.*quodlibet\)\|\([^ ]\{1,\}quodlibet\.py\)\|\(/usr/bin/quodlibet\)" | grep -v grep && running=1
+ps -ef | grep "\(python-exec.*quodlibet\)\|\([^ ]\{1,\}quodlibet\.py\)\|\(/usr/bin/quodlibet\)" | grep -qv grep && running=1
 qlexe=$(which quodlibet 2>/dev/null)
 [ ! "$qlexe" ] && qlexe=$(which quodlibet.py 2>/dev/null)
 [ ! "$qlexe" ] && qlexe=/opt/programs/quodlibet/quodlibet.py && [ ! -e $qlexe ] && echo "Exe not found." && exit 1
