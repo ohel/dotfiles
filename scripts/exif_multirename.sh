@@ -1,5 +1,5 @@
 #!/usr/bin/sh
-# Given filenames ending in .jpg/.JPG, .RW2/.RW2.xmp, or .CR3/.CR3.xmp, rename matching files with those extensions as:
+# Given filenames ending in .jpg/.JPG, .RW2/.RW2.xmp, .CR3/.CR3.xmp, or .ORF/.ORF.xmp, rename matching files with those extensions as:
 # YYYY-mm-dd_HH.MM.SS_<desc>.<ext>, where <desc> is an optional description from zenity input and <ext> the original extension.
 # If a similarly named file but with other extension exists, they are renamed too,
 # and the file name updated into the xmp file contents if an xmp file exists.
@@ -26,6 +26,7 @@ do
     echo "$inputname" | grep -oi "\.jpg$" && basename=$(basename "$inputname" | sed "s/\.jpg$\|\.JPG$//") && targetext="jpg"
     echo "$inputname" | grep -o "\.RW2$\|\.RW2\.xmp$" && basename=$(basename "$inputname" | sed "s/\.RW2$\|\.RW2\.xmp$//") && targetext="RW2"
     echo "$inputname" | grep -o "\.CR3$\|\.CR3\.xmp$" && basename=$(basename "$inputname" | sed "s/\.CR3$\|\.CR3\.xmp$//") && targetext="CR3"
+    echo "$inputname" | grep -o "\.ORF$\|\.ORF\.xmp$" && basename=$(basename "$inputname" | sed "s/\.ORF$\|\.ORF\.xmp$//") && targetext="ORF"
     echo "$inputname" | grep -oi "\.mp4$" && basename=$(basename "$inputname" | sed "s/\.mp4$\|\.MP4$//") && targetext="mp4"
     echo "$inputname" | grep -oi "\.mov$" && basename=$(basename "$inputname" | sed "s/\.mov$\|\.MOV$//") && targetext="mov"
 
@@ -34,6 +35,7 @@ do
     [ "$targetext" = "jpg" ] && [ -e "$basename.JPG" ] && originalname="$basename.JPG"
     [ "$targetext" = "RW2" ] && [ -e "$basename.RW2" ] && originalname="$basename.RW2"
     [ "$targetext" = "CR3" ] && [ -e "$basename.CR3" ] && originalname="$basename.CR3"
+    [ "$targetext" = "ORF" ] && [ -e "$basename.ORF" ] && originalname="$basename.ORF"
     [ "$targetext" = "mp4" ] && [ -e "$basename.mp4" ] && originalname="$basename.mp4"
     [ "$targetext" = "mp4" ] && [ -e "$basename.MP4" ] && originalname="$basename.MP4"
     [ "$targetext" = "mov" ] && [ -e "$basename.mov" ] && originalname="$basename.mov"
@@ -104,4 +106,8 @@ do
     [ -e "$basename.CR3" ] && mv "$basename.CR3" "$newbasename$postfix.CR3"
     [ -e "$basename.CR3.xmp" ] && sed -i -s "s/$basename.CR3/$newbasename$postfix.CR3/" "$basename.CR3.xmp"
     [ -e "$basename.CR3.xmp" ] && mv "$basename.CR3.xmp" "$newbasename$postfix.CR3.xmp"
+
+    [ -e "$basename.ORF" ] && mv "$basename.ORF" "$newbasename$postfix.ORF"
+    [ -e "$basename.ORF.xmp" ] && sed -i -s "s/$basename.ORF/$newbasename$postfix.ORF/" "$basename.ORF.xmp"
+    [ -e "$basename.ORF.xmp" ] && mv "$basename.ORF.xmp" "$newbasename$postfix.ORF.xmp"
 done
