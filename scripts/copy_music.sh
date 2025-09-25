@@ -100,7 +100,7 @@ encode() {
         elif [ "$encoding" = "ogg" ]
         then
             oggenc --resample 44100 -Q -q 7 -a "$meta_artist" -l "$meta_album" -t "$meta_title" -N "$meta_track" -c "replaygain_album_peak=$meta_rg_ap" -c "replaygain_track_peak=$meta_rg_tp" -c "replaygain_album_gain=$meta_rg_ag" -c "replaygain_track_gain=$meta_rg_tg" -o $tmpfile $wavfile
-        elif [ "$encoding" = "aac" ]
+        elif [ "$encoding" = "aac" ] || [ "$encoding" = "any" ]
         then
             tmpfile=$(mktemp -p $tempdir/ --suffix=".m4a")
             ffmpeg -loglevel error -y -i $wavfile -c:a libfdk_aac -vbr 5 -cutoff 20000 -ar 44100 \
@@ -137,7 +137,7 @@ do
     echo "Type in an album name or leave empty to read from tags:"
     read album
     echo "COPYING AND ENCODING:"
-    printf "| 0% "
+    printf "| 0%% "
     spacecount=$(expr $(expr $(echo $list | wc -w) \* 3) - 11)
     while [ $spacecount -gt 0 ]
     do
