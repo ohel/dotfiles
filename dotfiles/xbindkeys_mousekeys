@@ -9,14 +9,12 @@
 # Note: disabling default behavior may require modifying Xorg.conf. Example:
 # Section "InputClass"
 #     Identifier "DefaultMouse"
-#     MatchProduct "Logitech USB Receiver"
+#     MatchProduct "USB Receiver"
 #     MatchIsPointer "true"
-#     Option "CorePointer"
+#     Driver "evdev"
 #     # Button 2 = Middle mouse, remapped to disable X11 paste
 #     # Button 8/9 = Browser back/forward, remapped to disable default behavior
 #     Option "ButtonMapping" "1 12 3 4 5 7 6 10 11"
-#     Driver "evdev"
-#     Option "Device" "/dev/input/evdev-mouse"
 # EndSection
 
 # Mouse forward thumb mapping is defined in the Guile script file xbindkeys_mousekeys.scm, as it needs advanced scripting to work as a zoom toggle. Run a separate xbindkeys instance for it.
