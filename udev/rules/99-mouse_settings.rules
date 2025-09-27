@@ -1,0 +1,2 @@
+# When plugging in a mouse, run a script.
+SUBSYSTEM=="input", KERNEL=="mouse[0-9]*", ACTION=="add", RUN+="/usr/bin/su panther -c '/usr/bin/sh /opt/udev/scripts/mouse_settings.sh'"

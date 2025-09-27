@@ -4,7 +4,7 @@
 # In CLI and if jackd is already running, JACK is always used.
 
 export XAUTHORITY=$HOME/.Xauthority
-export DISPLAY=:0.0
+export DISPLAY=:0
 audiocard=m4_hw
 
 use_cli=""

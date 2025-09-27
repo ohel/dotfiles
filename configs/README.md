@@ -12,4 +12,3 @@ Files in this directory are usually located in ~/.config, but not always.
 * `renamepatterns.saved`: Quod Libet rename pattern for music library.
 * `scans.phatch`: An action list to use with Phatch when scanning lots of A4 text documents. The app itself is deprecated, but the ImageMagick operations are still usable.
 * `system`: Various local system startup scripts which in Gentoo are run from /etc/local.d. On Ubuntu the contents are in a single file called /etc/rc.local.
-* `input_config.sh`: Just a reminder how to set mouse settings with libinput.
