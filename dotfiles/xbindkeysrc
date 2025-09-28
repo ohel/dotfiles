@@ -32,9 +32,9 @@ Mod4 + Mod5 + 2 # Mod5 + 2 = @ in Finnish keyboard
 XF86Mail
 
 # Browser
-"~/.scripts/launchers/chromium.sh ifrunning file://~/.local/share/rssfeeds.html"
+"~/.scripts/launchers/chromium.sh ifrunning file://~/.local/share/rss_feeds.html"
 Mod4 + w
-"~/.scripts/launchers/chromium.sh ifrunning file://~/.local/share/rssfeeds.html"
+"~/.scripts/launchers/chromium.sh ifrunning file://~/.local/share/rss_feeds.html"
 XF86HomePage
 
 # Editor

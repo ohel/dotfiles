@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Application
 Name=RSS feeds gatherer
-Exec=.scripts/rssfeeds.sh
+Exec=.scripts/rss_feeds.sh
 StartupNotify=false
 Terminal=false
 Hidden=false
