@@ -13,8 +13,8 @@ device=${2:-$1}
 profile="$1"
 [ "$#" = 1 ] && profile="sr"
 
-scriptdir=$(dirname "$(readlink -f "$0")")
-$scriptdir/media_player.sh $profile \
+scriptsdir=$(dirname "$(readlink -f "$0")")
+$scriptsdir/media_player.sh $profile \
     --cache=no \
     --deinterlace=auto \
     dvd://$3 --dvd-device="$device"

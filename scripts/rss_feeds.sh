@@ -6,7 +6,7 @@ input=~/.config/rss_feeds
 output=~/.local/share/rss_feeds.html
 interval_minutes=30
 
-scriptdir=$(dirname "$(readlink -f "$0")")
+scriptsdir=$(dirname "$(readlink -f "$0")")
 scriptname=$(basename $0)
 existing_scripts=$(ps -ef | grep "/usr/bin/bash .*$scriptname$" | grep -v grep | wc -l)
 [ $existing_scripts -gt 2 ] && echo "RSS feeds script already running." && exit 1
@@ -38,7 +38,7 @@ EOF
     out_tmp=$(mktemp)
     for feed in ${feeds[@]}
     do
-        $scriptdir/rss_parser.py "$feed" >> $output
+        $scriptsdir/rss_parser.py "$feed" >> $output
         echo '<tr><td colspan="2"><hr></td></tr>' >> $output
     done
     echo "</tbody></table></body></html>" >> $output

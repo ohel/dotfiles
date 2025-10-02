@@ -562,6 +562,23 @@ function s:SetFileFormat()
 endfunction
 nnoremap <f8> :call <SID>SetFileFormat()<cr>
 
+" Toggle between .h and .cpp files.
+function! s:ToggleHeaderSource()
+    let l:fname = expand('%:p') " Full path of current file.
+    if l:fname =~ '\.h$'
+        let l:alt = substitute(l:fname, '\.h$', '.cpp', '')
+    elseif l:fname =~ '\.cpp$'
+        let l:alt = substitute(l:fname, '\.cpp$', '.h', '')
+    else
+        return
+    endif
+
+    if filereadable(l:alt)
+        execute 'edit ' . fnameescape(l:alt)
+    endif
+endfunction
+nnoremap <silent> <leader>h :call <SID>ToggleHeaderSource()<CR>
+
 " Font zooming.
 if has('gui_running') && exists('g:zoom_functions') && g:zoom_functions == 1
     if !exists('g:zoom_level')
@@ -784,6 +801,9 @@ function! OnVimEnter()
             endif
         endfunction
         nnoremap <silent> <leader>ch :call <SID>CocHoverHelpOnOffToggle()<cr>
+        if exists(':Arpeggio')
+            call arpeggio#map('n', 's', 0, 'ch', ':call CocHoverHelpOnOffToggle()<cr>')
+        endif
 
         let g:coc_enabled = 0
         function CocOnOffToggle()
