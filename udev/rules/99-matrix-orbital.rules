@@ -1,3 +1,4 @@
 # Initialize the display with correct serial port speed.
 # Note: needs to have the usbserial and ftdi-sio kernel modules loaded first.
 ACTION=="add", ENV{ID_VENDOR}=="Matrix_Orbital", ENV{ID_MODEL}=="MX2_MX3", KERNEL=="ttyUSB*", SYMLINK="serial/matrix_orbital", GROUP="wheel", MODE="0660", RUN+="/usr/bin/sh -c '/usr/bin/stty -F %E{DEVNAME} speed 19200 -onlcr && echo -en \\xFEX\\xFEF > %E{DEVNAME}'"
+ACTION=="add", ENV{ID_VENDOR}=="MO", ENV{ID_MODEL}=="LK202-25-USB", KERNEL=="ttyUSB*", SYMLINK="serial/matrix_orbital", GROUP="wheel", MODE="0660", RUN+="/usr/bin/sh -c '/usr/bin/stty -F %E{DEVNAME} speed 115200 -onlcr && echo -en \\xFEX\\xFEF > %E{DEVNAME}'"
