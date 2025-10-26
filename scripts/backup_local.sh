@@ -8,17 +8,18 @@
 #    backup_dest_dirs: Destination directories for misc backup. Should correspond to source directories.
 # Optionally also: systembackupexcludelist: Things to exclude from backup. For example:
 #    systembackupexcludelist=(
-#        "/dev/shm/\*"
-#        "/run/\*"
-#        "/home/\*"
-#        "/mnt/\*/\*"
-#        "/proc/\*"
-#        "/sys/\*"
-#        "/tmp/\*"
-#        "/var/lib/docker/\*"
+#        "/dev/shm/*"
+#        "/run/*"
+#        "/home/*"
+#        "/mnt/*/*"
+#        "/proc/*"
+#        "/sys/*"
+#        "/tmp/*"
+#        "/var/lib/docker/*"
 #        "/swapfile"
 #    )
 # Similarly, miscbackupexcludefile can be defined for misc backups. It is passed as exclude-from=FILE parameter to rsync.
+# The asterisks are wildcards for tar, therefore shell expansion will not be made.
 #
 # Additionally, for home backups each user may have a ~/.config/backup_exclude file.
 # It can define paths relative to that home directory for stuff that should be excluded.
@@ -33,7 +34,6 @@ backup_config=/opt/backup_config
 [ ! "$backup_source_dirs" ] && echo "Error: missing definition for backup_source_dirs" && exit 1
 [ ! "$backup_dest_dirs" ] && echo "Error: missing definition for backup_dest_dirs" && exit 1
 
-# Escape asterisks, otherwise shell expansion is made.
 [ ! "$systembackupexcludelist" ] && systembackupexcludelist=(
     "/dev/shm/\*"
     "/home/\*"
@@ -76,9 +76,8 @@ sleep 1
 echo "Starting backup in one second..."
 sleep 1
 
-parallel=0
 # If pigz is found, use threaded compression.
-[ "$(which pigz 2>/dev/null)" ] && parallel=1
+parallel=0 && [ "$(which pigz 2>/dev/null)" ] && parallel=1
 
 datestring=$(date +%F)
 
@@ -94,25 +93,23 @@ then
     echo
     echo "*******************************************************************************"
     echo "Beginning system backup..."
-    echo "To restore: tar -C /[home] -xvpzf archive.tgz"
 
     systembackupfile="$systembackupdir/$HOSTNAME-system-backup-$datestring.tgz"
 
-    excludelist=""
-    for excludeitem in ${systembackupexcludelist[@]}
+    excludelist=()
+    for excludeitem in "${systembackupexcludelist[@]}"
     do
         # Prefix every item with . so that we may use relative paths with tar.
-        excludelist="$excludelist --exclude=.$excludeitem"
+        excludelist+=("--exclude=.$excludeitem")
     done
-    excludelist=$(echo $excludelist | sed "s/\\\\\*/*/g")
 
     echo
     echo "Creating system backup, see /dev/shm/backup.out for progress."
     if [ $parallel -eq 1 ]
     then
-        tar -C / --warning=no-file-ignored --index-file /dev/shm/backup.out $excludelist -cvpf - ./ | pigz -c > $systembackupfile
+        tar -C / --warning=no-file-ignored --index-file /dev/shm/backup.out "${excludelist[@]}" -cvpf - ./ | pigz -c > $systembackupfile
     else
-        tar -C / --warning=no-file-ignored --index-file /dev/shm/backup.out $excludelist -cvpzf $systembackupfile ./
+        tar -C / --warning=no-file-ignored --index-file /dev/shm/backup.out "${excludelist[@]}" -cvpzf $systembackupfile ./
     fi
     echo "Moving log file to $logdir..."
     mv /dev/shm/backup.out $logdir
@@ -132,27 +129,27 @@ then
     echo "Backing up home directories..."
     homebackupfile="$systembackupdir/$HOSTNAME-home-backup-$datestring.tgz"
 
-    excludelist=""
+    excludelist=()
     for user in $(ls -d /home/* | sed "s/.*\///g")
     do
         excludesfile=/home/$user/.config/backup_exclude
         if [ -e $excludesfile ]
         then
-            while read -r excludeitem
+            while IFS= read -r excludeitem
             do
                 # If excluded item is a directory, include the empty directory.
                 [ -d "/home/$user/$excludeitem" ] && excludeitem="$excludeitem/*"
                 # Prefix every item with . so that relative paths may be used with tar.
-                excludelist="$excludelist --exclude=./home/$user/$excludeitem"
+                excludelist+=("--exclude=./home/$user/$excludeitem")
             done < $excludesfile
         fi
     done
 
     if [ $parallel -eq 1 ]
     then
-        tar -C / --warning=no-file-ignored --one-file-system -cpf - $excludelist ./home | pigz -c > $homebackupfile
+        tar -C / --warning=no-file-ignored --one-file-system -cpf - "${excludelist[@]}" ./home | pigz -c > $homebackupfile
     else
-        tar -C / --warning=no-file-ignored --one-file-system -cpzf $homebackupfile $excludelist ./home
+        tar -C / --warning=no-file-ignored --one-file-system -cpzf $homebackupfile "${excludelist[@]}" ./home
     fi
 fi
 
@@ -200,5 +197,6 @@ fi
 echo
 echo "*******************************************************************************"
 echo "Backup complete. Backup virtual machines separately."
+echo "To restore backups: tar -C /[home] -xvpzf archive.tgz"
 echo
 [ "$wait_at_end" == 1 ] && read

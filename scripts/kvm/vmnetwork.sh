@@ -55,9 +55,9 @@ then
 
         ip link add name netbridge type bridge
         ip link set netbridge up
-        ifconfig $nic 0.0.0.0
+        ip addr flush dev $nic
         ip link set $nic master netbridge
-        dhclient netbridge
+        dhcpcd -n -w -4 --nohook resolv.conf netbridge
         sysctl -q -e -w net.ipv4.conf.netbridge.forwarding=1
 
         echo "sudo ip link set netbridge down" >> $reset_script

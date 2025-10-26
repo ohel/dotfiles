@@ -1,13 +1,13 @@
 #!/usr/bin/sh
 # Show some status info about a WiFi interface. Assumes standard interface name, i.e. starts with wl.
 
-nic=$(ifconfig | grep wl.*: -o | tr -d ':')
+nic=$(ip addr show | grep -o  wl.*: | tr -d ':')
 [ ! "$nic" ] && echo No wireless interface found. && exit 1
-ip_addr=$(ifconfig | grep $nic -A 2 | grep -o "inet .*" | cut -f 2 -d ' ')
+ip_addr=$(ip addr show $nic | grep -o "inet [0-9.]*" | cut -f 2 -d ' ')
 link_quality=$(cat /proc/net/wireless 2>/dev/null | tail -n 1 | tr -s ' ' | cut -f 3 -d ' ' | tr -d '.|')
 link_quality=$(echo "$link_quality. / .7" | bc)
 link_info="$(iw dev $nic link)"
-ssid=$(echo " $link_info" | grep SSID | cut -f 2 -d ':')
+ssid=$(echo " $link_info" | grep SSID: | cut -f 2 -d ':')
 signal_strength=$(echo " $link_info" | grep "signal" | grep -o "\-.*")
 rx_bitrate=$(echo " $link_info" | grep "rx bitrate" | cut -f 2 -d ':')
 tx_bitrate=$(echo " $link_info" | grep "tx bitrate" | cut -f 2 -d ':')
