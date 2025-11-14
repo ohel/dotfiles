@@ -10,39 +10,38 @@ then
         ip=$(ip addr show $physical_device | grep -o "inet [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | cut -f 2 -d ' ')
         if [ "$ip" ]
         then
-            IF=$physical_device
+            nic=$physical_device
             break
         fi
     done
 else
-    IF=$1
+    nic=$1
 fi
 
-echo "Monitoring interface: $IF"
-echo "Only updates if notable change occurs - small traffic may seem nonexistent."
+echo "Monitoring interface: $nic"
+echo "Only updates nic notable change occurs - small traffic may seem nonexistent."
 echo
 echo " Unit: [MB/s]"
 echo "-------------"
 echo "   UP |  DOWN"
 echo "      |"
-pad="     "
-TMBPS_old=-1
-RMBPS_old=-1
+tx_mbps_old=-1
+rx_mbps_old=-1
 while true
 do
-    R1=$(cat /sys/class/net/$IF/statistics/rx_bytes)
-    T1=$(cat /sys/class/net/$IF/statistics/tx_bytes)
+    rx1=$(cat /sys/class/net/$nic/statistics/rx_bytes)
+    tx1=$(cat /sys/class/net/$nic/statistics/tx_bytes)
     sleep 1
-    R2=$(cat /sys/class/net/$IF/statistics/rx_bytes)
-    T2=$(cat /sys/class/net/$IF/statistics/tx_bytes)
-    TBPS=$(expr $T2 - $T1)
-    RBPS=$(expr $R2 - $R1)
-    TMBPS=$(echo "scale=2; $TBPS / 1048576" | bc)
-    RMBPS=$(echo "scale=2; $RBPS / 1048576" | bc)
-    if [ "$TMBPS" != "$TMBPS_old" ] || [ "$RMBPS" != "$RMBPS_old" ]
+    rx2=$(cat /sys/class/net/$nic/statistics/rx_bytes)
+    tx2=$(cat /sys/class/net/$nic/statistics/tx_bytes)
+    tx_bps=$(expr $tx2 - $tx1)
+    rx_bps=$(expr $rx2 - $rx1)
+    tx_mbps=$(echo "scale=2; $tx_bps / 1048576" | bc)
+    rx_mbps=$(echo "scale=2; $rx_bps / 1048576" | bc)
+    if [ "$tx_mbps" != "$tx_mbps_old" ] || [ "$rx_mbps" != "$rx_mbps_old" ]
     then
-        printf "%s | %s\n" "${pad:${#TMBPS}}$TMBPS" "${pad:${#RMBPS}}$RMBPS"
-        TMBPS_old=$TMBPS
-        RMBPS_old=$RMBPS
+        printf "%5s | %5s\n" "$tx_mbps" "$rx_mbps"
+        tx_mbps_old=$tx_mbps
+        rx_mbps_old=$rx_mbps
     fi
 done
