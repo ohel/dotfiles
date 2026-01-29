@@ -44,6 +44,7 @@ xrandrout="$(xrandr)"
 primary_display=${primary_display:-$(echo "$xrandrout" | grep " connected" | cut -f 1 -d ' ' | head -n 1)}
 primary_mode=$(echo "$xrandrout" | grep -A 1 $primary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
 p_width=$(echo $primary_mode | cut -f 1 -d 'x')
+[ ! "$p_width" ] && echo "Error parsing primary mode." && exit 1
 
 # Sometimes the native resolution is not the first mode line, but the second. This might be the case with e.g. 4K televisions.
 mode_candidate=$(echo "$xrandrout" | grep -A 2 $primary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
@@ -59,6 +60,7 @@ then
     mode_candidate=$(echo "$xrandrout" | grep -A 2 $secondary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
     mc_width=$(echo $mode_candidate | grep -o "^[0-9]\{3,4\}")
     s_width=$(echo $secondary_mode | cut -f 1 -d 'x')
+    [ ! "$s_width" ] && echo "Error parsing secondary mode." && exit 1
     ([ $s_width -gt $MAX_4K_WIDTH ] || ([ $mc_width -le $MAX_4K_WIDTH ] && [ $(echo $secondary_mode | grep -o "^[0-9]\{3,4\}") -lt $mc_width ])) && secondary_mode=$mode_candidate
     echo "Secondary display: $secondary_display, mode: $secondary_mode"
 fi
@@ -99,7 +101,7 @@ else
             --output $secondary_display --mode $secondary_mode --$position $primary_display
         panelwin="xfce4-panel"
         [ "$panel_pid" ] && panelheight=$(xwininfo -id $(wmctrl -l | grep $panelwin | cut -f 1 -d ' ') | grep Height | cut -f 2 -d ":" | tr -d -c [:digit:])
-        [ "$panel_pid" ] && panel_y=$(echo $(echo $primary_mode | cut -f 2 -d 'x') - $panelheight | bc)
+        [ "$panel_pid" ] && panel_y=$(expr $(echo $primary_mode | cut -f 2 -d 'x') - $panelheight)
         [ "$panel_pid" ] && wmctrl -r $panelwin -e 0,$panel_y,0,-1,-1
     elif [ "$script_mode" = "mirror" ]
     then
@@ -157,7 +159,7 @@ xrandrout="$(xrandr)"
 p_phys_width=$(echo "$xrandrout" | grep -A 1 $primary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
 if [ "$p_phys_width" ] && [ $p_phys_width -gt 0 ]
 then
-    p_dpi_calc=$(echo "scale=2; $p_width / $p_phys_width * 25.4" | bc | cut -f 1 -d '.')
+    p_dpi_calc=$(awk "BEGIN { printf \"%.0f\", $p_width / $p_phys_width * 25.4 }")
     p_dpi_set=96
     [ $p_dpi_calc -gt 100 ] && p_dpi_set=112
     [ $p_dpi_calc -gt 140 ] && [ $p_phys_width -gt 300 ] && p_dpi_set=144
@@ -171,7 +173,7 @@ scale=1
 [ "$secondary_display" ] && s_phys_width=$(echo "$xrandrout" | grep -A 1 $secondary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
 if [ "$s_phys_width" ] && [ $s_phys_width -gt 0 ]
 then
-    s_dpi_calc=$(echo "scale=2; $s_width / $s_phys_width * 25.4" | bc | cut -f 1 -d '.')
+    s_dpi_calc=$(awk "BEGIN { printf \"%.0f\", $s_width / $s_phys_width * 25.4 }")
     s_dpi_set=96
     [ $s_dpi_calc -gt 100 ] && s_dpi_set=112
     [ $s_dpi_calc -gt 140 ] && [ $s_phys_width -gt 300 ] && s_dpi_set=144

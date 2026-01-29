@@ -19,7 +19,7 @@ do
     usagecolumn=1
     for idletimes in $(mpstat -P ALL 1 1 | tr -s [' '] | grep "Average: \w " | cut -f 11 -d ' ')
     do
-        usage=$(echo "(100.0-$idletimes)/6.25" | bc)
+        usage=$(awk -v idle="$idletimes" 'BEGIN { printf "%.0f", (100.0 - idle)/6.25 }')
         if [ $usage -eq 16 ]
         then
             usagestring="20"

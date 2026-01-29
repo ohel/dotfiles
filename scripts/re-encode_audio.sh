@@ -36,7 +36,7 @@ fi
 echo Compressing audio...
 if [ "$(which fdkaac 2>/dev/null)" ]
 then
-    bitrate=$(echo 48000*$aquality | bc)
+    bitrate=$(expr 48000 \* $aquality)
     fdkaac -S -b $bitrate $tmpfile.normalized.wav -o $tmpfile.m4a
 else
     ffmpeg -loglevel error -i $tmpfile.normalized.wav -codec:a libfdk_aac -cutoff 18000 -vbr 5 -ar 44100 $tmpfile.m4a

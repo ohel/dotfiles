@@ -36,8 +36,8 @@ do
     tx2=$(cat /sys/class/net/$nic/statistics/tx_bytes)
     tx_bps=$(expr $tx2 - $tx1)
     rx_bps=$(expr $rx2 - $rx1)
-    tx_mbps=$(echo "scale=2; $tx_bps / 1048576" | bc)
-    rx_mbps=$(echo "scale=2; $rx_bps / 1048576" | bc)
+    tx_mbps=$(awk -v bps=$tx_bps 'BEGIN { printf "%.2f", bps / 1048576 }')
+    rx_mbps=$(awk -v bps=$rx_bps 'BEGIN { printf "%.2f", bps / 1048576 }')
     if [ "$tx_mbps" != "$tx_mbps_old" ] || [ "$rx_mbps" != "$rx_mbps_old" ]
     then
         printf "%5s | %5s\n" "$tx_mbps" "$rx_mbps"

@@ -73,7 +73,7 @@ do
         time2=$(date +%s%N | cut -b1-13)
         time_diff=$(expr $time2 - $time1)
         time_wait=$(expr $blend_interval_ms - $time_diff)
-        [ $time_wait -gt 0 ] && sleep $(echo "scale=3; $time_wait / 1000" | bc)
+        [ $time_wait -gt 0 ] && sleep $(awk -v time=$time_wait 'BEGIN { printf "%.3f", time/1000 }')
         percentage=$(expr $percentage + $step_percentage)
     done
 

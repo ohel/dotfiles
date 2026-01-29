@@ -17,7 +17,8 @@
 separator="_"
 [ "$#" -gt 1 ] && separator=""
 
-width=$(echo "$(xrandr | grep -o "current [0-9]*" | cut -f 2 -d ' ') / 4" | bc)
+screen_width=$(xrandr | grep -o "current [0-9]*" | cut -f 2 -d ' ')
+popup_width=$(awk -v w=$screen_width 'BEGIN { printf "%.0f", w/4 }')
 
 for inputname in "$@"
 do
@@ -55,7 +56,7 @@ do
     desc=""
     if [ "$separator" ]
     then
-        [ "$(which zenity 2>/dev/null)" ] && [ "$width" ] && desc=$(zenity --title="New filename" --text="Enter filename after timestamp, leave empty to use current, or cancel for no rename:" --entry --width=$width)
+        [ "$(which zenity 2>/dev/null)" ] && [ "$popup_width" ] && desc=$(zenity --title="New filename" --text="Enter filename after timestamp, leave empty to use current, or cancel for no rename:" --entry --width=$popup_width)
         # Check if user cancelled.
         [ "$?" = 1 ] && exit 1
         # If no description was given, use old description if found after timestamp.

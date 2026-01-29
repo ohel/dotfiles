@@ -8,20 +8,19 @@ existing_scripts=$(ps -ef | grep "/usr/bin/sh .*$scriptname$" | grep -v grep | w
 interval=${1:-900}
 
 easeInOutExp200Steps() {
-    if [ $1 -eq 0 ]
-    then
-        factor=0
-    elif [ $1 -eq 200 ]
-    then
-        factor=1
-    elif [ $1 -lt 100 ]
-    then
-        factor="e(($1/10 - 10) * l(2)) / 2"
-    else
-        factor="(2 - e((-$1/10 + 10) * l(2))) / 2"
-    fi
+    awk -v old=$1 -v diff=$2 '
+    function pow2(x) { return exp(x * log(2)) }
 
-    echo "$2 + $3 * $factor" | bc -l
+    BEGIN {
+        for (step = 1; step <= 200; step++) {
+            if (step < 100) {
+                f = pow2(step/10 - 10) / 2
+            } else {
+                f = (2 - pow2(-step/10 + 10)) / 2
+            }
+            printf "%.10f\n", old + diff * f
+        }
+    }'
 }
 
 while [ 1 ]
@@ -30,13 +29,9 @@ do
     new_length=$(shuf -i 75-100 -n 1)
     diff=$(expr $new_length - $old_length)
 
-    step=1
-    while [ $step -lt 201 ]
-    do
-        length=$(easeInOutExp200Steps $step $old_length $diff)
+    easeInOutExp200Steps $old_length $diff | while read length; do
         xfconf-query -c xfce4-panel -p /panels/panel-0/length -s $length
         sleep 0.0075
-        step=$(expr $step + 1)
     done
 
     sleep $interval

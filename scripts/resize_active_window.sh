@@ -7,7 +7,7 @@
 rdp_win_class="org.remmina.Remmina.org.remmina.Remmina"
 
 active_win_id_dec=$(xdotool getactivewindow)
-active_win_id_hex=$(echo "obase=16; $active_win_id_dec" | bc)
+active_win_id_hex=$(awk -v id="$active_win_id_dec" 'BEGIN { printf "%X\n", id }')
 active_win_class=$(wmctrl -lx | grep -i "0x[0]*$active_win_id_hex" | tr -s ' ' | cut -f 3 -d ' ')
 
 # Only resize RDP windows.

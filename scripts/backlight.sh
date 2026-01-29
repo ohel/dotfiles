@@ -15,9 +15,9 @@ current=$(cat $backlight/brightness)
 
 if [ "$(echo "$1" | grep \\.)" ]
 then
-    new=$(echo "$1 * $max" | bc | cut -f 1 -d '.')
+    new=$(awk -v p=$1 -v m=$max 'BEGIN { printf "%.0f", p*m }')
 else
-    new=$(echo $current + $1 | bc)
+    new=$(expr $current + $1)
     if [ $new -gt $max ]
     then
         new=$max

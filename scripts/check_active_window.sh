@@ -13,13 +13,14 @@
 #   ~/.config/check_window_titles
 # Put regex patterns to the file, one per line.
 # Example patterns for the file to prevent accidental emerge cancellation:
-#   ^HOSTNAME Jobs:
-#   ^HOSTNAME emerge$
+#   ^HOSTNAME: Jobs:
+#   ^HOSTNAME: emerge$
 
 active_win_id_dec=$(xdotool getactivewindow)
-active_win_id_hex=$(echo "obase=16; $active_win_id_dec" | bc)
-active_win_class=$(wmctrl -lx | grep -i "0x[0]*$active_win_id_hex" | tr -s ' ' | cut -f 3 -d ' ')
-active_win_title=$(wmctrl -lx | grep -i "0x[0]*$active_win_id_hex" | tr -s ' ' | cut -f 4- -d ' ')
+active_win_id_hex=$(awk -v id="$active_win_id_dec" 'BEGIN { printf "%X\n", id }')
+active_win_info=$(wmctrl -lx | grep -i "0x[0]*$active_win_id_hex" | tr -s ' ' | cut -f 3- -d ' ')
+active_win_class=$(echo $active_win_info | cut -f 1 -d ' ')
+active_win_title=$(echo $active_win_info | cut -f 3- -d ' ')
 
 [ "$(grep "$active_win_class" ~/.config/check_window_classes 2>/dev/null)" ] ||
 [ "$(echo "$active_win_title" | grep -f ~/.config/check_window_titles 2>/dev/null)" ] && exit 1

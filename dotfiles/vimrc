@@ -1,13 +1,15 @@
 " Note: if mapping Alt key combinations they might prevent some keys from working over SSH.
 " One such combination is <a-d> which would disable 'ä' on a Finnish keyboard.
 
-autocmd VimEnter * call OnVimEnter()
-autocmd GUIEnter * set lines=31 columns=107 " Set window size when starting in GUI mode.
-autocmd BufReadPost * call OnBufferRead()
+autocmd VimEnter * call s:OnVimEnter()
+autocmd GUIEnter * call s:OnGUIEnter()
+autocmd BufReadPost * call s:OnBufferRead()
 
-let g:dlines = 31 " Also set default size into memory.
-let g:dcols = 107
 let g:leave_my_textwidth_alone = 1 " Don't autowrap lines while typing.
+
+let g:dlines = 31 " Default GUI height.
+let g:dcols = 107 " Default GUI width.
+set guicursor=n-v-c:hor25-Cursor " Set cursor size.
 
 set autoread " Automatically update file if changed from the outside.
 set backspace=indent,eol,start " Make backspace clear other than new text also.
@@ -17,7 +19,6 @@ set go-=m " Hide menu.
 set go-=r " Disable right scroll bar.
 set go-=t " Disable tear-off menus.
 set go-=T " Hide toolbar.
-set guicursor=n-v-c:hor25-Cursor " Set cursor size.
 set hidden " Do not close file buffers when opening a new one, use :ls to list buffers.
 set hlsearch " Highlight search.
 set ic " Set ignore case on searches, remedy with set noic or use \C in search term.
@@ -84,8 +85,12 @@ inoremap <tab> <c-r>=TabOrComplete()<cr>
 " Insert real tab on shift-tab.
 inoremap <s-tab> <c-q><tab>
 
-let g:zoom_functions = 1
-let $VIMHOME = $HOME . '/.vim'
+if has('android')
+    let $VIMHOME='/data/data/com.termux/files/home/.vim'
+else
+    let g:zoom_functions = 1
+    let $VIMHOME = $HOME . '/.vim'
+endif
 
 if has('win32') || has ('win64')
 
@@ -110,29 +115,34 @@ else
 
     set guifont=Monospace\ 10
 
-    " Plugins checking.
+    " Plugins checks.
     if !isdirectory($VIMHOME . '/autoload')
         silent call mkdir($VIMHOME . '/autoload', 'p')
     endif
     if !filereadable($VIMHOME . '/autoload/plug.vim')
-        echo('Downloading vim-plug...')
-        silent !curl -fLo $VIMHOME/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        if executable('git')
+            echo('Downloading vim-plug...')
+            silent !curl -fLo $VIMHOME/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        else
+            :echo 'Vim-plug requires git, not downloading vim-plug.'
+        endif
     endif
 
 endif
 
-" Note: on Windows the colorscheme might not be found unless it is copied under
-" the global installation directory, e.g.
-" C:\Program Files (x86)\Vim\vimfiles\colors
-if filereadable($VIMHOME . '/colors/minigun.vim') || filereadable($VIMRUNTIME . '/colors/minigun.vim')
-    colorscheme minigun
-endif
+if !has('android')
+    " Note: on Windows the colorscheme might not be found unless it is copied under
+    " the global installation directory, e.g. C:\Program Files (x86)\Vim\vimfiles\colors
+    if filereadable($VIMHOME . '/colors/minigun.vim') || filereadable($VIMRUNTIME . '/colors/minigun.vim')
+        colorscheme minigun
+    endif
 
-if !isdirectory($VIMHOME . '/undodir')
-    silent call mkdir ($VIMHOME . '/undodir', 'p')
+    if !isdirectory($VIMHOME . '/undodir')
+        silent call mkdir ($VIMHOME . '/undodir', 'p')
+    endif
+    set undodir=$VIMHOME/undodir
+    set undofile
 endif
-set undodir=$VIMHOME/undodir
-set undofile
 
 " Syntax and file type detection etc.
 syntax on
@@ -164,23 +174,23 @@ if executable('ctags')
     endif
 endif
 
-" Create Compile Commands Or Ctags
-function CCCOC()
+" Create Compile Commands or Ctags
+function CCCC()
     if filereadable('platformio.ini')
         silent !pio run -t compiledb
-        echo('Created compile commands')
+        echo('Created compile commands.')
     elseif filereadable('../platformio.ini')
         cd ..
         silent !pio run -t compiledb
         cd -
-        echo('Created compile commands')
+        echo('Created compile commands.')
     elseif exists('s:ctags_extras')
         call system('ctags -R -f ./tags --c++-kinds=+p --fields=+iaS --' . s:ctags_extras . '=+q .')
-        echo('Created tags file')
+        echo('Created tags file.')
     endif
 endfunction
 
-nnoremap <c-f1> :call CCCOC()<cr>
+nnoremap <c-f1> :call CCCC()<cr>
 
 
 
@@ -188,11 +198,14 @@ nnoremap <c-f1> :call CCCOC()<cr>
 " ****************
 
 if filereadable($VIMHOME . '/autoload/plug.vim')
-    silent! call plug#begin($VIMHOME . '/plugged')
+    if executable('git')
+        silent! call plug#begin($VIMHOME . '/plugged')
+    else
+        :echo 'Vim-plug requires git, not starting vim-plug.'
+    endif
 endif
 if exists('*plug#begin')
     Plug 'ap/vim-css-color' " Display color codes in corresponding color.
-    Plug 'jreybert/vimagit' " Git integration.
     Plug 'justinmk/vim-gtfo' " Open terminal or file manager.
     Plug 'kana/vim-arpeggio' " Do stuff with configurable key combinations.
     Plug 'pangloss/vim-javascript' " Nicer JavaScript syntax highlighting etc.
@@ -656,7 +669,7 @@ if has('gui_running')
 
 endif
 
-function! OnVimEnter()
+function! s:OnVimEnter()
 
     " Unite
     if exists(':Unite')
@@ -710,11 +723,6 @@ function! OnVimEnter()
             endfunction
             call arpeggio#map('n', 's', 0, 'gb', ':call ToggleGitBlame()<cr>')
             call arpeggio#map('n', 's', 0, 'gl', ':Git log -p %<cr>')
-        endif
-
-        " Vimagit staging.
-        if exists(':Magit')
-            call arpeggio#map('n', 's', 0, 'gs', ':Magit<cr>')
         endif
     endif
 
@@ -872,7 +880,7 @@ function! OnVimEnter()
 
 endfunction
 
-function! OnBufferRead()
+function! s:OnBufferRead()
     " Set tab width to that of first line beginning with white space,
     " but ignore comment lines (usually starting with *, /, # or ").
     try
@@ -889,7 +897,10 @@ function! OnBufferRead()
     endif
 endfunction
 
-
+function! s:OnGUIEnter()
+    " Set window size when starting in GUI mode.
+    execute 'set lines=' . g:dlines . ' columns=' . g:dcols
+endfunction
 
 " Host specific stuff, e.g.:
 " function OnVimEnterExtra()

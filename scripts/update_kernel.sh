@@ -194,7 +194,7 @@ fi
 
 #### COMPILE AND COPY KERNEL, INSTALL MODULES #####
 
-num_threads=$(echo 1.99+$(grep "processor.*:" /proc/cpuinfo | tail -n 1 | cut -f 2 -d ':')*0.75 | bc | cut -f 1 -d '.')
+num_threads=$(awk "BEGIN { printf \"%.0f\", 1.99 + $(grep 'processor.*:' /proc/cpuinfo | tail -n 1 | cut -f 2 -d ':') * 0.75 }")
 make -j $num_threads
 
 if [ ! -e arch/x86_64/boot/bzImage ]

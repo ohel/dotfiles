@@ -21,7 +21,7 @@ mode=$2
 doc=${3:-$2}
 [ "$#" -lt 3 ] && mode="normal"
 
-docpath=$(readlink -m $doc | cut -c $(echo $(echo $localdir | wc -c)+1 | bc )-)
+docpath=$(readlink -m $doc | cut -c $(expr $(echo $localdir | wc -c) + 1)-)
 
 if [ "$mode" = "normal" ]
 then

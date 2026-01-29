@@ -22,6 +22,7 @@ primary_display=${primary_display:-$(echo "$xrandrout" | grep " connected" | cut
 [ ! "$primary_display" ] && echo "Primary display not found. Try giving it as \$2." && exit 1
 primary_mode=$(echo "$xrandrout" | grep -A 1 $primary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
 p_width=$(echo $primary_mode | cut -f 1 -d 'x')
+[ ! "$p_width" ] && echo "Error parsing primary mode." && exit 1
 
 # Sometimes the native resolution is not the first mode line, but the second. This might be the case with e.g. 4K televisions.
 mode_candidate=$(echo "$xrandrout" | grep -A 2 $primary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
@@ -38,6 +39,7 @@ then
     mode_candidate=$(echo "$xrandrout" | grep -A 2 $secondary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
     mc_width=$(echo $mode_candidate | grep -o "^[0-9]\{3,4\}")
     s_width=$(echo $secondary_mode | cut -f 1 -d 'x')
+    [ ! "$s_width" ] && echo "Error parsing secondary mode." && exit 1
     ([ $s_width -gt $HIDPI_WIDTH ] || ([ $mc_width -le $HIDPI_WIDTH ] && [ $(echo $secondary_mode | grep -o "^[0-9]\{3,4\}") -lt $mc_width ])) && secondary_mode=$mode_candidate
     secondary_native=$secondary_mode
     echo "Secondary display: $secondary_display, native mode: $secondary_native"
@@ -69,7 +71,7 @@ xrandrout="$(xrandr)"
 p_phys_width=$(echo "$xrandrout" | grep -A 1 $primary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
 if [ "$p_phys_width" ] && [ $p_phys_width -gt 0 ] && [ "$has_primary" ]
 then
-    p_dpi_calc=$(echo "scale=2; $p_width / $p_phys_width * 25.4" | bc | cut -f 1 -d '.')
+    p_dpi_calc=$(awk "BEGIN { printf \"%.0f\", $p_width / $p_phys_width * 25.4 }")
     p_dpi_set=96
     [ $p_dpi_calc -gt 100 ] && p_dpi_set=112
     [ $p_dpi_calc -gt 140 ] && [ $p_phys_width -gt 300 ] && p_dpi_set=144
@@ -77,7 +79,7 @@ then
     then
         p_mode_width=$(echo $primary_mode | cut -f 1 -d 'x')
         p_native_width=$(echo $primary_native | cut -f 1 -d 'x')
-        p_dpi_set=$(echo "scale=2; $p_mode_width / $p_native_width * $p_dpi_set" | bc | cut -f 1 -d '.')
+        p_dpi_set=$(awk "BEGIN { printf \"%.0f\", $p_mode_width / $p_native_width * $p_dpi_set }")
         [ $p_dpi_set -lt 96 ] && p_dpi_set=96
     else
         [ "$DPI" ] && p_dpi_set=$DPI
@@ -92,7 +94,7 @@ scale=1
 [ "$secondary_display" ] && s_phys_width=$(echo "$xrandrout" | grep -A 1 $secondary_display | grep -o [0-9]*mm | head -n 1 | tr -d [:alpha:])
 if [ "$s_phys_width" ] && [ $s_phys_width -gt 0 ] && [ "$has_secondary" ]
 then
-    s_dpi_calc=$(echo "scale=2; $s_width / $s_phys_width * 25.4" | bc | cut -f 1 -d '.')
+    s_dpi_calc=$(awk "BEGIN { printf \"%.0f\", $s_width / $s_phys_width * 25.4 }")
     s_dpi_set=96
     [ $s_dpi_calc -gt 100 ] && s_dpi_set=112
     [ $s_dpi_calc -gt 140 ] && [ $s_phys_width -gt 300 ] && s_dpi_set=144
@@ -102,7 +104,7 @@ then
     then
         s_mode_width=$(echo $secondary_mode | cut -f 1 -d 'x')
         s_native_width=$(echo $secondary_native | cut -f 1 -d 'x')
-        s_dpi_set=$(echo "scale=2; $s_mode_width / $s_native_width * $s_dpi_set" | bc | cut -f 1 -d '.')
+        s_dpi_set=$(awk "BEGIN { printf \"%.0f\", $s_mode_width / $s_native_width * $s_dpi_set }")
         [ $s_dpi_set -lt 96 ] && s_dpi_set=96
     fi
     (! [ "$common_dpi" ] || [ $s_dpi_set -lt $p_dpi_set ]) && common_dpi=$s_dpi_set

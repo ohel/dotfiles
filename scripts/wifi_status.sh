@@ -5,7 +5,7 @@ nic=$(ip addr show | grep -o  wl.*: | tr -d ':')
 [ ! "$nic" ] && echo No wireless interface found. && exit 1
 ip_addr=$(ip addr show $nic | grep -o "inet [0-9.]*" | cut -f 2 -d ' ')
 link_quality=$(cat /proc/net/wireless 2>/dev/null | tail -n 1 | tr -s ' ' | cut -f 3 -d ' ' | tr -d '.|')
-link_quality=$(echo "$link_quality. / .7" | bc)
+link_quality=$(awk -v q=$link_quality 'BEGIN { printf "%.0f", q/0.7 }')
 link_info="$(iw dev $nic link)"
 ssid=$(echo " $link_info" | grep SSID: | cut -f 2 -d ':')
 signal_strength=$(echo " $link_info" | grep "signal" | grep -o "\-.*")

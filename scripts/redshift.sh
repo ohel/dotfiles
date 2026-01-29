@@ -34,7 +34,7 @@ fi
 if [ "$#" -gt 0 ] && echo "$1" | grep -q "^[-+0-9]*$"
 then
     delta=$(echo "$1" | tr -d '+')
-    new=$(echo $current + $delta | bc)
+    new=$(expr $current + $delta)
     if [ $new -gt $max ]
     then
         new=$max
@@ -60,7 +60,7 @@ else
     factor=$(expr 6 - $hourval)
     set_brightness=1
     delta=$(expr $max - $min)
-    new=$(echo "scale=2; $min + $factor/6 * $delta" | bc | cut -f 1 -d '.')
+    new=$(awk -v m=$min -v f=$factor -v d=$delta "BEGIN { printf \"%.0f\", m + f/6 * d }")
     notify_time=3000
 fi
 
@@ -75,10 +75,10 @@ version=$(redshift -V | cut -f 2 -d ' ' | tr -d '.')
 b=""
 if [ "$set_brightness" ]
 then
-    brightness=$(echo "scale=2; $new/$max" | bc)
+    brightness=$(awk -v n=$new -v m=$max 'BEGIN { printf "%.2f", n/m }')
     # Script will succeed if hardware backlight can be used, fail otherwise - in which case use the -b parameter for redshift.
     # Use a much dimmer value for hardware backlights.
-    $scriptsdir/backlight.sh $(echo "scale=2; $brightness * $brightness * $brightness * 0.75" | bc) || b="-b $brightness"
+    $scriptsdir/backlight.sh $(awk -v b=$brightness 'BEGIN { printf "%.2f", b*b*b*0.75 }') || b="-b $brightness"
 fi
 
 redshift $resetparam -O $new $b 2>&1 > /dev/null
