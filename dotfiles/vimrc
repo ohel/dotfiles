@@ -579,9 +579,15 @@ nnoremap <f8> :call <SID>SetFileFormat()<cr>
 function! s:ToggleHeaderSource()
     let l:fname = expand('%:p') " Full path of current file.
     if l:fname =~ '\.h$'
+        " Try .cpp first, then .c
         let l:alt = substitute(l:fname, '\.h$', '.cpp', '')
+        if !filereadable(l:alt)
+            let l:alt = substitute(l:fname, '\.h$', '.c', '')
+        endif
     elseif l:fname =~ '\.cpp$'
         let l:alt = substitute(l:fname, '\.cpp$', '.h', '')
+    elseif l:fname =~ '\.c$'
+        let l:alt = substitute(l:fname, '\.c$', '.h', '')
     else
         return
     endif
