@@ -155,7 +155,19 @@ autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 autocmd BufNewFile,BufRead *.md set filetype=markdown | set omnifunc=
 autocmd BufNewFile,BufRead *.xaml set filetype=xml
 autocmd BufNewFile,BufRead *.jsonl set filetype=json
-let g:markdown_fenced_languages = ['html', 'xml', 'js=javascript', 'javascript', 'json=javascript', 'ts=typescript', 'typescript', 'sh', 'yml=yaml', 'yaml']
+" Syntax highlight for Markdown code blocks if not automatically applied.
+let g:markdown_fenced_languages = [
+            \ 'html',
+            \ 'xml',
+            \ 'js=javascript',
+            \ 'javascript',
+            \ 'json=javascript',
+            \ 'ts=typescript',
+            \ 'typescript',
+            \ 'sh',
+            \ 'yml=yaml',
+            \ 'yaml'
+            \]
 
 
 
@@ -575,7 +587,7 @@ function s:SetFileFormat()
 endfunction
 nnoremap <f8> :call <SID>SetFileFormat()<cr>
 
-" Toggle between .h and .cpp files.
+" Toggle between .h and .cpp/.c files.
 function! s:ToggleHeaderSource()
     let l:fname = expand('%:p') " Full path of current file.
     if l:fname =~ '\.h$'
@@ -764,14 +776,7 @@ function! s:OnVimEnter()
 
     " XML formatting using Python.
     if executable('python')
-        let s:python_path='python'
-    endif
-    if isdirectory($HOME . '/.pyenv/versions')
-        " Use the latest Python virtual environment version 3.x
-        let s:python_path = system('ls -1v ' . $HOME . '/.pyenv/versions/*/bin/python3\.? | tail -n 1 | tr -d "\n"')
-    endif
-    if exists('s:python_path')
-        execute 'nnoremap <leader>x :%!' . s:python_path ' -c "import xml.dom.minidom, sys; print(xml.dom.minidom.parse(sys.stdin).toprettyxml())"<cr><cr>:%s/^[ \t]*$\n//g<cr>'
+        nnoremap <leader>x :%!python -c "import xml.dom.minidom, sys; print(xml.dom.minidom.parse(sys.stdin).toprettyxml())"<cr><cr>:%s/^[ \t]*$\n//g<cr>
     endif
 
     " Code completion stuff etc.

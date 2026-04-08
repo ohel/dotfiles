@@ -6,6 +6,8 @@
     "coc-clangd": "*",
     "coc-go": "*",
     "coc-angular": "*",
-    "coc-pyright": "*"
-  }
+    "coc-pyright": "*",
+    "coc-phpls": "*"
+  },
+  "lastUpdate": 1775688122388
 }
