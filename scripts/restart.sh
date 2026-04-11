@@ -1,7 +1,7 @@
 #!/usr/bin/sh
 # Safely restart computer.
 
-if [ "$(which zenity 2>/dev/null)" ] && [ "$DISPLAY" ]
+if [ "$(command -v ethtool)" ] && [ "$DISPLAY" ]
 then
     ! zenity --question --text="Restart?" && exit
 else

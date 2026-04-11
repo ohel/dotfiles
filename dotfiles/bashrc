@@ -45,13 +45,13 @@ alias x='exit'
 grep_ignore_file="" && [ -e ~/.config/grep_ignore ] && grep_ignore_file=~/.config/grep_ignore
 grep_ignore="" && [ "$grep_ignore_file" ] && grep_ignore="--exclude-from=$grep_ignore_file"
 alias g="grep -iR --colour $grep_ignore"
-which ag &>/dev/null && alias g='ag'
+command -v ag >/dev/null && alias g='ag'
 grep_ignore="" && [ "$grep_ignore_file" ] && grep_ignore="--ignore-file $grep_ignore_file"
-which rg &>/dev/null && alias g="rg -S -uu $grep_ignore"
+command -v rg >/dev/null && alias g="rg -S -uu $grep_ignore"
 
-which gvim &>/dev/null && alias gvim='gvim -p'
-which rsync &>/dev/null && alias rcp='rsync -ah --progress' && alias rs='rsync -avzu --delete'
-which xfce4-terminal &>/dev/null && alias term='xfce4-terminal'
+command -v gvim >/dev/null && alias gvim='gvim -p'
+command -v rsync >/dev/null && alias rcp='rsync -ah --progress' && alias rs='rsync -avzu --delete'
+command -v xfce4-terminal >/dev/null && alias term='xfce4-terminal'
 
 [ -e "$HOME/.scripts/grepedit.sh" ] && alias ge='~/.scripts/grepedit.sh'
 [ -e "$HOME/.scripts/findedit.sh" ] && alias fe='~/.scripts/findedit.sh'

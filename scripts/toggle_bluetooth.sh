@@ -20,7 +20,7 @@ then
     fi
 
     [ "$powermode" = "true" ] && powermode="on" || powermode="off"
-    [ "$(which notify-send 2>/dev/null)" ] && notify-send -h int:transient:1 "Bluetooth: $powermode" -t 500
+    command -v notify-send >/dev/null && notify-send -h int:transient:1 "Bluetooth: $powermode" -t 500
     exit 0
 fi
 
@@ -38,4 +38,4 @@ then
 fi
 
 cmd="$cmd"ed
-[ "$(which notify-send 2>/dev/null)" ] && notify-send -h int:transient:1 "Bluetooth: $cmd" -t 500
+command -v notify-send >/dev/null && notify-send -h int:transient:1 "Bluetooth: $cmd" -t 500

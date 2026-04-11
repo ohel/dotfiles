@@ -11,7 +11,7 @@
 # If input is a single file but no new description is given, and a description exists, the old one is used.
 
 [ ! "$1" ] && echo "Missing arguments." && exit 1
-[ ! "$(which exiftool 2>/dev/null)" ] && echo "Missing exiftool." && exit 1
+! command -v exiftool >/dev/null && echo "Missing exiftool." && exit 1
 
 # Use this description separator but only if this is a batch run, i.e. more than one file.
 separator="_"
@@ -56,7 +56,7 @@ do
     desc=""
     if [ "$separator" ]
     then
-        [ "$(which zenity 2>/dev/null)" ] && [ "$popup_width" ] && desc=$(zenity --title="New filename" --text="Enter filename after timestamp, leave empty to use current, or cancel for no rename:" --entry --width=$popup_width)
+        [ "$(command -v zenity)" ] && [ "$popup_width" ] && desc=$(zenity --title="New filename" --text="Enter filename after timestamp, leave empty to use current, or cancel for no rename:" --entry --width=$popup_width)
         # Check if user cancelled.
         [ "$?" = 1 ] && exit 1
         # If no description was given, use old description if found after timestamp.

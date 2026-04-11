@@ -17,7 +17,7 @@ else
     then
         msg="Found symbolic link in Steam's media directory."
         echo $msg
-        [ "$(which zenity 2>/dev/null)" ] && zenity --title="Steam error" --text="$msg" --error
+        command -v zenity >/dev/null && zenity --title="Steam error" --text="$msg" --error
         exit 1
     fi
 

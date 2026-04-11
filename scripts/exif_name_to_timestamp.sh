@@ -3,7 +3,7 @@
 
 [ ! "$1" ] && echo "Missing arguments." && exit 1
 
-if [ "$(which zenity 2>/dev/null)" ]
+if command -v zenity >/dev/null
 then
     offset=$(zenity --title="Timezone compensation" --text="Enter X for UTC+X hours (prefix with - for negative):" --entry)
     if [ "$offset" ]

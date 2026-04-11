@@ -3,7 +3,7 @@
 # The critical bit is Docker setting a FORWARD policy DROP which would break my virtual machines.
 # Other than that, this script mainly just cleans up everything.
 
-if [ "$(which systemctl 2>/dev/null)" ]
+if command -v systemctl >/dev/null
 then
   if [ "$(systemctl | grep docker | grep -v device)" ]
   then

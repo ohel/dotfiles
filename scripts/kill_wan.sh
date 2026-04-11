@@ -1,7 +1,7 @@
 #!/usr/bin/sh
 # Prevent all network connections except LAN and VM bridge. Disable forwarding.
 
-if ! command -v nft >/dev/null 2>&1; then
+if ! command -v nft >/dev/null; then
     echo "Command nft not found. Do you have (root) access?"
     exit 1
 fi

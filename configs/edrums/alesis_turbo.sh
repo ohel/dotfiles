@@ -79,7 +79,7 @@ jack_connect "ALSA output:capture_2" "system:playback_2"
 
 # Use a previously saved nice reverb config for the drums, if present.
 # The reverb config here can be found in my dotfiles.
-if [ "$(which jack-rack 2>/dev/null)" ] && [ -e /opt/jackrack/reverb_drums ]
+if [ "$(command -v jack-rack)" ] && [ -e /opt/jackrack/reverb_drums ]
 then
     echo "Connecting JACK Rack"
     jack-rack /opt/jackrack/reverb_drums &

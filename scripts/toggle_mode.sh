@@ -116,7 +116,7 @@ fi
 echo Final DPI: $common_dpi
 [ ! "$set_target_mode" ] && [ "$(env | grep GDK_DPI_SCALE=0.5)" ] && common_dpi=$(expr 2 \* $common_dpi)
 
-if [ "$(which xfconf-query 2>/dev/null)" ]
+if command -v xfconf-query >/dev/null
 then
     xfconf-query -c xsettings -p /Xft/DPI -s $common_dpi
     xfconf-query -c xsettings -p /Gdk/WindowScalingFactor -s 1
@@ -124,7 +124,7 @@ then
     xfconf-query -c xsettings -p /Gtk/CursorThemeSize -s $(expr $scale \* 20 + 1)
 fi
 
-which feh >/dev/null 2>&1 && feh --bg-fill --no-fehbg $primary_background $secondary_background 2>/dev/null
+command -v feh >/dev/null && feh --bg-fill --no-fehbg $primary_background $secondary_background 2>/dev/null
 
 # Reloads icons so that they scale correctly.
 ps -ef | grep -q "xfce4-panel$" && xfce4-panel -r

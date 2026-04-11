@@ -25,7 +25,7 @@ ctx=""
 if ! ps -ef | grep -q "$ollama_path/bin/ollama serve$"
 then
     env $ctx LD_LIBRARY_PATH=$ollama_path/lib $ollama_path/bin/ollama serve > $logsdir/ollama.log 2>&1 &
-    if which nc >/dev/null 2>&1
+    if command -v nc >/dev/null
     then
         while ! nc -z localhost 11434; do sleep 0.5; done
     else

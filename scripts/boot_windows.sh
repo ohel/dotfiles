@@ -2,7 +2,7 @@
 # Boot to first Windows selection either using legacy GRUB or rEFInd with EFI variables, or rEFInd with default selection override.
 # For override, give the location of the default selection override file.
 
-if [ "$(which zenity 2>/dev/null)" ] && [ "$DISPLAY" ]
+if [ "$(command -v zenity)" ] && [ "$DISPLAY" ]
 then
     ! zenity --question --text="Boot to Windows?" && exit
 else

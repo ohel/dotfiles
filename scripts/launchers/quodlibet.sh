@@ -14,8 +14,8 @@
 logfile=~/.cache/qllog.txt
 
 ps -ef | grep "\(python-exec.*quodlibet\)\|\([^ ]\{1,\}quodlibet\.py\)\|\(/usr/bin/quodlibet\)" | grep -qv grep && running=1
-qlexe=$(which quodlibet 2>/dev/null)
-[ ! "$qlexe" ] && qlexe=$(which quodlibet.py 2>/dev/null)
+qlexe=$(command -v quodlibet)
+[ ! "$qlexe" ] && qlexe=$(command -v quodlibet.py)
 [ ! "$qlexe" ] && qlexe=/opt/programs/quodlibet/quodlibet.py && [ ! -e $qlexe ] && echo "Exe not found." && exit 1
 
 echo "Using Quod Libet exe: $qlexe"

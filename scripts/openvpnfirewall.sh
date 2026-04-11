@@ -9,7 +9,7 @@
 logfile=~/.cache/openvpn.log
 
 [ "$#" = 0 ] && echo "You must give the OpenVPN config file as parameter." && exit 1
-[ ! "$(which openvpn)" ] && echo "OpenVPN executable not found." && exit 1
+[ ! "$(command -v openvpn)" ] && echo "OpenVPN executable not found." && exit 1
 
 nic=$(ip route show default | awk '{print $5}')
 ip=$(ip -4 addr show "$nic" | awk '/inet / {print $2}' | cut -d '/' -f 1)

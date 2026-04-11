@@ -77,7 +77,7 @@ echo "Starting backup in one second..."
 sleep 1
 
 # If pigz is found, use threaded compression.
-parallel=0 && [ "$(which pigz 2>/dev/null)" ] && parallel=1
+parallel=0 && command -v pigz >/dev/null && parallel=1
 
 datestring=$(date +%F)
 

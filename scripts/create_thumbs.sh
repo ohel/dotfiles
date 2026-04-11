@@ -47,7 +47,7 @@ do
     inputfile="$1"
     videotempfile=""
     extension="${1##*.}"
-    if [ "$extension" == "mp4" ] || [ "$extension" == "MP4" ] && [ "$(which ffmpeg 2>/dev/null)" ]
+    if [ "$extension" == "mp4" ] || [ "$extension" == "MP4" ] && [ "$(command -v ffmpeg)" ]
     then
         videotempfile=$(mktemp --suffix=.png)
         ffmpeg -i "$1" -vf thumbnail -frames:v 1 -y $videotempfile &> /dev/null

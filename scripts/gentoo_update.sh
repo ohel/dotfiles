@@ -3,7 +3,7 @@
 
 if test "X$1" != "Xnosync"
 then
-    which layman >/dev/null 2>&1 && layman -s ALL
+    command -v layman >/dev/null && layman -s ALL
     emaint sync --auto
 fi
 emerge -DNtuvp world

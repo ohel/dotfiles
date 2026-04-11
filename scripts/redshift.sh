@@ -24,7 +24,7 @@ current=$(cat $tempfile)
 
 if [ "$1" = "r" ] || [ "$2" = "r" ]
 then
-    [ "$(which notify-send 2>/dev/null)" ] && notify-send -h int:transient:1 "Reset redshift" -t 1000
+    command -v notify-send >/dev/null && notify-send -h int:transient:1 "Reset redshift" -t 1000
     redshift -x
     ([ "$1" = "b" ] || [ "$2" = "b" ]) && $scriptsdir/backlight.sh 0.50
     [ -e $tempfile ] && echo $max > $tempfile
@@ -82,4 +82,4 @@ then
 fi
 
 redshift $resetparam -O $new $b 2>&1 > /dev/null
-[ "$(which notify-send 2>/dev/null)" ] && notify-send -h int:transient:1 "New redshift value: $new" -t $notify_time
+command -v notify-send >/dev/null && notify-send -h int:transient:1 "New redshift value: $new" -t $notify_time

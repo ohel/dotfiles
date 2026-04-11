@@ -39,7 +39,7 @@ user_given_src_dir="$1"
 [ "$use_grub" ] && [ "$hostonly_mode" ] && user_given_src_dir="$3"
 
 use_dracut=""
-$(which dracut >/dev/null 2>&1) && use_dracut=1
+command -v dracut >/dev/null && use_dracut=1
 
 #### GENERAL CHECKS #####
 
@@ -208,7 +208,7 @@ echo "Compiled kernel."
 
 if [ -e /opt/mok/mok.key ] && [ -e /opt/mok/mok.crt ]
 then
-    if [ ! "$(which sbsign 2>/dev/null)" ]
+    if ! command -v sbsign >/dev/null
     then
         echo "Unable to find sbsign. Aborting."
         read

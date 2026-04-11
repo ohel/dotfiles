@@ -31,7 +31,7 @@ tmpfile=~/.cache/out
 echo Extracting audio...
 ffmpeg -loglevel error -acodec pcm_s16le -i $input -c copy -map 0:a:0 $tmpfile.wav
 
-if [ "$(which sox 2>/dev/null)" ]
+if command -v sox >/dev/null
 then
     echo Normalizing audio...
     sox -q $tmpfile.wav -r 44.1k --norm=-3 $tmpfile.normalized.wav
@@ -40,7 +40,7 @@ else
 fi
 
 echo Compressing audio...
-if [ "$(which fdkaac 2>/dev/null)" ]
+if command -v fdkaac >/dev/null
 then
     bitrate=$(expr 48000 \* $quality)
     fdkaac -S -b $bitrate $tmpfile.normalized.wav -o $tmpfile.m4a

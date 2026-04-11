@@ -12,8 +12,8 @@
 scale="env GDK_DPI_SCALE=1 GDK_SCALE=1"
 
 # Chromium executable name varies between systems.
-[ "$(which chromium-browser 2>/dev/null)" ] && executable="chromium-browser"
-[ ! "$executable" ] && [ "$(which chromium 2>/dev/null)" ] && executable="chromium"
+command -v chromium-browser >/dev/null && executable="chromium-browser"
+[ ! "$executable" ] && command -v chromium >/dev/null && executable="chromium"
 [ ! "$executable" ] && [ -e ~/.var/app/org.chromium.Chromium ] && executable="/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=/app/bin/chromium --file-forwarding org.chromium.Chromium"
 [ ! "$executable" ] && echo "Chromium not found." && exit 1
 

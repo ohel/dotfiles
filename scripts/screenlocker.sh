@@ -20,7 +20,7 @@ fi
 # First found screen resolution of form <width>x<height>, e.g. 3840x2160.
 resolution=$(xrandr | grep "[0-9.][0-9.]\*" | head -n 1 | grep -o "[0-9]*x[0-9]*")
 
-if [ "$resolution" ] && [ "$(which magick 2>/dev/null)" ]
+if [ "$resolution" ] && [ "$(command -v magick)" ]
 then
     size=$(echo $resolution | cut -f 1 -d 'x')
     # Sometimes magick segfaults with xautolock for some reason. Seems to happen more often with pipes than temporary files.

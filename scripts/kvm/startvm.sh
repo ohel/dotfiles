@@ -257,10 +257,10 @@ then
     renice +15 $pid
 fi
 
-if which gvncviewer >/dev/null 2>&1
+if command -v gvncviewer >/dev/null
 then
     vncviewer="gvncviewer localhost:$net_id"
-elif which vncviewer >/dev/null 2>&1
+elif command -v vncviewer >/dev/null
 then
     vncviewer="vncviewer :$net_id"
 fi

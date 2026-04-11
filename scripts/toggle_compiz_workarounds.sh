@@ -15,9 +15,9 @@ current=$(grep "s0_active_plugins" $config_file | grep -o "workarounds;")
 if [ "$current" ]
 then
     sed -i "s/s0_active_plugins = \(.*\)workarounds;\(.*\)/s0_active_plugins = \1\2/" $config_file
-    [ "$(which notify-send 2>/dev/null)" ] && notify-send -h int:transient:1 "Workarounds: off" -t 1000
+    command -v notify-send >/dev/null && notify-send -h int:transient:1 "Workarounds: off" -t 1000
     exit 0
 fi
 
 sed -i "s/s0_active_plugins = \(.*\)/s0_active_plugins = \1workarounds;/" $config_file
-[ "$(which notify-send 2>/dev/null)" ] && notify-send -h int:transient:1 "Workarounds: on" -t 1000
+command -v notify-send >/dev/null && notify-send -h int:transient:1 "Workarounds: on" -t 1000

@@ -31,14 +31,14 @@ xset s off
 [ "$XDG_RUNTIME_DIR" ] && [ ! -e ~/.tmpfs ] && ln -s $XDG_RUNTIME_DIR ~/.tmpfs
 mkdir -p $(readlink ~/.tmpfs) 2>/dev/null
 mkdir -p $(readlink ~/.cache) 2>/dev/null
-which mpv >/dev/null 2>&1 && [ -d ~/.cache ] && [ ! -e ~/.cache/mpvfifo ] && mkfifo ~/.cache/mpvfifo
+command -v mpv >/dev/null && [ -d ~/.cache ] && [ ! -e ~/.cache/mpvfifo ] && mkfifo ~/.cache/mpvfifo
 # Persist sessions if directory exists.
 [ -d ~/.sessions ] && [ ! -e ~/.cache/sessions ] && ln -sf ~/.sessions ~/.cache/sessions
 # Persist pip cache if directory exists.
 [ -d ~/.pip-cache ] && [ ! -e ~/.cache/pip ] && ln -sf ~/.pip-cache ~/.cache/pip
 
 # This temporary directory is needed if using mhwaveedit.
-which mhwaveedit >/dev/null 2>&1 && mkdir -p /tmp/mhwaveedit
+command -v mhwaveedit >/dev/null && mkdir -p /tmp/mhwaveedit
 
 # This application does absolutely nothing, it just waits to be killed, keeping X alive.
 # It is as stable as it gets, even if the real session manager might be unstable.

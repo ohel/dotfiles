@@ -1,3 +1,4 @@
+#!/usr/bin/sh
 # Load stored ALSA settings.
 /usr/bin/alsactl restore > /dev/null 2>&1 &
 einfo "Restored ALSA settings."

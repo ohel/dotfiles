@@ -4,7 +4,7 @@
 echo "Warning! Original files will be overwritten. Press a key to continue."
 read tmp
 
-[ ! "$(which readlink)" ] && echo "Needs readlink to work." && exit 1
+! command -v readlink >/dev/null && echo "Needs readlink to work." && exit 1
 
 ln -sf $(readlink -f ./bashrc) ~/.bashrc
 mkdir -p ~/.config/ctags

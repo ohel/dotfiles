@@ -188,7 +188,7 @@ fi
 echo Final DPI: $common_dpi
 echo Scaling factor: $scale
 
-if [ "$(which xfconf-query 2>/dev/null)" ]
+if command -v xfconf-query >/dev/null
 then
     xfconf-query -c xsettings -p /Xft/DPI -s $common_dpi
     xfconf-query -c xsettings -p /Gdk/WindowScalingFactor -s 1
@@ -196,7 +196,7 @@ then
     xfconf-query -c xsettings -p /Gtk/CursorThemeSize -s $(expr $scale \* 20 + 1)
 fi
 
-which feh >/dev/null 2>&1 && feh --bg-fill --no-fehbg $primary_background $secondary_background 2>/dev/null
+command -v feh >/dev/null && feh --bg-fill --no-fehbg $primary_background $secondary_background 2>/dev/null
 
 # The panel may have restarted automatically resulting in an error but ignore it.
 [ "$panel_pid" ] && setsid xfce4-panel >/dev/null 2>&1 &

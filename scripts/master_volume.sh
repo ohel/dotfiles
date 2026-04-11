@@ -103,7 +103,7 @@ use_new_step=""
 [ ! "$do_pulse" ] && amixer -M -c $card set "$dev",0 "$new_vol"% >/dev/null
 [ "$do_pulse" ] && pactl set-sink-volume $default_sink "$new_vol"%
 
-[ ! "$(which notify-send 2>/dev/null)" ] || [ ! "$DISPLAY" ] && exit 0
+[ ! "$(command -v notify-send)" ] || [ ! "$DISPLAY" ] && exit 0
 
 # Close previous notifications so that new volume is displayed immediately.
 winid=$(xwininfo -name Notification 2>/dev/null | head -n 2 | grep -o "0x[^ ]*")

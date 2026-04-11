@@ -4,13 +4,13 @@
 
 cmd=${1:-/bin/sh}
 
-manager="" && [ "$(which docker 2>/dev/null)" ] && manager="docker"
+manager="" && command -v docker >/dev/null && manager="docker"
 [ "$manager" ] && containers=$($manager ps --format "table {{.ID}} {{.Names}}" | grep -A 99 "CONTAINER ID NAMES")
 
 # If no docker containers are found, try podman.
 if [ ! "$containers" ] || [ $(echo "$containers" | wc -l) -eq 1 ]
 then
-    manager="" && [ "$(which podman 2>/dev/null)" ] && manager="podman"
+    manager="" && command -v podman >/dev/null && manager="podman"
     [ "$manager" ] && containers=$($manager ps --format "table {{.ID}} {{.Names}}" | grep -A 99 "CONTAINER ID NAMES")
 fi
 

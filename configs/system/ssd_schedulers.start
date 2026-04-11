@@ -1,12 +1,12 @@
 #!/usr/bin/bash
 # Disable IO schedulers for SSDs to save CPU resources as a scheduler isn't really needed with SSDs.
 # Also Kyber scheduler (an otherwise nice choice) might lose LVM physical volumes and hang the computer on hdparm -Y.
+
 ssd_id_ends=(
-    "2J3920085984"
-    "2J4520110868"
-    "2J4520111845"
+    "24434X4A1P11"
+    "24434X4A1A06"
+    "24381V802757"
     "1831E14BF911"
-    "1831E14C07B6"
 )
 
 for ssd in ${ssd_id_ends[@]}
@@ -19,3 +19,4 @@ do
         einfo "Disabled IO scheduler for $device."
     fi
 done
+

@@ -2,12 +2,12 @@
 # Search stuff using rg/ag/grep "$1", then from the search results open filenames matching search terms.
 
 editor=$EDITOR
-[ "$(which gedit 2>/dev/null)" ] && editor="gedit"
-[ "$(which vim 2>/dev/null)" ] && editor="vim"
-[ "$(which gvim 2>/dev/null)" ] && editor="gvim -p"
+command -v gedit >/dev/null && editor="gedit"
+command -v vim >/dev/null && editor="vim"
+command -v gvim >/dev/null && editor="gvim -p"
 
-rg_exe=$(which rg 2>/dev/null)
-ag_exe=$(which ag 2>/dev/null)
+rg_exe=$(command -v rg)
+ag_exe=$(command -v ag)
 
 [ "$#" -eq 0 ] && exit 1
 

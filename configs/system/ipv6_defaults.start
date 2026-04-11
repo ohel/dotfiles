@@ -1,0 +1,14 @@
+#!/usr/bin/sh
+# Turn on IPv6 privacy extension to all physical network devices.
+# Turn IPv6 off by default.
+
+sysctl -wq net.ipv6.conf.all.use_tempaddr=2
+sysctl -wq net.ipv6.conf.default.use_tempaddr=2
+sysctl -wq net.ipv6.conf.default.disable_ipv6=1
+for nic in $(ls /sys/class/net)
+do
+    [ "$nic" != "lo" ] && sysctl -wq net.ipv6.conf.$nic.use_tempaddr=2
+    [ "$nic" != "lo" ] && sysctl -wq net.ipv6.conf.$nic.disable_ipv6=1
+done
+
+einfo "IPv6 defaults set."
