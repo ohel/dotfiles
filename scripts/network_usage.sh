@@ -3,20 +3,8 @@
 # or by default for the first PCI interface with IPv4 address.
 # Only updates when speed changes enough to show on MB/s scale.
 
-if [ "$#" = 0 ]
-then
-    for physical_device in $(ls -l /sys/class/net | grep devices/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')
-    do
-        ip=$(ip addr show $physical_device | grep -o "inet [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | cut -f 2 -d ' ')
-        if [ "$ip" ]
-        then
-            nic=$physical_device
-            break
-        fi
-    done
-else
-    nic=$1
-fi
+nic=$(ip route show default | awk '{print $5}')
+[ "$#" != 0 ] && nic=$1
 
 echo "Monitoring interface: $nic"
 echo "Only updates nic notable change occurs - small traffic may seem nonexistent."

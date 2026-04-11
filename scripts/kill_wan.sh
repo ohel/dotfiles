@@ -1,61 +1,64 @@
 #!/usr/bin/sh
-# Prevent all network connections except those to LAN. IP forwarding is also disabled.
+# Prevent all network connections except LAN and VM bridge. Disable forwarding.
 
-if [ ! "$(which iptables 2>/dev/null)" ]
-then
-    echo "Executable iptables not in path. Do you have (root) access?"
+if ! command -v nft >/dev/null 2>&1; then
+    echo "Command nft not found. Do you have (root) access?"
     exit 1
 fi
 
-for physical_device in $(ls -l /sys/class/net | grep devices/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')
-do
-    ip=$(ip addr show $physical_device | grep -o "inet [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | cut -f 2 -d ' ')
-    if [ "$ip" ]
-    then
-        IF=$physical_device
-        subnet=$(echo $ip | cut -f 1 -d '.')
-        break
-    fi
-done
+nic=$(ip route show default | awk '{print $5}')
+ip=$(ip -4 addr show "$nic" | awk '/inet / {print $2}' | cut -d '/' -f 1)
 
 if [ "$1" = "restore" ]
 then
-    iptables -F
-    iptables -P INPUT ACCEPT
-    iptables -P OUTPUT ACCEPT
+    nft flush ruleset
 
-    sysctl -q -e -w net.ipv4.conf.$IF.forwarding=1
-    sysctl -q -e -w net.ipv6.conf.$IF.forwarding=1
+    sysctl -q -e -w net.ipv4.conf.$nic.forwarding=1
+    sysctl -q -e -w net.ipv6.conf.$nic.forwarding=1
 
-    echo "Flushed iptables rules. WAN connections are allowed."
+    echo "Flushed nft rules. WAN connections are allowed."
     sleep 1
     exit 0
 fi
 
-iptables -F
-iptables -P INPUT DROP
-iptables -P OUTPUT DROP
+case "$ip" in
+    10.*|192.168.*)
+        ;;
+    *)
+        echo "Unsupported LAN IP: $ip"
+        exit 1
+        ;;
+esac
 
-lan_net=0
-[ "$subnet" = "192" ] && lan_net=168
+nft add table inet firewall 2>/dev/null
+nft add chain inet firewall input  '{ type filter hook input priority 0; policy drop; }' 2>/dev/null
+nft add chain inet firewall output '{ type filter hook output priority 0; policy drop; }' 2>/dev/null
 
-iptables -A INPUT -s $subnet.$lan_net.0.0/16 -d $ip/32 -j ACCEPT
-iptables -A OUTPUT -s $ip/32 -d $subnet.$lan_net.0.0/16 -j ACCEPT
-iptables -A INPUT -i lo -j ACCEPT
-iptables -A OUTPUT -o lo -j ACCEPT
+# Allow loopback.
+nft add rule inet firewall input iif lo accept
+nft add rule inet firewall output oif lo accept
 
-vmbridge_net=$(ip addr show vmbridge | grep "inet " | tr -s ' ' | cut -f 3 -d ' ' | cut -f 1 -d '/' | cut -f 1-3 -d '.')
+lan_prefix=$(ip -4 route show dev "$nic" scope link | awk '{print $1}' | head -n 1)
 
-if [ "$vmbridge_net" ]
-then
-    iptables -A INPUT -s $vmbridge_net.0/24 -d $vmbridge_net.0/24 -j ACCEPT
-    iptables -A INPUT -s $vmbridge_net.0/24 -d $subnet.$lan_net.0.0/16 -j ACCEPT
-    iptables -A OUTPUT -s $vmbridge_net.0/24 -d $vmbridge_net.0/24 -j ACCEPT
-    iptables -A OUTPUT -s $subnet.$lan_net.0.0/16 -d $vmbridge_net.0/24 -j ACCEPT
+# Allow LAN traffic.
+nft add rule inet firewall input ip saddr $lan_prefix ip daddr $ip accept
+nft add rule inet firewall output ip saddr $ip ip daddr $lan_prefix accept
+
+# If there's a virtual machine bridge, allow that too.
+vmbridge_net=$(ip addr show vmbridge 2>/dev/null | grep "inet " | tr -s ' ' | cut -f 3 -d ' ' | cut -f 1 -d '/' | cut -f 1-3 -d '.')
+
+if [ "$vmbridge_net" ]; then
+    vm_net="$vmbridge_net.0/24"
+
+    nft add rule inet firewall input ip saddr $vm_net ip daddr $vm_net accept
+    nft add rule inet firewall input ip saddr $vm_net ip daddr $lan_prefix accept
+
+    nft add rule inet firewall output ip saddr $vm_net ip daddr $vm_net accept
+    nft add rule inet firewall output ip saddr $lan_prefix ip daddr $vm_net accept
 fi
 
-sysctl -q -e -w net.ipv4.conf.$IF.forwarding=0
-sysctl -q -e -w net.ipv6.conf.$IF.forwarding=0
+sysctl -q -e -w net.ipv4.conf.$nic.forwarding=0
+sysctl -q -e -w net.ipv6.conf.$nic.forwarding=0
 
 echo "WAN connections are prevented."
 sleep 1

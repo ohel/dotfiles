@@ -4,7 +4,7 @@
 # - Optionally ($2 = "bridge" or "b") set up network bridge where bridged VM tap devices should be added.
 # - Set up virtual machine bridge where routed VM tap devices should be added.
 # - Set up virtual localhost for consistent host access.
-# - Specify ACCEPT policy to FORWARD chain.
+# - Specify chains to nftables.
 # Source $reset_script to undo everything.
 
 reset_script=network_reset
@@ -12,24 +12,19 @@ echo "" > $reset_script
 
 modprobe tun
 
-if [ "$#" = 0 ]
+nic=$(ip route show default | awk '{print $5}')
+if [ "$#" != 0 ]
 then
-    for physical_device in $(ls -l /sys/class/net | grep devices/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')
-    do
-        ip=$(ip addr show $physical_device | grep -o "inet [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | cut -f 2 -d ' ')
-        [ "$ip" ] && nic=$physical_device && break
-    done
-else
-    nic=$1
-    [ -f $1 ] && nic=$(cat $1)
+    nic="$1"
+    [ -f "$1" ] && nic=$(cat "$1")
 
     if [ "$(ls -l /sys/class/net | grep devices/pci | grep -o '-> [^ ]*' | grep -o $nic)" != "$nic" ]
     then
         echo "Network device not found: $nic"
         exit 1
     fi
-    ip=$(ip addr show $nic| grep -o "inet [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | cut -f 2 -d ' ')
 fi
+ip=$(ip -4 addr show "$nic" | awk '/inet / {print $2}' | cut -d '/' -f 1)
 
 echo "Using adapter: $nic with IP: $ip"
 echo "Setting up forward policies..."
@@ -38,10 +33,14 @@ forward=$(sysctl -q -e net.ipv4.conf.$nic.forwarding | cut -f 3 -d ' ')
 sysctl -q -e -w net.ipv4.conf.$nic.forwarding=1
 echo "sudo sysctl -q -e -w net.ipv4.conf.$nic.forwarding=$forward" >> $reset_script
 
-if [ ! "$(iptables -L FORWARD | grep "policy ACCEPT")" ]
+# Packet forwarding so that access to other networks such as Internet works.
+if ! nft list chain inet filter vm_forward 2>/dev/null | grep -q "policy accept"
 then
-    iptables -P FORWARD ACCEPT
-    echo "sudo iptables -P FORWARD DROP" >> $reset_script
+    nft list table inet filter >/dev/null 2>&1 || nft add table inet filter
+    nft list chain inet filter vm_forward >/dev/null 2>&1 || nft add chain inet filter vm_forward '{ type filter hook forward priority 0; policy accept; }'
+    echo "sudo nft delete chain inet filter vm_forward 2>/dev/null" >> $reset_script
+else
+    echo "Packet forwarding chains already defined."
 fi
 
 # Network bridge using DHCP. Note: not all interfaces support bridging.
@@ -62,7 +61,7 @@ then
 
         echo "sudo ip link set netbridge down" >> $reset_script
         echo "sudo ip link delete netbridge type bridge" >> $reset_script
-        echo "sudo ifconfig $nic $ip" >> $reset_script
+        echo "sudo ip addr add $ip/24 dev $nic" >> $reset_script
 
         ip=$(ip address show netbridge | grep -o "inet [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | cut -f 2 -d ' ')
         echo "Using netbridge with IP: $ip"
@@ -79,7 +78,8 @@ else
     ip link add name vmbridge type bridge
     ip link set vmbridge up
     ip address add 10.0.1.1/24 dev vmbridge
-    ip address add fe80::1:1/64 dev vmbridge
+    [ "$(sysctl -n net.ipv6.conf.vmbridge.disable_ipv6 2>/dev/null)" != "1" ] && \
+        ip address add fe80::1:1/64 dev vmbridge
     sysctl -q -e -w net.ipv4.conf.vmbridge.forwarding=1
     sysctl -q -e -w net.ipv6.conf.vmbridge.forwarding=1
 
@@ -88,15 +88,18 @@ else
 fi
 
 # Virtual machine bridge NAT.
-rule="POSTROUTING -s 10.0.1.0/24 -o $nic -j SNAT --to-source $ip"
-if iptables -t nat -C $rule 2>/dev/null
+nft list table ip vm_nat >/dev/null 2>&1 || nft add table ip vm_nat
+nft list chain ip vm_nat postrouting >/dev/null 2>&1 || nft add chain ip vm_nat postrouting '{ type nat hook postrouting priority 100; }'
+rule_expr="ip saddr 10.0.1.0/24 oif \"$nic\" snat to $ip"
+if nft list chain ip vm_nat postrouting | grep -q "$rule_expr"
 then
     echo "Virtual machine bridge NAT routing rule already exists."
 else
-    echo "Setting up virtual bridge NAT routing rule..."
-
-    iptables -t nat -A $rule
-    echo "sudo iptables -t nat -D $rule" >> $reset_script
+    nft add rule ip vm_nat postrouting $rule_expr
+    handle=$(nft -a list chain ip vm_nat postrouting | \
+        grep "$rule_expr" | \
+        sed -n 's/.*handle \([0-9]\+\)$/\1/p')
+    echo "sudo nft delete rule ip vm_nat postrouting handle $handle" >> $reset_script
 fi
 
 # Virtual localhost. Use this IP within guests to use services running locally on the host.
@@ -110,10 +113,15 @@ else
     ip tuntap add mode tap vlocalhost
     ip link set vlocalhost up
     ip address add $vm_guest_host_ip dev vlocalhost
-    rule="PREROUTING -i vlocalhost -j DNAT --to 127.0.0.1"
-    iptables -t nat -A $rule
 
-    echo "sudo iptables -t nat -D $rule" >> $reset_script
+    nft add chain ip vm_nat prerouting '{ type nat hook prerouting priority -100; }'
+    rule_expr="iif \"vlocalhost\" dnat to 127.0.0.1"
+    nft add rule ip vm_nat prerouting $rule_expr
+    handle=$(nft -a list chain ip vm_nat prerouting | \
+        grep "vlocalhost" | \
+        sed -n 's/.*handle \([0-9]\+\).*/\1/p')
+
+    echo "sudo nft delete rule ip vm_nat prerouting handle $handle" >> $reset_script
     echo "sudo ip link set vlocalhost down" >> $reset_script
     echo "sudo ip tuntap del mode tap vlocalhost" >> $reset_script
 fi

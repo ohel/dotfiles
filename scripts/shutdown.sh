@@ -16,17 +16,10 @@ scriptsdir=$(dirname "$(readlink -f "$0")")
 . $scriptsdir/shutdown_init.sh
 
 # Enable Wake-On-Lan.
-if [ "$(which ethtool 2>/dev/null)" ]
+if command -v ethtool >/dev/null 2>&1
 then
-    for physical_device in $(ls -l /sys/class/net | grep devices/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')
-    do
-        ip=$(ip addr show $physical_device | grep -o "inet [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | cut -f 2 -d ' ')
-        if [ "$ip" ]
-        then
-            ethtool -s $physical_device wol g 2>/dev/null
-            break
-        fi
-    done
+    nic=$(ip route show default 2>/dev/null | awk '{print $5}')
+    [ "$nic" ] && ethtool -s "$nic" wol g 2>/dev/null
 fi
 
 # Do scheduled backups.

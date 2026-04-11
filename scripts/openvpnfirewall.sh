@@ -11,22 +11,15 @@ logfile=~/.cache/openvpn.log
 [ "$#" = 0 ] && echo "You must give the OpenVPN config file as parameter." && exit 1
 [ ! "$(which openvpn)" ] && echo "OpenVPN executable not found." && exit 1
 
-for physical_device in $(ls -l /sys/class/net | grep devices\/pci | grep -o " [^ ]* ->" | cut -f 2 -d ' ')
-do
-    ip=$(ip addr show $physical_device | grep -o "inet [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" | cut -f 2 -d ' ')
-    if [ "$ip" ]
-    then
-        IF=$physical_device
-        [ "$2" = "allowlan" ] && lannet=$(echo $ip | cut -f 1 -d '.')
-        break
-    fi
-done
+nic=$(ip route show default | awk '{print $5}')
+ip=$(ip -4 addr show "$nic" | awk '/inet / {print $2}' | cut -d '/' -f 1)
+[ "$2" = "allowlan" ] && lan_prefix=$(ip -4 route show dev "$nic" scope link | awk '{print $1}' | head -n 1)
 
-echo "Using interface $IF and config file $1"
+echo "Using interface $nic and config file $1"
 echo "OpenVPN output is logged into $logfile"
 echo "To kill the connection, press Ctrl-c and then c."
 
-old_routes=$(ip route show | grep $IF | cut -f 1 -d ' ')
+old_routes=$(ip route show | grep $nic | cut -f 1 -d ' ')
 num_routes=$(ip route show | wc -l)
 
 modprobe tun
@@ -69,7 +62,7 @@ echo
 echo
 echo "VPN connection is active."
 
-new_routes=$(ip route show | grep $IF | cut -f 1 -d ' ')
+new_routes=$(ip route show | grep $nic | cut -f 1 -d ' ')
 vpn_ip=""
 for route in $new_routes
 do
@@ -96,13 +89,11 @@ ip6tables -P INPUT DROP
 ip6tables -P OUTPUT DROP
 lanstate="blocked"
 
-if [ "$lannet" ]
+if [ "$lan_prefix" ]
 then
-    subnet=0 # 10.0.x.x
-    [ "$lannet" = "192" ] && subnet=168 # 192.168.x.x
     lanstate="allowed"
-    iptables -A INPUT -s $lannet.$subnet.0.0/16 -d $lannet.$subnet.0.0/16 -j ACCEPT
-    iptables -A OUTPUT -s $lannet.$subnet.0.0/16 -d $lannet.$subnet.0.0/16 -j ACCEPT
+    iptables -A INPUT -s $lan_prefix -d $lan_prefix -j ACCEPT
+    iptables -A OUTPUT -s $lan_prefix -d $lan_prefix -j ACCEPT
 fi
 
 iptables -A INPUT -i lo -j ACCEPT
