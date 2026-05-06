@@ -1,7 +1,8 @@
 #!/usr/bin/sh
 # Toggles Docker services on/off.
-# The critical bit is Docker setting a FORWARD policy DROP which would break my virtual machines.
-# Other than that, this script mainly just cleans up everything.
+# The critical bit is Docker setting FORWARD policy DROP.
+# That prevents e.g. KVM virtual machine packet routing.
+# Other than that, this script just cleans up everything.
 
 if command -v systemctl >/dev/null
 then
@@ -19,14 +20,12 @@ then
     sudo systemctl enable docker.socket
     sudo systemctl start docker.service
     sudo systemctl start docker.socket
-    sudo iptables -P FORWARD ACCEPT
   fi
 else
   if [ "$(/etc/init.d/docker status | grep stopped)" ]
   then
     echo Starting Docker services.
     sudo /etc/init.d/docker start
-    sudo iptables -P FORWARD ACCEPT
   else
     stopping=yes
     echo Stopping Docker services.
@@ -34,16 +33,29 @@ else
   fi
 fi
 
-[ ! "$stopping" ] && exit 0
-sudo iptables -t nat -F
-sudo iptables -t nat -X DOCKER
-sudo iptables -F DOCKER
-sudo iptables -F DOCKER-USER
-sudo iptables -F DOCKER-ISOLATION-STAGE-1
-sudo iptables -F DOCKER-ISOLATION-STAGE-2
-sudo iptables -F FORWARD
-sudo iptables -X DOCKER
-sudo iptables -X DOCKER-USER
-sudo iptables -X DOCKER-ISOLATION-STAGE-1
-sudo iptables -X DOCKER-ISOLATION-STAGE-2
 sudo iptables -P FORWARD ACCEPT
+[ ! "$stopping" ] && exit 0
+
+sudo iptables -t nat -F 2>/dev/null
+sudo iptables -t nat -X DOCKER 2>/dev/null
+sudo ip6tables -t nat -F 2>/dev/null
+sudo ip6tables -t nat -X DOCKER 2>/dev/null
+sudo iptables -F FORWARD 2>/dev/null
+sudo nft flush table ip filter 2>/dev/null
+sudo nft flush table ip6 filter 2>/dev/null
+sudo iptables -X DOCKER 2>/dev/null
+sudo iptables -X DOCKER-USER 2>/dev/null
+sudo iptables -X DOCKER-FORWARD 2>/dev/null
+sudo iptables -X DOCKER-CT 2>/dev/null
+sudo iptables -X DOCKER-BRIDGE 2>/dev/null
+sudo iptables -X DOCKER-ISOLATION-STAGE-1 2>/dev/null
+sudo iptables -X DOCKER-ISOLATION-STAGE-2 2>/dev/null
+sudo ip6tables -X DOCKER 2>/dev/null
+sudo ip6tables -X DOCKER-USER 2>/dev/null
+sudo ip6tables -X DOCKER-FORWARD 2>/dev/null
+sudo ip6tables -X DOCKER-CT 2>/dev/null
+sudo ip6tables -X DOCKER-BRIDGE 2>/dev/null
+sudo ip6tables -X DOCKER-ISOLATION-STAGE-1 2>/dev/null
+sudo ip6tables -X DOCKER-ISOLATION-STAGE-2 2>/dev/null
+
+echo "Cleared iptables, check results with: sudo nft list ruleset"

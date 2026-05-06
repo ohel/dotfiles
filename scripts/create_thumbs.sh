@@ -24,6 +24,8 @@ fi
 
 shift
 
+echo "Creating thumbnails. Copy-paste lines for a Markdown blog post:"
+echo ""
 while [ -n "$1" ]
 do
     [ ! -e "$1" ] && shift && continue
@@ -57,9 +59,7 @@ do
 
     [ "$videotempfile" ] && [ -e "$videotempfile" ] && rm "$videotempfile"
 
-    echo "Created thumbnail $filename_thumb | Copy-paste for a Markdown blog post:"
     echo "[![Alt text]($filename_thumb \"Optional image caption.\")]($1)"
-    echo ""
 
     shift
 

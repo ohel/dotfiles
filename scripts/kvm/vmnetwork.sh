@@ -4,7 +4,7 @@
 # - Optionally ($2 = "bridge" or "b") set up network bridge where bridged VM tap devices should be added.
 # - Set up virtual machine bridge where routed VM tap devices should be added.
 # - Set up virtual localhost for consistent host access.
-# - Specify chains to nftables.
+# - Specify iptables/nftables forward policy.
 # Source $reset_script to undo everything.
 
 reset_script=network_reset
@@ -32,16 +32,6 @@ echo "Setting up forward policies..."
 forward=$(sysctl -q -e net.ipv4.conf.$nic.forwarding | cut -f 3 -d ' ')
 sysctl -q -e -w net.ipv4.conf.$nic.forwarding=1
 echo "sudo sysctl -q -e -w net.ipv4.conf.$nic.forwarding=$forward" >> $reset_script
-
-# Packet forwarding so that access to other networks such as Internet works.
-if ! nft list chain inet filter vm_forward 2>/dev/null | grep -q "policy accept"
-then
-    nft list table inet filter >/dev/null 2>&1 || nft add table inet filter
-    nft list chain inet filter vm_forward >/dev/null 2>&1 || nft add chain inet filter vm_forward '{ type filter hook forward priority 0; policy accept; }'
-    echo "sudo nft delete chain inet filter vm_forward 2>/dev/null" >> $reset_script
-else
-    echo "Packet forwarding chains already defined."
-fi
 
 # Network bridge using DHCP. Note: not all interfaces support bridging.
 if [ "$2" = "bridge" ] || [ "$2" = "b" ]
@@ -101,6 +91,36 @@ else
         sed -n 's/.*handle \([0-9]\+\)$/\1/p')
     echo "sudo nft delete rule ip vm_nat postrouting handle $handle" >> $reset_script
 fi
+
+# Packet forwarding so that access to other networks such as Internet works.
+# Forwarding also depends on legacy iptables policies. By default: Chain FORWARD (policy ACCEPT)
+# However, services such as Docker might override that and set policy DROP.
+# That would prevent forwarding also via vmbridge. Therefore we need to set the ACCEPT policy.
+if command -v iptables >/dev/null
+then
+    if command -v docker >/dev/null
+    then
+        echo "If you run Docker and VM network does not work, check: sudo iptables -L FORWARD"
+        echo "If there is no ACCEPT policy, set it: sudo iptables -P FORWARD ACCEPT"
+    fi
+    if [ ! "$(iptables -L FORWARD | grep "policy ACCEPT")" ]
+    then
+        iptables -P FORWARD ACCEPT
+        echo "sudo iptables -P FORWARD DROP" >> $reset_script
+    fi
+fi
+# For nft, a similar setting might look something like this:
+#
+#    nft list table inet vm_filter >/dev/null 2>&1 || nft add table inet vm_filter
+#    nft list chain inet vm_filter vm_forward >/dev/null 2>&1 || \
+#        nft add chain inet vm_filter vm_forward '{ type filter hook forward priority 0; policy drop; }'
+#    nft flush chain inet vm_filter vm_forward 2>/dev/null || true
+#    # Outgoing accept rule for traffic.
+#    nft add rule inet vm_filter vm_forward iif "vmbridge" oif "$nic" accept
+#    # Incoming accept rule for traffic, needs NFT_CT.
+#    nft add rule inet vm_filter vm_forward iif "$nic" oif "vmbridge" ct state established,related accept
+#    echo "sudo nft delete chain inet vm_filter vm_forward 2>/dev/null" >> $reset_script
+#    echo "sudo nft delete table inet vm_filter 2>/dev/null" >> $reset_script
 
 # Virtual localhost. Use this IP within guests to use services running locally on the host.
 vm_guest_host_ip="10.0.1.127/24"
