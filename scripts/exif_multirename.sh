@@ -93,7 +93,7 @@ do
     postfix=""
     if [ -e "$newbasename.$targetext" ]
     then
-        index=$(ls -1 "$newbasename"*."$targetext" | wc -l)
+        index=$(ls "$newbasename"*."$targetext" | wc -l)
         postfix="_$index"
     fi
 

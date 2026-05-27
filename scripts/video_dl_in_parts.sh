@@ -23,6 +23,12 @@ echo "Enter output filename without extension [complete]:"
 read completed
 [ ! "$completed" ] && completed="complete"
 
+echo "Enter referer header []:"
+printf https://www.
+read referer
+[ "$referer" ] && referer="https://www.$referer"
+user_agent="user-agent: Linux"
+
 current_index=$start_index
 while [ $current_index -le $max_index ]
 do
@@ -37,7 +43,8 @@ do
     fi
 
     echo "Downloading segment $current_index..."
-    curl $url_part_1$current_index$url_part_2 > $tmp_dir/$filename
+    [ "$referer" ] && curl $url_part_1$current_index$url_part_2 -H "referer: $referer" -H "$user_agent" > $tmp_dir/$filename
+    [ ! "$referer" ] && curl $url_part_1$current_index$url_part_2 -H "$user_agent" > $tmp_dir/$filename
     current_index=$(expr $current_index + 1)
     if [ "$(file $tmp_dir/$filename | grep "ASCII text")" ]
     then

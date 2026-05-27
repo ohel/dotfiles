@@ -100,7 +100,7 @@ else
     wpa_supplicant -B -i "$nic" -c "$conf_file" -P "$pid_file"
 fi
 
-echo -n "Waiting for Wi-Fi association..."
+printf "Waiting for Wi-Fi association..."
 max_wait=60
 waited=0
 while [ $waited -lt $max_wait ]

@@ -22,9 +22,9 @@ mkdir -p $tmp_dir
 cd $tmp_dir
 
 # Initial images.
-count=$(ls -1 $images_dir/ | wc -l)
-image_a=$(ls -1 $images_dir/ | head -n $(shuf -i 1-$count -n 1) | tail -n 1)
-image_b=$(ls -1 $images_dir/ | head -n $(shuf -i 1-$count -n 1) | tail -n 1)
+count=$(ls $images_dir/ | wc -l)
+image_a=$(ls $images_dir/ | head -n $(shuf -i 1-$count -n 1) | tail -n 1)
+image_b=$(ls $images_dir/ | head -n $(shuf -i 1-$count -n 1) | tail -n 1)
 [ -L ~/.themes/background ] && rm ~/.themes/background && ln -s $images_dir/$image_a ~/.themes/background
 
 monitor_count=$(xrandr --listmonitors | grep Monitors: | grep -o "[0-9]*")
@@ -79,8 +79,8 @@ do
 
     # Start next blend from current background image.
     image_a=blend_100.png
-    count=$(ls -1 $images_dir/ | wc -l)
-    image_b=$(ls -1 $images_dir/ | head -n $(shuf -i 1-$count -n 1) | tail -n 1)
+    count=$(ls $images_dir/ | wc -l)
+    image_b=$(ls $images_dir/ | head -n $(shuf -i 1-$count -n 1) | tail -n 1)
 
     # Update symlink to background if one exists.
     [ -L ~/.themes/background ] && rm ~/.themes/background && ln -s $tmp_dir/$image_a ~/.themes/background

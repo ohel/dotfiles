@@ -13,7 +13,7 @@ echo Checking use flags...
 if [ -d /etc/portage/package.use ]
 then
     cd /etc/portage/package.use
-    for usefile in $(ls -1)
+    for usefile in $(ls)
     do
         # Packages without version.
         grep -v "\(^#\)\|\(^$\)" $usefile | cut -f 1 -d ' ' | grep -v "\(^>\)\|\(^=\)\|\(^\*\)" | xargs -I {} sh -c "equery -NC l {} | grep \"No installed\"" equerycmd

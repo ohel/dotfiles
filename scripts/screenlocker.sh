@@ -12,9 +12,9 @@ ps -e | grep -q i3lock && exit 1
 
 if [ -d $imagesdir ]
 then
-    count=$(ls -1 $imagesdir/*.* | wc -l)
+    count=$(ls $imagesdir/*.* | wc -l)
     index=$(shuf -i 1-$count -n 1)
-    image=$(ls -1 $imagesdir/*.* | head -n $index | tail -n 1)
+    image=$(ls $imagesdir/*.* | head -n $index | tail -n 1)
 fi
 
 # First found screen resolution of form <width>x<height>, e.g. 3840x2160.
