@@ -67,7 +67,7 @@ elseif executable('ag')
 endif
 
 " Generic tab complete.
-function TabOrComplete()
+function! s:TabOrComplete()
     if col('.') > 1 && strpart( getline('.'), 0, col('.') ) =~ '.*/\S*$'
         return "\<c-x>\<c-f>"
     elseif col('.') > 1 && strpart( getline('.'), col('.')-2, 2 ) =~ '^\w'
@@ -80,7 +80,7 @@ function TabOrComplete()
         return "\<Tab>"
     endif
 endfunction
-inoremap <tab> <c-r>=TabOrComplete()<cr>
+inoremap <tab> <c-r>=<SID>TabOrComplete()<cr>
 
 " Insert real tab on shift-tab.
 inoremap <s-tab> <c-q><tab>
@@ -186,23 +186,92 @@ if executable('ctags')
     endif
 endif
 
-" Create Compile Commands or Ctags
-function CCCC()
+" Helper to find project root based on given marker files or directories.
+function! s:FindProjectRoot(markers)
+    let l:dir = expand('%:p:h')
+    while l:dir != '/'
+        for marker in a:markers
+            if filereadable(l:dir . '/' . marker) || isdirectory(l:dir . '/' . marker)
+                return l:dir
+            endif
+        endfor
+        let l:dir = fnamemodify(l:dir, ':h')
+    endwhile
+    return ''
+endfunction
+
+" Create Compile Commands
+function! CCC(...) abort
+    let l:root = <SID>FindProjectRoot(['platformio.ini', 'compile_commands.json', '.git'])
+    if empty(l:root)
+        echo('Project root not found.')
+        return
+    endif
+
+    execute 'cd ' . fnameescape(l:root)
     if filereadable('platformio.ini')
         silent !pio run -t compiledb
-        echo('Created compile commands.')
-    elseif filereadable('../platformio.ini')
-        cd ..
-        silent !pio run -t compiledb
-        cd -
-        echo('Created compile commands.')
-    elseif exists('s:ctags_extras')
+        echo('Created compile commands (PlatformIO).')
+    elseif filereadable('Makefile')
+        silent !bear -- make
+        echo('Created compile commands (Makefile).')
+    elseif filereadable('README.md')
+        " Entry files (optional arguments).
+        if a:0 > 0
+            let l:entries = a:1
+        else
+            " Fallback: try to find .c files in root.
+            let l:entries = globpath(l:root, '*.c', 0, 1)
+            if empty(l:entries)
+                echo('No C source files found.')
+                return
+            endif
+        endif
+
+        " Check if Windows headers are used and create CC using mingw-w64.
+        let l:cmd = "grep -R -i -E '#\\s*include\\s*[<\"]windows\\.h[>\"]' ./* 2>/dev/null"
+        let l:result = system(l:cmd)
+
+        if v:shell_error == 0
+            let l:json = ['[']
+
+            for idx in range(len(l:entries))
+                let l:file = fnamemodify(l:entries[idx], ':t')
+
+                call add(l:json, '  {')
+                call add(l:json, '    "directory": "' . l:root . '",')
+                call add(l:json, '    "command": "clang --target=x86_64-w64-windows-gnu -I/usr/x86_64-w64-mingw32/include -c ' . l:file . '",')
+                call add(l:json, '    "file": "' . l:file . '"')
+                call add(l:json, '  }' . (idx < len(l:entries)-1 ? ',' : ''))
+            endfor
+
+            call add(l:json, ']')
+
+            call writefile(l:json, l:root . '/compile_commands.json')
+            echo('Created compile commands (MinGW).')
+        endif
+    endif
+    cd -
+endfunction
+
+" Create CTags
+function! s:CCT()
+    let l:root = FindProjectRoot(['tags', '.git'])
+    if empty(l:root)
+        echo('Project root not found.')
+        return
+    endif
+
+    execute 'cd ' . fnameescape(l:root)
+    if exists('s:ctags_extras')
         call system('ctags -R -f ./tags --c++-kinds=+p --fields=+iaS --' . s:ctags_extras . '=+q .')
         echo('Created tags file.')
     endif
+    cd -
 endfunction
 
-nnoremap <c-f1> :call CCCC()<cr>
+nnoremap <c-f1> :call CCC()<cr>
+nnoremap <c-f2> :call <SID>CCT()<cr>
 
 
 
@@ -351,7 +420,7 @@ endif
 
 " JSON syntax conceal.
 let g:vim_json_syntax_conceal = 0
-function ToggleJsonSyntaxConceal()
+function! s:ToggleJsonSyntaxConceal()
     if &l:conceallevel == 0
         setlocal conceallevel=2
         let g:vim_json_syntax_conceal = 1
@@ -360,7 +429,7 @@ function ToggleJsonSyntaxConceal()
         setlocal conceallevel=0
     endif
 endfunction
-nnoremap <leader>jc :call ToggleJsonSyntaxConceal()<cr>
+nnoremap <leader>jc :call <SID>ToggleJsonSyntaxConceal()<cr>
 nnoremap <leader>js :set syntax=json<cr>
 
 
@@ -490,28 +559,28 @@ let g:netrw_liststyle = 3
 let g:netrw_banner = 0
 let g:netrw_browse_split = 4
 let g:netrw_winsize = 25
-function ToggleNetrw()
+function! s:ToggleNetrw()
     if &ft ==# 'netrw'
         exe "normal \<c-w>c"
     else
         exe "normal :Vexplore .\<cr>"
     endif
 endfunction
-nnoremap <silent> <leader>n :call ToggleNetrw()<cr>
+nnoremap <silent> <leader>n :call <SID>ToggleNetrw()<cr>
 
 
 
 " Tab width configs.
-function SetTabWidth(newwidth)
+function! s:SetTabWidth(newwidth)
     let &tabstop = a:newwidth
     let &shiftwidth = a:newwidth " Set indent (using keys << or >>) width.
     let &softtabstop = a:newwidth " Set indent width in insert mode using tab.
     echo "Tab width set to:" a:newwidth
 endfunction
 
-silent call SetTabWidth(4) " Default tab width.
+silent call <SID>SetTabWidth(4) " Default tab width.
 
-function s:WhitespaceToTabWidth()
+function! s:WhitespaceToTabWidth()
     normal! ^
     let tabwidth = col('.') - 1
     if tabwidth > 0
@@ -526,7 +595,7 @@ nnoremap <leader><tab> :call <SID>WhitespaceToTabWidth()<cr>
 
 " Relative line numbering came in Vim 7.3.
 if version >= 703
-    function s:ToggleRelativeNumbering()
+    function! s:ToggleRelativeNumbering()
         if &rnu
             set rnu!
             echo 'Absolute numbering set.'
@@ -540,7 +609,7 @@ if version >= 703
     nnoremap <silent> <f3> :call <SID>ToggleRelativeNumbering()<cr>
 endif
 
-function s:ToggleWrap()
+function! s:ToggleWrap()
     if &wrap
         set nowrap
         echo 'No wrap set.'
@@ -554,7 +623,7 @@ inoremap <silent> <f2> <c-r>=<SID>ToggleWrap()<cr>
 nnoremap <silent> <f2> :call <SID>ToggleWrap()<cr>
 
 " Print file info: encoding and format.
-function s:PrintFileInfo()
+function! s:PrintFileInfo()
     redir => filename
     silent !echo %:p
     redir END
@@ -564,7 +633,7 @@ endfunction
 nnoremap <f6> :call <SID>PrintFileInfo()<cr>
 
 " Set file encoding dialog.
-function s:SetFileEncoding()
+function! s:SetFileEncoding()
     let n = confirm("Select file encoding:\n(current: " . &fileencoding . ")", "&UTF-8\n&ISO-8859-1\n&Cancel", 3, "Question")
     if n == 1
         set fileencoding=utf-8
@@ -575,7 +644,7 @@ endfunction
 nnoremap <f7> :call <SID>SetFileEncoding()<cr>
 
 " Set file format dialog.
-function s:SetFileFormat()
+function! s:SetFileFormat()
     let n = confirm("Select format for writing the file:\n(current: " . &ff . ")", "&Unix\n&Dos\n&Mac\n&Cancel", 4, "Question")
     if n == 1
         set ff=unix
@@ -616,7 +685,7 @@ if has('gui_running') && exists('g:zoom_functions') && g:zoom_functions == 1
         let g:zoom_level = 1
     endif
 
-    function s:ChangeFontSize(delta)
+    function! s:ChangeFontSize(delta)
 
         if exists('g:alt_font_in_use')
             silent call <SID>ToggleAlternativeFont()
@@ -657,7 +726,7 @@ if has('gui_running') && exists('g:zoom_functions') && g:zoom_functions == 1
 endif
 
 if has('gui_running')
-    function s:ToggleAlternativeFont()
+    function! s:ToggleAlternativeFont()
 
         if !exists('g:alt_font')
             return ''
@@ -732,7 +801,7 @@ function! s:OnVimEnter()
 
         " Toggle Git blame window and log for current file.
         if exists(':Git')
-            function ToggleGitBlame()
+            function! ToggleGitBlame()
                 if @% =~# 'fugitiveblame'
                     exe "normal \<c-w>c"
                 else
@@ -781,7 +850,7 @@ function! s:OnVimEnter()
 
     " Code completion stuff etc.
     if exists(':CocStart')
-        function s:ShowDocumentation(hover_only)
+        function! s:ShowDocumentation(hover_only)
             if (a:hover_only != 1 && index(['vim','help'], &filetype) >= 0)
                 execute 'h '.expand('<cword>')
             else
@@ -825,7 +894,7 @@ function! s:OnVimEnter()
         endif
 
         let g:coc_enabled = 0
-        function CocOnOffToggle()
+        function! CocOnOffToggle()
             if g:coc_enabled == 0
                 let g:coc_enabled = 1
                 CocStart
@@ -850,7 +919,7 @@ function! s:OnVimEnter()
 
     " GitHub Copilot
     if exists(':Copilot')
-        function CopOnOffToggle()
+        function! CopOnOffToggle()
             if g:copilot_enabled == v:false
                 let g:copilot_enabled = v:true
                 Copilot enable
