@@ -483,12 +483,15 @@ nnoremap <c-insert> V"+y<esc>:let @*=@+<cr>:echo "Line copied."<cr>
 vnoremap <c-insert> "+y<esc>:let @*=@+<cr>:echo "Copied."<cr>
 vnoremap <c-c> "+y<esc>:let @*=@+<cr>:echo "Copied."<cr>
 
-" Common insert hotkeys.
+" Common insert/paste hotkeys.
 " Use <c-q> in GUI mode to insert control characters.
 nnoremap <s-insert> "+P
 inoremap <s-insert> <c-r>=col('.') == col('$') ? "\<lt>esc>`^\"+pa" : "\<lt>esc>`^\"+Pa"<cr>
 cnoremap <c-v> <c-r>+
 inoremap <c-v> <c-r>=col('.') == col('$') ? "\<lt>esc>`^\"+pa" : "\<lt>esc>`^\"+Pa"<cr>
+
+" Read and paste contents of X clipboard.
+nnoremap <s-c-x> :silent r !xclip -o<cr>
 
 " Replace contents, but delete the old selection to black hole register first so as not to replace insert buffer.
 vnoremap <silent><expr> <s-insert> mode() ==# "V" ? "\"_x\"+P" : ":<esc>`>:exe col('.') == col('$')-1 ? \"normal! gv\\\"_x\\\"+p\" : \"normal! gv\\\"_x\\\"+Pl\"<cr>"
