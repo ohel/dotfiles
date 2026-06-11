@@ -985,6 +985,50 @@ function! s:OnGUIEnter()
     execute 'set lines=' . g:dlines . ' columns=' . g:dcols
 endfunction
 
+" Turn a single column buffer data into multi column.
+function! Columnize(cols, minwidth) abort
+    let lines = getline(1, '$')
+    let n = len(lines)
+
+    if a:cols <= 0 || n == 0
+        return
+    endif
+
+    let widths = repeat([a:minwidth], a:cols)
+    for idx in range(n)
+        let col = idx % a:cols
+        let widths[col] = max([widths[col], strdisplaywidth(lines[idx])])
+    endfor
+
+    let rows = []
+    for rowstart in range(0, n - 1, a:cols)
+        let parts = []
+
+        for col in range(a:cols)
+            let idx = rowstart + col
+            if idx >= n
+                break
+            endif
+
+            let text = lines[idx]
+            if col < a:cols - 1
+                let pad = widths[col] - strdisplaywidth(text)
+                let text .= repeat(' ', pad + 1)
+            endif
+
+            call add(parts, text)
+        endfor
+
+        call add(rows, join(parts, ''))
+    endfor
+
+    call setline(1, rows)
+
+    if len(rows) < line('$')
+        execute (len(rows) + 1) . ',$delete _'
+    endif
+endfunction
+
 " Host specific stuff, e.g.:
 " function OnVimEnterExtra()
 "    if stridx(&filetype, 'typescript') > -1
