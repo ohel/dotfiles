@@ -15,9 +15,8 @@ fi
 export GDK_USE_XFT=1
 export QT_XFT=1
 
-# Qt5.7 no longer supports GTK styles so to get something reasonable (i.e. dark color scheme)
-# one must use qt5ct to change the look of Qt5 applications.
-export QT_QPA_PLATFORMTHEME=qt5ct
+# Qt styling theme plugin.
+export QT_QPA_PLATFORMTHEME=qt6ct
 
 # Set default standby, suspend, off timeouts for DPMS. If using a television, DPMS is probably not supported but the signal is turned off so the TV power management may set standby.
 xset dpms 900 0 0
@@ -40,20 +39,14 @@ command -v mpv >/dev/null && [ -d ~/.cache ] && [ ! -e ~/.cache/mpvfifo ] && mkf
 # This temporary directory is needed if using mhwaveedit.
 command -v mhwaveedit >/dev/null && mkdir -p /tmp/mhwaveedit
 
-# This application does absolutely nothing, it just waits to be killed, keeping X alive.
-# It is as stable as it gets, even if the real session manager might be unstable.
-# The code consists of a single pause() call.
-lastone=$(ls /opt/programs/pause/pause 2>/dev/null)
-
 # Need to set to XFCE so that log out etc. works correctly when using XFCE panel. Otherwise X-Generic would be more correct.
 export XDG_CURRENT_DESKTOP="XFCE"
 
 # To use this file as an Xsession file, create a link:
 # ln -s ~/.xinitrc ~/.xsession && chmod +x ~/.xinitrc
-if [ $(basename "$0") = ".xsession" ] || [ ! "$lastone" ]
+if [ $(basename "$0") = ".xsession" ]
 then
     exec xfce4-session
 else
-    xfce4-session &
-    exec $lastone
+    xfce4-session
 fi

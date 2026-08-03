@@ -24,10 +24,10 @@ encode() {
     typemp3=$(echo $fileid | grep MPEG)
 
     # Default for ogg and flac.
-    tagalbum="album="
-    tagtrack="tracknumber="
-    tagartist="artist="
-    tagtitle="title="
+    tagalbum="^album="
+    tagtrack="^tracknumber="
+    tagartist="^artist="
+    tagtitle="^title="
     if [ "$typemp3" ]
     then
         tagalbum="^TALB="
@@ -42,14 +42,14 @@ encode() {
         tagtitle="^©nam="
     fi
 
-    meta_album=$(mutagen-inspect "$filein" | grep -a $tagalbum | cut -d '=' -f 2 | tr -d -c "[:alnum:] ")
-    meta_track=$(mutagen-inspect "$filein" | grep -a $tagtrack | cut -d '=' -f 2 | cut -f 1 -d '/' | tr -d -c "[:alnum:] ")
-    meta_artist=$(mutagen-inspect "$filein" | grep -a $tagartist | cut -d '=' -f 2 | tr -d -c "[:alnum:] ")
-    meta_title=$(mutagen-inspect "$filein" | grep -a $tagtitle | cut -d '=' -f 2 | tr -d -c "[:alnum:] ")
-    meta_rg_ap=$(mutagen-inspect "$filein" | grep -a "replaygain_album_peak" | cut -d '=' -f 2)
-    meta_rg_tp=$(mutagen-inspect "$filein" | grep -a "replaygain_track_peak" | cut -d '=' -f 2)
-    meta_rg_ag=$(mutagen-inspect "$filein" | grep -a "replaygain_album_gain" | cut -d '=' -f 2)
-    meta_rg_tg=$(mutagen-inspect "$filein" | grep -a "replaygain_track_gain" | cut -d '=' -f 2)
+    meta_album=$(mutagen-inspect "$filein" | grep -ai $tagalbum | cut -d '=' -f 2 | tr -d "[/\\'\"]")
+    meta_track=$(mutagen-inspect "$filein" | grep -ai $tagtrack | cut -d '=' -f 2 | cut -f 1 -d '/' | tr -d -c "[:digit:] ")
+    meta_artist=$(mutagen-inspect "$filein" | grep -ai $tagartist | cut -d '=' -f 2 | tr -d "[/\\'\"]")
+    meta_title=$(mutagen-inspect "$filein" | grep -ai $tagtitle | cut -d '=' -f 2 | tr -d "[/\\'\"]")
+    meta_rg_ap=$(mutagen-inspect "$filein" | grep -ai "replaygain_album_peak" | cut -d '=' -f 2)
+    meta_rg_tp=$(mutagen-inspect "$filein" | grep -ai "replaygain_track_peak" | cut -d '=' -f 2)
+    meta_rg_ag=$(mutagen-inspect "$filein" | grep -ai "replaygain_album_gain" | cut -d '=' -f 2)
+    meta_rg_tg=$(mutagen-inspect "$filein" | grep -ai "replaygain_track_gain" | cut -d '=' -f 2)
 
     meta_track="${meta_track:-"XX"}"
     meta_album="${override_album:-$meta_album}"
