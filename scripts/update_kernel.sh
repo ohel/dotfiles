@@ -83,8 +83,16 @@ function cleanup {
     current_release=$(uname -r)
     keep_release=${1:-$current_release}
 
-    current_releases=($(ls -d /usr/src/$PREFIX-* | grep -v $keep_release | xargs -I {} basename {} | cut -f 2- -d '-'))
-    if [ ${#current_releases[@]} -eq 0 ]
+    old_releases=()
+    all_releases="$(ls -d /usr/src/$PREFIX-* | xargs -I {} basename {} | cut -f 2- -d '-')"
+    for release in ${all_releases[@]}
+    do
+        [ "$release" == "$keep_release" ] && continue
+        [ "$(readlink -f "/usr/src/$PREFIX-$release")" == "$(readlink -f "/usr/src/$PREFIX-$keep_release")" ] && continue
+        old_releases+=("$release")
+    done
+
+    if [ ${#old_releases[@]} -eq 0 ]
     then
         echo "Found nothing to clean up."
         echo "Run backup scripts? Press y to run, any other key to skip."
@@ -95,7 +103,7 @@ function cleanup {
     fi
 
     echo "Found old releases in /usr/src:"
-    echo ${current_releases[@]}
+    echo ${old_releases[@]}
     echo
     if [ "$keep_release" != "$current_release" ]
     then
@@ -113,7 +121,7 @@ function cleanup {
     [ "$remove" != "y" ] && return 1
 
     echo
-    for release in ${current_releases[@]}
+    for release in ${old_releases[@]}
     do
         rm -rf /usr/src/linux-$release
         rm -rf /lib/modules/$release
@@ -148,13 +156,13 @@ then
     make oldconfig
 else
 
-    #### AUTO-DETECT NEW RELEASE TO COMPILE #####
+    #### AUTOMATICALLY DETECT NEW RELEASE TO COMPILE #####
 
     cd /usr/src
     current_release=$(uname -r)
     new_release=$(ls -v1 --file-type | grep '/' | cut -f 1 -d '/' | grep "^$PREFIX" | tail -n 1 | cut -f 2- -d '-')
 
-    if [ "$current_release" == "$new_release" ]
+    if [ "$current_release" == "$new_release" ] || [ "$(readlink -f "/usr/src/$PREFIX-$current_release")" == "$(readlink -f "/usr/src/$PREFIX-$new_release")" ]
     then
         echo "No new kernel releases found."
         cd $cwd
@@ -259,14 +267,39 @@ function update_refind_config {
     config_file=$1
     new_release=$2
     current_release=$(uname -r)
-    sed -i "s/\(\(kernel\)\|\(initramfs\)\)-[2-9]\.[0-9]*\.[0-9]*/\1-$new_release/g" $config_file
+    if [ ! -e $EFI_DEST_DIR/linux/kernel-$current_release ]
+    then
+        if echo $current_release | grep "\-rc[0-9]" >/dev/null
+        then
+            echo "Kernel $current_release not found in $EFI_DEST_DIR/linux"
+            echo You are using a release candidate. Fix config files manually.
+            read
+        else
+            echo "Kernel $current_release not found in $EFI_DEST_DIR/linux, aborting."
+            read
+            exit 1
+        fi
+    fi
+
+    if echo $current_release | grep "\-rc[0-9]" >/dev/null
+    then
+        echo You are using a release candidate. If both release formats e.g. 7.2-rc6 and 7.2.0-rc6 are in use, create a symbolic link manually in /lib/modules
+        read
+    elif [ ! -d /lib/modules/$current_release ]
+    then
+        echo "Kernel $current_release libs not found in /lib/modules, aborting."
+        read
+        exit 1
+    fi
+
+    sed -i "s/\(\(kernel\)\|\(initramfs\)\)-[3-9]\.[0-9]*\(\.[0-9]*\)\?\(-rc[0-9]\)\?/\1-$new_release/g" $config_file
 
     backup_begin=$(grep -in "$BACKUP_MENUENTRY_IDENTIFIER" $config_file | cut -f 1 -d ':')
     backup_end=$(grep -n "menuentry" $config_file | grep -A 1 "^$backup_begin" | tail -n 1 | cut -f 1 -d ':')
-    [ ! $backup_end ] && backup_end=$(wc -l $config_file) # Backup entry is the last menuentry.
+    [ ! $backup_end ] && backup_end=$(wc -l $config_file) # Backup entry is the last menuentry if no menuentries found after.
     if [ "$backup_begin" ]
     then
-        sed -i "$backup_begin,$backup_end s/\(\(kernel\)\|\(initramfs\)\)-[2-9]\.[0-9]*\.[0-9]*/\1-$current_release/g" $config_file
+        sed -i "$backup_begin,$backup_end s/\(\(kernel\)\|\(initramfs\)\)-[3-9]\.[0-9]*\(\.[0-9]*\)\?\(-rc[0-9]\)\?/\1-$current_release/g" $config_file
         sed -i "$backup_begin,$backup_end s/\(^ *\)disabled/\1# disabled/" $config_file
     fi
 }
