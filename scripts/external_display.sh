@@ -8,6 +8,7 @@
 # If a secondary display is not found, the primary display is reset to its best resolution.
 #
 # DPI may be overridden with DPI environment variable or ~/.config/dpi file.
+# If ~/.config/primary_display_max_hz exists, the maximum available refresh rate is used instead of the default given by xrandr.
 #
 # An operating mode for the script may be given as parameter $1 or $2:
 # switch = switch the display between primary and secondary (default mode if parameter not given)
@@ -43,6 +44,9 @@ xrandrout="$(xrandr)"
 
 primary_display=${primary_display:-$(echo "$xrandrout" | grep " connected" | cut -f 1 -d ' ' | head -n 1)}
 primary_mode=$(echo "$xrandrout" | grep -A 1 $primary_display | grep -o "[0-9]\{3,4\}x[0-9]\{3,4\}" | tail -n 1)
+primary_max_hz=$(echo "$xrandrout" | grep "$primary_mode" | grep -o '[0-9]\+\.[0-9]\+' | sort -n | tail -1 | cut -d. -f1)
+primary_default_hz=$(echo "$xrandrout" | grep "$primary_mode" | grep -oE '[0-9]+\.[0-9]+\*?[[:space:]]*\+' | tr -d ' *+' | cut -d. -f1)
+primary_hz=$primary_default_hz && [ -e ~/.config/primary_display_max_hz ] && primary_hz=$primary_max_hz
 p_width=$(echo $primary_mode | cut -f 1 -d 'x')
 [ ! "$p_width" ] && echo "Error parsing primary mode." && exit 1
 
@@ -77,14 +81,14 @@ then
         echo No secondary display found, resetting primary display.
     fi
 
-    xrandr --output $primary_display --mode $primary_mode --primary \
+    xrandr --output $primary_display --mode $primary_mode --rate $primary_hz --primary \
         $secondary_params
     secondary_background=""
     rm $testfile
 elif [ ! "$secondary_mode" ]
 then
     echo No secondary display found, resetting primary display.
-    xrandr --output $primary_display --mode $primary_mode --primary
+    xrandr --output $primary_display --mode $primary_mode --rate $primary_hz --primary
 else
     if [ "$script_mode" = "switch" ]
     then
@@ -97,7 +101,7 @@ else
     then
         echo "Extending to external display $secondary_display."
         position=${3:-"right-of"}
-        xrandr --output $primary_display --mode $primary_mode --primary \
+        xrandr --output $primary_display --mode $primary_mode --rate $primary_hz --primary \
             --output $secondary_display --mode $secondary_mode --$position $primary_display
         panelwin="xfce4-panel"
         [ "$panel_pid" ] && panelheight=$(xwininfo -id $(wmctrl -l | grep $panelwin | cut -f 1 -d ' ') | grep Height | cut -f 2 -d ":" | tr -d -c [:digit:])
@@ -140,7 +144,7 @@ else
         fi
 
         mirror_mode="$(echo $selected_mode | cut -f 1 -d 'x')x$(echo $selected_mode | cut -f 2 -d 'x')"
-        xrandr --output $primary_display --mode $mirror_mode --noprimary \
+        xrandr --output $primary_display --mode $mirror_mode --rate $primary_hz --noprimary \
             --output $secondary_display --mode $mirror_mode
         secondary_background=""
         echo "Set mode $mirror_mode."
