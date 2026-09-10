@@ -31,6 +31,7 @@ do
     echo "$inputname" | grep -oi "\.mp4$"             && basename=$(basename "$inputname" | sed "s/\.mp4$\|\.MP4$//")      && targetext="mp4"
     echo "$inputname" | grep -oi "\.mov$"             && basename=$(basename "$inputname" | sed "s/\.mov$\|\.MOV$//")      && targetext="mov"
     echo "$inputname" | grep -o  "\.dng$"             && basename=$(basename "$inputname" | sed "s/\.dng$//")              && targetext="dng"
+    echo "$inputname" | grep -o  "\.webp$"            && basename=$(basename "$inputname" | sed "s/\.webp$//")             && targetext="webp"
 
     originalname=""
     [ "$targetext" = "jpg" ] && [ -e "$basename.jpg" ] && originalname="$basename.jpg"
@@ -43,6 +44,7 @@ do
     [ "$targetext" = "mov" ] && [ -e "$basename.mov" ] && originalname="$basename.mov"
     [ "$targetext" = "mov" ] && [ -e "$basename.MOV" ] && originalname="$basename.MOV"
     [ "$targetext" = "dng" ] && [ -e "$basename.dng" ] && originalname="$basename.dng"
+    [ "$targetext" = "webp" ] && [ -e "$basename.webp" ] && originalname="$basename.webp"
 
     if [ ! "$originalname" ]
     then
@@ -101,8 +103,9 @@ do
     [ "$targetext" = "mp4" ] && mv "$originalname" "$newbasename$postfix.mp4" && continue
     [ "$targetext" = "mov" ] && mv "$originalname" "$newbasename$postfix.mov" && continue
 
-    # JPG + RAW pairs.
+    # For compressed + RAW pairs.
     [ "$targetext" = "jpg" ] && mv "$originalname" "$newbasename$postfix.jpg"
+    [ "$targetext" = "webp" ] && mv "$originalname" "$newbasename$postfix.webp"
 
     [ -e "$basename.RW2" ] && mv "$basename.RW2" "$newbasename$postfix.RW2"
     [ -e "$basename.RW2.xmp" ] && sed -i -s "s/$basename.RW2/$newbasename$postfix.RW2/" "$basename.RW2.xmp"

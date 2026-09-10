@@ -272,7 +272,7 @@ function update_refind_config {
         if echo $current_release | grep "\-rc[0-9]" >/dev/null
         then
             echo "Kernel $current_release not found in $EFI_DEST_DIR/linux"
-            echo You are using a release candidate. Fix config files manually.
+            echo You are using a release candidate. Check config files manually if needed.
             read
         else
             echo "Kernel $current_release not found in $EFI_DEST_DIR/linux, aborting."
@@ -283,7 +283,7 @@ function update_refind_config {
 
     if echo $current_release | grep "\-rc[0-9]" >/dev/null
     then
-        echo You are using a release candidate. If both release formats e.g. 7.2-rc6 and 7.2.0-rc6 are in use, create a symbolic link manually in /lib/modules
+        echo You are using a release candidate. If both release name formats e.g. 7.2-rc6 and 7.2.0-rc6 are in use, create a symbolic link manually in /lib/modules
         read
     elif [ ! -d /lib/modules/$current_release ]
     then

@@ -587,7 +587,7 @@ function! s:WhitespaceToTabWidth()
     normal! ^
     let tabwidth = col('.') - 1
     if tabwidth > 0
-        call SetTabWidth(tabwidth)
+        call <SID>SetTabWidth(tabwidth)
     endif
 endfunction
 
