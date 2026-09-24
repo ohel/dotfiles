@@ -12,10 +12,19 @@
 scale="env GDK_DPI_SCALE=1 GDK_SCALE=1"
 
 # Chromium executable name varies between systems.
-command -v chromium-browser >/dev/null && executable="chromium-browser"
-[ ! "$executable" ] && command -v chromium >/dev/null && executable="chromium"
-[ ! "$executable" ] && [ -e ~/.var/app/org.chromium.Chromium ] && executable="/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=/app/bin/chromium --file-forwarding org.chromium.Chromium"
-[ ! "$executable" ] && echo "Chromium not found." && exit 1
+if [ -e ~/.var/app/org.chromium.Chromium ]
+then
+    executable="/usr/bin/flatpak run --file-forwarding org.chromium.Chromium"
+    use_flatpak=1
+elif command -v chromium-browser >/dev/null
+then
+    executable="chromium-browser"
+elif command -v chromium >/dev/null
+then
+    executable="chromium"
+else
+    echo "Chromium not found." && exit 1
+fi
 
 focuswin=$(wmctrl -l | grep -e "Chromium" | tail -n 1 | cut -f 1 -d ' ')
 [ "$focuswin" ] && wmctrl -i -a $focuswin
@@ -48,7 +57,12 @@ then
     exit 0
 fi
 
-running_exe=$(ps -ef | grep $executable | grep -v grep)
+if [ "$use_flatpak" ]
+then
+    running_exe=$(ps -ef | grep .var/app/org.chromium.Chromium | grep -v grep)
+else
+    running_exe=$(ps -ef | grep $executable | grep -v grep)
+fi
 
 if [ "$if_running" ] && [ "$running_exe" ] && [ ! "$file_url_invalid" ]
 then
