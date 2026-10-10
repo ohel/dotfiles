@@ -8,18 +8,6 @@ img_name="vm.img"
 vm_name="KVM"
 net_id=10 # Used as the last number of static IP address of the guest, MAC address and VNC display.
 
-pid=$(ps -ef | grep "qemu.*$vm_name" | grep -v grep | tr -s ' ' | cut -f 2 -d ' ')
-if [ "$pid" ]
-then
-    echo $vm_name virtual machine is already running with PID: $pid
-    echo "Press return to kill."
-    read tmp
-    kill $pid
-    sleep 2
-    echo "Press return to restart the virtual machine."
-    read tmp
-fi
-
 vm_mem_mb=8192
 vm_num_cores=4
 vm_threads_per_core=1
@@ -54,40 +42,73 @@ cdrom_image="image.iso"
 # Use "lspci -nn | grep VGA" to check the device id.
 # To find out the device bus, list details using device id. E.g. for AMD IGP:
 #   $ lspci -nnk -d 1002:13c0
-#   11:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Granite Ridge [Radeon Graphics] [1002:13c0] (rev c2)
-#   	Subsystem: ASRock Incorporation Device [1849:364e]
+#   0f:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Granite Ridge [Radeon Graphics] [1002:13c0] (rev c1)
+#   	Subsystem: ASUSTeK Computer Inc. Device [1043:8877]
 #   	Kernel driver in use: vfio-pci
 #   	Kernel modules: amdgpu
-# See /sys/kernel/iommu_groups/*/devices/* for IOMMU groups, and for details e.g.: lspci -nns 000:11:00
+#
+# See /sys/kernel/iommu_groups/*/devices/* for IOMMU groups, and for details e.g.: lspci -nns 000:0f:00
+# The video and audio devices should be in separate IOMMU groups; if they aren't, try ACS override.
+#
 # If two GPUs share the same driver, unbinding the driver ("echo DEVICE-ID > /sys/bus/pci/devices/DEVICE-ID/driver/unbind") would result in X11 crashing.
+#
 # If using X11 and auto adding GPUs is disabled, you may want to explicitly define the GPU a device refers to, e.g.
-# Section "Device"
-#   BusID "PCI:3:0:0" # Here 0000:3:00.0 would be the primary GPU device address.
+#   Section "Device"
+#     BusID "PCI:3:0:0" # Here 0000:3:00.0 would be the primary GPU device address.
 # Another option is to ignore the passthrough device:
-# Section "Device"
-#   Driver "modesetting"
-#   BusID "PCI:13:0:0"
-#   Option "Ignore" "true"
+#   Section "Device"
+#     Driver "modesetting"
+#     BusID "PCI:0f:0:0"
+#     Option "Ignore" "true"
 # The driver has probably been loaded already during initramfs, though. In that case create a modprobe rule such as:
 #   options vfio-pci ids=1002:13c0
 #   softdep amdgpu pre: vfio-pci
 # This would make kernel load vfio-pci before amdgpu and bind vfio-pci to id 1002:13c0.
-# This script assumes the VGA driver has been bound correctly already. Only the audio driver is unbound.
+#
 # NOTE: especially AMD GPUs might have problems with Windows guests not resetting them correctly during guest shut down, resulting in a passed through device working exactly once during host uptime. Take this into account when testing if the passthrough works. A common indication is "error 43" in Windows device manager for the GPU.
 # There are tools such as RadeonResetBugFixService.exe to mitigate the problem. What they do is they remove the device from Windows before shutdown, and add the device anew on startup. This forces Windows to reset the device correctly.
-passthrough_video_device="0000:11:00.0"
-passthrough_audio_device="0000:11:00.1"
+#
+# To extract the required video BIOS and ROM, use tools such as UEFI Bios Updater:
+#   * For video: run UBU.bat, choose VBIOS, select X for extracted, copy the extracted dat file.
+#   * For audio, extract the files and run: EfiRom.exe -f 0x1002 -i 0xffff -e AMDGopDriver.efi
+#
+# The GOP is for video device, but this is how they seem to be loaded here for AMD IGPs, so the GOP ROM for the audio part. The important part is the devices are passed through as multifunction device together. This is apparently only when using the OVMF UEFI BIOS. If using e.g. SeaBIOS, just the VBIOS ROM is needed (no GOP ROM).
+# It might also be that the ROMs extracted from your motherboard BIOS do not work. In that case try downloading the ROM files from e.g. https://github.com/isc30/ryzen-gpu-passthrough-proxmox
+# My processor is 9950X, and using vbios_9950x.rom together with AMDGopDriver_9950x3d.rom works.
+passthrough_video_device="0000:0f:00.0"
+passthrough_audio_device="0000:0f:00.1"
 passthrough_vbios="vbios_164E.dat"
 passthrough_gopdriver="AMDGopDriver.rom"
+
+pid=$(ps -ef | grep "qemu.*$vm_name" | grep -v grep | tr -s ' ' | cut -f 2 -d ' ')
+if [ "$pid" ]
+then
+    echo $vm_name virtual machine is already running with PID: $pid
+    echo "Press return to kill."
+    read tmp
+    kill $pid
+    sleep 2
+    echo "Press return to restart the virtual machine."
+    read tmp
+fi
 
 if [ "$passthrough" = 1 ]
 then
     # This will probe: vfio_pci, vfio, vfio_pci_core, vfio_iommu_type1
     # Note that sometimes is required in /etc/modprobe.d/vfio.conf: options vfio_iommu_type1 allow_unsafe_interrupts=1
+    # Otherwise KVM fails with an error to set IOMMU for container.
     modprobe vfio_pci
-
-    if [ -e /sys/bus/pci/devices/$passthrough_audio_device ]
+    if [ "$(realpath /sys/bus/pci/devices/$passthrough_video_device/driver)" != "/sys/bus/pci/drivers/vfio-pci" ]
     then
+        passthrough=0
+        echo Using passthrough is not possible, device $passthrough_video_device is not using vfio-pci
+    else
+        echo Using passthrough for video device $passthrough_video_device
+    fi
+
+    if [ $passthrough = 1 ] && [ -e /sys/bus/pci/devices/$passthrough_audio_device ]
+    then
+        echo Using passthrough for audio device $passthrough_audio_device
         if [ "$(realpath /sys/bus/pci/devices/$passthrough_audio_device/driver)" != "/sys/bus/pci/drivers/vfio-pci" ]
         then
             [ -e /sys/bus/pci/devices/$passthrough_audio_device/driver/unbind ] && echo $passthrough_audio_device > /sys/bus/pci/devices/$passthrough_audio_device/driver/unbind
@@ -97,10 +118,12 @@ then
         fi
     fi
 
-    # This root device is required, otherwise guest fails with error 43 for the GPU.
+    # This root device is required, otherwise guest fails with error 43 for the GPU. It should also be in a different bus than the passed through devices; let's leave out the bus option and let it be handled automatically.
     passthrough_options="-device pcie-root-port,id=pcie0,slot=0"
     [ -e /sys/bus/pci/devices/$passthrough_video_device ] && passthrough_options="$passthrough_options -device vfio-pci,host=$passthrough_video_device,bus=pcie0,addr=00.0,x-vga=on,multifunction=on,romfile=$passthrough_vbios"
     [ -e /sys/bus/pci/devices/$passthrough_audio_device ] && passthrough_options="$passthrough_options -device vfio-pci,host=$passthrough_audio_device,bus=pcie0,addr=00.1,romfile=$passthrough_gopdriver"
+
+    [ $passthrough = 0 ] && passthrough_options=""
 fi
 
 modprobe tun
@@ -204,11 +227,12 @@ fi
 # Shall the guest know it is running virtualized. Turning off might help when installing certain drivers (e.g. for passthrough GPU).
 cpu_host_kvm=off
 
-echo "Starting the virtual machine..."
+echo Starting the virtual machine with command line:
+command_line="
 qemu-system-x86_64 \
 -daemonize \
 -enable-kvm \
--name "$vm_name" \
+-name \"$vm_name\" \
 -boot $boot_options \
 -machine q35,accel=kvm \
 -cpu host,kvm=$cpu_host_kvm,+topoext \
@@ -217,13 +241,18 @@ qemu-system-x86_64 \
 -k fi \
 -display vnc=localhost:$net_id \
 -device virtio-net,netdev=netdev$net_id,mac=00:00:00:00:00:$mac_end -netdev tap,id=netdev$net_id,br=$vm_bridge,script=kvm_tap_vmbridge.sh \
--drive file="$img_name",if=virtio,format=raw \
+-drive file=\"$img_name\",if=virtio,format=raw \
 $bridged_net_devices \
 $soundhw \
 $videohw \
 $uefi_options \
 $tpm_options \
-$secure_boot_options
+$secure_boot_options \
+$passthrough_options
+"
+
+echo $command_line
+eval $command_line
 
 # Common workarounds and tweaks:
 # * Fixes most problems and some BSODs in Windows, especially during setup:

@@ -7,8 +7,7 @@ Files in this directory are usually located in ~/.config, but not always.
 * `hrtf_1059.mhr`: Head-related transfer function made with makehrtf using the HRIR measurements from the Ircam/AKG Listen project. Used with OpenAL, see the alsoftrc dotfile.
 * `mpv`: mpv media player config files located in ~/.mpv.
 * `check_window_classes`: When using my xbindkeysrc, do not close windows of these classes. There's also another file for window titles.
-* `quodlibet_gst_pipeline`: Pipeline definitions for Quod Libet music player.
+* `quodlibet_gst_pipeline_*`: Pipeline definitions for Quod Libet music player.
 * `ranger`: ranger file manager config files located in ~/.config/ranger.
 * `renamepatterns.saved`: Quod Libet rename pattern for music library.
-* `scans.phatch`: An action list to use with Phatch when scanning lots of A4 text documents. The app itself is deprecated, but the ImageMagick operations are still usable.
-* `system`: Various local system startup scripts which in Gentoo are run from /etc/local.d. On Ubuntu the contents are in a single file called /etc/rc.local.
+* `system`: Various local system startup scripts which on Gentoo are run from /etc/local.d. On Ubuntu the contents are in single file, /etc/rc.local.

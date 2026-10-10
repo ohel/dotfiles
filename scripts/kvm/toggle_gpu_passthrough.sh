@@ -5,9 +5,9 @@
 # * Toggling from VFIO-PCI to $driver might not always work, or not work but once. Kernel bugs, NULL dereferences etc. may occur.
 # * Even a direct kernel command line option like vfio_pci.ids=1002:13c0 might not prevent amdgpu from binding to device 1002:13c0 instead of vfio-pci.
 
-gpu_dev=${1:-"0000:11:00.0"}
+gpu_dev=${1:-"0000:0f:00.0"}
 driver=${2:-"amdgpu"}
-audio_dev=${3:-"0000:11:00.1"}
+audio_dev=${3:-"0000:0f:00.1"}
 
 # Is VFIO currently in use?
 is_vfio="" && [ "$(realpath /sys/bus/pci/devices/$gpu_dev/driver)" = "/sys/bus/pci/drivers/vfio-pci" ] && is_vfio=yes
