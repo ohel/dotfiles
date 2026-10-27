@@ -333,7 +333,7 @@ pcm.loop_playback_in_mix {
         slave {
             pcm "hw:Loopback,0,0"
             format S32_LE
-            periods 4
+            periods 3
             period_size 128
             rate 44100
         }

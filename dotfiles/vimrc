@@ -130,19 +130,17 @@ else
 
 endif
 
-if !has('android')
-    " Note: on Windows the colorscheme might not be found unless it is copied under
-    " the global installation directory, e.g. C:\Program Files (x86)\Vim\vimfiles\colors
-    if filereadable($VIMHOME . '/colors/minigun.vim') || filereadable($VIMRUNTIME . '/colors/minigun.vim')
-        colorscheme minigun
-    endif
-
-    if !isdirectory($VIMHOME . '/undodir')
-        silent call mkdir ($VIMHOME . '/undodir', 'p')
-    endif
-    set undodir=$VIMHOME/undodir
-    set undofile
+" Note: on Windows the colorscheme might not be found unless it is copied under
+" the global installation directory, e.g. C:\Program Files (x86)\Vim\vimfiles\colors
+if filereadable($VIMHOME . '/colors/minigun.vim') || filereadable($VIMRUNTIME . '/colors/minigun.vim')
+    colorscheme minigun
 endif
+
+if !isdirectory($VIMHOME . '/undodir')
+    silent call mkdir ($VIMHOME . '/undodir', 'p')
+endif
+set undodir=$VIMHOME/undodir
+set undofile
 
 " Syntax and file type detection etc.
 syntax on
@@ -496,7 +494,7 @@ cnoremap <c-v> <c-r>+
 inoremap <c-v> <c-r>=col('.') == col('$') ? "\<lt>esc>`^\"+pa" : "\<lt>esc>`^\"+Pa"<cr>
 
 " Read and paste contents of X clipboard.
-nnoremap <s-c-x> :silent r !xclip -o<cr>
+nnoremap <leader><insert> :silent r !xclip -o<cr>
 
 " Replace contents, but delete the old selection to black hole register first so as not to replace insert buffer.
 vnoremap <silent><expr> <s-insert> mode() ==# "V" ? "\"_x\"+P" : ":<esc>`>:exe col('.') == col('$')-1 ? \"normal! gv\\\"_x\\\"+p\" : \"normal! gv\\\"_x\\\"+Pl\"<cr>"

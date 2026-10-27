@@ -1,5 +1,8 @@
 #!/usr/bin/sh
-# Without PulseAudio one must use BlueALSA to connect to Bluetooth headsets.
+# Connect a Bluetooth audio device using BlueALSA so that mixing works.
+# This is a hacky way and very much discouraged; rather use PipeWire instead if possible.
+#
+# Without PipeWire or PulseAudio one must use BlueALSA to connect to Bluetooth headsets.
 # Unfortunately, there's no way of using a dmix device with bluealsa directly,
 # as ALSA will just give an error message if dmix has bluealsa as slave.
 # As of BlueALSA version 1.3.0, some applications refuse to play anything at

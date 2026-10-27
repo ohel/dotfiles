@@ -1,12 +1,18 @@
 #!/usr/bin/pulseaudio -nDF
 # Make PulseAudio a simple ALSA bridge.
+#
+# Use together with a configuration file such as:
+#
+#    avoid-resampling = true
+#    flat-volumes = yes
+#    exit-idle-time = -1
 
 .fail
     # Input/record ALSA device.
-    load-module module-alsa-source device="loop" tsched=1
+    load-module module-alsa-source device="default" tsched=1
 
     # Output/playback ALSA device.
-    load-module module-alsa-sink device="loop" tsched=1
+    load-module module-alsa-sink device="default" tsched=1
 
     # Required to accept clients. Don't remove.
     load-module module-native-protocol-unix
