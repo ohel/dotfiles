@@ -31,10 +31,11 @@ xset s off
 mkdir -p $(readlink ~/.tmpfs) 2>/dev/null
 mkdir -p $(readlink ~/.cache) 2>/dev/null
 command -v mpv >/dev/null && [ -d ~/.cache ] && [ ! -e ~/.cache/mpvfifo ] && mkfifo ~/.cache/mpvfifo
-# Persist sessions if directory exists.
+# Persist sessions.
 [ -d ~/.sessions ] && [ ! -e ~/.cache/sessions ] && ln -sf ~/.sessions ~/.cache/sessions
-# Persist pip cache if directory exists.
+# Persist pip and uv caches.
 [ -d ~/.pip-cache ] && [ ! -e ~/.cache/pip ] && ln -sf ~/.pip-cache ~/.cache/pip
+[ -d ~/.uv-cache ] && [ ! -e ~/.cache/uv ] && ln -sf ~/.uv-cache ~/.cache/uv
 
 # This temporary directory is needed if using mhwaveedit.
 command -v mhwaveedit >/dev/null && mkdir -p /tmp/mhwaveedit

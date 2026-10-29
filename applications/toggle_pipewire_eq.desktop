@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=Toggle PipeWire eq
-Exec=.scripts/toggle_pipewire_eq.sh
-Icon=audio-card
-Terminal=false
-Type=Application
-Categories=Audio

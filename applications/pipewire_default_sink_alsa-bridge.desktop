@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Set PipeWire default sink: ALSA bridge
+Exec=.scripts/pipewire_default_sink.sh alsa-bridge
+Icon=audio-card
+Terminal=false
+Type=Application
+Categories=Audio
