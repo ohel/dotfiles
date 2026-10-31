@@ -1,7 +1,7 @@
 #!/usr/bin/sh
 # Run Ollama installed with custom prefix and Open WebUI installed to venv with pip.
 # $1 = stop|ollama. If "stop", stop serving and kill Open WebUI. If "ollama", Open WebUI is not started.
-# $2 = context size for Ollama, e.g. 8192 for Aider. Optional.
+# $2 = default context size for Ollama, e.g. 8192. Optional.
 
 ollama_path=/opt/ai_tools/ollama
 openwebui_path=/opt/ai_tools/open-webui-venv
