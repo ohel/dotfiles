@@ -1,4 +1,4 @@
-Files in this directory are usually located in ~/.config, but not always.
+Files in this directory are mostly located in `~/.config`. Some applications use their own config directories, and the ones in the `etc` directory correspond to files usually located in `/etc`.
 
 * `ccsm_compiz_0_9.profile`: Compiz config settings manager profile for Compiz 0.9 series.
 * `coc`: Conquer of Completion settings. For use with Vim.
@@ -7,7 +7,4 @@ Files in this directory are usually located in ~/.config, but not always.
 * `hrtf_1059.mhr`: Head-related transfer function made with makehrtf using the HRIR measurements from the Ircam/AKG Listen project. Used with OpenAL, see the alsoftrc dotfile.
 * `mpv`: mpv media player config files located in ~/.mpv.
 * `check_window_classes`: When using my xbindkeysrc, do not close windows of these classes. There's also another file for window titles.
-* `quodlibet_gst_pipeline_*`: Pipeline definitions for Quod Libet music player.
 * `ranger`: ranger file manager config files located in ~/.config/ranger.
-* `renamepatterns.saved`: Quod Libet rename pattern for music library.
-* `system`: Various local system startup scripts which on Gentoo are run from /etc/local.d. On Ubuntu the contents are in single file, /etc/rc.local.

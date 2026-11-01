@@ -1,11 +1,5 @@
 #!/usr/bin/pulseaudio -nDF
-# Make PulseAudio a simple ALSA bridge.
-#
-# Use together with a configuration file such as:
-#
-#    avoid-resampling = true
-#    flat-volumes = yes
-#    exit-idle-time = -1
+# Use together with alsapipe.conf to make PulseAudio a simple ALSA bridge.
 
 .fail
     # Input/record ALSA device.
