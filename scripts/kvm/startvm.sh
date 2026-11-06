@@ -2,43 +2,62 @@
 # Start a Qemu-KVM virtual machine. Consider this script a template to copy per virtual machine.
 # Assumes the client has drivers installed for the paravirtualized VirtIO Ethernet Adapter,
 # VirtIO SCSI controller, and QXL video device.
-# There's two parameters: passthrough and bridged_network. 0 disables (default), 1 enables.
+# There's two parameters: passthrough ($1) and bridged_network ($2). Value 0 disables (default), 1 enables.
 
-img_name="vm.img"
+set -eu
+
+vm_img_file="vm.img"
 vm_name="KVM"
-net_id=10 # Used as the last number of static IP address of the guest, MAC address and VNC display.
+vm_net_id=10 # Used as the last number of static IP address of the guest, MAC address and VNC display.
 
-vm_mem_mb=8192
-vm_num_cores=4
+vm_memory_in_mb=16384
+vm_num_cores=8
 vm_threads_per_core=1
 
-audio=0
-auto_setup_network=1
-auto_start_vnc=0
-boot_from_cd=0
-boot_menu=0
-bridged_network=${2:-0}
-passthrough=${1:-0}
-tpm=0
-uefi=1
+use_audio=0
+use_auto_setup_network=1
+use_auto_start_vnc=0
+use_boot_from_cd=0
+use_boot_menu=0
+use_bridged_network=${2:-0}
+use_passthrough=${1:-0} # See notes about using passthrough below.
+use_secure_boot=0 # See note about using secure boot below.
+use_shared_memory=0 # Using virtiofsd needs the memory to be shared.
+use_tpm=0
+use_uefi=1
 
-# If using too old OVMF files, some keys are required to be enrolled for secure boot.
-# Use /usr/share/edk2-ovmf/UefiShell.iso as cdrom_image to boot and do:
+passthrough_video_device="0000:0f:00.0"
+passthrough_audio_device="0000:0f:00.1"
+passthrough_vbios_romfile=vbios_164E.dat
+passthrough_gopdriver_romfile=AMDGopDriver.rom
+
+# Shall the guest know it is running virtualized: "off" might help when installing certain drivers (e.g. for passthrough GPU).
+vm_cpu_host_kvm=off
+
+safe_vm_name=$(echo "$vm_name" | tr ' ' '-' | tr -cd '[:alnum:]-')
+bridge_name=vmbridge
+net_bridge_name=netbridge
+tap_dev_name=$(echo tap-$safe_vm_name | cut -c -15) # TAP names have a maximum length.
+uefi_bios_file=/usr/share/edk2-ovmf/OVMF_CODE.fd
+[ $use_secure_boot -eq 1 ] && uefi_bios_file=/usr/share/edk2-ovmf/OVMF_CODE.secboot.fd
+# Note: uefi_vars_file should be a copy of /usr/share/edk2-ovmf/OVMF_VARS.secboot.fd for storing UEFI variables and keys. Required with secure boot.
+uefi_vars_file="$(basename -s .img $vm_img_file)_OVMF_VARS.secboot.fd"
+cdrom_image_file=image.iso
+virtiofs_socket=/tmp/virtiofs-$safe_vm_name
+virtiofs_shared_dir=/mnt/exports
+
+# A note about using secure boot.
+#
+# If using too old OVMF files, some keys are required to be enrolled.
+# Use /usr/share/edk2-ovmf/UefiShell.iso as cdrom_image_file to boot and do:
 #   Shell> fs0:
 #   FS0:\> EnrollDefaultKeys.efi
 #   FS0:\> reset
 # If the file is not .iso but .img instead, try adding it as another drive and booting from there.
-# If there is an error "OEM String with app prefix 4E32566D-8E9E-4F52-81D3-5BB9715F9727 not found" try newer OVMF files with keys already enrolled.
-secure_boot=0
+# If there is an error such as "OEM String with app prefix 4E32566D-8E9E-4F52-81D3-5BB9715F9727 not found", try newer OVMF files with keys already enrolled.
 
-vm_bridge=vmbridge
-net_bridge=netbridge
-uefi_bios="/usr/share/edk2-ovmf/OVMF_CODE.fd"
-[ "$secure_boot" = 1 ] && uefi_bios="/usr/share/edk2-ovmf/OVMF_CODE.secboot.fd"
-# Should be a copy of /usr/share/edk2-ovmf/OVMF_VARS.secboot.fd for storing UEFI variables and keys. Required with secure boot.
-uefi_vars="$(basename -s .img $img_name)_OVMF_VARS.secboot.fd"
-cdrom_image="image.iso"
-
+# Notes about using PCI passthrough.
+#
 # Use "lspci -nn | grep VGA" to check the device id.
 # To find out the device bus, list details using device id. E.g. for AMD IGP:
 #   $ lspci -nnk -d 1002:13c0
@@ -75,10 +94,6 @@ cdrom_image="image.iso"
 # The GOP is for video device, but this is how they seem to be loaded here for AMD IGPs, so the GOP ROM for the audio part. The important part is the devices are passed through as multifunction device together. This is apparently only when using the OVMF UEFI BIOS. If using e.g. SeaBIOS, just the VBIOS ROM is needed (no GOP ROM).
 # It might also be that the ROMs extracted from your motherboard BIOS do not work. In that case try downloading the ROM files from e.g. https://github.com/isc30/ryzen-gpu-passthrough-proxmox
 # My processor is 9950X, and using vbios_9950x.rom together with AMDGopDriver_9950x3d.rom works.
-passthrough_video_device="0000:0f:00.0"
-passthrough_audio_device="0000:0f:00.1"
-passthrough_vbios="vbios_164E.dat"
-passthrough_gopdriver="AMDGopDriver.rom"
 
 pid=$(ps -ef | grep "qemu.*$vm_name" | grep -v grep | tr -s ' ' | cut -f 2 -d ' ')
 if [ "$pid" ]
@@ -92,7 +107,8 @@ then
     read tmp
 fi
 
-if [ "$passthrough" = 1 ]
+passthrough_options=""
+if [ $use_passthrough -eq 1 ]
 then
     # This will probe: vfio_pci, vfio, vfio_pci_core, vfio_iommu_type1
     # Note that sometimes is required in /etc/modprobe.d/vfio.conf: options vfio_iommu_type1 allow_unsafe_interrupts=1
@@ -100,13 +116,13 @@ then
     modprobe vfio_pci
     if [ "$(realpath /sys/bus/pci/devices/$passthrough_video_device/driver)" != "/sys/bus/pci/drivers/vfio-pci" ]
     then
-        passthrough=0
+        use_passthrough=0
         echo Using passthrough is not possible, device $passthrough_video_device is not using vfio-pci
     else
         echo Using passthrough for video device $passthrough_video_device
     fi
 
-    if [ $passthrough = 1 ] && [ -e /sys/bus/pci/devices/$passthrough_audio_device ]
+    if [ $use_passthrough -eq 1 ] && [ -e /sys/bus/pci/devices/$passthrough_audio_device ]
     then
         echo Using passthrough for audio device $passthrough_audio_device
         if [ "$(realpath /sys/bus/pci/devices/$passthrough_audio_device/driver)" != "/sys/bus/pci/drivers/vfio-pci" ]
@@ -120,88 +136,88 @@ then
 
     # This root device is required, otherwise guest fails with error 43 for the GPU. It should also be in a different bus than the passed through devices; let's leave out the bus option and let it be handled automatically.
     passthrough_options="-device pcie-root-port,id=pcie0,slot=0"
-    [ -e /sys/bus/pci/devices/$passthrough_video_device ] && passthrough_options="$passthrough_options -device vfio-pci,host=$passthrough_video_device,bus=pcie0,addr=00.0,x-vga=on,multifunction=on,romfile=$passthrough_vbios"
-    [ -e /sys/bus/pci/devices/$passthrough_audio_device ] && passthrough_options="$passthrough_options -device vfio-pci,host=$passthrough_audio_device,bus=pcie0,addr=00.1,romfile=$passthrough_gopdriver"
+    [ -e /sys/bus/pci/devices/$passthrough_video_device ] && passthrough_options="$passthrough_options -device vfio-pci,host=$passthrough_video_device,bus=pcie0,addr=00.0,x-vga=on,multifunction=on,romfile=$passthrough_vbios_romfile"
+    [ -e /sys/bus/pci/devices/$passthrough_audio_device ] && passthrough_options="$passthrough_options -device vfio-pci,host=$passthrough_audio_device,bus=pcie0,addr=00.1,romfile=$passthrough_gopdriver_romfile"
 
-    [ $passthrough = 0 ] && passthrough_options=""
+    [ $use_passthrough -eq 0 ] && passthrough_options=""
 fi
 
 modprobe tun
 modprobe kvm
 lscpu | grep Intel && modprobe kvm-intel || modprobe kvm-amd
 
-if [ "$bridged_network" = 1 ] && brctl show $net_bridge 2>&1 | grep -q "\(No\)\|\(not \)"
+if [ $use_bridged_network -eq 1 ] && brctl show $net_bridge_name 2>&1 | grep -q "\(No\)\|\(not \)"
 then
     echo "Set up the bridged network manually first."
     exit 1
 fi
 
-if brctl show $vm_bridge 2>&1 | grep -q "\(No\)\|\(not \)"
+if brctl show $bridge_name 2>&1 | grep -q "\(No\)\|\(not \)"
 then
-    if [ "$auto_setup_network" = 0 ]
+    if [ $use_auto_setup_network -eq 0 ]
     then
-        echo "The bridge $vm_bridge does not exist. Aborting..."
+        echo "The bridge $bridge_name does not exist. Aborting..."
         exit 1
     fi
 fi
-./vmnetwork.sh
+./vmnetwork.sh "tap=$tap_dev_name"
 
 # Use KVM software, e.g. Input Leap when headless.
 # Alternatively use -vga std and Qemu VNC.
 # Guest screen might require some input such as a mouse click, even with text-only VNC.
 # NOTE: if using passthrough reset fixes such as RadeonResetBugFixService, it might remove the QXL device on startup.
 videohw="-vga none"
-if [ "$passthrough" = 0 ] || [ ! -e /sys/bus/pci/devices/$passthrough_video_device ]
+if [ $use_passthrough -eq 0 ] || [ ! -e /sys/bus/pci/devices/$passthrough_video_device ]
 then
     videohw="-vga std"
     if [ ! "$(echo quit | qemu-system-x86_64 -vga qxl -machine none -nographic 2>&1 | grep QXL)" ]
     then
-        port=$net_id
-        [ "$net_id" -lt 10 ] && port="0"$port
+        port=$vm_net_id
+        [ "$vm_net_id" -lt 10 ] && port="0"$port
         videohw="-device qxl-vga,vgamem_mb=64,ram_size_mb=256,vram_size_mb=256 \
             -device virtio-serial-pci \
-            -device virtserialport,chardev=spicechannel$net_id,name=com.redhat.spice.0 \
-            -chardev spicevmc,id=spicechannel$net_id,name=vdagent \
+            -device virtserialport,chardev=spicechannel$vm_net_id,name=com.redhat.spice.0 \
+            -chardev spicevmc,id=spicechannel$vm_net_id,name=vdagent \
             -spice port=600$port,addr=127.0.0.1,disable-ticketing=on"
     fi
 fi
 
 soundhw=""
-if [ "$audio" = 1 ]
+if [ $use_audio -eq 1 ]
 then
-    soundhw="-device intel-hda -device hda-duplex,audiodev=snd$net_id"
+    soundhw="-device intel-hda -device hda-duplex,audiodev=snd$vm_net_id"
     if ps -e | grep -q pulseaudio
     then
         socket=$(ls /run/user/*/pulse/native 2>/dev/null | head -n 1)
         [ ! "$socket" ] && continue
         user=$(ls -o $socket | cut -f 3 -d ' ')
         cp /home/$user/.config/pulse/cookie ~/.config/pulse/cookie
-        soundhw="$soundhw -audiodev pa,id=snd$net_id,server=unix:$socket"
+        soundhw="$soundhw -audiodev pa,id=snd$vm_net_id,server=unix:$socket"
     else
         modprobe snd-aloop
         dac="hw:Loopback,,0,,4" # loop_vm_dac_in
         adc="hw:Loopback,,1,,5" # loop_vm_adc_out
-        soundhw="$soundhw -audiodev alsa,id=snd$net_id,out.dev=$dac,in.dev=$adc"
+        soundhw="$soundhw -audiodev alsa,id=snd$vm_net_id,out.dev=$dac,in.dev=$adc"
     fi
 fi
 
 boot_options="order=c"
-[ "$boot_from_cd" = 1 ] && boot_options="order=d -cdrom $cdrom_image"
-[ "$boot_menu" = 1 ] && boot_options="menu=on"
+[ $use_boot_from_cd -eq 1 ] && boot_options="order=d -cdrom $cdrom_image_file"
+[ $use_boot_menu -eq 1 ] && boot_options="menu=on"
 
 # Note: if you have multiple virtual machines, their network devices must have different MAC addresses. Otherwise only one works at a time.
-mac_end=$net_id
-[ "$net_id" -lt 10 ] && mac_end="0"$mac_end
+mac_end=$vm_net_id
+[ "$vm_net_id" -lt 10 ] && mac_end="0"$mac_end
 
 bridged_net_devices=""
-[ "$bridged_network" = 1 ] && bridged_net_devices=\
-    "-device virtio-net-pci,netdev=brdev$net_id,mac=00:00:00:00:01:$mac_end -netdev tap,id=brdev$net_id,br=$net_bridge,script=kvm_tap_netbridge.sh"
+[ $use_bridged_network -eq 1 ] && bridged_net_devices=\
+    "-device virtio-net-pci,netdev=brdev$vm_net_id,mac=00:00:00:00:01:$mac_end -netdev tap,id=brdev$vm_net_id,ifname=$tap_dev_name,script=no,downscript=no"
 
 uefi_options=""
-[ "$uefi" = 1 ] && uefi_options="-smbios type=0,uefi=on -bios $uefi_bios"
+[ $use_uefi -eq 1 ] && uefi_options="-smbios type=0,uefi=on -bios $uefi_bios_file"
 
 tpm_options=""
-if [ "$tpm" = 1 ]
+if [ $use_tpm -eq 1 ]
 then
     mkdir -p /tmp/emulated_tpm
     ! ps -ef | grep -q "swtpm.*/tmp/emulated_tpm.*level=20$" && \
@@ -212,20 +228,33 @@ then
 fi
 
 secure_boot_options=""
-if [ "$secure_boot" = 1 ]
+if [ $use_secure_boot -eq 1 ]
 then
-    [ ! -e "$uefi_vars" ] && echo "$uefi_vars doesn't exist." && exit 1
+    [ ! -e "$uefi_vars_file" ] && echo "$uefi_vars_file doesn't exist." && exit 1
     secure_boot_options="-global driver=cfi.pflash01,property=secure,value=on \
-    -drive if=pflash,format=raw,unit=0,file=$uefi_bios,readonly=on \
-    -drive if=pflash,format=raw,unit=1,file=$uefi_vars \
+    -drive if=pflash,format=raw,unit=0,file=$uefi_bios_file,readonly=on \
+    -drive if=pflash,format=raw,unit=1,file=$uefi_vars_file \
     -global ICH9-LPC.disable_s3=1"
     # Need to disable ACPI S3 suspend/resume, otherwise will result in error:
     # "Guest has not initialized the display (yet)."
     # https://bugs.archlinux.org/task/59465.html
 fi
 
-# Shall the guest know it is running virtualized. Turning off might help when installing certain drivers (e.g. for passthrough GPU).
-cpu_host_kvm=off
+machine_memory_options=""
+virtiofs_options=""
+if [ $use_shared_memory -eq 1 ]
+then
+    memory_options="-object memory-backend-memfd,id=mem_be,share=on,size=$vm_memory_in_mb"
+    machine_memory_options=",memory-backend=mem_be"
+    if ! ps -ef | grep "$virtiofs_socket" | grep -v grep >/dev/null
+    then
+        /usr/libexec/virtiofsd --socket-path=$virtiofs_socket --shared-dir=$virtiofs_shared_dir &
+        chmod a+rw $virtiofs_socket
+    fi
+    virtiofs_options="-chardev socket,id=vfs,path=$virtiofs_socket -device vhost-user-fs-pci,chardev=vfs,tag=hostshare"
+else
+    memory_options="-m $vm_memory_in_mb"
+fi
 
 echo Starting the virtual machine with command line:
 command_line="
@@ -234,14 +263,15 @@ qemu-system-x86_64 \
 -enable-kvm \
 -name \"$vm_name\" \
 -boot $boot_options \
--machine q35,accel=kvm \
--cpu host,kvm=$cpu_host_kvm,+topoext \
+$memory_options \
+-machine q35,accel=kvm$machine_memory_options \
+-cpu host,kvm=$vm_cpu_host_kvm,+topoext \
 -smp cores=$vm_num_cores,threads=$vm_threads_per_core,sockets=1 \
--m $vm_mem_mb \
 -k fi \
--display vnc=localhost:$net_id \
--device virtio-net,netdev=netdev$net_id,mac=00:00:00:00:00:$mac_end -netdev tap,id=netdev$net_id,br=$vm_bridge,script=kvm_tap_vmbridge.sh \
--drive file=\"$img_name\",if=virtio,format=raw \
+-display vnc=localhost:$vm_net_id \
+-device virtio-net,netdev=netdev$vm_net_id,mac=00:00:00:00:00:$mac_end -netdev tap,id=netdev$vm_net_id,ifname=$tap_dev_name,script=no,downscript=no \
+-drive file=\"$vm_img_file\",if=virtio,format=raw \
+$virtiofs_options \
 $bridged_net_devices \
 $soundhw \
 $videohw \
@@ -288,9 +318,9 @@ fi
 
 if command -v gvncviewer >/dev/null
 then
-    vncviewer="gvncviewer localhost:$net_id"
+    vncviewer="gvncviewer localhost:$vm_net_id"
 elif command -v vncviewer >/dev/null
 then
-    vncviewer="vncviewer :$net_id"
+    vncviewer="vncviewer :$vm_net_id"
 fi
-[ "$auto_start_vnc" = 1 ] && [ "$vncviewer" ] && $vncviewer &
+[ $use_auto_start_vnc -eq 1 ] && [ "$vncviewer" ] && $vncviewer &

@@ -1,9 +1,11 @@
 #!/usr/bin/sh
 # Set up networking for KVM virtual machines:
-# - SNAT to first PCI NIC, or $1 if given. $1 may be also a filename, with file contents being the NIC.
-# - Optionally ($2 = "bridge" or "b") set up network bridge where bridged VM tap devices should be added.
+# - $1 should have: if=<filename|network interface>,tap=<tap device name>,mode=bridge
+# - SNAT to first PCI network interface, or interface parsed from $1 if given. The parameter can also be a filename, with file contents being the name of the network device.
+# - If mode is bridge, set up network bridge where bridged VM tap devices should be added.
 # - Set up virtual machine bridge where routed VM tap devices should be added.
 # - Set up virtual localhost for consistent host access.
+# - If tap given in $1, set up tap device.
 # - Specify iptables/nftables forward policy.
 # Source $reset_script to undo everything.
 
@@ -12,17 +14,23 @@ echo "" > $reset_script
 
 modprobe tun
 
-nic=$(ip route show default | awk '{print $5}')
-if [ "$#" != 0 ]
+if_param="" && [ "$#" != 0 ] && if_param=$(echo $1 | grep -o if=[^,]* | cut -f 2 -d '=')
+tap_param="" && [ "$#" != 0 ] && tap_param=$(echo $1 | grep -o tap=[^,]* | cut -f 2 -d '=')
+mode_param="" && [ "$#" != 0 ] && mode_param=$(echo $1 | grep -o mode=[^,]* | cut -f 2 -d '=')
+bridge_mode=0 && [ "$mode_param" = "bridge" ] || [ "$mode_param" = "b" ] && bridge_mode=1
+
+if [ "$if_param" ]
 then
-    nic="$1"
-    [ -f "$1" ] && nic=$(cat "$1")
+    nic=$if_param
+    [ -f "$if_param" ] && nic=$(cat "$if_param")
 
     if [ "$(ls -l /sys/class/net | grep devices/pci | grep -o '-> [^ ]*' | grep -o $nic)" != "$nic" ]
     then
         echo "Network device not found: $nic"
         exit 1
     fi
+else
+    nic=$(ip route show default | awk '{print $5}')
 fi
 ip=$(ip -4 addr show "$nic" | awk '/inet / {print $2}' | cut -d '/' -f 1)
 
@@ -34,7 +42,7 @@ sysctl -q -e -w net.ipv4.conf.$nic.forwarding=1
 echo "sudo sysctl -q -e -w net.ipv4.conf.$nic.forwarding=$forward" >> $reset_script
 
 # Network bridge using DHCP. Note: not all interfaces support bridging.
-if [ "$2" = "bridge" ] || [ "$2" = "b" ]
+if [ $bridge_mode -eq 1 ]
 then
     if [ "$(ip link show type bridge | grep ": netbridge:")" ]
     then
@@ -121,6 +129,24 @@ fi
 #    nft add rule inet vm_filter vm_forward iif "$nic" oif "vmbridge" ct state established,related accept
 #    echo "sudo nft delete chain inet vm_filter vm_forward 2>/dev/null" >> $reset_script
 #    echo "sudo nft delete table inet vm_filter 2>/dev/null" >> $reset_script
+
+if [ "$tap_param" ]
+then
+    if ip tuntap 2>/dev/null | cut -f 1 -d ':' | grep $tap_param\$ >/dev/null
+    then
+        echo "Tap $tap_param already exists."
+    else
+        echo "Setting up tap $tap_param..."
+
+        ip tuntap add mode tap $tap_param
+        bridge=vmbridge && [ $bridge_mode -eq 1 ] && bridge=netbridge
+        ip link set $tap_param master $bridge
+        ip link set $tap_param up
+
+        echo "sudo ip link set $tap_param down" >> $reset_script
+        echo "sudo ip tuntap del mode tap $tap_param" >> $reset_script
+    fi
+fi
 
 # Virtual localhost. Use this IP within guests to use services running locally on the host.
 vm_guest_host_ip="10.0.1.127/24"
