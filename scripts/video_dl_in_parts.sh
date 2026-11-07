@@ -3,6 +3,7 @@
 # Copy the URL from a web browser's network tab; any segment is fine.
 # When downloaded segment contains just plain text, it's taken as the last segment.
 # First parameter may also be a m3u8 playlist, for non-continuous indices for example.
+# If the playlist uses EXT-X-MAP init segments as per HLS specification, they are included.
 #
 # Parameters:
 # $1: URL (use double quotes) or playlist file
@@ -18,6 +19,9 @@ use_url=0 && [ "$(echo "$1" | grep "^http")" ] && use_url=1
 
 seg_cue=${2:-seg-}
 extension=${3:-mp4}
+
+init_seg="#EXT-X-MAP:URI"
+
 if [ $use_url -eq 1 ]
 then
     url_part_1=$(echo "$1" | sed "s/\(.*\)$seg_cue[0-9]*\(.*\)/\1$seg_cue/")
@@ -27,7 +31,7 @@ then
     stop_on_ascii=${6:-1}
 else
     url_part_1=$(echo "$1" | sed "s/\(.*\)$seg_cue[0-9]*\(.*\)/\1/")
-    playlist=($(grep "^$seg_cue" "$playlist_file"))
+    playlist=($(grep "^\($seg_cue\)\|\($init_seg\)" "$playlist_file"))
     start_index=0
     max_index=${#playlist[@]}
     stop_on_ascii=0
@@ -66,7 +70,14 @@ do
         then
             segment_url=$url_part_1$current_index$url_part_2
         else
-            segment_url=$url_part_1${playlist[$current_index]}
+            next_url=${playlist[$current_index]}
+            # If init segment, trim off the variable name and quotes.
+            if [ "$(echo $next_url | grep "^$init_seg")" ]
+            then
+                echo Init segment detected.
+                next_url=$(echo $next_url | cut -f 2- -d '=' | sed "s/\"\(.*\)\"/\1/")
+            fi
+            segment_url=$url_part_1$next_url
         fi
 
         [ "$referer" ] && curl $segment_url -H "referer: $referer" -H "$user_agent" > $tmp_dir/$filename
@@ -79,7 +90,7 @@ do
 
     if [ "$(file $tmp_dir/$filename | grep "ASCII text")" ]
     then
-        if [ $stop_on_ascii -eq 1 ] || [ "$(cat $tmp_dir/$filename)" = "Not Found" ]
+        if [ $stop_on_ascii -eq 1 ] || [ "$(cat $tmp_dir/$filename)" = "Not Found" ] || [ "$(cat $tmp_dir/$filename)" = "request incorrect" ]
         then
             rm $tmp_dir/$filename
             break
@@ -87,13 +98,16 @@ do
     fi
 done
 
+sync
+
 echo Concatenating segments...
 ffmpeg -f concat -safe 0 -i <(for f in $tmp_dir/seg_*.$extension; do echo "file '$f'"; done) -c copy "$completed".$extension
 
 if [ ! -e complete.$extension ]
 then
     echo Error concatenating files using ffmpeg, using cat instead.
-    cat $tmp_dir/seg_*.$extension >> "$completed".$extension
+    cat $tmp_dir/seg_*.$extension > "$completed".$extension
 fi
 
-rm -rf $tmp_dir
+echo "Segments are in: $tmp_dir"
+echo "To remove: rm -rf $tmp_dir"
