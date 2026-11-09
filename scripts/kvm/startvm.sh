@@ -1,8 +1,10 @@
 #!/usr/bin/sh
 # Start a Qemu-KVM virtual machine. Consider this script a template to copy per virtual machine.
-# Assumes the client has drivers installed for the paravirtualized VirtIO Ethernet Adapter,
-# VirtIO SCSI controller, and QXL video device.
-# There's two parameters: passthrough ($1) and bridged_network ($2). Value 0 disables (default), 1 enables.
+# Assumes the client has drivers installed for paravirtualized devices:
+# - VirtIO Ethernet Adapter
+# - VirtIO SCSI controller
+# - QXL video device
+# There are two parameters: passthrough ($1) and bridged_network ($2). Value 0 disables (default), 1 enables.
 
 set -eu
 
@@ -162,8 +164,7 @@ then
 fi
 ./vmnetwork.sh "tap=$tap_dev_name"
 
-# Use KVM software, e.g. Input Leap when headless.
-# Alternatively use -vga std and Qemu VNC.
+# Use KVM software, e.g. Deskflow when headless. Alternatively use -vga std and Qemu VNC.
 # Guest screen might require some input such as a mouse click, even with text-only VNC.
 # NOTE: if using passthrough reset fixes such as RadeonResetBugFixService, it might remove the QXL device on startup.
 videohw="-vga none"

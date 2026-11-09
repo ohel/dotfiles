@@ -29,11 +29,11 @@ emerge --depclean -a
 flatpak_user=$(logname 2>/dev/null)
 if command -v flatpak >/dev/null && [ -e /home/$flatpak_user/.var/app ]
 then
-    echo "Checking Flatpak updates for $flatpak_user..."
-    if ! sudo -u "$flatpak_user" flatpak update --no-pull --no-deploy | grep -q "^Nothing to update\.$"
-    then
-        sudo -u "$flatpak_user" flatpak update --noninteractive
-    fi
+    echo
+    echo "Found Flatpak applications for user $flatpak_user:"
+    sudo -u "$flatpak_user" flatpak list --app --columns=name,application,version,origin
+    echo
+    sudo -u "$flatpak_user" flatpak update --assumeyes
 fi
 
 echo
