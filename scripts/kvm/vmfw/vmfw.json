@@ -1,0 +1,15 @@
+{
+  "interface": "vmbridge",
+  "default": "block",
+  "log_blocked": false,
+  "allow_ipv6": false,
+  "subdomains": true,
+  "host_access": ["icmp", "udp:67"],
+
+  "entries": [
+    "github.com",
+    "registry.npmjs.org:443",
+    "icmp:1.1.1.1",
+    "udp:1.1.1.1:53"
+  ]
+}

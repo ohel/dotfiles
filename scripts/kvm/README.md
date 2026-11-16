@@ -4,3 +4,5 @@
 * `vmrdp.sh`: Full screen RDP connection to a computer with space for Xfce Panel.
 * `startvm.sh`: A script template I use to start virtual machines.
 * `microvm.sh`: A script to launch a microVM for sandbox use.
+
+In the directory `vmfw` is a virtual machine firewall application to limit a VM's network traffic.
